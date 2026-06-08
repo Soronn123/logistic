@@ -1,0 +1,49 @@
+{% extends 'base.html' %}{% load i18n static i18n_extras %}
+{% block title %}{% translate 'Tenders' %} — Baikal-Service{% endblock %}
+{% block meta_description %}{% translate 'Active tenders and procurement at Baikal-Service' %}{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center mb-2">{% translate 'Tenders & Procurement' %}</h1>
+    <p class="text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto mb-10">{% translate 'Active tenders and requests for proposals' %}</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for tender in tenders %}
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300 flex flex-col">
+        <div class="flex-1">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">{{ tender|localized }}</h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-3">{{ tender|localized_field:'description'|striptags|truncatewords:30 }}</p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              <span class="text-sm text-gray-500 dark:text-gray-400">{% translate 'Deadline' %}: {{ tender.deadline|date:"d.m.Y" }}</span>
+            </div>
+            <span class="text-xs px-2 py-1 rounded-full {% if tender.is_active %}bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400{% else %}bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400{% endif %}">
+              {% if tender.is_active %}{% translate 'Active' %}{% else %}{% translate 'Closed' %}{% endif %}
+            </span>
+          </div>
+          {% if tender.is_active %}
+          <div x-data="{ deadline: new Date('{{ tender.deadline|date:'Y/m/d' }}').getTime(), now: new Date().getTime() }" x-init="setInterval(() => { now = new Date().getTime() }, 1000)" class="mb-4">
+            <div class="flex items-center gap-1 text-sm">
+              <svg class="w-4 h-4 text-baikal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span class="text-baikal-600 dark:text-baikal-400 font-medium" x-text="Math.max(0, Math.floor((deadline - now) / 86400000)) + ' ' + '{% translate "days left" %}'"></span>
+            </div>
+          </div>
+          {% endif %}
+          <a href="{% url 'core:tender_detail' slug=tender.slug %}" class="block w-full text-center px-4 py-2.5 bg-baikal-50 dark:bg-baikal-900/30 text-baikal-600 dark:text-baikal-400 font-medium rounded-xl hover:bg-baikal-100 dark:hover:bg-baikal-900/50 transition-colors text-sm">
+            {% translate 'View Details' %}
+          </a>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-span-full text-center py-16">
+        <svg class="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <p class="text-gray-500 dark:text-gray-400 text-lg">{% translate 'No active tenders at the moment.' %}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

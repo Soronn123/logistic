@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static i18n i18n_extras %}
+
+{% block title %}{% translate 'FAQ — Baikal-Service' %}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="bg-gradient-to-r from-baikal-700 to-baikal-900 text-white py-12 sm:py-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav class="flex items-center space-x-2 text-sm text-baikal-200 mb-4">
+      <a href="{% url 'core:home' %}" class="hover:text-white transition-colors">{% translate 'Home' %}</a>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <span class="text-white">{% translate 'FAQ' %}</span>
+    </nav>
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold">{% translate 'Frequently Asked Questions' %}</h1>
+    <p class="text-lg text-baikal-200 mt-3 max-w-2xl">{% translate 'Find answers to common questions about our services' %}</p>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-12 sm:py-16 bg-white dark:bg-gray-900">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Search -->
+    <div class="relative mb-10" x-data="{ query: '' }">
+      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </div>
+      <input type="text" x-model="query" placeholder="{% translate 'Search FAQ...' %}" class="w-full pl-12 pr-4 py-4 rounded-2xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all text-lg">
+    </div>
+
+    <!-- FAQ Categories -->
+    {% regroup faqs by category as faq_categories %}
+    {% if faq_categories %}
+    <div x-data="{ activeItem: null }" class="space-y-8">
+      {% for category in faq_categories %}
+      <div x-data="{ open: false }">
+        <button @click="open = !open" class="flex items-center justify-between w-full text-left mb-4 group">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-baikal-600 dark:group-hover:text-baikal-400 transition-colors">{{ category.grouper }}</h2>
+          <svg class="w-5 h-5 text-gray-400 transition-transform duration-300" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div x-show="open" x-collapse class="space-y-3">
+          {% for faq in category.list %}
+          <div class="bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300" x-data="{ expanded: false }">
+            <button @click="expanded = !expanded; if(expanded) activeItem = {{ faq.id }}; else activeItem = null" class="flex items-center justify-between w-full text-left p-5 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" :class="expanded ? 'bg-gray-100 dark:bg-gray-800' : ''">
+              <span class="text-base font-medium text-gray-900 dark:text-white pr-4">{{ faq|localized_field:'question' }}</span>
+              <div class="flex-shrink-0 w-8 h-8 rounded-full bg-baikal-100 dark:bg-baikal-900/30 flex items-center justify-center transition-transform duration-300" :class="expanded ? 'rotate-45 bg-baikal-600 dark:bg-baikal-600' : ''">
+                <svg class="w-4 h-4 text-baikal-600 dark:text-baikal-400" :class="expanded ? 'text-white' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              </div>
+            </button>
+            <div x-show="expanded" x-collapse>
+              <div class="px-5 pb-5 text-gray-600 dark:text-gray-400 leading-relaxed prose prose-gray dark:prose-invert max-w-none">
+                {{ faq|localized_field:'answer'|safe }}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- No results Alpine state -->
+    <template x-if="query.length > 0">
+      <div>
+        <div x-show="$el.parentElement.querySelectorAll('[data-faq-item]').length === 0" class="text-center py-12">
+          <svg class="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 2a10 10 0 100 20 10 10 0 000-20z"/></svg>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{% translate 'No results found' %}</h3>
+          <p class="text-gray-500 dark:text-gray-400">{% translate 'Try a different search term or browse categories above.' %}</p>
+        </div>
+      </div>
+    </template>
+    {% else %}
+    <div class="text-center py-20">
+      <svg class="w-24 h-24 mx-auto mb-6 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{% translate 'No FAQs yet' %}</h2>
+      <p class="text-gray-500 dark:text-gray-400">{% translate 'Check back later for frequently asked questions.' %}</p>
+    </div>
+    {% endif %}
+
+    <!-- Still have questions CTA -->
+    <div class="mt-12 text-center bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-8 sm:p-10 border border-gray-200 dark:border-gray-700">
+      <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">{% translate 'Still have questions?' %}</h3>
+      <p class="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">{% translate 'Our support team is ready to help you with any questions.' %}</p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="{% url 'core:contact' %}" class="inline-flex items-center px-6 py-3 bg-baikal-600 hover:bg-baikal-700 text-white font-semibold rounded-xl transition-all shadow-md">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          {% translate 'Contact us' %}
+        </a>
+        <a href="tel:+78005553535" class="inline-flex items-center px-6 py-3 border-2 border-baikal-600 dark:border-baikal-400 text-baikal-600 dark:text-baikal-400 font-semibold rounded-xl hover:bg-baikal-50 dark:hover:bg-baikal-900/20 transition-all">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          +7 (800) 555-35-35
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}{% load i18n static i18n_extras %}
+{% block title %}{{ service|localized }} — Baikal-Service{% endblock %}
+{% block meta_description %}{{ service|localized_field:'short_description' }}{% endblock %}
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "{{ service|localized }}",
+  "description": "{{ service|localized_field:'short_description' }}",
+  "provider": {
+    "@type": "Organization",
+    "name": "Baikal-Service"
+  },
+  "areaServed": ["Russia", "Kazakhstan", "Belarus", "Kyrgyzstan", "China"],
+  "serviceType": "CargoTransportation"
+}
+</script>
+{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-8">
+      <a href="{% url 'services:list' %}" class="hover:text-baikal-600 dark:hover:text-baikal-400 transition-colors">{% translate 'Services' %}</a>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      {% if service.category %}
+      <a href="{% url 'services:category' slug=service.category.slug %}" class="hover:text-baikal-600 dark:hover:text-baikal-400 transition-colors">{{ service.category|localized }}</a>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      {% endif %}
+      <span class="text-gray-900 dark:text-white">{{ service|localized }}</span>
+    </nav>
+
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+      <!-- Header -->
+      <div class="p-6 sm:p-8 border-b border-gray-100 dark:border-gray-700">
+        <div class="flex items-center gap-4 mb-4">
+          {% if service.icon %}
+          <div class="w-16 h-16 rounded-2xl bg-baikal-50 dark:bg-baikal-900/30 flex items-center justify-center">
+            <i class="{{ service.icon }} text-3xl text-baikal-600 dark:text-baikal-400"></i>
+          </div>
+          {% endif %}
+          <div>
+            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">{{ service|localized }}</h1>
+            {% if service.base_price %}
+            <p class="text-lg text-baikal-600 dark:text-baikal-400 font-semibold">{% translate 'from' %} {{ service.base_price }} ₽</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="p-6 sm:p-8">
+        <div class="prose prose-gray dark:prose-invert max-w-none">{{ service.description|safe }}</div>
+
+        <!-- Tariffs -->
+        {% if service.tariff_set.active %}
+        <div class="mt-8">
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">{% translate 'Tariffs' %}</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {% for tariff in service.tariff_set.active %}
+            <div class="p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+              <h3 class="font-semibold text-gray-900 dark:text-white">{{ tariff|localized }}</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">{{ tariff|localized_field:'description' }}</p>
+              <div class="text-2xl font-bold text-baikal-600 dark:text-baikal-400">{{ tariff.price_per_kg }} ₽ <span class="text-sm font-normal text-gray-500">/ {% translate 'kg' %}</span></div>
+              <div class="mt-2 flex gap-4 text-sm text-gray-500 dark:text-gray-400">
+                <span>{{ tariff.min_weight }}-{{ tariff.max_weight }} {% translate 'kg' %}</span>
+                <span>{{ tariff.delivery_days_min }}-{{ tariff.delivery_days_max }} {% translate 'days' %}</span>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- CTA -->
+        <div class="mt-8 flex flex-col sm:flex-row gap-4">
+          <a href="{% url 'core:calculator' %}" class="inline-flex items-center justify-center gap-2 px-8 py-3 bg-baikal-600 hover:bg-baikal-700 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-baikal-600/25">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            {% translate 'Calculate Cost' %}
+          </a>
+          <a href="{% url 'orders:create' %}" class="inline-flex items-center justify-center gap-2 px-8 py-3 border-2 border-baikal-600 dark:border-baikal-400 text-baikal-600 dark:text-baikal-400 font-semibold rounded-xl hover:bg-baikal-50 dark:hover:bg-baikal-900/20 transition-colors">
+            {% translate 'Place Order' %}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

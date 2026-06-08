@@ -1,0 +1,111 @@
+{% extends 'pages/dashboard/base_dashboard.html' %}{% load i18n %}
+{% block dash_title %}{% translate 'Dashboard' %}{% endblock %}
+{% block dash_page_title %}{% translate 'Dashboard Overview' %}{% endblock %}
+{% block dash_content %}
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+  <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
+    <div class="flex items-center justify-between mb-3">
+      <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{% translate 'Orders Today' %}</p>
+      <span class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center">
+        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      </span>
+    </div>
+    <div class="text-3xl font-bold text-gray-900 dark:text-white">{{ today_orders|default:0 }}</div>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{% translate 'created today' %}</p>
+  </div>
+
+  <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
+    <div class="flex items-center justify-between mb-3">
+      <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{% translate 'Active Shipments' %}</p>
+      <span class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center">
+        <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
+      </span>
+    </div>
+    <div class="text-3xl font-bold text-gray-900 dark:text-white">{{ active_shipments|default:0 }}</div>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{% translate 'in transit or at warehouse' %}</p>
+  </div>
+
+  <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
+    <div class="flex items-center justify-between mb-3">
+      <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{% translate 'Open Tickets' %}</p>
+      <span class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-900/30 flex items-center justify-center">
+        <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+      </span>
+    </div>
+    <div class="text-3xl font-bold text-gray-900 dark:text-white">{{ open_tickets|default:0 }}</div>
+    <p class="mt-1 text-sm text-amber-600 dark:text-amber-400">{% translate 'needs attention' %}</p>
+  </div>
+
+  <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
+    <div class="flex items-center justify-between mb-3">
+      <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{% translate 'Total Users' %}</p>
+      <span class="w-10 h-10 rounded-xl bg-green-50 dark:bg-green-900/30 flex items-center justify-center">
+        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </span>
+    </div>
+    <div class="text-3xl font-bold text-gray-900 dark:text-white">{{ total_users|default:0 }}</div>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{% translate 'registered users' %}</p>
+  </div>
+</div>
+
+<!-- Charts Row -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-8">
+  <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{% translate 'Orders per Day' %}</h3>
+    <div class="h-64 bg-gray-50 dark:bg-gray-900 rounded-xl flex items-center justify-center">
+      <p class="text-sm text-gray-400">{% translate 'Chart coming soon...' %}</p>
+    </div>
+  </div>
+  <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{% translate 'Revenue per Month' %}</h3>
+    <div class="h-64 bg-gray-50 dark:bg-gray-900 rounded-xl flex items-center justify-center">
+      <p class="text-sm text-gray-400">{% translate 'Chart coming soon...' %}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Orders -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+  <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'Recent Orders' %}</h3>
+    <a href="{% url 'dashboard:orders' %}" class="text-sm text-baikal-600 dark:text-baikal-400 hover:underline">{% translate 'View all' %}</a>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 dark:bg-gray-900 text-left">
+        <tr>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Tracking #' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Customer' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Route' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Status' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Date' %}</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+        {% for order in recent_orders %}
+        <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+          <td class="px-6 py-3 font-mono text-xs text-baikal-600 dark:text-baikal-400">{{ order.tracking_number }}</td>
+          <td class="px-6 py-3 text-gray-900 dark:text-white">{{ order.user.get_full_name|default:order.user.email }}</td>
+          <td class="px-6 py-3 text-gray-600 dark:text-gray-400">{{ order.sender_address }} → {{ order.recipient_address }}</td>
+          <td class="px-6 py-3">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+              {% if order.status == 'delivered' %}bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400
+              {% elif order.status == 'cancelled' %}bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400
+              {% elif order.status == 'in_transit' %}bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400
+              {% else %}bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300{% endif %}">
+              {{ order.get_status_display }}
+            </span>
+          </td>
+          <td class="px-6 py-3 text-gray-500 dark:text-gray-400">{{ order.created_at|date:'d M Y' }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">{% translate 'No orders yet.' %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

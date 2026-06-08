@@ -1,0 +1,110 @@
+{% extends 'base.html' %}{% load i18n static i18n_extras %}
+{% block title %}{% translate 'Shipping Calculator' %} — Baikal-Service{% endblock %}
+{% block meta_description %}{% translate 'Calculate the cost of cargo transportation' %}{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center mb-2">{% translate 'Cargo Shipping Calculator' %}</h1>
+    <p class="text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto mb-10">{% translate 'Calculate the cost and delivery time for your shipment' %}</p>
+
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+      <div class="p-6 sm:p-8">
+        <form hx-post="{% url 'core:calculator' %}" hx-target="#estimate-results" hx-trigger="submit" hx-swap="innerHTML" class="space-y-6">
+            {% csrf_token %}
+          <!-- Step 1: Route -->
+          <div>
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+              <span class="w-8 h-8 rounded-full bg-baikal-100 dark:bg-baikal-900 text-baikal-600 dark:text-baikal-400 flex items-center justify-center text-sm font-bold">1</span>
+              {% translate 'Route' %}
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'From city' %} *</label>
+                <select name="from_city" required class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors">
+                  <option value="">{% translate 'Select city' %}</option>
+                  {% for city in cities %}
+                   <option value="{{ city.id }}">{{ city|localized }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'To city' %} *</label>
+                <select name="to_city" required class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors">
+                  <option value="">{% translate 'Select city' %}</option>
+                  {% for city in cities %}
+                   <option value="{{ city.id }}">{{ city|localized }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Cargo -->
+          <div>
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+              <span class="w-8 h-8 rounded-full bg-baikal-100 dark:bg-baikal-900 text-baikal-600 dark:text-baikal-400 flex items-center justify-center text-sm font-bold">2</span>
+              {% translate 'Cargo Details' %}
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Weight (kg)' %} *</label>
+                <input type="number" name="weight" required step="0.1" min="0.1" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'e.g. 100' %}">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Length (cm)' %}</label>
+                <input type="number" name="length" step="1" min="1" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'e.g. 120' %}">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Width (cm)' %}</label>
+                <input type="number" name="width" step="1" min="1" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'e.g. 80' %}">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Height (cm)' %}</label>
+                <input type="number" name="height" step="1" min="1" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'e.g. 60' %}">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Declared value (₽)' %}</label>
+                <input type="number" name="declared_value" step="100" min="0" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'e.g. 50000' %}">
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Service -->
+          <div>
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+              <span class="w-8 h-8 rounded-full bg-baikal-100 dark:bg-baikal-900 text-baikal-600 dark:text-baikal-400 flex items-center justify-center text-sm font-bold">3</span>
+              {% translate 'Service Type' %}
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {% for service in services %}
+              <label class="relative flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 has-[:checked]:border-baikal-500 has-[:checked]:bg-baikal-50 dark:has-[:checked]:bg-baikal-900/20 border-gray-200 dark:border-gray-700 hover:border-baikal-300 dark:hover:border-baikal-600">
+                <input type="radio" name="service" value="{{ service.id }}" class="sr-only">
+                <div class="flex items-center gap-3">
+                  {% if service.icon %}<i class="{{ service.icon }} text-2xl"></i>{% endif %}
+                  <div>
+                    <p class="font-medium text-gray-900 dark:text-white text-sm">{{ service|localized }}</p>
+                    {% if service.base_price %}<p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'from' %} {{ service.base_price }} ₽</p>{% endif %}
+                  </div>
+                </div>
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <button type="submit" class="w-full px-8 py-3.5 bg-baikal-600 hover:bg-baikal-700 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-baikal-600/25 text-lg">
+            {% translate 'Calculate Estimate' %} <span class="text-baikal-200 font-normal text-base">/ Calculate</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Results Area -->
+    <div id="estimate-results" class="mt-8">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 sm:p-12 text-center border-2 border-dashed border-gray-200 dark:border-gray-700">
+        <svg class="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+        <p class="text-gray-500 dark:text-gray-400 text-lg">{% translate 'Fill in the form and click "Calculate" to see the estimate' %} / Calculate</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

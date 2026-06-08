@@ -1,0 +1,49 @@
+{% extends 'base.html' %}{% load i18n static %}
+{% block title %}{% translate 'Dashboard Login' %} — Baikal-Service{% endblock %}
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-gray-900 to-baikal-900 flex items-center justify-center px-4">
+  <div class="w-full max-w-md">
+    <!-- Logo -->
+    <div class="text-center mb-8">
+      <svg class="w-12 h-12 mx-auto text-baikal-400" viewBox="0 0 32 32" fill="currentColor">
+        <rect x="2" y="10" width="28" height="12" rx="2"/>
+        <rect x="6" y="6" width="4" height="4" rx="1"/>
+        <rect x="22" y="6" width="4" height="4" rx="1"/>
+        <circle cx="10" cy="22" r="2" fill="#111827"/>
+        <circle cx="22" cy="22" r="2" fill="#111827"/>
+      </svg>
+      <h1 class="text-2xl font-bold text-white mt-4">{% translate 'Dashboard' %}</h1>
+      <p class="text-gray-400 text-sm mt-1">{% translate 'Staff administration panel' %}</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 sm:p-8">
+      <form method="post" class="space-y-5">
+        {% csrf_token %}
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Email' %}</label>
+          <input type="email" name="username" required autocomplete="email" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="admin@baikal-service.ru">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Password' %}</label>
+          <input type="password" name="password" required autocomplete="current-password" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="••••••••">
+        </div>
+
+        {% if form.errors %}
+        <div class="p-3 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm">
+          {% translate 'Invalid email or password. Please try again.' %}
+        </div>
+        {% endif %}
+
+        <button type="submit" class="w-full px-6 py-3 bg-baikal-600 hover:bg-baikal-700 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-baikal-600/25">
+          {% translate 'Sign In' %}
+        </button>
+      </form>
+    </div>
+
+    <p class="text-center text-sm text-gray-500 mt-6">
+      <a href="{% url 'core:home' %}" class="text-baikal-400 hover:text-baikal-300 transition-colors">&larr; {% translate 'Back to website' %}</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

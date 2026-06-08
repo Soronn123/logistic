@@ -1,0 +1,223 @@
+{% extends 'pages/dashboard/base_dashboard.html' %}{% load i18n %}
+{% block dash_title %}{% translate 'Service Management' %}{% endblock %}
+{% block dash_page_title %}{% translate 'Service Management' %}{% endblock %}
+{% block dash_content %}
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+  <div>
+    <p class="text-gray-500 dark:text-gray-400 mt-1">{% translate 'Manage service categories, services, and tariffs' %}</p>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="flex flex-wrap gap-2 mb-6">
+  <button class="px-5 py-2.5 text-sm font-medium rounded-xl bg-baikal-600 text-white transition-colors service-tab active" data-tab="categories">{% translate 'Service Categories' %}</button>
+  <button class="px-5 py-2.5 text-sm font-medium rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors service-tab" data-tab="services">{% translate 'Services' %}</button>
+  <button class="px-5 py-2.5 text-sm font-medium rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors service-tab" data-tab="tariffs">{% translate 'Tariffs' %}</button>
+</div>
+
+<!-- Tab: Service Categories -->
+<div id="tab-categories" class="service-tab-content">
+  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'Service Categories' %}</h3>
+      <a href="#" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-xl transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        {% translate 'Add Category' %}
+      </a>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 dark:bg-gray-900 text-left">
+          <tr>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Name' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Slug' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Icon' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Order' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Services Count' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Actions' %}</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+          {% for cat in categories %}
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+            <td class="px-6 py-3 text-gray-900 dark:text-white font-medium">{{ cat.name }}</td>
+            <td class="px-6 py-3 text-gray-500 dark:text-gray-400 font-mono text-xs">{{ cat.slug }}</td>
+            <td class="px-6 py-3">
+              <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-baikal-50 dark:bg-baikal-900/30 text-baikal-600 dark:text-baikal-400">
+                <i class="{{ cat.icon }}"></i>
+              </span>
+            </td>
+            <td class="px-6 py-3 text-gray-600 dark:text-gray-400">{{ cat.order }}</td>
+            <td class="px-6 py-3">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">{{ cat.services_count|default:0 }}</span>
+            </td>
+            <td class="px-6 py-3">
+              <div class="flex items-center gap-2">
+                <a href="#" class="p-1.5 rounded-lg text-gray-400 hover:text-baikal-600 dark:hover:text-baikal-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" title="{% translate 'Edit' %}">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                </a>
+                <a href="#" class="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors" title="{% translate 'Delete' %}">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="6" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">{% translate 'No categories yet.' %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Tab: Services -->
+<div id="tab-services" class="service-tab-content hidden">
+  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'Services' %}</h3>
+      <a href="#" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-xl transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        {% translate 'Add Service' %}
+      </a>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 dark:bg-gray-900 text-left">
+          <tr>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Name' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Category' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Base Price' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Status' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Order' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Actions' %}</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+          {% for service in services %}
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+            <td class="px-6 py-3 text-gray-900 dark:text-white font-medium">{{ service.name }}</td>
+            <td class="px-6 py-3 text-gray-600 dark:text-gray-400">{{ service.category.name|default:'—' }}</td>
+            <td class="px-6 py-3 text-gray-900 dark:text-white font-mono">
+              {% if service.base_price %}{{ service.base_price }} ₽{% else %}—{% endif %}
+            </td>
+            <td class="px-6 py-3">
+              {% if service.is_active %}
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
+                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                {% translate 'Active' %}
+              </span>
+              {% else %}
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+                {% translate 'Inactive' %}
+              </span>
+              {% endif %}
+            </td>
+            <td class="px-6 py-3 text-gray-600 dark:text-gray-400">{{ service.order }}</td>
+            <td class="px-6 py-3">
+              <div class="flex items-center gap-2">
+                <a href="#" class="p-1.5 rounded-lg text-gray-400 hover:text-baikal-600 dark:hover:text-baikal-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" title="{% translate 'Edit' %}">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                </a>
+                <a href="#" class="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors" title="{% translate 'Delete' %}">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="6" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">{% translate 'No services yet.' %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Tab: Tariffs -->
+<div id="tab-tariffs" class="service-tab-content hidden">
+  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'Tariffs' %}</h3>
+      <a href="#" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-xl transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        {% translate 'Add Tariff' %}
+      </a>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 dark:bg-gray-900 text-left">
+          <tr>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Name' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Weight Range' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Price / kg' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Delivery Days' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Actions' %}</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+          {% for tariff in tariffs %}
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+            <td class="px-6 py-3 text-gray-900 dark:text-white font-medium">{{ tariff.name }}</td>
+            <td class="px-6 py-3 text-gray-600 dark:text-gray-400">
+              {% if tariff.min_weight and tariff.max_weight %}
+                {{ tariff.min_weight }} – {{ tariff.max_weight }} {% translate 'kg' %}
+              {% elif tariff.min_weight %}
+                {% blocktranslate with w=tariff.min_weight %}from {{ w }} kg{% endblocktranslate %}
+              {% elif tariff.max_weight %}
+                {% blocktranslate with w=tariff.max_weight %}up to {{ w }} kg{% endblocktranslate %}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+            <td class="px-6 py-3 font-mono text-gray-900 dark:text-white">{{ tariff.price_per_kg }} ₽</td>
+            <td class="px-6 py-3">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400">
+                {{ tariff.delivery_days_min }}–{{ tariff.delivery_days_max }} {% translate 'days' %}
+              </span>
+            </td>
+            <td class="px-6 py-3">
+              <div class="flex items-center gap-2">
+                <a href="#" class="p-1.5 rounded-lg text-gray-400 hover:text-baikal-600 dark:hover:text-baikal-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" title="{% translate 'Edit' %}">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                </a>
+                <a href="#" class="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors" title="{% translate 'Delete' %}">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">{% translate 'No tariffs yet.' %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block dash_extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.service-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.service-tab').forEach(t => {
+        t.classList.remove('bg-baikal-600', 'text-white', 'active');
+        t.classList.add('bg-gray-100', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+      });
+      this.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+      this.classList.add('bg-baikal-600', 'text-white', 'active');
+      document.querySelectorAll('.service-tab-content').forEach(c => c.classList.add('hidden'));
+      document.getElementById('tab-' + this.dataset.tab).classList.remove('hidden');
+    });
+  });
+});
+</script>
+{% endblock %}

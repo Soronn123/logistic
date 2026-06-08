@@ -1,0 +1,95 @@
+{% extends 'base.html' %}{% load i18n static i18n_extras %}
+{% block title %}{% translate 'Tariffs & Rates' %} — Baikal-Service{% endblock %}
+{% block meta_description %}{% translate 'Cargo transportation tariffs and price list' %}{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center mb-2">{% translate 'Tariffs & Rates' %}</h1>
+    <p class="text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto mb-10">{% translate 'Transparent pricing for all types of cargo transportation' %}</p>
+
+    <!-- Price calculator CTA -->
+    <div class="bg-baikal-600 rounded-2xl p-6 sm:p-8 mb-10 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <h2 class="text-xl font-semibold text-white mb-1">{% translate 'Need an exact quote?' %}</h2>
+        <p class="text-baikal-100 text-sm">{% translate 'Use our calculator for instant estimate' %}</p>
+      </div>
+      <a href="{% url 'core:calculator' %}" class="px-6 py-3 bg-white text-baikal-600 font-semibold rounded-xl hover:bg-baikal-50 transition-colors shadow-lg whitespace-nowrap">
+        {% translate 'Calculate Now' %}
+      </a>
+    </div>
+
+    <!-- Tariff Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+      {% for tariff in tariffs %}
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{{ tariff|localized }}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">{{ tariff|localized_field:'description' }}</p>
+        {% if tariff.price_per_kg %}
+        <div class="mb-4">
+          <span class="text-2xl font-bold text-baikal-600 dark:text-baikal-400">{{ tariff.price_per_kg }} ₽</span>
+          <span class="text-sm text-gray-500 dark:text-gray-400"> / {% translate 'kg' %}</span>
+        </div>
+        {% endif %}
+        <div class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+          {% if tariff.min_weight %}
+          <div class="flex justify-between">
+            <span>{% translate 'Min weight' %}</span>
+            <span class="font-medium text-gray-900 dark:text-white">{{ tariff.min_weight }} {% translate 'kg' %}</span>
+          </div>
+          {% endif %}
+          {% if tariff.max_weight %}
+          <div class="flex justify-between">
+            <span>{% translate 'Max weight' %}</span>
+            <span class="font-medium text-gray-900 dark:text-white">{{ tariff.max_weight }} {% translate 'kg' %}</span>
+          </div>
+          {% endif %}
+          {% if tariff.delivery_days_min and tariff.delivery_days_max %}
+          <div class="flex justify-between">
+            <span>{% translate 'Delivery' %}</span>
+            <span class="font-medium text-gray-900 dark:text-white">{{ tariff.delivery_days_min }}-{{ tariff.delivery_days_max }} {% translate 'days' %}</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-span-full text-center py-12">
+        <p class="text-gray-500 dark:text-gray-400">{% translate 'No tariffs available.' %}</p>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Tariff Table -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+      <div class="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'Price List by Weight' %}</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-baikal-50 dark:bg-gray-900">
+              <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">{% translate 'Weight (kg)' %}</th>
+              <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">{% translate 'Direction' %}</th>
+              <th class="text-right px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">{% translate 'Price, ₽' %}</th>
+              <th class="text-center px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">{% translate 'Delivery time' %}</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+            {% for price in price_list %}
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+              <td class="px-4 py-3 text-gray-900 dark:text-white">{{ price.weight }}</td>
+              <td class="px-4 py-3 text-gray-600 dark:text-gray-400">{{ price.direction }}</td>
+              <td class="px-4 py-3 text-right font-medium text-gray-900 dark:text-white">{{ price.price }} ₽</td>
+              <td class="px-4 py-3 text-center text-gray-600 dark:text-gray-400">{{ price.delivery_time }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4" class="px-4 py-12 text-center text-gray-500 dark:text-gray-400">{% translate 'Price list coming soon.' %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

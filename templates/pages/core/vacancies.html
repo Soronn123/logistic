@@ -1,0 +1,79 @@
+{% extends 'base.html' %}{% load i18n static i18n_extras %}
+{% block title %}{% translate 'Careers' %} — Baikal-Service{% endblock %}
+{% block meta_description %}{% translate 'Open positions at Baikal-Service' %}{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center mb-2">{% translate 'Careers at Baikal-Service' %}</h1>
+    <p class="text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto mb-8">{% translate 'Join our team — we are always looking for talented professionals' %}</p>
+
+    <!-- Filters -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100 dark:border-gray-700 mb-8">
+      <form method="get" class="flex flex-col sm:flex-row gap-4">
+        <div class="flex-1">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Department' %}</label>
+          <select name="department" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors">
+            <option value="">{% translate 'All departments' %}</option>
+            {% for dept in departments %}
+            <option value="{{ dept }}" {% if request.GET.department == dept %}selected{% endif %}>{{ dept }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="flex-1">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'City' %}</label>
+          <select name="city" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors">
+            <option value="">{% translate 'All cities' %}</option>
+            {% for city in cities %}
+            <option value="{{ city.id }}" {% if request.GET.city == city.id|stringformat:'s' %}selected{% endif %}>{{ city|localized }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="flex items-end">
+          <button type="submit" class="w-full sm:w-auto px-6 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl transition-colors text-sm">{% translate 'Filter' %}</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Vacancy Cards -->
+    <div class="space-y-4">
+      {% for vacancy in vacancies %}
+      <a href="{% url 'core:vacancy_detail' slug=vacancy.slug %}" class="block bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300 group">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-baikal-600 dark:group-hover:text-baikal-400 transition-colors">{{ vacancy|localized }}</h3>
+            <div class="flex flex-wrap items-center gap-3 mt-2 text-sm text-gray-500 dark:text-gray-400">
+              <span class="inline-flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                {{ vacancy.department }}
+              </span>
+              {% if vacancy.city %}
+              <span class="inline-flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                {{ vacancy.city|localized }}
+              </span>
+              {% endif %}
+              {% if vacancy.salary_from or vacancy.salary_to %}
+              <span class="inline-flex items-center gap-1 text-baikal-600 dark:text-baikal-400 font-medium">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                {% if vacancy.salary_from and vacancy.salary_to %}{{ vacancy.salary_from }} — {{ vacancy.salary_to }} ₽{% elif vacancy.salary_from %}{% translate 'from' %} {{ vacancy.salary_from }} ₽{% else %}{% translate 'up to' %} {{ vacancy.salary_to }} ₽{% endif %}
+              </span>
+              {% endif %}
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-gray-400 dark:text-gray-500">{% translate 'Published' %}: {{ vacancy.published_at|date:"d.m.Y" }}</span>
+            <svg class="w-5 h-5 text-gray-300 dark:text-gray-600 group-hover:text-baikal-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+        <p class="text-gray-600 dark:text-gray-400 text-sm mt-3 line-clamp-2">{{ vacancy|localized_field:'short_description' }}</p>
+      </a>
+      {% empty %}
+      <div class="text-center py-16">
+        <svg class="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        <p class="text-gray-500 dark:text-gray-400 text-lg">{% translate 'No open positions at the moment. Check back later.' %}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,4074 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-08 02:50+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: apps/core/admin.py:15 apps/core/admin.py:50 apps/core/admin.py:64
+#: apps/core/admin.py:98 baikal/settings.py:88
+msgid "Russian"
+msgstr "Русский"
+
+#: apps/core/admin.py:16 apps/core/admin.py:51 apps/core/admin.py:65
+#: apps/core/admin.py:99 baikal/settings.py:89
+msgid "English"
+msgstr "Английский"
+
+#: apps/core/admin.py:17
+msgid "SEO"
+msgstr "SEO"
+
+#: apps/core/admin.py:36
+msgid "Approve selected reviews"
+msgstr "Одобрить выбранные отзывы"
+
+#: apps/core/admin.py:52
+msgid "Publishing"
+msgstr "Публикация"
+
+#: apps/core/admin.py:66
+msgid "Salary"
+msgstr "Зарплата"
+
+#: apps/core/admin.py:100
+msgid "Period"
+msgstr "Период"
+
+#: apps/core/apps.py:9
+msgid "Core"
+msgstr "Основной модуль"
+
+#: apps/core/forms.py:12
+msgid "Your name"
+msgstr "Ваше имя"
+
+#: apps/core/forms.py:13
+msgid "Your email"
+msgstr "Ваш email"
+
+#: apps/core/forms.py:14
+msgid "Your phone"
+msgstr "Ваш телефон"
+
+#: apps/core/forms.py:15 apps/core/models.py:118 apps/users/models.py:45
+#: templates/pages/core/contact.html:66
+#: templates/pages/dashboard/tickets.html:54
+#: templates/pages/users/ticket_create.html:28
+msgid "Subject"
+msgstr "Тема"
+
+#: apps/core/forms.py:16
+msgid "Your message"
+msgstr "Ваше сообщение"
+
+#: apps/core/forms.py:23 apps/orders/models.py:22
+#: templates/pages/core/track.html:14
+msgid "Tracking number"
+msgstr "Трек-номер"
+
+#: apps/core/forms.py:26 templates/pages/core/home.html:47
+msgid "Enter tracking number"
+msgstr "Введите трек-номер"
+
+#: apps/core/forms.py:34 templates/pages/core/calculator.html:21
+#: templates/pages/core/home.html:63 templates/pages/orders/create.html:56
+msgid "From city"
+msgstr "Откуда"
+
+#: apps/core/forms.py:39 templates/pages/core/calculator.html:30
+#: templates/pages/core/home.html:69 templates/pages/orders/create.html:84
+msgid "To city"
+msgstr "Куда"
+
+#: apps/core/forms.py:44 apps/orders/models.py:33
+#: templates/pages/core/calculator.html:49 templates/pages/core/tariffs.html:70
+#: templates/pages/orders/create.html:105
+msgid "Weight (kg)"
+msgstr "Вес (кг)"
+
+#: apps/core/forms.py:45
+msgid "e.g. 10"
+msgstr "напр. 10"
+
+#: apps/core/models.py:7 templates/base.html:101 templates/base.html:227
+msgid "About"
+msgstr "О компании"
+
+#: apps/core/models.py:8 templates/base.html:228 templates/base.html:328
+#: templates/pages/core/news_detail.html:15
+#: templates/pages/core/news_list.html:13
+#: templates/pages/core/news_list.html:15
+msgid "News"
+msgstr "Новости"
+
+#: apps/core/models.py:9 apps/core/models.py:106
+msgid "Vacancy"
+msgstr "Вакансия"
+
+#: apps/core/models.py:10 apps/core/models.py:62
+msgid "Review"
+msgstr "Отзыв"
+
+#: apps/core/models.py:11
+msgid "Press"
+msgstr "Пресса"
+
+#: apps/core/models.py:12 apps/core/models.py:141
+msgid "Tender"
+msgstr "Тендер"
+
+#: apps/core/models.py:13 apps/core/models.py:44 templates/base.html:231
+#: templates/base.html:331 templates/pages/core/faq.html:13
+msgid "FAQ"
+msgstr "Вопросы и ответы"
+
+#: apps/core/models.py:15 apps/core/models.py:73 apps/core/models.py:94
+#: apps/core/models.py:134 apps/core/models.py:152 apps/services/models.py:7
+#: apps/services/models.py:25 apps/services/models.py:51
+msgid "Slug"
+msgstr "URL-псевдоним"
+
+#: apps/core/models.py:16 apps/core/models.py:71 apps/core/models.py:92
+#: apps/core/models.py:133 apps/core/models.py:150 apps/documents/models.py:16
+#: apps/partners/models.py:35
+msgid "Title"
+msgstr "Название"
+
+#: apps/core/models.py:17 apps/core/models.py:72 apps/core/models.py:93
+#: apps/core/models.py:151 apps/documents/models.py:17
+msgid "Title (EN)"
+msgstr "Название (EN)"
+
+#: apps/core/models.py:18 templates/pages/dashboard/base_dashboard.html:88
+msgid "Content"
+msgstr "Содержание"
+
+#: apps/core/models.py:19
+msgid "Content (EN)"
+msgstr "Содержание (EN)"
+
+#: apps/core/models.py:20
+msgid "Meta description"
+msgstr "Мета-описание"
+
+#: apps/core/models.py:21 apps/core/models.py:41 apps/core/models.py:80
+#: templates/pages/core/tender_detail.html:50
+#: templates/pages/core/vacancies.html:64
+#: templates/pages/core/vacancy_detail.html:32
+msgid "Published"
+msgstr "Опубликован"
+
+#: apps/core/models.py:22 apps/core/models.py:58 apps/core/models.py:121
+#: apps/documents/models.py:45 apps/orders/models.py:43
+#: apps/partners/models.py:18 apps/users/models.py:50 apps/users/models.py:66
+#: apps/users/models.py:88
+msgid "Created at"
+msgstr "Дата создания"
+
+#: apps/core/models.py:23 apps/orders/models.py:44 apps/users/models.py:51
+msgid "Updated at"
+msgstr "Дата обновления"
+
+#: apps/core/models.py:24
+msgid "Page type"
+msgstr "Тип страницы"
+
+#: apps/core/models.py:27
+msgid "Content page"
+msgstr "Страница контента"
+
+#: apps/core/models.py:28
+msgid "Content pages"
+msgstr "Страницы контента"
+
+#: apps/core/models.py:35
+msgid "Question"
+msgstr "Вопрос"
+
+#: apps/core/models.py:36
+msgid "Question (EN)"
+msgstr "Вопрос (EN)"
+
+#: apps/core/models.py:37
+msgid "Answer"
+msgstr "Ответ"
+
+#: apps/core/models.py:38
+msgid "Answer (EN)"
+msgstr "Ответ (EN)"
+
+#: apps/core/models.py:39 apps/documents/models.py:18
+#: apps/services/models.py:23
+msgid "Category"
+msgstr "Категория"
+
+#: apps/core/models.py:40 apps/geo/models.py:56 apps/orders/models.py:49
+#: apps/orders/models.py:58 apps/orders/models.py:74 apps/services/models.py:10
+msgid "Order"
+msgstr "Порядок"
+
+#: apps/core/models.py:45
+msgid "FAQs"
+msgstr "Часто задаваемые вопросы"
+
+#: apps/core/models.py:53
+msgid "Author name"
+msgstr "Имя автора"
+
+#: apps/core/models.py:54
+msgid "Author company"
+msgstr "Компания автора"
+
+#: apps/core/models.py:55
+msgid "Text"
+msgstr "Текст"
+
+#: apps/core/models.py:56
+msgid "Rating"
+msgstr "Рейтинг"
+
+#: apps/core/models.py:57 apps/partners/models.py:9
+msgid "Approved"
+msgstr "Одобрен"
+
+#: apps/core/models.py:59
+msgid "Source"
+msgstr "Источник"
+
+#: apps/core/models.py:63 templates/base.html:229 templates/base.html:330
+#: templates/pages/core/reviews.html:2
+msgid "Reviews"
+msgstr "Отзывы"
+
+#: apps/core/models.py:74
+msgid "Short text"
+msgstr "Краткий текст"
+
+#: apps/core/models.py:75
+msgid "Short text (EN)"
+msgstr "Краткий текст (EN)"
+
+#: apps/core/models.py:76
+msgid "Full text"
+msgstr "Полный текст"
+
+#: apps/core/models.py:77
+msgid "Full text (EN)"
+msgstr "Полный текст (EN)"
+
+#: apps/core/models.py:78 apps/core/models.py:155 apps/geo/models.py:54
+#: apps/partners/models.py:36
+msgid "Image"
+msgstr "Изображение"
+
+#: apps/core/models.py:79 apps/core/models.py:103 apps/core/models.py:138
+msgid "Published at"
+msgstr "Дата публикации"
+
+#: apps/core/models.py:83
+msgid "News item"
+msgstr "Новость"
+
+#: apps/core/models.py:84
+msgid "News items"
+msgstr "Новости"
+
+#: apps/core/models.py:95 templates/pages/core/vacancies.html:14
+msgid "Department"
+msgstr "Отдел"
+
+#: apps/core/models.py:96 apps/geo/models.py:16 apps/geo/models.py:30
+#: templates/pages/core/vacancies.html:23
+msgid "City"
+msgstr "Город"
+
+#: apps/core/models.py:97 apps/core/models.py:153 apps/services/models.py:27
+msgid "Short description"
+msgstr "Краткое описание"
+
+#: apps/core/models.py:98 apps/core/models.py:154
+msgid "Full description"
+msgstr "Полное описание"
+
+#: apps/core/models.py:99 templates/pages/core/vacancy_detail.html:45
+msgid "Requirements"
+msgstr "Требования"
+
+#: apps/core/models.py:100
+msgid "Salary from"
+msgstr "Зарплата от"
+
+#: apps/core/models.py:101
+msgid "Salary to"
+msgstr "Зарплата до"
+
+#: apps/core/models.py:102 apps/core/models.py:137 apps/core/models.py:158
+#: apps/documents/models.py:22 apps/geo/models.py:12 apps/geo/models.py:39
+#: apps/partners/models.py:41 apps/services/models.py:31
+#: templates/pages/core/tender_detail.html:18
+#: templates/pages/core/tenders.html:24
+#: templates/pages/dashboard/user_form.html:48
+msgid "Active"
+msgstr "Активно"
+
+#: apps/core/models.py:107
+msgid "Vacancies"
+msgstr "Вакансии"
+
+#: apps/core/models.py:115 apps/geo/models.py:6 apps/partners/models.py:53
+#: apps/services/models.py:6 apps/services/models.py:24
+#: apps/services/models.py:50 apps/services/models.py:65
+#: templates/pages/core/contact.html:49
+msgid "Name"
+msgstr "Имя"
+
+#: apps/core/models.py:116 apps/geo/models.py:35 apps/partners/models.py:14
+#: apps/users/forms.py:12 apps/users/forms.py:30 apps/users/models.py:15
+#: templates/pages/core/contact.html:55 templates/pages/core/contact.html:104
+#: templates/pages/core/vacancy_detail.html:85
+#: templates/pages/dashboard/login.html:24
+#: templates/pages/dashboard/user_form.html:31
+#: templates/pages/dashboard/users.html:40
+#: templates/pages/orders/create.html:52 templates/pages/orders/create.html:80
+#: templates/pages/partners/apply.html:37 templates/pages/users/login.html:42
+#: templates/pages/users/register.html:90
+#: templates/pages/users/settings.html:72
+msgid "Email"
+msgstr "Эл. почта"
+
+#: apps/core/models.py:117 apps/geo/models.py:34 apps/partners/models.py:15
+#: apps/users/forms.py:34 apps/users/models.py:16
+#: templates/pages/core/contact.html:60 templates/pages/core/contact.html:94
+#: templates/pages/core/vacancy_detail.html:89
+#: templates/pages/dashboard/user_form.html:36
+#: templates/pages/dashboard/users.html:41
+#: templates/pages/orders/create.html:48 templates/pages/orders/create.html:76
+#: templates/pages/partners/apply.html:31
+#: templates/pages/users/register.html:106
+#: templates/pages/users/settings.html:65
+msgid "Phone"
+msgstr "Телефон"
+
+#: apps/core/models.py:119 apps/users/models.py:65
+#: templates/pages/core/contact.html:71
+#: templates/pages/users/ticket_create.html:44
+msgid "Message"
+msgstr "Сообщение"
+
+#: apps/core/models.py:120
+msgid "Read"
+msgstr "Прочитано"
+
+#: apps/core/models.py:124
+msgid "Contact message"
+msgstr "Обращение"
+
+#: apps/core/models.py:125
+msgid "Contact messages"
+msgstr "Обращения"
+
+#: apps/core/models.py:135 apps/documents/models.py:20
+#: apps/partners/models.py:54 apps/services/models.py:9
+#: apps/services/models.py:26 apps/services/models.py:52
+#: apps/services/models.py:66 apps/users/models.py:87
+#: templates/pages/users/balance.html:65 templates/pages/users/profile.html:82
+msgid "Description"
+msgstr "Описание"
+
+#: apps/core/models.py:136 templates/pages/core/tender_detail.html:51
+#: templates/pages/core/tenders.html:21
+msgid "Deadline"
+msgstr "Срок выполнения"
+
+#: apps/core/models.py:142 templates/pages/core/tender_detail.html:8
+#: templates/pages/core/tenders.html:2
+msgid "Tenders"
+msgstr "Тендеры"
+
+#: apps/core/models.py:156 apps/partners/models.py:39
+msgid "Start date"
+msgstr "Дата начала"
+
+#: apps/core/models.py:157 apps/partners/models.py:40
+msgid "End date"
+msgstr "Дата окончания"
+
+#: apps/core/models.py:162
+msgid "Promotion"
+msgstr "Акция"
+
+#: apps/core/models.py:163 templates/pages/core/promotion_detail.html:8
+#: templates/pages/core/promotions.html:2
+msgid "Promotions"
+msgstr "Акции"
+
+#: apps/core/views.py:182
+msgid "Order not found"
+msgstr "Заказ не найден"
+
+#: apps/dashboard/apps.py:9 templates/pages/dashboard/base_dashboard.html:7
+#: templates/pages/dashboard/base_dashboard.html:65
+#: templates/pages/dashboard/base_dashboard.html:151
+#: templates/pages/dashboard/home.html:2
+#: templates/pages/dashboard/login.html:15
+msgid "Dashboard"
+msgstr "Панель управления"
+
+#: apps/dashboard/views.py:61
+msgid "User updated successfully."
+msgstr "Пользователь успешно обновлён."
+
+#: apps/dashboard/views.py:71
+msgid "User deleted successfully."
+msgstr "Пользователь успешно удалён."
+
+#: apps/documents/apps.py:9 apps/documents/models.py:26
+#: templates/pages/dashboard/base_dashboard.html:96
+#: templates/pages/documents/list.html:2
+msgid "Documents"
+msgstr "Документы"
+
+#: apps/documents/models.py:7 templates/pages/users/accounting_docs.html:25
+msgid "Contracts"
+msgstr "Договоры"
+
+#: apps/documents/models.py:8
+msgid "Shipping documents"
+msgstr "Отгрузочные документы"
+
+#: apps/documents/models.py:9
+msgid "Receipt documents"
+msgstr "Приемочные документы"
+
+#: apps/documents/models.py:10
+msgid "Power of attorney"
+msgstr "Доверенность"
+
+#: apps/documents/models.py:11 templates/pages/users/accounting_docs.html:29
+msgid "Charter"
+msgstr "Устав"
+
+#: apps/documents/models.py:12 templates/pages/users/accounting_docs.html:30
+msgid "Claims"
+msgstr "Претензии"
+
+#: apps/documents/models.py:13 templates/pages/users/accounting_docs.html:31
+msgid "Refunds"
+msgstr "Возвраты"
+
+#: apps/documents/models.py:14
+msgid "TUE replacement"
+msgstr "Замена ТУЭ"
+
+#: apps/documents/models.py:19 apps/orders/models.py:76
+msgid "File"
+msgstr "Файл"
+
+#: apps/documents/models.py:21 apps/orders/models.py:77
+msgid "Uploaded at"
+msgstr "Дата загрузки"
+
+#: apps/documents/models.py:25
+msgid "Document"
+msgstr "Документ"
+
+#: apps/documents/models.py:35
+msgid "Pending"
+msgstr "В ожидании"
+
+#: apps/documents/models.py:36
+msgid "Processing"
+msgstr "В обработке"
+
+#: apps/documents/models.py:37
+msgid "Fulfilled"
+msgstr "Выполнен"
+
+#: apps/documents/models.py:38 apps/partners/models.py:10
+msgid "Rejected"
+msgstr "Отклонен"
+
+#: apps/documents/models.py:40 apps/orders/models.py:23 apps/users/models.py:27
+#: apps/users/models.py:84 templates/pages/dashboard/users.html:39
+msgid "User"
+msgstr "Пользователь"
+
+#: apps/documents/models.py:41 apps/orders/models.py:75
+#: templates/pages/users/accounting_docs.html:21
+msgid "Document type"
+msgstr "Тип документа"
+
+#: apps/documents/models.py:42 templates/pages/users/accounting_docs.html:38
+msgid "Period start"
+msgstr "Начало периода"
+
+#: apps/documents/models.py:43 templates/pages/users/accounting_docs.html:43
+msgid "Period end"
+msgstr "Конец периода"
+
+#: apps/documents/models.py:44 apps/orders/models.py:41
+#: apps/orders/models.py:59 apps/partners/models.py:17 apps/users/models.py:46
+#: templates/pages/dashboard/home.html:81
+#: templates/pages/dashboard/orders.html:28
+#: templates/pages/dashboard/tickets.html:57
+#: templates/pages/users/orders.html:22
+msgid "Status"
+msgstr "Статус"
+
+#: apps/documents/models.py:46
+msgid "Fulfilled at"
+msgstr "Выполнен"
+
+#: apps/documents/models.py:49
+msgid "Accounting request"
+msgstr "Бухгалтерский запрос"
+
+#: apps/documents/models.py:50
+msgid "Accounting requests"
+msgstr "Бухгалтерские запросы"
+
+#: apps/geo/apps.py:9
+msgid "Geography"
+msgstr "География"
+
+#: apps/geo/models.py:7
+msgid "Name (EN)"
+msgstr "Название (EN)"
+
+#: apps/geo/models.py:8
+msgid "Region"
+msgstr "Регион"
+
+#: apps/geo/models.py:9
+msgid "Region (EN)"
+msgstr "Регион (EN)"
+
+#: apps/geo/models.py:10 apps/geo/models.py:37
+msgid "Latitude"
+msgstr "Широта"
+
+#: apps/geo/models.py:11 apps/geo/models.py:38
+msgid "Longitude"
+msgstr "Долгота"
+
+#: apps/geo/models.py:13
+msgid "Timezone"
+msgstr "Часовой пояс"
+
+#: apps/geo/models.py:17
+msgid "Cities"
+msgstr "Города"
+
+#: apps/geo/models.py:26
+msgid "Warehouse"
+msgstr "Склад"
+
+#: apps/geo/models.py:27
+msgid "Pickup point"
+msgstr "Пункт выдачи"
+
+#: apps/geo/models.py:28
+msgid "Office"
+msgstr "Офис"
+
+#: apps/geo/models.py:31
+msgid "Branch type"
+msgstr "Тип отделения"
+
+#: apps/geo/models.py:32 templates/pages/core/contact.html:114
+msgid "Address"
+msgstr "Адрес"
+
+#: apps/geo/models.py:33
+msgid "Address (EN)"
+msgstr "Адрес (EN)"
+
+#: apps/geo/models.py:36
+msgid "Working hours"
+msgstr "Часы работы"
+
+#: apps/geo/models.py:40 templates/pages/geo/city_branches.html:68
+msgid "Pickup available"
+msgstr "Самовывоз"
+
+#: apps/geo/models.py:41 templates/pages/geo/city_branches.html:69
+msgid "Delivery available"
+msgstr "Доставка"
+
+#: apps/geo/models.py:42 templates/pages/geo/city_branches.html:70
+msgid "Loading equipment"
+msgstr "Погрузочная техника"
+
+#: apps/geo/models.py:45 apps/geo/models.py:53
+msgid "Branch"
+msgstr "Отделение"
+
+#: apps/geo/models.py:46 templates/base.html:100 templates/base.html:211
+#: templates/pages/dashboard/base_dashboard.html:92
+#: templates/pages/geo/city_branches.html:9
+msgid "Branches"
+msgstr "Отделения"
+
+#: apps/geo/models.py:55
+msgid "Caption"
+msgstr "Подпись"
+
+#: apps/geo/models.py:59
+msgid "Branch image"
+msgstr "Изображение отделения"
+
+#: apps/geo/models.py:60
+msgid "Branch images"
+msgstr "Изображения отделения"
+
+#: apps/orders/admin.py:33 apps/users/models.py:64
+#: templates/pages/orders/create.html:28
+msgid "Sender"
+msgstr "Отправитель"
+
+#: apps/orders/admin.py:34 templates/pages/orders/create.html:29
+msgid "Recipient"
+msgstr "Получатель"
+
+#: apps/orders/admin.py:35 templates/pages/orders/create.html:30
+#: templates/pages/orders/create.html:173
+msgid "Cargo"
+msgstr "Груз"
+
+#: apps/orders/admin.py:36 apps/orders/models.py:39 apps/services/models.py:35
+#: templates/pages/orders/create.html:178
+msgid "Service"
+msgstr "Услуга"
+
+#: apps/orders/admin.py:37
+msgid "Dates"
+msgstr "Даты"
+
+#: apps/orders/apps.py:9 apps/orders/models.py:50
+#: templates/pages/dashboard/base_dashboard.html:73
+msgid "Orders"
+msgstr "Заказы"
+
+#: apps/orders/models.py:13 templates/pages/dashboard/orders.html:14
+#: templates/pages/users/orders.html:41
+msgid "Draft"
+msgstr "Черновик"
+
+#: apps/orders/models.py:14 templates/pages/dashboard/orders.html:15
+#: templates/pages/users/orders.html:45
+msgid "Confirmed"
+msgstr "Подтвержден"
+
+#: apps/orders/models.py:15
+msgid "Picked up"
+msgstr "Забран"
+
+#: apps/orders/models.py:16
+msgid "In transit"
+msgstr "В пути"
+
+#: apps/orders/models.py:17
+msgid "At warehouse"
+msgstr "На складе"
+
+#: apps/orders/models.py:18
+msgid "Out for delivery"
+msgstr "Доставляется"
+
+#: apps/orders/models.py:19 templates/pages/dashboard/orders.html:17
+#: templates/pages/users/orders.html:65
+msgid "Delivered"
+msgstr "Доставлен"
+
+#: apps/orders/models.py:20 templates/pages/users/orders.html:69
+msgid "Cancelled"
+msgstr "Отменен"
+
+#: apps/orders/models.py:24 templates/pages/orders/create.html:44
+msgid "Sender name"
+msgstr "Имя отправителя"
+
+#: apps/orders/models.py:25
+msgid "Sender phone"
+msgstr "Телефон отправителя"
+
+#: apps/orders/models.py:26
+msgid "Sender city"
+msgstr "Город отправителя"
+
+#: apps/orders/models.py:27
+msgid "Sender address detail"
+msgstr "Адрес отправителя"
+
+#: apps/orders/models.py:28 templates/pages/orders/create.html:72
+msgid "Recipient name"
+msgstr "Имя получателя"
+
+#: apps/orders/models.py:29
+msgid "Recipient phone"
+msgstr "Телефон получателя"
+
+#: apps/orders/models.py:30
+msgid "Recipient city"
+msgstr "Город получателя"
+
+#: apps/orders/models.py:31
+msgid "Recipient address detail"
+msgstr "Адрес получателя"
+
+#: apps/orders/models.py:32 templates/pages/orders/create.html:100
+msgid "Cargo description"
+msgstr "Описание груза"
+
+#: apps/orders/models.py:34
+msgid "Volume (m³)"
+msgstr "Объем (м³)"
+
+#: apps/orders/models.py:35 templates/pages/core/calculator.html:53
+#: templates/pages/orders/create.html:109
+msgid "Length (cm)"
+msgstr "Длина (см)"
+
+#: apps/orders/models.py:36 templates/pages/core/calculator.html:57
+#: templates/pages/orders/create.html:113
+msgid "Width (cm)"
+msgstr "Ширина (см)"
+
+#: apps/orders/models.py:37 templates/pages/core/calculator.html:61
+#: templates/pages/orders/create.html:117
+msgid "Height (cm)"
+msgstr "Высота (см)"
+
+#: apps/orders/models.py:38
+msgid "Declared value"
+msgstr "Объявленная ценность"
+
+#: apps/orders/models.py:40 apps/services/models.py:58 templates/base.html:81
+#: templates/base.html:206 templates/pages/orders/create.html:148
+msgid "Additional services"
+msgstr "Дополнительные услуги"
+
+#: apps/orders/models.py:42
+msgid "Total price"
+msgstr "Итоговая цена"
+
+#: apps/orders/models.py:45
+msgid "Estimated delivery"
+msgstr "Ожидаемая доставка"
+
+#: apps/orders/models.py:46
+msgid "Actual delivery"
+msgstr "Фактическая доставка"
+
+#: apps/orders/models.py:60
+msgid "Changed by"
+msgstr "Кто изменил"
+
+#: apps/orders/models.py:61
+msgid "Timestamp"
+msgstr "Время"
+
+#: apps/orders/models.py:62
+msgid "Comment"
+msgstr "Комментарий"
+
+#: apps/orders/models.py:65
+msgid "Order status history"
+msgstr "История статусов заказа"
+
+#: apps/orders/models.py:66
+msgid "Order status histories"
+msgstr "Истории статусов заказа"
+
+#: apps/orders/models.py:80
+msgid "Order document"
+msgstr "Документ заказа"
+
+#: apps/orders/models.py:81
+msgid "Order documents"
+msgstr "Документы заказа"
+
+#: apps/partners/admin.py:18
+msgid "Approve selected applications"
+msgstr "Одобрить выбранные заявки"
+
+#: apps/partners/admin.py:22
+msgid "Mark selected as reviewing"
+msgstr "Отметить выбранные как на рассмотрении"
+
+#: apps/partners/apps.py:9 templates/pages/dashboard/base_dashboard.html:100
+#: templates/pages/partners/banners.html:11
+#: templates/pages/partners/iframe.html:11
+msgid "Partners"
+msgstr "Партнеры"
+
+#: apps/partners/models.py:7
+msgid "New"
+msgstr "Новый"
+
+#: apps/partners/models.py:8
+msgid "Reviewing"
+msgstr "На рассмотрении"
+
+#: apps/partners/models.py:12 apps/users/forms.py:35 apps/users/models.py:21
+#: templates/pages/dashboard/user_form.html:57
+#: templates/pages/partners/apply.html:16
+#: templates/pages/users/register.html:57
+#: templates/pages/users/settings.html:98
+msgid "Company name"
+msgstr "Название компании"
+
+#: apps/partners/models.py:13 templates/pages/partners/apply.html:27
+msgid "Contact person"
+msgstr "Контактное лицо"
+
+#: apps/partners/models.py:16 templates/pages/partners/apply.html:20
+msgid "Website"
+msgstr "Веб-сайт"
+
+#: apps/partners/models.py:21
+msgid "Partner application"
+msgstr "Заявка партнера"
+
+#: apps/partners/models.py:22
+msgid "Partner applications"
+msgstr "Заявки партнеров"
+
+#: apps/partners/models.py:31
+msgid "Header"
+msgstr "Шапка"
+
+#: apps/partners/models.py:32
+msgid "Sidebar"
+msgstr "Боковая панель"
+
+#: apps/partners/models.py:33
+msgid "Footer"
+msgstr "Подвал"
+
+#: apps/partners/models.py:37
+msgid "Link"
+msgstr "Ссылка"
+
+#: apps/partners/models.py:38
+msgid "Placement"
+msgstr "Размещение"
+
+#: apps/partners/models.py:42
+msgid "Clicks count"
+msgstr "Кол-во кликов"
+
+#: apps/partners/models.py:45
+msgid "Banner"
+msgstr "Баннер"
+
+#: apps/partners/models.py:46 templates/pages/dashboard/base_dashboard.html:111
+msgid "Banners"
+msgstr "Баннеры"
+
+#: apps/partners/models.py:55
+msgid "Embed code"
+msgstr "Код для вставки"
+
+#: apps/partners/models.py:56 templates/pages/partners/iframe.html:34
+msgid "Documentation"
+msgstr "Документация"
+
+#: apps/partners/models.py:59
+msgid "iFrame module"
+msgstr "iFrame модуль"
+
+#: apps/partners/models.py:60
+msgid "iFrame modules"
+msgstr "iFrame модули"
+
+#: apps/services/apps.py:9 apps/services/models.py:36 templates/base.html:72
+#: templates/base.html:199 templates/base.html:312
+#: templates/pages/dashboard/base_dashboard.html:84
+#: templates/pages/orders/create.html:31
+#: templates/pages/services/additionalservice_list.html:11
+#: templates/pages/services/category_detail.html:9
+#: templates/pages/services/category_list.html:2
+#: templates/pages/services/service_detail.html:25
+#: templates/pages/services/tariff_list.html:11
+msgid "Services"
+msgstr "Услуги"
+
+#: apps/services/models.py:8 apps/services/models.py:28
+msgid "Icon"
+msgstr "Иконка"
+
+#: apps/services/models.py:11
+msgid "Parent category"
+msgstr "Родительская категория"
+
+#: apps/services/models.py:14
+msgid "Service category"
+msgstr "Категория услуг"
+
+#: apps/services/models.py:15
+msgid "Service categories"
+msgstr "Категории услуг"
+
+#: apps/services/models.py:29
+msgid "Base price"
+msgstr "Базовая цена"
+
+#: apps/services/models.py:30
+msgid "Price unit"
+msgstr "Единица цены"
+
+#: apps/services/models.py:32
+msgid "Sort order"
+msgstr "Порядок сортировки"
+
+#: apps/services/models.py:46
+msgid "Fixed"
+msgstr "Фиксированная"
+
+#: apps/services/models.py:47
+msgid "Per unit"
+msgstr "За единицу"
+
+#: apps/services/models.py:48
+msgid "Percentage"
+msgstr "Процент"
+
+#: apps/services/models.py:53
+#: templates/pages/services/additionalservice_list.html:44
+msgid "Price"
+msgstr "Цена"
+
+#: apps/services/models.py:54
+msgid "Price type"
+msgstr "Тип цены"
+
+#: apps/services/models.py:57
+msgid "Additional service"
+msgstr "Дополнительная услуга"
+
+#: apps/services/models.py:67
+msgid "Min weight (kg)"
+msgstr "Мин. вес (кг)"
+
+#: apps/services/models.py:68
+msgid "Max weight (kg)"
+msgstr "Макс. вес (кг)"
+
+#: apps/services/models.py:69 templates/pages/services/tariff_list.html:26
+msgid "Price per kg"
+msgstr "Цена за кг"
+
+#: apps/services/models.py:70
+msgid "Min delivery days"
+msgstr "Мин. дней доставки"
+
+#: apps/services/models.py:71
+msgid "Max delivery days"
+msgstr "Макс. дней доставки"
+
+#: apps/services/models.py:74
+msgid "Tariff"
+msgstr "Тариф"
+
+#: apps/services/models.py:75 templates/base.html:226
+#: templates/pages/services/service_detail.html:59
+msgid "Tariffs"
+msgstr "Тарифы"
+
+#: apps/users/admin.py:16
+msgid "Personal info"
+msgstr "Личная информация"
+
+#: apps/users/admin.py:17
+msgid "Company"
+msgstr "Компания"
+
+#: apps/users/admin.py:18 templates/pages/users/settings.html:80
+msgid "Preferences"
+msgstr "Настройки"
+
+#: apps/users/admin.py:19
+msgid "Role & Balance"
+msgstr "Роль и баланс"
+
+#: apps/users/admin.py:20
+msgid "Permissions"
+msgstr "Права"
+
+#: apps/users/admin.py:21
+msgid "Important dates"
+msgstr "Важные даты"
+
+#: apps/users/apps.py:9 apps/users/models.py:28
+#: templates/pages/dashboard/base_dashboard.html:69
+msgid "Users"
+msgstr "Пользователи"
+
+#: apps/users/forms.py:19 apps/users/forms.py:44
+#: templates/pages/dashboard/login.html:28 templates/pages/users/login.html:50
+#: templates/pages/users/register.html:115
+msgid "Password"
+msgstr "Пароль"
+
+#: apps/users/forms.py:31 templates/pages/users/register.html:98
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: apps/users/forms.py:32 templates/pages/dashboard/user_form.html:21
+#: templates/pages/users/register.html:74
+#: templates/pages/users/settings.html:51
+msgid "First name"
+msgstr "Имя"
+
+#: apps/users/forms.py:33 templates/pages/dashboard/user_form.html:26
+#: templates/pages/users/register.html:81
+#: templates/pages/users/settings.html:58
+msgid "Last name"
+msgstr "Фамилия"
+
+#: apps/users/forms.py:36 apps/users/models.py:22
+#: templates/pages/dashboard/user_form.html:62
+#: templates/pages/users/register.html:64
+#: templates/pages/users/settings.html:102
+msgid "INN"
+msgstr "ИНН"
+
+#: apps/users/forms.py:48 templates/pages/users/register.html:134
+#: templates/pages/users/settings.html:121
+#: templates/pages/users/settings.html:122
+msgid "Confirm password"
+msgstr "Подтвердите пароль"
+
+#: apps/users/forms.py:73
+msgid "Ticket subject"
+msgstr "Тема тикета"
+
+#: apps/users/forms.py:86
+msgid "Write your message..."
+msgstr "Напишите сообщение..."
+
+#: apps/users/models.py:11 templates/pages/dashboard/users.html:26
+msgid "Client"
+msgstr "Клиент"
+
+#: apps/users/models.py:12 templates/pages/dashboard/users.html:27
+msgid "Manager"
+msgstr "Менеджер"
+
+#: apps/users/models.py:13 templates/pages/dashboard/users.html:28
+msgid "Admin"
+msgstr "Администратор"
+
+#: apps/users/models.py:17 templates/base.html:142 templates/base.html:190
+#: templates/base.html:239 templates/pages/dashboard/user_form.html:52
+#: templates/pages/dashboard/users.html:43 templates/pages/users/balance.html:4
+#: templates/pages/users/balance.html:67
+msgid "Balance"
+msgstr "Баланс"
+
+#: apps/users/models.py:18 templates/pages/dashboard/user_form.html:41
+#: templates/pages/dashboard/users.html:42
+msgid "Role"
+msgstr "Роль"
+
+#: apps/users/models.py:19 templates/pages/dashboard/user_form.html:73
+#: templates/pages/users/settings.html:83
+msgid "Language"
+msgstr "Язык"
+
+#: apps/users/models.py:20
+msgid "Light"
+msgstr "Светлая"
+
+#: apps/users/models.py:20
+msgid "Dark"
+msgstr "Темная"
+
+#: apps/users/models.py:20 templates/pages/dashboard/user_form.html:78
+#: templates/pages/users/settings.html:87
+msgid "Theme"
+msgstr "Тема"
+
+#: apps/users/models.py:23 templates/pages/dashboard/user_form.html:69
+#: templates/pages/users/register.html:35
+msgid "Legal entity"
+msgstr "Юридическое лицо"
+
+#: apps/users/models.py:24 templates/pages/users/settings.html:42
+msgid "Avatar"
+msgstr "Аватар"
+
+#: apps/users/models.py:36 templates/pages/dashboard/tickets.html:20
+#: templates/pages/users/ticket_detail.html:47
+#: templates/pages/users/tickets.html:29 templates/pages/users/tickets.html:68
+msgid "Open"
+msgstr "Открыт"
+
+#: apps/users/models.py:37 templates/pages/users/ticket_detail.html:51
+#: templates/pages/users/tickets.html:32 templates/pages/users/tickets.html:72
+msgid "In progress"
+msgstr "В работе"
+
+#: apps/users/models.py:38 templates/pages/core/tender_detail.html:18
+#: templates/pages/core/tenders.html:24
+#: templates/pages/dashboard/tickets.html:42
+#: templates/pages/users/ticket_detail.html:55
+#: templates/pages/users/tickets.html:35 templates/pages/users/tickets.html:76
+msgid "Closed"
+msgstr "Закрыт"
+
+#: apps/users/models.py:41 templates/pages/users/tickets.html:62
+msgid "Low"
+msgstr "Низкий"
+
+#: apps/users/models.py:42 templates/pages/users/tickets.html:58
+msgid "Medium"
+msgstr "Средний"
+
+#: apps/users/models.py:43 templates/pages/users/tickets.html:54
+msgid "High"
+msgstr "Высокий"
+
+#: apps/users/models.py:47 templates/pages/dashboard/tickets.html:56
+#: templates/pages/users/ticket_create.html:36
+msgid "Priority"
+msgstr "Приоритет"
+
+#: apps/users/models.py:48
+msgid "Created by"
+msgstr "Создан"
+
+#: apps/users/models.py:49
+msgid "Assigned to"
+msgstr "Назначен"
+
+#: apps/users/models.py:54 apps/users/models.py:63
+msgid "Ticket"
+msgstr "Тикет"
+
+#: apps/users/models.py:55 templates/pages/dashboard/base_dashboard.html:77
+msgid "Tickets"
+msgstr "Тикеты"
+
+#: apps/users/models.py:67
+msgid "Internal note"
+msgstr "Внутренняя заметка"
+
+#: apps/users/models.py:70
+msgid "Ticket message"
+msgstr "Сообщение тикета"
+
+#: apps/users/models.py:71
+msgid "Ticket messages"
+msgstr "Сообщения тикета"
+
+#: apps/users/models.py:80 templates/pages/users/balance.html:77
+#: templates/pages/users/profile.html:93
+msgid "Deposit"
+msgstr "Пополнение"
+
+#: apps/users/models.py:81 templates/pages/users/balance.html:81
+#: templates/pages/users/profile.html:97
+msgid "Withdrawal"
+msgstr "Списание"
+
+#: apps/users/models.py:82 templates/pages/users/balance.html:85
+#: templates/pages/users/profile.html:101
+msgid "Refund"
+msgstr "Возврат"
+
+#: apps/users/models.py:85 templates/pages/users/balance.html:66
+#: templates/pages/users/balance_success.html:15
+#: templates/pages/users/orders.html:24 templates/pages/users/profile.html:83
+msgid "Amount"
+msgstr "Сумма"
+
+#: apps/users/models.py:86
+msgid "Transaction type"
+msgstr "Тип операции"
+
+#: apps/users/models.py:89
+msgid "Balance after"
+msgstr "Баланс после"
+
+#: apps/users/models.py:92
+msgid "Transaction"
+msgstr "Транзакция"
+
+#: apps/users/models.py:93 templates/pages/users/profile.html:60
+msgid "Transactions"
+msgstr "Транзакции"
+
+#: apps/users/views.py:85
+msgid "Balance top-up"
+msgstr "Пополнение баланса"
+
+#: templates/404.html:4 templates/404.html:25
+msgid "Page not found"
+msgstr "Страница не найдена"
+
+#: templates/404.html:6
+msgid "The page you are looking for does not exist."
+msgstr "Страница, которую вы ищете, не существует."
+
+#: templates/404.html:29
+msgid ""
+"The page you are looking for might have been removed, had its name changed, "
+"or is temporarily unavailable."
+msgstr ""
+"Страница, которую вы ищете, могла быть удалена, переименована или временно "
+"недоступна."
+
+#: templates/404.html:38 templates/500.html:38
+msgid "Go to homepage"
+msgstr "На главную"
+
+#: templates/404.html:45
+msgid "Go back"
+msgstr "Назад"
+
+#: templates/404.html:51
+msgid "If you believe this is a mistake, please"
+msgstr "Если вы считаете, что это ошибка, пожалуйста"
+
+#: templates/404.html:53 templates/500.html:53
+msgid "contact our support team"
+msgstr "свяжитесь с нашей службой поддержки"
+
+#: templates/500.html:4
+msgid "Server error"
+msgstr "Ошибка сервера"
+
+#: templates/500.html:6
+msgid "An internal server error occurred. Please try again later."
+msgstr "Произошла внутренняя ошибка сервера. Пожалуйста, повторите попытку позже."
+
+#: templates/500.html:25
+msgid "Something went wrong"
+msgstr "Что-то пошло не так"
+
+#: templates/500.html:29
+msgid ""
+"An unexpected error occurred on our server. Our technical team has been "
+"notified and is working on a fix. Please try again in a few minutes."
+msgstr ""
+"Произошла непредвиденная ошибка на нашем сервере. Наша техническая команда "
+"уведомлена и работает над исправлением. Пожалуйста, повторите попытку "
+"через несколько минут."
+
+#: templates/500.html:45
+msgid "Try again"
+msgstr "Попробуйте снова"
+
+#: templates/500.html:51
+msgid "If the problem persists, please"
+msgstr "Если проблема сохраняется, пожалуйста"
+
+#: templates/base.html:7
+msgid ""
+"Baikal-Service — cargo transportation across Russia, Kazakhstan, Belarus, "
+"Kyrgyzstan, and China"
+msgstr ""
+"Baikal-Service — грузоперевозки по России, Казахстану, Беларуси, "
+"Кыргызстану и Китаю"
+
+#: templates/base.html:10
+msgid "Reliable cargo transportation services"
+msgstr "Надёжные услуги грузоперевозок"
+
+#: templates/base.html:76 templates/base.html:203
+msgid "All services"
+msgstr "Все услуги"
+
+#: templates/base.html:77 templates/base.html:204 templates/base.html:314
+msgid "Cargo transportation"
+msgstr "Грузоперевозки"
+
+#: templates/base.html:78
+msgid "Consolidated cargo"
+msgstr "Сборный груз"
+
+#: templates/base.html:79 templates/base.html:205 templates/base.html:315
+msgid "Marketplaces delivery"
+msgstr "Доставка на маркетплейсы"
+
+#: templates/base.html:80 templates/base.html:316
+msgid "Pallet transportation"
+msgstr "Паллетные перевозки"
+
+#: templates/base.html:85 templates/base.html:210
+msgid "Directions"
+msgstr "Направления"
+
+#: templates/base.html:89 templates/base.html:216
+msgid "Tools"
+msgstr "Инструменты"
+
+#: templates/base.html:93 templates/base.html:220
+msgid "Shipping calculator"
+msgstr "Калькулятор доставки"
+
+#: templates/base.html:94 templates/base.html:221
+msgid "Track cargo"
+msgstr "Отследить груз"
+
+#: templates/base.html:95
+msgid "Delivery times"
+msgstr "Сроки доставки"
+
+#: templates/base.html:96 templates/base.html:222
+msgid "Shipping request"
+msgstr "Заявка на перевозку"
+
+#: templates/base.html:102 templates/base.html:232 templates/base.html:332
+#: templates/base.html:338 templates/pages/dashboard/base_dashboard.html:107
+msgid "Contacts"
+msgstr "Контакты"
+
+#: templates/base.html:126
+msgid "Toggle theme"
+msgstr "Переключить тему"
+
+#: templates/base.html:139 templates/base.html:236
+#: templates/pages/users/profile.html:4
+msgid "Profile"
+msgstr "Профиль"
+
+#: templates/base.html:140 templates/base.html:237
+msgid "My orders"
+msgstr "Мои заказы"
+
+#: templates/base.html:141
+msgid "Support tickets"
+msgstr "Тикеты поддержки"
+
+#: templates/base.html:147 templates/base.html:243
+#: templates/pages/dashboard/base_dashboard.html:57
+#| msgid "Admin"
+msgid "Admin Panel"
+msgstr "Панель администратора"
+
+#: templates/base.html:153 templates/base.html:248
+#: templates/pages/dashboard/base_dashboard.html:135
+msgid "Logout"
+msgstr "Выход"
+
+#: templates/base.html:159 templates/base.html:252
+#: templates/pages/users/login.html:4
+msgid "Login"
+msgstr "Вход"
+
+#: templates/base.html:162 templates/base.html:253
+#: templates/pages/users/register.html:4
+msgid "Register"
+msgstr "Регистрация"
+
+#: templates/base.html:181
+msgid "Menu"
+msgstr "Меню"
+
+#: templates/base.html:194 templates/pages/core/about.html:11
+#: templates/pages/core/brand_assets.html:8
+#: templates/pages/core/contact.html:11 templates/pages/core/faq.html:11
+#: templates/pages/core/info_page.html:25
+#: templates/pages/core/mobile_app.html:8
+#: templates/pages/core/news_detail.html:13
+#: templates/pages/core/news_list.html:11 templates/pages/core/press.html:8
+#: templates/pages/core/shipping_request.html:9
+#: templates/pages/core/warehouse.html:8
+#: templates/pages/partners/banners.html:9
+#: templates/pages/partners/iframe.html:9
+#: templates/pages/services/additionalservice_list.html:9
+#: templates/pages/services/tariff_list.html:9
+msgid "Home"
+msgstr "Главная"
+
+#: templates/base.html:230 templates/base.html:329
+#: templates/pages/core/vacancies.html:2
+#: templates/pages/core/vacancy_detail.html:9
+msgid "Careers"
+msgstr "Карьера"
+
+#: templates/base.html:238
+msgid "Support"
+msgstr "Поддержка"
+
+#: templates/base.html:296
+msgid ""
+"Reliable cargo transportation across Russia, Kazakhstan, Belarus, "
+"Kyrgyzstan, and China since 2005."
+msgstr ""
+"Надёжные грузоперевозки по России, Казахстану, Беларуси, Кыргызстану и "
+"Китаю с 2005 года."
+
+#: templates/base.html:317
+msgid "Container transportation"
+msgstr "Контейнерные перевозки"
+
+#: templates/base.html:318
+msgid "Air cargo"
+msgstr "Авиаперевозки"
+
+#: templates/base.html:319 templates/pages/core/home.html:187
+msgid "FTL"
+msgstr "FТЛ (автоперевозки)"
+
+#: templates/base.html:325
+msgid "Information"
+msgstr "Информация"
+
+#: templates/base.html:327
+msgid "About company"
+msgstr "О компании"
+
+#: templates/base.html:350 templates/pages/core/contact.html:115
+#: templates/pages/core/contact.html:164
+msgid "Moscow, st. Transportnaya, 1"
+msgstr "г. Москва, ул. Транспортная, 1"
+
+#: templates/base.html:357
+msgid "All rights reserved."
+msgstr "Все права защищены."
+
+#: templates/base.html:359
+msgid "Privacy policy"
+msgstr "Политика конфиденциальности"
+
+#: templates/base.html:360
+msgid "Terms of use"
+msgstr "Условия использования"
+
+#: templates/pages/core/about.html:4
+msgid "About Company — Baikal-Service"
+msgstr "О компании — Baikal-Service"
+
+#: templates/pages/core/about.html:13
+msgid "About Company"
+msgstr "О компании"
+
+#: templates/pages/core/about.html:15
+msgid "About Baikal-Service"
+msgstr "О компании Baikal-Service"
+
+#: templates/pages/core/about.html:16
+msgid "Your reliable partner in logistics since 2005"
+msgstr "Ваш надёжный партнёр в логистике с 2005 года"
+
+#: templates/pages/core/about.html:24
+msgid "Our History"
+msgstr "Наша история"
+
+#: templates/pages/core/about.html:25
+msgid "Two decades of growth and excellence in logistics"
+msgstr "Два десятилетия роста и совершенства в логистике"
+
+#: templates/pages/core/about.html:34
+msgid "Foundation"
+msgstr "Основание"
+
+#: templates/pages/core/about.html:35
+msgid ""
+"Baikal-Service was founded in Moscow, starting with domestic cargo "
+"transportation across Russia."
+msgstr ""
+"Baikal-Service был основан в Москве, начав с внутренних грузоперевозок по "
+"России."
+
+#: templates/pages/core/about.html:44
+msgid "Regional Expansion"
+msgstr "Расширение на регионы"
+
+#: templates/pages/core/about.html:45
+msgid ""
+"Opened branches in St. Petersburg, Novosibirsk, and Yekaterinburg. Fleet "
+"expanded to 100+ vehicles."
+msgstr ""
+"Открыты отделения в Санкт-Петербурге, Новосибирске и Екатеринбурге. "
+"Автопарк расширен до 100+ единиц техники."
+
+#: templates/pages/core/about.html:52
+msgid "International Routes"
+msgstr "Международные маршруты"
+
+#: templates/pages/core/about.html:53
+msgid "Launched international shipping to Kazakhstan, Belarus, and Kyrgyzstan."
+msgstr "Запущены международные перевозки в Казахстан, Беларусь и Кыргызстан."
+
+#: templates/pages/core/about.html:62
+msgid "China Direction"
+msgstr "Направление Китай"
+
+#: templates/pages/core/about.html:63
+msgid ""
+"Established container shipping routes from China, including rail and "
+"multimodal solutions."
+msgstr ""
+"Установлены контейнерные маршруты из Китая, включая железнодорожные и "
+"мультимодальные решения."
+
+#: templates/pages/core/about.html:70
+msgid "Digital Transformation"
+msgstr "Цифровая трансформация"
+
+#: templates/pages/core/about.html:71
+msgid ""
+"Launched online tracking, mobile app, and digital document management system."
+msgstr ""
+"Запущены онлайн-отслеживание, мобильное приложение и система электронного "
+"документооборота."
+
+#: templates/pages/core/about.html:79
+msgid "Today"
+msgstr "Сегодня"
+
+#: templates/pages/core/about.html:80
+msgid "Industry Leader"
+msgstr "Лидер отрасли"
+
+#: templates/pages/core/about.html:81
+msgid ""
+"200+ cities, 80+ branches, 1.5M+ shipments delivered. Serving thousands of "
+"corporate clients across 5 countries."
+msgstr ""
+"200+ городов, 80+ отделений, 1,5 млн+ доставленных отправлений. "
+"Обслуживаем тысячи корпоративных клиентов в 5 странах."
+
+#: templates/pages/core/about.html:93
+msgid "Mission & Values"
+msgstr "Миссия и ценности"
+
+#: templates/pages/core/about.html:94
+msgid "What drives us every day"
+msgstr "Что движет нас каждый день"
+
+#: templates/pages/core/about.html:101
+msgid "Reliability"
+msgstr "Надёжность"
+
+#: templates/pages/core/about.html:102
+msgid ""
+"We deliver on our promises. Every shipment is tracked, insured, and handled "
+"with care."
+msgstr ""
+"Мы выполняем свои обещания. Каждая отправка отслеживается, застрахована и "
+"обрабатывается с заботой."
+
+#: templates/pages/core/about.html:108
+msgid "Security"
+msgstr "Безопасность"
+
+#: templates/pages/core/about.html:109
+msgid ""
+"Your cargo is insured up to full declared value. Modern warehouses with 24/7 "
+"surveillance."
+msgstr ""
+"Ваш груз застрахован на полную объявленную стоимость. Современные склады с "
+"круглосуточным видеонаблюдением."
+
+#: templates/pages/core/about.html:115
+msgid "Speed"
+msgstr "Скорость"
+
+#: templates/pages/core/about.html:116
+msgid ""
+"Fast transit times with real-time tracking. Express delivery options "
+"available."
+msgstr ""
+"Быстрые сроки транзита с отслеживанием в реальном времени. Доступны "
+"варианты экспресс-доставки."
+
+#: templates/pages/core/about.html:122
+msgid "Teamwork"
+msgstr "Командная работа"
+
+#: templates/pages/core/about.html:123
+msgid "500+ dedicated professionals working together to deliver excellence."
+msgstr "500+ преданных своему делу профессионалов, работающих вместе для достижения превосходства."
+
+#: templates/pages/core/about.html:129
+msgid "Innovation"
+msgstr "Инновации"
+
+#: templates/pages/core/about.html:130
+msgid "Constantly improving our technology and processes for better service."
+msgstr "Постоянно совершенствуем наши технологии и процессы для лучшего обслуживания."
+
+#: templates/pages/core/about.html:136
+msgid "Client Focus"
+msgstr "Ориентация на клиента"
+
+#: templates/pages/core/about.html:137
+msgid ""
+"Every client gets a personal manager. We tailor solutions to your needs."
+msgstr ""
+"Каждый клиент получает персонального менеджера. Мы подстраиваем решения "
+"под ваши потребности."
+
+#: templates/pages/core/about.html:147
+msgid "Leadership Team"
+msgstr "Руководство"
+
+#: templates/pages/core/about.html:148
+msgid "Experienced professionals guiding Baikal-Service"
+msgstr "Опытные профессионалы, управляющие Baikal-Service"
+
+#: templates/pages/core/about.html:157
+msgid "Alexei Petrov"
+msgstr "Алексей Петров"
+
+#: templates/pages/core/about.html:158
+msgid "CEO & Founder"
+msgstr "Генеральный директор и основатель"
+
+#: templates/pages/core/about.html:166
+msgid "Elena Ivanova"
+msgstr "Елена Иванова"
+
+#: templates/pages/core/about.html:167
+msgid "Chief Operations Officer"
+msgstr "Директор по операциям"
+
+#: templates/pages/core/about.html:175
+msgid "Dmitry Sidorov"
+msgstr "Дмитрий Сидоров"
+
+#: templates/pages/core/about.html:176
+msgid "Chief Commercial Officer"
+msgstr "Коммерческий директор"
+
+#: templates/pages/core/about.html:184
+msgid "Olga Smirnova"
+msgstr "Ольга Смирнова"
+
+#: templates/pages/core/about.html:185
+msgid "Chief Financial Officer"
+msgstr "Финансовый директор"
+
+#: templates/pages/core/about.html:195
+msgid "Certificates & Licenses"
+msgstr "Сертификаты и лицензии"
+
+#: templates/pages/core/about.html:196
+msgid "We operate with full regulatory compliance and industry certifications"
+msgstr "Мы работаем в полном соответствии с требованиями и имеем все необходимые отраслевые сертификаты"
+
+#: templates/pages/core/about.html:203
+msgid "ISO 9001:2015"
+msgstr "ISO 9001:2015"
+
+#: templates/pages/core/about.html:204
+msgid "Quality Management"
+msgstr "Управление качеством"
+
+#: templates/pages/core/about.html:210
+msgid "License"
+msgstr "Лицензия"
+
+#: templates/pages/core/about.html:211
+msgid "Ministry of Transport"
+msgstr "Министерство транспорта"
+
+#: templates/pages/core/about.html:217
+msgid "AEO"
+msgstr "AEO"
+
+#: templates/pages/core/about.html:218
+msgid "Authorized Economic Operator"
+msgstr "Уполномоченный экономический оператор"
+
+#: templates/pages/core/about.html:224
+msgid "SRO Membership"
+msgstr "Членство в СРО"
+
+#: templates/pages/core/about.html:225
+msgid "Self-Regulatory Organization"
+msgstr "Саморегулируемая организация"
+
+#: templates/pages/core/about.html:231
+msgid "Insurance"
+msgstr "Страхование"
+
+#: templates/pages/core/about.html:232
+msgid "Cargo Liability Insurance"
+msgstr "Страхование ответственности за груз"
+
+#: templates/pages/core/brand_assets.html:2
+#: templates/pages/core/brand_assets.html:10
+#| msgid "Branches"
+msgid "Brand Assets"
+msgstr "Фирменный стиль"
+
+#: templates/pages/core/brand_assets.html:3
+msgid ""
+"Download Baikal-Service logos, banners, and brand guidelines for partners "
+"and media"
+msgstr ""
+"Скачайте логотипы, баннеры и фирменные стандарты Baikal-Service для "
+"партнёров и СМИ"
+
+#: templates/pages/core/brand_assets.html:12
+msgid "Brand Assets & Logos"
+msgstr "Фирменные материалы и логотипы"
+
+#: templates/pages/core/brand_assets.html:13
+msgid "Download official Baikal-Service logos, banners, and brand guidelines"
+msgstr "Скачайте официальные логотипы, баннеры и фирменные стандарты Baikal-Service"
+
+#: templates/pages/core/brand_assets.html:19
+msgid "Downloadable Resources"
+msgstr "Доступные материалы для скачивания"
+
+#: templates/pages/core/brand_assets.html:25
+msgid "Main Logo"
+msgstr "Основной логотип"
+
+#: templates/pages/core/brand_assets.html:26
+msgid "Full-color logo, transparent PNG, SVG, EPS"
+msgstr "Цветной логотип, прозрачный PNG, SVG, EPS"
+
+#: templates/pages/core/brand_assets.html:29
+#: templates/pages/core/brand_assets.html:40
+#| msgid "Download"
+msgid "Download ZIP"
+msgstr "Скачать"
+
+#: templates/pages/core/brand_assets.html:36
+msgid "Logo Light Version"
+msgstr "Логотип светлой версии"
+
+#: templates/pages/core/brand_assets.html:37
+msgid "White logo for dark backgrounds"
+msgstr "Белый логотип для тёмных фонов"
+
+#: templates/pages/core/brand_assets.html:47
+msgid "Brand Guidelines"
+msgstr "Фирменные стандарты"
+
+#: templates/pages/core/brand_assets.html:48
+msgid "Complete brand guidelines PDF"
+msgstr "Полный PDF-файл фирменных стандартов"
+
+#: templates/pages/core/brand_assets.html:51
+#| msgid "Download"
+msgid "Download PDF"
+msgstr "Скачать"
+
+#: templates/pages/core/calculator.html:2
+msgid "Shipping Calculator"
+msgstr "Калькулятор доставки"
+
+#: templates/pages/core/calculator.html:3
+msgid "Calculate the cost of cargo transportation"
+msgstr "Рассчитайте стоимость грузоперевозки"
+
+#: templates/pages/core/calculator.html:7
+msgid "Cargo Shipping Calculator"
+msgstr "Калькулятор грузоперевозок"
+
+#: templates/pages/core/calculator.html:8
+msgid "Calculate the cost and delivery time for your shipment"
+msgstr "Рассчитайте стоимость и сроки доставки вашей отправки"
+
+#: templates/pages/core/calculator.html:17
+#: templates/pages/dashboard/home.html:80
+#: templates/pages/dashboard/orders.html:27
+#: templates/pages/orders/create.html:169 templates/pages/users/orders.html:21
+msgid "Route"
+msgstr "Маршрут"
+
+#: templates/pages/core/calculator.html:23
+#: templates/pages/core/calculator.html:32
+#: templates/pages/core/delivery_times.html:16
+#: templates/pages/core/delivery_times.html:25
+#: templates/pages/orders/create.html:58 templates/pages/orders/create.html:86
+msgid "Select city"
+msgstr "Выберите город"
+
+#: templates/pages/core/calculator.html:45
+#: templates/pages/orders/create.html:97
+msgid "Cargo Details"
+msgstr "Данные о грузе"
+
+#: templates/pages/core/calculator.html:50
+msgid "e.g. 100"
+msgstr "напр. 100"
+
+#: templates/pages/core/calculator.html:54
+msgid "e.g. 120"
+msgstr "напр. 120"
+
+#: templates/pages/core/calculator.html:58
+msgid "e.g. 80"
+msgstr "напр. 80"
+
+#: templates/pages/core/calculator.html:62
+msgid "e.g. 60"
+msgstr "напр. 60"
+
+#: templates/pages/core/calculator.html:65
+#: templates/pages/orders/create.html:122
+msgid "Declared value (₽)"
+msgstr "Объявленная ценность (₽)"
+
+#: templates/pages/core/calculator.html:66
+msgid "e.g. 50000"
+msgstr "напр. 50000"
+
+#: templates/pages/core/calculator.html:75
+msgid "Service Type"
+msgstr "Тип услуги"
+
+#: templates/pages/core/calculator.html:85
+#: templates/pages/core/vacancies.html:58
+#: templates/pages/core/vacancy_detail.html:29
+#: templates/pages/services/category_detail.html:61
+#: templates/pages/services/service_detail.html:46
+#: templates/pages/services/tariff_list.html:41
+msgid "from"
+msgstr "от"
+
+#: templates/pages/core/calculator.html:94
+msgid "Calculate Estimate"
+msgstr "Рассчитать стоимость"
+
+#: templates/pages/core/calculator.html:104
+msgid "Fill in the form and click \"Calculate\" to see the estimate"
+msgstr "Заполните форму и нажмите «Рассчитать» для получения стоимости"
+
+#: templates/pages/core/contact.html:4
+msgid "Contact Us — Baikal-Service"
+msgstr "Свяжитесь с нами — Baikal-Service"
+
+#: templates/pages/core/contact.html:13 templates/pages/core/contact.html:15
+msgid "Contact Us"
+msgstr "Связаться с нами"
+
+#: templates/pages/core/contact.html:16
+msgid "Get in touch with Baikal-Service. We are here to help."
+msgstr "Свяжитесь с Baikal-Service. Мы готовы помочь."
+
+#: templates/pages/core/contact.html:28
+msgid "Message sent successfully!"
+msgstr "Сообщение успешно отправлено!"
+
+#: templates/pages/core/contact.html:29
+msgid "Thank you for contacting us. We will get back to you within 24 hours."
+msgstr "Спасибо за обращение. Мы ответим вам в течение 24 часов."
+
+#: templates/pages/core/contact.html:44
+msgid "Send us a message"
+msgstr "Отправьте нам сообщение"
+
+#: templates/pages/core/contact.html:78
+#: templates/pages/users/ticket_detail.html:105
+msgid "Send message"
+msgstr "Отправить"
+
+#: templates/pages/core/contact.html:87
+msgid "Contact Information"
+msgstr "Контактная информация"
+
+#: templates/pages/core/contact.html:96
+msgid "Toll-free, 24/7"
+msgstr "Бесплатная линия, круглосуточно"
+
+#: templates/pages/core/contact.html:106
+msgid "We reply within 24 hours"
+msgstr "Отвечаем в течение 24 часов"
+
+#: templates/pages/core/contact.html:116
+msgid "Business center \"Logistics\", 5th floor"
+msgstr "Бизнес-центр «Логистика», 5-й этаж"
+
+#: templates/pages/core/contact.html:124
+msgid "Working Hours"
+msgstr "Часы работы"
+
+#: templates/pages/core/contact.html:125
+msgid "Mon-Fri: 9:00 - 20:00"
+msgstr "Пн-Пт: 9:00 – 20:00"
+
+#: templates/pages/core/contact.html:126
+msgid "Sat: 10:00 - 18:00"
+msgstr "Сб: 10:00 – 18:00"
+
+#: templates/pages/core/contact.html:127
+msgid "Sun: Closed"
+msgstr "Вс: выходной"
+
+#: templates/pages/core/contact.html:135
+msgid "Follow Us"
+msgstr "Подписывайтесь"
+
+#: templates/pages/core/contact.html:163
+#: templates/pages/geo/city_branches.html:20
+msgid "Map loading..."
+msgstr "Загрузка карты..."
+
+#: templates/pages/core/delivery_times.html:2
+msgid "Delivery Times"
+msgstr "Сроки доставки"
+
+#: templates/pages/core/delivery_times.html:3
+msgid "Estimated delivery times for cargo transportation"
+msgstr "Ориентировочные сроки доставки для грузоперевозок"
+
+#: templates/pages/core/delivery_times.html:7
+msgid "Delivery Time Calculator"
+msgstr "Калькулятор сроков доставки"
+
+#: templates/pages/core/delivery_times.html:8
+msgid "Check estimated delivery times between cities"
+msgstr "Проверьте ориентировочные сроки доставки между городами"
+
+#: templates/pages/core/delivery_times.html:14
+#: templates/pages/core/delivery_times.html:43
+msgid "From"
+msgstr "Откуда"
+
+#: templates/pages/core/delivery_times.html:23
+#: templates/pages/core/delivery_times.html:44
+msgid "To"
+msgstr "Куда"
+
+#: templates/pages/core/delivery_times.html:32
+msgid "Check"
+msgstr "Проверить"
+
+#: templates/pages/core/delivery_times.html:45
+msgid "Min days"
+msgstr "Мин. дней"
+
+#: templates/pages/core/delivery_times.html:46
+msgid "Max days"
+msgstr "Макс. дней"
+
+#: templates/pages/core/delivery_times.html:47
+#: templates/pages/orders/create.html:133
+msgid "Service type"
+msgstr "Тип услуги"
+
+#: templates/pages/core/delivery_times.html:65
+msgid "No delivery time data found for the selected route."
+msgstr "Данные о сроках доставки для выбранного маршрута не найдены."
+
+#: templates/pages/core/delivery_times.html:67
+msgid "Select cities and click \"Check\" to see delivery times."
+msgstr "Выберите города и нажмите «Проверить» для просмотра сроков доставки."
+
+#: templates/pages/core/delivery_times.html:80
+msgid ""
+"Delivery times are estimates and may vary depending on weather conditions, "
+"holidays, and other factors. Please confirm with your manager for exact "
+"dates."
+msgstr ""
+"Сроки доставки являются ориентировочными и могут варьироваться в "
+"зависимости от погодных условий, праздников и других факторов. Пожалуйста, "
+"уточните точные даты у менеджера."
+
+#: templates/pages/core/directions.html:2
+#: templates/pages/core/directions.html:7
+msgid "Shipping Directions"
+msgstr "Направления доставки"
+
+#: templates/pages/core/directions.html:3
+msgid ""
+"Cargo transportation directions across Russia, Kazakhstan, Belarus, "
+"Kyrgyzstan, and China"
+msgstr ""
+"Направления грузоперевозок по России, Казахстану, Беларуси, Кыргызстану и "
+"Китаю"
+
+#: templates/pages/core/directions.html:8
+msgid "We deliver cargo across Russia and neighboring countries"
+msgstr "Доставляем грузы по России и странам СНГ"
+
+#: templates/pages/core/directions.html:15
+msgid "Interactive map loading..."
+msgstr "Загрузка интерактивной карты..."
+
+#: templates/pages/core/directions.html:26
+msgid "Shipping Within Russia"
+msgstr "Перевозки по России"
+
+#: templates/pages/core/directions.html:27
+msgid "Cargo transportation across all regions of Russia"
+msgstr "Грузоперевозки по всем регионам России"
+
+#: templates/pages/core/directions.html:34
+msgid "Shipping to Kazakhstan"
+msgstr "Перевозки в Казахстан"
+
+#: templates/pages/core/directions.html:35
+msgid "Direct routes to major cities of Kazakhstan"
+msgstr "Прямые маршруты в крупные города Казахстана"
+
+#: templates/pages/core/directions.html:42
+msgid "Shipping to Belarus"
+msgstr "Перевозки в Беларусь"
+
+#: templates/pages/core/directions.html:43
+msgid "Simplified procedures within the Union State"
+msgstr "Упрощённые процедуры в рамках Союзного государства"
+
+#: templates/pages/core/directions.html:50
+msgid "Shipping to Kyrgyzstan"
+msgstr "Перевозки в Кыргызстан"
+
+#: templates/pages/core/directions.html:51
+msgid "Regular shipments to Kyrgyz Republic"
+msgstr "Регулярные отправления в Кыргызскую Республику"
+
+#: templates/pages/core/directions.html:58
+msgid "Shipping from China"
+msgstr "Импорт из Китая"
+
+#: templates/pages/core/directions.html:59
+msgid "Import from China, customs clearance, container and rail options"
+msgstr "Импорт из Китая, таможенное оформление, контейнерные и железнодорожные перевозки"
+
+#: templates/pages/core/directions.html:66
+msgid "Shipping to Kaliningrad"
+msgstr "Перевозки в Калининград"
+
+#: templates/pages/core/directions.html:67
+msgid "Special transit conditions for Kaliningrad region"
+msgstr "Особые транзитные условия для Калининградской области"
+
+#: templates/pages/core/faq.html:4
+msgid "FAQ — Baikal-Service"
+msgstr "Вопросы и ответы — Baikal-Service"
+
+#: templates/pages/core/faq.html:15
+msgid "Frequently Asked Questions"
+msgstr "Часто задаваемые вопросы"
+
+#: templates/pages/core/faq.html:16
+msgid "Find answers to common questions about our services"
+msgstr "Найдите ответы на частые вопросы о наших услугах"
+
+#: templates/pages/core/faq.html:28
+msgid "Search FAQ..."
+msgstr "Поиск по вопросам..."
+
+#: templates/pages/core/faq.html:67
+msgid "No results found"
+msgstr "Результатов не найдено"
+
+#: templates/pages/core/faq.html:68
+msgid "Try a different search term or browse categories above."
+msgstr "Попробуйте другой запрос или просмотрите категории выше."
+
+#: templates/pages/core/faq.html:75
+msgid "No FAQs yet"
+msgstr "Вопросов пока нет"
+
+#: templates/pages/core/faq.html:76
+msgid "Check back later for frequently asked questions."
+msgstr "Зайдите позже, чтобы увидеть часто задаваемые вопросы."
+
+#: templates/pages/core/faq.html:82
+msgid "Still have questions?"
+msgstr "Остались вопросы?"
+
+#: templates/pages/core/faq.html:83
+msgid "Our support team is ready to help you with any questions."
+msgstr "Наша служба поддержки готова помочь вам с любыми вопросами."
+
+#: templates/pages/core/faq.html:87
+msgid "Contact us"
+msgstr "Свяжитесь с нами"
+
+#: templates/pages/core/home.html:9
+msgid "Baikal-Service — Cargo Transportation Across Russia and CIS"
+msgstr "Baikal-Service — Грузоперевозки по России и СНГ"
+
+#: templates/pages/core/home.html:19 templates/pages/core/news_detail.html:4
+msgid "Baikal-Service"
+msgstr "Baikal-Service"
+
+#: templates/pages/core/home.html:21
+msgid ""
+"Reliable cargo transportation across Russia, Kazakhstan, Belarus, "
+"Kyrgyzstan, and China"
+msgstr "Надёжные грузоперевозки по России, Казахстану, Беларуси, Кыргызстану и Китаю"
+
+#: templates/pages/core/home.html:25
+msgid ""
+"Full-cycle logistics services: from document delivery to container shipping. "
+"19 years of trust."
+msgstr ""
+"Полный цикл логистических услуг: от доставки документов до контейнерных "
+"перевозок. 19 лет доверия."
+
+#: templates/pages/core/home.html:30
+msgid "Calculate cost"
+msgstr "Рассчитать стоимость"
+
+#: templates/pages/core/home.html:34
+msgid "Submit request"
+msgstr "Оставить заявку"
+
+#: templates/pages/core/home.html:44
+msgid "Track your cargo"
+msgstr "Отследить груз"
+
+#: templates/pages/core/home.html:49 templates/pages/core/track.html:19
+msgid "Track"
+msgstr "Отследить"
+
+#: templates/pages/core/home.html:59
+msgid "Quick estimate"
+msgstr "Быстрый расчет"
+
+#: templates/pages/core/home.html:75
+msgid "Weight, kg"
+msgstr "Вес, кг"
+
+#: templates/pages/core/home.html:77
+msgid "Go"
+msgstr "Рассчитать"
+
+#: templates/pages/core/home.html:116
+msgid "Years in business"
+msgstr "Лет на рынке"
+
+#: templates/pages/core/home.html:120
+msgid "Cities served"
+msgstr "Городов охвата"
+
+#: templates/pages/core/home.html:124
+msgid "Shipments delivered"
+msgstr "Отправлений доставлено"
+
+#: templates/pages/core/home.html:128
+msgid "Happy clients"
+msgstr "Довольных клиентов"
+
+#: templates/pages/core/home.html:137
+#: templates/pages/services/category_list.html:28
+msgid "Our Services"
+msgstr "Наши услуги"
+
+#: templates/pages/core/home.html:138
+msgid "Comprehensive logistics solutions for any cargo"
+msgstr "Комплексные логистические решения для любого груза"
+
+#: templates/pages/core/home.html:145
+msgid "Cargo Transportation"
+msgstr "Грузоперевозки"
+
+#: templates/pages/core/home.html:146
+msgid "Full range of road, rail, air, and sea freight services"
+msgstr "Полный спектр услуг автомобильных, железнодорожных, авиационных и морских перевозок"
+
+#: templates/pages/core/home.html:152
+msgid "Marketplaces Delivery"
+msgstr "Доставка на маркетплейсы"
+
+#: templates/pages/core/home.html:153
+msgid "Delivery to Wildberries, Ozon, Yandex Market and more"
+msgstr "Доставка на Wildberries, Ozon, Yandex Market и другие площадки"
+
+#: templates/pages/core/home.html:159
+msgid "Pallet Transportation"
+msgstr "Паллетные перевозки"
+
+#: templates/pages/core/home.html:160
+msgid "Palletized cargo shipping with loading equipment"
+msgstr "Паллетные грузоперевозки с погрузочной техникой"
+
+#: templates/pages/core/home.html:166
+msgid "Consolidated Cargo"
+msgstr "Сборные грузы"
+
+#: templates/pages/core/home.html:167
+msgid "Cost-effective groupage shipping solutions"
+msgstr "Экономичные решения для сборных отправлений"
+
+#: templates/pages/core/home.html:173
+msgid "Air Cargo"
+msgstr "Авиаперевозки"
+
+#: templates/pages/core/home.html:174
+msgid "Express air freight to any destination"
+msgstr "Экспресс-авиаперевозки в любую точку"
+
+#: templates/pages/core/home.html:180
+msgid "Container Shipping"
+msgstr "Контейнерные перевозки"
+
+#: templates/pages/core/home.html:181
+msgid "20ft and 40ft container transportation"
+msgstr "Перевозки контейнерами 20 и 40 футов"
+
+#: templates/pages/core/home.html:188
+msgid "Full truck load with dedicated transport"
+msgstr "Полная загрузка автомобиля с выделенным транспортом"
+
+#: templates/pages/core/home.html:194
+msgid "Parcel Tariff"
+msgstr "Тариф «Посылка»"
+
+#: templates/pages/core/home.html:195
+msgid "Affordable small parcel shipping"
+msgstr "Доступные перевозки мелких посылок"
+
+#: templates/pages/core/home.html:201
+#: templates/pages/services/additionalservice_list.html:2
+#: templates/pages/services/additionalservice_list.html:13
+#: templates/pages/services/additionalservice_list.html:16
+msgid "Additional Services"
+msgstr "Дополнительные услуги"
+
+#: templates/pages/core/home.html:202
+msgid "Insurance, packaging, loading, and more"
+msgstr "Страхование, упаковка, погрузка и многое другое"
+
+#: templates/pages/core/home.html:207
+msgid "View all services"
+msgstr "Все услуги"
+
+#: templates/pages/core/home.html:218
+msgid "Our Geography"
+msgstr "Наша география"
+
+#: templates/pages/core/home.html:219
+msgid "200+ cities across Russia and CIS countries"
+msgstr "200+ городов по России и странам СНГ"
+
+#: templates/pages/core/home.html:231
+msgid "What Our Clients Say"
+msgstr "Что говорят наши клиенты"
+
+#: templates/pages/core/home.html:232
+msgid "Trusted by thousands of businesses and individuals"
+msgstr "Нам доверяют тысячи компаний и частных лиц"
+
+#: templates/pages/core/home.html:262
+msgid "No reviews yet"
+msgstr "Отзывов пока нет"
+
+#: templates/pages/core/home.html:284
+msgid "All reviews"
+msgstr "Все отзывы"
+
+#: templates/pages/core/home.html:296
+msgid "Latest News"
+msgstr "Последние новости"
+
+#: templates/pages/core/home.html:297
+msgid "Stay updated with Baikal-Service"
+msgstr "Будьте в курсе новостей Baikal-Service"
+
+#: templates/pages/core/home.html:300 templates/pages/core/home.html:338
+msgid "All news"
+msgstr "Все новости"
+
+#: templates/pages/core/home.html:323 templates/pages/core/news_list.html:45
+msgid "Read more"
+msgstr "Подробнее"
+
+#: templates/pages/core/home.html:331 templates/pages/core/news_list.html:79
+msgid "No news yet"
+msgstr "Новостей пока нет"
+
+#: templates/pages/core/home.html:354 templates/pages/partners/apply.html:2
+#: templates/pages/partners/overview.html:57
+msgid "Become a Partner"
+msgstr "Стать партнёром"
+
+#: templates/pages/core/home.html:355
+msgid ""
+"Join our partner network and earn with Baikal-Service. Special conditions "
+"for agents and integrators."
+msgstr ""
+"Присоединяйтесь к нашей партнёрской сети и зарабатывайте с Baikal-Service. "
+"Специальные условия для агентов и интеграторов."
+
+#: templates/pages/core/home.html:357
+msgid "Apply now"
+msgstr "Подать заявку"
+
+#: templates/pages/core/home.html:368 templates/pages/core/mobile_app.html:2
+#: templates/pages/core/mobile_app.html:10
+msgid "Mobile App"
+msgstr "Мобильное приложение"
+
+#: templates/pages/core/home.html:370
+msgid ""
+"Track shipments, calculate costs, and manage deliveries from your phone. "
+"Available on iOS and Android."
+msgstr ""
+"Отслеживайте отправления, рассчитывайте стоимость и управляйте доставкой "
+"со смартфона. Доступно на iOS и Android."
+
+#: templates/pages/core/mobile_app.html:3
+msgid ""
+"Download the Baikal-Service mobile app for cargo tracking, calculator, and "
+"order management on iOS and Android"
+msgstr ""
+"Скачайте мобильное приложение Baikal-Service для отслеживания грузов, "
+"калькулятора и управления заказами на iOS и Android"
+
+#: templates/pages/core/mobile_app.html:12
+msgid "Baikal-Service Mobile App"
+msgstr "Мобильное приложение Baikal-Service"
+
+#: templates/pages/core/mobile_app.html:13
+msgid "Manage your shipments on the go with our mobile application"
+msgstr "Управляйте отправлениями на ходу с нашим мобильным приложением"
+
+#: templates/pages/core/mobile_app.html:21
+msgid "All features at your fingertips"
+msgstr "Все функции у вас под рукой"
+
+#: templates/pages/core/mobile_app.html:27
+msgid "Real-time Tracking"
+msgstr "Отслеживание в реальном времени"
+
+#: templates/pages/core/mobile_app.html:27
+msgid "Track your cargo location and status in real time"
+msgstr "Отслеживайте местоположение и статус груза в реальном времени"
+
+#: templates/pages/core/mobile_app.html:33
+#| msgid "Shipping Calculator"
+msgid "Cost Calculator"
+msgstr "Калькулятор доставки"
+
+#: templates/pages/core/mobile_app.html:33
+msgid "Calculate shipping costs instantly"
+msgstr "Мгновенный расчёт стоимости доставки"
+
+#: templates/pages/core/mobile_app.html:39
+#: templates/pages/dashboard/orders.html:2
+#: templates/pages/dashboard/orders.html:3
+#: templates/pages/dashboard/orders.html:7
+#| msgid "Order document"
+msgid "Order Management"
+msgstr "Документ заказа"
+
+#: templates/pages/core/mobile_app.html:39
+msgid "Create and manage your orders from anywhere"
+msgstr "Создавайте и управляйте заказами из любой точки"
+
+#: templates/pages/core/mobile_app.html:45
+msgid "Push Notifications"
+msgstr "Push-уведомления"
+
+#: templates/pages/core/mobile_app.html:45
+msgid "Get instant status change alerts"
+msgstr "Получайте мгновенные оповещения об изменении статуса"
+
+#: templates/pages/core/mobile_app.html:55
+msgid "Version 2.0"
+msgstr "Версия 2.0"
+
+#: templates/pages/core/mobile_app.html:57
+msgid "Download on the App Store"
+msgstr "Скачать в App Store"
+
+#: templates/pages/core/mobile_app.html:58
+msgid "Get it on Google Play"
+msgstr "Доступно в Google Play"
+
+#: templates/pages/core/news_detail.html:47
+msgid "Share:"
+msgstr "Поделиться:"
+
+#: templates/pages/core/news_detail.html:67
+msgid "Related News"
+msgstr "Похожие новости"
+
+#: templates/pages/core/news_list.html:4
+msgid "News — Baikal-Service"
+msgstr "Новости — Baikal-Service"
+
+#: templates/pages/core/news_list.html:16
+msgid "Latest updates from Baikal-Service"
+msgstr "Последние обновления от Baikal-Service"
+
+#: templates/pages/core/news_list.html:55
+msgid "Pagination"
+msgstr "Постраничная навигация"
+
+#: templates/pages/core/news_list.html:80
+msgid "Check back later for updates and announcements."
+msgstr "Зайдите позже для обновлений и объявлений."
+
+#: templates/pages/core/press.html:2 templates/pages/core/press.html:10
+#: templates/pages/core/press.html:12
+msgid "Press Center"
+msgstr "Пресс-центр"
+
+#: templates/pages/core/press.html:3
+msgid "Press releases, media kit, and company news from Baikal-Service"
+msgstr "Пресс-релизы, медиакит и новости компании Baikal-Service"
+
+#: templates/pages/core/press.html:13
+msgid "Latest news, press releases, and media resources from Baikal-Service"
+msgstr "Последние новости, пресс-релизы и медиаресурсы от Baikal-Service"
+
+#: templates/pages/core/press.html:24
+msgid "Press Releases"
+msgstr "Пресс-релизы"
+
+#: templates/pages/core/press.html:25
+msgid "Official announcements and company news"
+msgstr "Официальные объявления и новости компании"
+
+#: templates/pages/core/press.html:31
+msgid "Media Kit"
+msgstr "Медиакит"
+
+#: templates/pages/core/press.html:32
+msgid "Logos, banners, and brand assets for media"
+msgstr "Логотипы, баннеры и фирменные материалы для СМИ"
+
+#: templates/pages/core/press.html:38
+#| msgid "Documents"
+msgid "Company Documents"
+msgstr "Документы"
+
+#: templates/pages/core/press.html:39
+msgid "Certificates, licenses, and legal documents"
+msgstr "Сертификаты, лицензии и юридические документы"
+
+#: templates/pages/core/press.html:48
+msgid "Media Inquiries"
+msgstr "Медиазапросы"
+
+#: templates/pages/core/press.html:49
+msgid ""
+"For press and media inquiries, please contact our communications department."
+msgstr ""
+"По вопросам прессы и медиа, пожалуйста, свяжитесь с нашим отделом "
+"коммуникаций."
+
+#: templates/pages/core/promotion_detail.html:27
+#: templates/pages/core/promotions.html:26 templates/pages/core/tenders.html:31
+msgid "days left"
+msgstr "дней осталось"
+
+#: templates/pages/core/promotion_detail.html:37
+msgid "Terms & Conditions"
+msgstr "Условия и положения"
+
+#: templates/pages/core/promotion_detail.html:43
+msgid "Offer valid until"
+msgstr "Предложение действительно до"
+
+#: templates/pages/core/promotions.html:3
+msgid "Special offers and promotions on cargo transportation"
+msgstr "Специальные предложения и акции на грузоперевозки"
+
+#: templates/pages/core/promotions.html:7
+msgid "Promotions & Special Offers"
+msgstr "Акции и специальные предложения"
+
+#: templates/pages/core/promotions.html:8
+msgid "Take advantage of our current promotions and save on shipping"
+msgstr "Воспользуйтесь нашими акциями и экономьте на доставке"
+
+#: templates/pages/core/promotions.html:32
+msgid "Learn more"
+msgstr "Подробнее"
+
+#: templates/pages/core/promotions.html:40
+msgid "No active promotions at the moment."
+msgstr "На данный момент активных акций нет."
+
+#: templates/pages/core/reviews.html:3
+msgid "Client testimonials about Baikal-Service cargo transportation"
+msgstr "Отзывы клиентов о грузоперевозках Baikal-Service"
+
+#: templates/pages/core/reviews.html:7
+msgid "Client Reviews"
+msgstr "Отзывы клиентов"
+
+#: templates/pages/core/reviews.html:8
+msgid "What our clients say about our services"
+msgstr "Что говорят наши клиенты об услугах"
+
+#: templates/pages/core/reviews.html:12
+#: templates/pages/dashboard/orders.html:13
+#: templates/pages/users/tickets.html:26
+msgid "All"
+msgstr "Все"
+
+#: templates/pages/core/reviews.html:42
+msgid "No reviews yet."
+msgstr "Отзывов пока нет."
+
+#: templates/pages/core/reviews.html:51
+msgid "Previous"
+msgstr "Назад"
+
+#: templates/pages/core/reviews.html:57 templates/pages/orders/create.html:196
+msgid "Next"
+msgstr "Далее"
+
+#: templates/pages/core/shipping_request.html:2
+#: templates/pages/core/shipping_request.html:12
+#| msgid "Shipping request"
+msgid "Shipping Request"
+msgstr "Заявка на перевозку"
+
+#: templates/pages/core/shipping_request.html:3
+msgid "Submit a shipping request online — multi-step form"
+msgstr "Отправьте заявку на перевозку онлайн — многоступенчатая форма"
+
+#: templates/pages/core/shipping_request.html:17
+#| msgid "Shipping request"
+msgid "Submit a Shipping Request"
+msgstr "Заявка на перевозку"
+
+#: templates/pages/core/shipping_request.html:18
+msgid "Fill out the form and our manager will contact you within 15 minutes."
+msgstr "Заполните форму, и наш менеджер свяжется с вами в течение 15 минут."
+
+#: templates/pages/core/shipping_request.html:22
+msgid "Please use our"
+msgstr "Пожалуйста, воспользуйтесь нашим"
+
+#: templates/pages/core/shipping_request.html:22
+#| msgid "Shipping calculator"
+msgid "cargo calculator"
+msgstr "Калькулятор доставки"
+
+#: templates/pages/core/shipping_request.html:22
+msgid "to get an instant estimate, or"
+msgstr "для мгновенного расчёта, или"
+
+#: templates/pages/core/shipping_request.html:22
+#| msgid "Contact Us"
+msgid "contact us"
+msgstr "Связаться с нами"
+
+#: templates/pages/core/shipping_request.html:22
+msgid "directly."
+msgstr "напрямую."
+
+#: templates/pages/core/tariffs.html:2 templates/pages/core/tariffs.html:7
+#: templates/pages/services/tariff_list.html:2
+#: templates/pages/services/tariff_list.html:13
+#: templates/pages/services/tariff_list.html:16
+msgid "Tariffs & Rates"
+msgstr "Тарифы и расценки"
+
+#: templates/pages/core/tariffs.html:3
+msgid "Cargo transportation tariffs and price list"
+msgstr "Тарифы на грузоперевозки и прейскурант"
+
+#: templates/pages/core/tariffs.html:8
+msgid "Transparent pricing for all types of cargo transportation"
+msgstr "Прозрачное ценообразование для всех видов грузоперевозок"
+
+#: templates/pages/core/tariffs.html:13
+msgid "Need an exact quote?"
+msgstr "Нужна точная стоимость?"
+
+#: templates/pages/core/tariffs.html:14
+msgid "Use our calculator for instant estimate"
+msgstr "Используйте наш калькулятор для мгновенного расчёта"
+
+#: templates/pages/core/tariffs.html:17
+msgid "Calculate Now"
+msgstr "Рассчитать сейчас"
+
+#: templates/pages/core/tariffs.html:30 templates/pages/core/tariffs.html:37
+#: templates/pages/core/tariffs.html:43
+#: templates/pages/services/category_detail.html:61
+#: templates/pages/services/service_detail.html:65
+#: templates/pages/services/service_detail.html:67
+#: templates/pages/services/tariff_list.html:39
+#: templates/pages/services/tariff_list.html:41
+#: templates/pages/services/tariff_list.html:43
+msgid "kg"
+msgstr "кг"
+
+#: templates/pages/core/tariffs.html:36
+msgid "Min weight"
+msgstr "Мин. вес"
+
+#: templates/pages/core/tariffs.html:42
+msgid "Max weight"
+msgstr "Макс. вес"
+
+#: templates/pages/core/tariffs.html:48
+msgid "Delivery"
+msgstr "Доставка"
+
+#: templates/pages/core/tariffs.html:49
+#: templates/pages/services/service_detail.html:68
+#: templates/pages/services/tariff_list.html:52
+msgid "days"
+msgstr "дней"
+
+#: templates/pages/core/tariffs.html:56
+msgid "No tariffs available."
+msgstr "Тарифы отсутствуют."
+
+#: templates/pages/core/tariffs.html:64
+msgid "Price List by Weight"
+msgstr "Прейскурант по весу"
+
+#: templates/pages/core/tariffs.html:71
+msgid "Direction"
+msgstr "Направление"
+
+#: templates/pages/core/tariffs.html:72
+msgid "Price, ₽"
+msgstr "Цена, ₽"
+
+#: templates/pages/core/tariffs.html:73
+msgid "Delivery time"
+msgstr "Срок доставки"
+
+#: templates/pages/core/tariffs.html:86
+msgid "Price list coming soon."
+msgstr "Прейскурант будет доступен в ближайшее время."
+
+#: templates/pages/core/tender_detail.html:25
+msgid "Time remaining until deadline"
+msgstr "Оставшееся время до дедлайна"
+
+#: templates/pages/core/tender_detail.html:29
+msgid "Days"
+msgstr "Дней"
+
+#: templates/pages/core/tender_detail.html:33
+msgid "Hours"
+msgstr "Часов"
+
+#: templates/pages/core/tender_detail.html:37
+msgid "Minutes"
+msgstr "Минут"
+
+#: templates/pages/core/tender_detail.html:41
+msgid "Seconds"
+msgstr "Секунд"
+
+#: templates/pages/core/tender_detail.html:56
+msgid "Submit a proposal"
+msgstr "Отправить предложение"
+
+#: templates/pages/core/tender_detail.html:57
+msgid ""
+"To participate in this tender, please send your proposal to our procurement "
+"department."
+msgstr ""
+"Для участия в этом тендере, пожалуйста, отправьте ваше предложение в наш "
+"отдел закупок."
+
+#: templates/pages/core/tender_detail.html:60
+msgid "Send proposal"
+msgstr "Отправить предложение"
+
+#: templates/pages/core/tenders.html:3
+msgid "Active tenders and procurement at Baikal-Service"
+msgstr "Активные тендеры и закупки в Baikal-Service"
+
+#: templates/pages/core/tenders.html:7
+msgid "Tenders & Procurement"
+msgstr "Тендеры и закупки"
+
+#: templates/pages/core/tenders.html:8
+msgid "Active tenders and requests for proposals"
+msgstr "Активные тендеры и запросы коммерческих предложений"
+
+#: templates/pages/core/tenders.html:36
+msgid "View Details"
+msgstr "Подробнее"
+
+#: templates/pages/core/tenders.html:43
+msgid "No active tenders at the moment."
+msgstr "На данный момент активных тендеров нет."
+
+#: templates/pages/core/track.html:2
+msgid "Track Cargo"
+msgstr "Отследить груз"
+
+#: templates/pages/core/track.html:3
+msgid "Track your cargo shipment in real time"
+msgstr "Отслеживайте вашу грузовую отправку в реальном времени"
+
+#: templates/pages/core/track.html:7
+msgid "Track Your Cargo"
+msgstr "Отследите ваш груз"
+
+#: templates/pages/core/track.html:8
+msgid "Enter your tracking number to get real-time status of your shipment"
+msgstr "Введите трек-номер для получения актуального статуса вашей отправки"
+
+#: templates/pages/core/track.html:15
+msgid "Enter tracking number, e.g. BAIKAL-001234"
+msgstr "Введите трек-номер, например BAIKAL-001234"
+
+#: templates/pages/core/track.html:28
+msgid "Enter a tracking number and click \"Track\" to see your shipment status"
+msgstr "Введите трек-номер и нажмите «Отследить» для просмотра статуса отправки"
+
+#: templates/pages/core/vacancies.html:3
+msgid "Open positions at Baikal-Service"
+msgstr "Открытые вакансии в Baikal-Service"
+
+#: templates/pages/core/vacancies.html:7
+msgid "Careers at Baikal-Service"
+msgstr "Карьера в Baikal-Service"
+
+#: templates/pages/core/vacancies.html:8
+msgid "Join our team — we are always looking for talented professionals"
+msgstr "Присоединяйтесь к нашей команде — мы всегда ищем талантливых профессионалов"
+
+#: templates/pages/core/vacancies.html:16
+msgid "All departments"
+msgstr "Все отделы"
+
+#: templates/pages/core/vacancies.html:25
+msgid "All cities"
+msgstr "Все города"
+
+#: templates/pages/core/vacancies.html:32
+msgid "Filter"
+msgstr "Фильтр"
+
+#: templates/pages/core/vacancies.html:58
+#: templates/pages/core/vacancy_detail.html:29
+#: templates/pages/services/tariff_list.html:43
+msgid "up to"
+msgstr "до"
+
+#: templates/pages/core/vacancies.html:73
+msgid "No open positions at the moment. Check back later."
+msgstr "На данный момент открытых вакансий нет. Проверьте позже."
+
+#: templates/pages/core/vacancy_detail.html:39
+msgid "Job Description"
+msgstr "Описание должности"
+
+#: templates/pages/core/vacancy_detail.html:55
+msgid "Interested in this position?"
+msgstr "Интересует эта вакансия?"
+
+#: templates/pages/core/vacancy_detail.html:56
+msgid "Send us your resume and we will contact you."
+msgstr "Отправьте нам ваше резюме, и мы свяжемся с вами."
+
+#: templates/pages/core/vacancy_detail.html:59
+msgid "Apply Now"
+msgstr "Откликнуться"
+
+#: templates/pages/core/vacancy_detail.html:73
+msgid "Apply for"
+msgstr "Откликнуться на"
+
+#: templates/pages/core/vacancy_detail.html:81
+msgid "Full name"
+msgstr "Полное имя"
+
+#: templates/pages/core/vacancy_detail.html:82
+#: templates/pages/partners/apply.html:28
+msgid "Ivan Ivanov"
+msgstr "Иван Иванов"
+
+#: templates/pages/core/vacancy_detail.html:93
+msgid "Resume"
+msgstr "Резюме"
+
+#: templates/pages/core/vacancy_detail.html:97
+msgid "Cover letter"
+msgstr "Сопроводительное письмо"
+
+#: templates/pages/core/vacancy_detail.html:98
+msgid "Tell us about yourself..."
+msgstr "Расскажите о себе..."
+
+#: templates/pages/core/vacancy_detail.html:100
+msgid "Send Application"
+msgstr "Отправить заявку"
+
+#: templates/pages/core/warehouse.html:2 templates/pages/core/warehouse.html:10
+#: templates/pages/core/warehouse.html:12
+#| msgid "Warehouse"
+msgid "Warehouse Services"
+msgstr "Складские услуги"
+
+#: templates/pages/core/warehouse.html:3
+msgid ""
+"Warehouse services: responsible storage, cargo packaging, and free storage "
+"from Baikal-Service"
+msgstr ""
+"Складские услуги: ответственное хранение, упаковка грузов и бесплатное "
+"хранение от Baikal-Service"
+
+#: templates/pages/core/warehouse.html:13
+msgid "Comprehensive warehouse solutions for your cargo"
+msgstr "Комплексные складские решения для вашего груза"
+
+#: templates/pages/core/warehouse.html:24
+msgid "Responsible Storage"
+msgstr "Ответственное хранение"
+
+#: templates/pages/core/warehouse.html:25
+msgid ""
+"Secure warehouse storage with temperature control, humidity monitoring, and "
+"24/7 security surveillance."
+msgstr ""
+"Безопасное складское хранение с контролем температуры, мониторингом "
+"влажности и круглосуточной охраной."
+
+#: templates/pages/core/warehouse.html:27
+msgid "Temperature-controlled zones"
+msgstr "Зоны с контролем температуры"
+
+#: templates/pages/core/warehouse.html:28
+msgid "24/7 video surveillance"
+msgstr "Круглосуточное видеонаблюдение"
+
+#: templates/pages/core/warehouse.html:29
+msgid "Flexible rental terms"
+msgstr "Гибкие условия аренды"
+
+#: templates/pages/core/warehouse.html:36
+msgid "Cargo Packaging"
+msgstr "Упаковка грузов"
+
+#: templates/pages/core/warehouse.html:37
+msgid ""
+"Professional packaging services to ensure your cargo arrives safely at its "
+"destination."
+msgstr ""
+"Профессиональные услуги упаковки для безопасной доставки вашего груза в "
+"пункт назначения."
+
+#: templates/pages/core/warehouse.html:39
+msgid "Custom crating"
+msgstr "Индивидуальное ящичное упаковывание"
+
+#: templates/pages/core/warehouse.html:40
+#| msgid "Pallet transportation"
+msgid "Pallet wrapping"
+msgstr "Паллетные перевозки"
+
+#: templates/pages/core/warehouse.html:41
+msgid "Fragile item protection"
+msgstr "Защита хрупких изделий"
+
+#: templates/pages/core/warehouse.html:48
+msgid "Free Storage"
+msgstr "Бесплатное хранение"
+
+#: templates/pages/core/warehouse.html:49
+msgid ""
+"Complimentary storage period for your cargo with transparent terms and easy "
+"extension options."
+msgstr ""
+"Бесплатный период хранения вашего груза с прозрачными условиями и простыми "
+"вариантами продления."
+
+#: templates/pages/core/warehouse.html:51
+msgid "Free storage up to 3 days"
+msgstr "Бесплатное хранение до 3 дней"
+
+#: templates/pages/core/warehouse.html:52
+msgid "Easy extension options"
+msgstr "Простые варианты продления"
+
+#: templates/pages/core/warehouse.html:53
+msgid "No hidden fees"
+msgstr "Без скрытых платежей"
+
+#: templates/pages/dashboard/base_dashboard.html:80
+#| msgid "Manager"
+msgid "Management"
+msgstr "Менеджер"
+
+#: templates/pages/dashboard/base_dashboard.html:103
+#| msgid "Documentation"
+msgid "Communication"
+msgstr "Документация"
+
+#: templates/pages/dashboard/base_dashboard.html:114
+msgid "System"
+msgstr "Система"
+
+#: templates/pages/dashboard/base_dashboard.html:118
+msgid "Settings"
+msgstr "Настройки"
+
+#: templates/pages/dashboard/base_dashboard.html:155
+msgid "View Site"
+msgstr "Перейти на сайт"
+
+#: templates/pages/dashboard/home.html:3
+#| msgid "Dashboard"
+msgid "Dashboard Overview"
+msgstr "Обзор панели управления"
+
+#: templates/pages/dashboard/home.html:9
+msgid "Orders Today"
+msgstr "Заказов сегодня"
+
+#: templates/pages/dashboard/home.html:15
+#| msgid "Created at"
+msgid "created today"
+msgstr "Дата создания"
+
+#: templates/pages/dashboard/home.html:20
+msgid "Active Shipments"
+msgstr "Активные отправления"
+
+#: templates/pages/dashboard/home.html:26
+msgid "in transit or at warehouse"
+msgstr "в пути или на складе"
+
+#: templates/pages/dashboard/home.html:31
+#| msgid "Tickets"
+msgid "Open Tickets"
+msgstr "Тикеты"
+
+#: templates/pages/dashboard/home.html:37
+msgid "needs attention"
+msgstr "требует внимания"
+
+#: templates/pages/dashboard/home.html:42
+#| msgid "Total price"
+msgid "Total Users"
+msgstr "Итоговая цена"
+
+#: templates/pages/dashboard/home.html:48
+msgid "registered users"
+msgstr "зарегистрированных пользователей"
+
+#: templates/pages/dashboard/home.html:55
+msgid "Orders per Day"
+msgstr "Заказов в день"
+
+#: templates/pages/dashboard/home.html:57
+#: templates/pages/dashboard/home.html:63
+msgid "Chart coming soon..."
+msgstr "Диаграмма будет доступна в ближайшее время..."
+
+#: templates/pages/dashboard/home.html:61
+msgid "Revenue per Month"
+msgstr "Выручка за месяц"
+
+#: templates/pages/dashboard/home.html:71
+#| msgid "Orders"
+msgid "Recent Orders"
+msgstr "Заказы"
+
+#: templates/pages/dashboard/home.html:72 templates/pages/users/profile.html:41
+#: templates/pages/users/profile.html:54 templates/pages/users/profile.html:67
+msgid "View all"
+msgstr "Смотреть все"
+
+#: templates/pages/dashboard/home.html:78
+#: templates/pages/dashboard/orders.html:25
+#| msgid "Tracking number"
+msgid "Tracking #"
+msgstr "Трек-номер"
+
+#: templates/pages/dashboard/home.html:79
+#: templates/pages/dashboard/orders.html:26
+msgid "Customer"
+msgstr "Клиент"
+
+#: templates/pages/dashboard/home.html:82
+#: templates/pages/dashboard/orders.html:30
+#: templates/pages/users/balance.html:63
+#: templates/pages/users/balance_success.html:23
+#: templates/pages/users/orders.html:23 templates/pages/users/profile.html:80
+msgid "Date"
+msgstr "Дата"
+
+#: templates/pages/dashboard/home.html:104
+#| msgid "My orders"
+msgid "No orders yet."
+msgstr "Мои заказы"
+
+#: templates/pages/dashboard/login.html:2
+msgid "Dashboard Login"
+msgstr "Вход в панель управления"
+
+#: templates/pages/dashboard/login.html:16
+msgid "Staff administration panel"
+msgstr "Административная панель персонала"
+
+#: templates/pages/dashboard/login.html:34
+msgid "Invalid email or password. Please try again."
+msgstr "Неверный email или пароль. Пожалуйста, попробуйте снова."
+
+#: templates/pages/dashboard/login.html:39
+msgid "Sign In"
+msgstr "Войти"
+
+#: templates/pages/dashboard/login.html:45
+msgid "Back to website"
+msgstr "Вернуться на сайт"
+
+#: templates/pages/dashboard/orders.html:8
+msgid "View and manage all orders"
+msgstr "Просмотр и управление всеми заказами"
+
+#: templates/pages/dashboard/orders.html:16
+#: templates/pages/users/orders.html:53
+#| msgid "In transit"
+msgid "In Transit"
+msgstr "В пути"
+
+#: templates/pages/dashboard/orders.html:29
+#| msgid "Weight, kg"
+msgid "Weight"
+msgstr "Вес, кг"
+
+#: templates/pages/dashboard/orders.html:56
+#| msgid "Order not found"
+msgid "No orders found."
+msgstr "Заказ не найден"
+
+#: templates/pages/dashboard/tickets.html:2
+#: templates/pages/dashboard/tickets.html:3
+#: templates/pages/dashboard/tickets.html:7
+#| msgid "Ticket message"
+msgid "Ticket Management"
+msgstr "Сообщение тикета"
+
+#: templates/pages/dashboard/tickets.html:8
+#| msgid "Support tickets"
+msgid "View and manage support tickets"
+msgstr "Тикеты поддержки"
+
+#: templates/pages/dashboard/tickets.html:31
+#| msgid "In progress"
+msgid "In Progress"
+msgstr "В работе"
+
+#: templates/pages/dashboard/tickets.html:55
+#| msgid "Created by"
+msgid "Created By"
+msgstr "Создан"
+
+#: templates/pages/dashboard/tickets.html:58
+#| msgid "Assigned to"
+msgid "Assigned To"
+msgstr "Назначен"
+
+#: templates/pages/dashboard/tickets.html:59
+#: templates/pages/users/ticket_detail.html:24
+msgid "Created"
+msgstr "Создан"
+
+#: templates/pages/dashboard/tickets.html:92
+msgid "No tickets found."
+msgstr "Тикеты не найдены."
+
+#: templates/pages/dashboard/user_confirm_delete.html:2
+#: templates/pages/dashboard/user_confirm_delete.html:3
+#: templates/pages/dashboard/user_confirm_delete.html:10
+msgid "Delete User"
+msgstr "Удалить пользователя"
+
+#: templates/pages/dashboard/user_confirm_delete.html:11
+msgid ""
+"Are you sure you want to delete this user? This action cannot be undone."
+msgstr "Вы уверены, что хотите удалить пользователя? Это действие нельзя отменить."
+
+#: templates/pages/dashboard/user_confirm_delete.html:20
+#: templates/pages/dashboard/user_form.html:86
+#: templates/pages/users/settings.html:129
+#: templates/pages/users/ticket_create.html:61
+msgid "Cancel"
+msgstr "Отмена"
+
+#: templates/pages/dashboard/user_confirm_delete.html:23
+#: templates/pages/dashboard/users.html:66
+msgid "Delete"
+msgstr "Удалить"
+
+#: templates/pages/dashboard/user_form.html:2
+#: templates/pages/dashboard/user_form.html:3
+#: templates/pages/dashboard/user_form.html:8
+#| msgid "User"
+msgid "Edit User"
+msgstr "Пользователь"
+
+#: templates/pages/dashboard/user_form.html:9
+msgid "Update user details"
+msgstr "Обновить данные пользователя"
+
+#: templates/pages/dashboard/user_form.html:12
+msgid "Back to List"
+msgstr "Назад к списку"
+
+#: templates/pages/dashboard/user_form.html:89
+msgid "Save Changes"
+msgstr "Сохранить изменения"
+
+#: templates/pages/dashboard/users.html:2
+#: templates/pages/dashboard/users.html:3
+#: templates/pages/dashboard/users.html:7
+#| msgid "Username"
+msgid "User Management"
+msgstr "Имя пользователя"
+
+#: templates/pages/dashboard/users.html:8
+msgid "Manage all registered users"
+msgstr "Управление всеми зарегистрированными пользователями"
+
+#: templates/pages/dashboard/users.html:12
+msgid "Export CSV"
+msgstr "Экспорт в CSV"
+
+#: templates/pages/dashboard/users.html:22
+msgid "Search by name or email..."
+msgstr "Поиск по имени или email..."
+
+#: templates/pages/dashboard/users.html:25
+#| msgid "Role"
+msgid "All Roles"
+msgstr "Роль"
+
+#: templates/pages/dashboard/users.html:44
+msgid "Joined"
+msgstr "Зарегистрирован"
+
+#: templates/pages/dashboard/users.html:45
+#| msgid "Directions"
+msgid "Actions"
+msgstr "Направления"
+
+#: templates/pages/dashboard/users.html:64
+msgid "Edit"
+msgstr "Редактировать"
+
+#: templates/pages/dashboard/users.html:72
+msgid "View"
+msgstr "Просмотр"
+
+#: templates/pages/dashboard/users.html:77
+msgid "No users found."
+msgstr "Пользователи не найдены."
+
+#: templates/pages/documents/list.html:3
+msgid "Download shipping documents, contracts, forms, and templates"
+msgstr "Скачивайте отгрузочные документы, договоры, формы и шаблоны"
+
+#: templates/pages/documents/list.html:7
+msgid "Documents Library"
+msgstr "Библиотека документов"
+
+#: templates/pages/documents/list.html:8
+msgid "Download all necessary documents for shipping, contracts, and forms"
+msgstr "Скачивайте все необходимые документы для перевозки, договоры и формы"
+
+#: templates/pages/documents/list.html:14
+msgid "All documents"
+msgstr "Все документы"
+
+#: templates/pages/documents/list.html:37
+msgid "Download"
+msgstr "Скачать"
+
+#: templates/pages/documents/list.html:39
+#| msgid "Profile"
+msgid "No file"
+msgstr "Профиль"
+
+#: templates/pages/documents/list.html:48
+msgid "No documents available yet."
+msgstr "Документы пока не загружены."
+
+#: templates/pages/geo/branches.html:2
+msgid "Branches & Offices"
+msgstr "Отделения и офисы"
+
+#: templates/pages/geo/branches.html:3
+msgid "Baikal-Service offices, warehouses, and pickup points across Russia"
+msgstr "Офисы, склады и пункты выдачи Baikal-Service по всей России"
+
+#: templates/pages/geo/branches.html:11
+msgid "Our Branches & Offices"
+msgstr "Наши отделения и офисы"
+
+#: templates/pages/geo/branches.html:12
+msgid "Find the nearest branch for cargo pickup or delivery"
+msgstr "Найдите ближайшее отделение для забора или доставки груза"
+
+#: templates/pages/geo/branches.html:19
+msgid "Search city..."
+msgstr "Поиск города..."
+
+#: templates/pages/geo/branches.html:48
+msgid "No branches found."
+msgstr "Отделения не найдены."
+
+#: templates/pages/geo/branches.html:59
+msgid "Loading map..."
+msgstr "Загрузка карты..."
+
+#: templates/pages/geo/city_branches.html:2
+#: templates/pages/geo/city_branches.html:14
+#, python-format
+msgid "Branches in %(city)s"
+msgstr "Отделения в г. %(city)s"
+
+#: templates/pages/geo/city_branches.html:3
+#, python-format
+msgid "Baikal-Service branches, offices, and warehouses in %(city)s"
+msgstr "Отделения, офисы и склады Baikal-Service в г. %(city)s"
+
+#: templates/pages/geo/city_branches.html:76
+msgid "No branches in this city yet."
+msgstr "В этом городе пока нет отделений."
+
+#: templates/pages/orders/create.html:2
+msgid "Create Order"
+msgstr "Создать заказ"
+
+#: templates/pages/orders/create.html:3
+msgid "Submit a cargo shipping request"
+msgstr "Оставить заявку на грузоперевозку"
+
+#: templates/pages/orders/create.html:7
+msgid "Create Shipping Order"
+msgstr "Создать заказ на перевозку"
+
+#: templates/pages/orders/create.html:8
+msgid "Fill in the details to create a new cargo shipment order"
+msgstr "Заполните данные для создания нового заказа на перевозку груза"
+
+#: templates/pages/orders/create.html:32
+msgid "Confirm"
+msgstr "Подтвердить"
+
+#: templates/pages/orders/create.html:41
+msgid "Sender Information"
+msgstr "Информация об отправителе"
+
+#: templates/pages/orders/create.html:45 templates/pages/orders/create.html:73
+msgid "Full name or company name"
+msgstr "Полное имя или название компании"
+
+#: templates/pages/orders/create.html:69
+msgid "Recipient Information"
+msgstr "Информация о получателе"
+
+#: templates/pages/orders/create.html:101
+msgid "Describe the cargo, contents, and special handling requirements..."
+msgstr "Опишите груз, содержимое и особые требования к обращению..."
+
+#: templates/pages/orders/create.html:123
+msgid "Cargo value for insurance"
+msgstr "Стоимость груза для страхования"
+
+#: templates/pages/orders/create.html:130
+msgid "Select Services"
+msgstr "Выберите услуги"
+
+#: templates/pages/orders/create.html:166
+msgid "Confirm Order"
+msgstr "Подтвердить заказ"
+
+#: templates/pages/orders/create.html:185
+msgid ""
+"I confirm that the provided information is accurate and I agree to the terms "
+"and conditions of cargo transportation"
+msgstr ""
+"Я подтверждаю, что предоставленная информация точна, и согласен с "
+"условиями перевозки груза"
+
+#: templates/pages/orders/create.html:192
+msgid "Back"
+msgstr "Назад"
+
+#: templates/pages/orders/create.html:200
+msgid "Submit Order"
+msgstr "Отправить заказ"
+
+#: templates/pages/partners/apply.html:3
+msgid "Apply to become a partner of Baikal-Service"
+msgstr "Подайте заявку на партнёрство с Baikal-Service"
+
+#: templates/pages/partners/apply.html:7
+msgid "Partner Application"
+msgstr "Заявка на партнёрство"
+
+#: templates/pages/partners/apply.html:8
+msgid ""
+"Fill out the form and our partnership team will contact you within 2 "
+"business days"
+msgstr ""
+"Заполните форму, и наш отдел партнёрства свяжется с вами в течение 2 "
+"рабочих дней"
+
+#: templates/pages/partners/apply.html:17
+msgid "LLC Company Name"
+msgstr "Название ООО"
+
+#: templates/pages/partners/apply.html:42
+msgid "Partner type"
+msgstr "Тип партнёрства"
+
+#: templates/pages/partners/apply.html:44
+msgid "Select partner type"
+msgstr "Выберите тип партнёрства"
+
+#: templates/pages/partners/apply.html:45
+msgid "Agent"
+msgstr "Агент"
+
+#: templates/pages/partners/apply.html:46
+msgid "Franchise"
+msgstr "Франшиза"
+
+#: templates/pages/partners/apply.html:47
+msgid "Integrator"
+msgstr "Интегратор"
+
+#: templates/pages/partners/apply.html:52
+msgid "Expected monthly shipment volume"
+msgstr "Ожидаемый месячный объём отправлений"
+
+#: templates/pages/partners/apply.html:54
+msgid "Select volume"
+msgstr "Выберите объём"
+
+#: templates/pages/partners/apply.html:55
+msgid "Up to 10 shipments/month"
+msgstr "до 10 отправлений/мес."
+
+#: templates/pages/partners/apply.html:56
+msgid "10-50 shipments/month"
+msgstr "10–50 отправлений/мес."
+
+#: templates/pages/partners/apply.html:57
+msgid "50-200 shipments/month"
+msgstr "50–200 отправлений/мес."
+
+#: templates/pages/partners/apply.html:58
+msgid "200+ shipments/month"
+msgstr "200+ отправлений/мес."
+
+#: templates/pages/partners/apply.html:63
+msgid "Region of operation"
+msgstr "Регион работы"
+
+#: templates/pages/partners/apply.html:64
+msgid "e.g. Moscow and Moscow region"
+msgstr "напр. Москва и Московская область"
+
+#: templates/pages/partners/apply.html:68
+msgid "Additional information"
+msgstr "Дополнительная информация"
+
+#: templates/pages/partners/apply.html:69
+msgid ""
+"Tell us about your company, experience in logistics, and why you want to "
+"partner with us..."
+msgstr ""
+"Расскажите о вашей компании, опыте в логистике и почему вы хотите "
+"сотрудничать с нами..."
+
+#: templates/pages/partners/apply.html:74
+msgid ""
+"I agree to the processing of personal data and the terms of the partnership "
+"agreement"
+msgstr ""
+"Я согласен на обработку персональных данных и условия партнёрского "
+"соглашения"
+
+#: templates/pages/partners/apply.html:78
+msgid "Submit Application"
+msgstr "Отправить заявку"
+
+#: templates/pages/partners/banners.html:2
+#: templates/pages/partners/banners.html:13
+#: templates/pages/partners/banners.html:16
+#| msgid "Banners"
+msgid "Banners & Logos"
+msgstr "Баннеры"
+
+#: templates/pages/partners/banners.html:3
+msgid "Download promotional banners and logos for your website"
+msgstr "Скачивайте рекламные баннеры и логотипы для вашего сайта"
+
+#: templates/pages/partners/banners.html:17
+msgid ""
+"Download promotional materials to feature Baikal-Service on your website."
+msgstr "Скачайте рекламные материалы для размещения Baikal-Service на вашем сайте."
+
+#: templates/pages/partners/banners.html:36
+msgid "View more"
+msgstr "Подробнее"
+
+#: templates/pages/partners/banners.html:47
+msgid "No banners available yet."
+msgstr "Баннеры пока не загружены."
+
+#: templates/pages/partners/iframe.html:2
+#: templates/pages/partners/iframe.html:13
+#: templates/pages/partners/iframe.html:16
+#| msgid "iFrame modules"
+msgid "iFrame Modules"
+msgstr "iFrame модули"
+
+#: templates/pages/partners/iframe.html:3
+msgid "Embeddable calculator and tracking widgets for your website"
+msgstr "Встраиваемый калькулятор и виджеты отслеживания для вашего сайта"
+
+#: templates/pages/partners/iframe.html:17
+msgid ""
+"Embed our calculator, tracking widget, or other tools directly on your "
+"website using simple iFrame code snippets."
+msgstr ""
+"Встройте наш калькулятор, виджет отслеживания или другие инструменты на "
+"вашем сайте с помощью простых кодов iFrame."
+
+#: templates/pages/partners/iframe.html:30
+msgid "Copy Code"
+msgstr "Скопировать код"
+
+#: templates/pages/partners/iframe.html:47
+msgid "No modules available yet. Check back soon."
+msgstr "Модули пока не добавлены. Скоро появятся."
+
+#: templates/pages/partners/overview.html:2
+msgid "Partnership"
+msgstr "Партнёрство"
+
+#: templates/pages/partners/overview.html:3
+msgid "Become a partner of Baikal-Service — agents, franchises, integrators"
+msgstr "Станьте партнёром Baikal-Service — агенты, франшизы, интеграторы"
+
+#: templates/pages/partners/overview.html:7
+msgid "Partnership Programs"
+msgstr "Партнёрские программы"
+
+#: templates/pages/partners/overview.html:8
+msgid "Join our partner network and grow your business with Baikal-Service"
+msgstr "Присоединяйтесь к партнёрской сети и развивайте бизнес с Baikal-Service"
+
+#: templates/pages/partners/overview.html:14
+msgid "Partner companies"
+msgstr "Компании-партнёры"
+
+#: templates/pages/partners/overview.html:18
+msgid "Cities with partners"
+msgstr "Города с партнёрами"
+
+#: templates/pages/partners/overview.html:22
+msgid "Average commission"
+msgstr "Средняя комиссия"
+
+#: templates/pages/partners/overview.html:32
+msgid "Agent Partnership"
+msgstr "Агентское партнёрство"
+
+#: templates/pages/partners/overview.html:33
+msgid ""
+"Refer clients and earn commission on every shipment. Perfect for logistics "
+"consultants and agencies."
+msgstr ""
+"Привлекайте клиентов и зарабатывайте комиссию с каждой перевозки. Идеально "
+"для логистических консультантов и агентств."
+
+#: templates/pages/partners/overview.html:40
+msgid "Franchise Partnership"
+msgstr "Франчайзинговое партнёрство"
+
+#: templates/pages/partners/overview.html:41
+msgid ""
+"Open your own logistics center under the Baikal-Service brand. Full "
+"operational and marketing support."
+msgstr ""
+"Откройте собственный логистический центр под брендом Baikal-Service. "
+"Полная операционная и маркетинговая поддержка."
+
+#: templates/pages/partners/overview.html:48
+msgid "Integration Partnership"
+msgstr "Интеграционное партнёрство"
+
+#: templates/pages/partners/overview.html:49
+msgid ""
+"Integrate your platform with our API. Offer seamless shipping solutions to "
+"your customers."
+msgstr ""
+"Интегрируйте вашу платформу с нашим API. Предлагайте бесперебойные решения "
+"для доставки вашим клиентам."
+
+#: templates/pages/services/additionalservice_list.html:3
+msgid "All additional services for cargo transportation"
+msgstr "Все дополнительные услуги для грузоперевозок"
+
+#: templates/pages/services/additionalservice_list.html:17
+msgid "Enhance your shipment with our additional services."
+msgstr "Улучшите вашу отправку с помощью наших дополнительных услуг."
+
+#: templates/pages/services/additionalservice_list.html:47
+#| msgid "Per unit"
+msgid "per unit"
+msgstr "За единицу"
+
+#: templates/pages/services/additionalservice_list.html:49
+#| msgid "Declared value"
+msgid "of cargo value"
+msgstr "Объявленная ценность"
+
+#: templates/pages/services/additionalservice_list.html:59
+msgid "No additional services available at the moment."
+msgstr "На данный момент дополнительные услуги отсутствуют."
+
+#: templates/pages/services/category_detail.html:34
+msgid "Subcategories"
+msgstr "Подкатегории"
+
+#: templates/pages/services/category_detail.html:48
+msgid "Available Services"
+msgstr "Доступные услуги"
+
+#: templates/pages/services/category_detail.html:69
+msgid "Starting from"
+msgstr "Начиная от"
+
+#: templates/pages/services/category_detail.html:74
+msgid "Details"
+msgstr "Подробнее"
+
+#: templates/pages/services/category_detail.html:80
+msgid "No services in this category yet."
+msgstr "В этой категории пока нет услуг."
+
+#: templates/pages/services/category_list.html:3
+msgid "All cargo transportation services offered by Baikal-Service"
+msgstr "Все услуги грузоперевозок, предлагаемые Baikal-Service"
+
+#: templates/pages/services/category_list.html:29
+msgid ""
+"Comprehensive cargo transportation solutions across Russia and neighboring "
+"countries"
+msgstr "Комплексные решения для грузоперевозок по России и странам СНГ"
+
+#: templates/pages/services/category_list.html:35
+msgid "Search services..."
+msgstr "Поиск услуг..."
+
+#: templates/pages/services/category_list.html:54
+msgid "services"
+msgstr "услуги"
+
+#: templates/pages/services/category_list.html:62
+msgid "No services found."
+msgstr "Услуги не найдены."
+
+#: templates/pages/services/service_detail.html:80
+msgid "Calculate Cost"
+msgstr "Рассчитать стоимость"
+
+#: templates/pages/services/service_detail.html:83
+msgid "Place Order"
+msgstr "Оформить заказ"
+
+#: templates/pages/services/tariff_list.html:3
+#| msgid "Cargo transportation"
+msgid "Cargo transportation tariffs and rates"
+msgstr "Грузоперевозки"
+
+#: templates/pages/services/tariff_list.html:17
+msgid ""
+"Our competitive tariff structure for cargo transportation across all "
+"directions."
+msgstr "Наши конкурентные тарифы на грузоперевозки по всем направлениям."
+
+#: templates/pages/services/tariff_list.html:24
+#| msgid "Tariff"
+msgid "Tariff Name"
+msgstr "Тариф"
+
+#: templates/pages/services/tariff_list.html:25
+#| msgid "Weight, kg"
+msgid "Weight Range"
+msgstr "Вес, кг"
+
+#: templates/pages/services/tariff_list.html:27
+#| msgid "Delivery Times"
+msgid "Delivery Time"
+msgstr "Сроки доставки"
+
+#: templates/pages/services/tariff_list.html:61
+msgid "No tariffs available at the moment."
+msgstr "На данный момент тарифы отсутствуют."
+
+#: templates/pages/users/accounting_docs.html:4
+#: templates/pages/users/accounting_docs.html:10
+#| msgid "Accounting requests"
+msgid "Accounting Documents"
+msgstr "Бухгалтерские запросы"
+
+#: templates/pages/users/accounting_docs.html:11
+msgid "Request accounting and financial documents for your account"
+msgstr "Запросите бухгалтерские и финансовые документы для вашего аккаунта"
+
+#: templates/pages/users/accounting_docs.html:15
+#: templates/pages/users/accounting_docs.html:51
+#| msgid "Receipt documents"
+msgid "Request documents"
+msgstr "Приемочные документы"
+
+#: templates/pages/users/accounting_docs.html:24
+#| msgid "Document type"
+msgid "Select document type"
+msgstr "Тип документа"
+
+#: templates/pages/users/accounting_docs.html:26
+#| msgid "Shipping documents"
+msgid "Shipping Documents"
+msgstr "Отгрузочные документы"
+
+#: templates/pages/users/accounting_docs.html:27
+#| msgid "Receipt documents"
+msgid "Receipt Documents"
+msgstr "Приемочные документы"
+
+#: templates/pages/users/accounting_docs.html:28
+#| msgid "Power of attorney"
+msgid "Power of Attorney"
+msgstr "Доверенность"
+
+#: templates/pages/users/accounting_docs.html:32
+#| msgid "TUE replacement"
+msgid "TUE Replacement"
+msgstr "Замена ТУЭ"
+
+#: templates/pages/users/accounting_docs.html:59
+#| msgid "Accounting requests"
+msgid "Previous requests"
+msgstr "Бухгалтерские запросы"
+
+#: templates/pages/users/accounting_docs.html:66
+msgid "No previous requests."
+msgstr "Предыдущих запросов нет."
+
+#: templates/pages/users/accounting_docs.html:67
+msgid "Your document requests will appear here."
+msgstr "Ваши запросы документов появятся здесь."
+
+#: templates/pages/users/balance.html:10
+msgid "Balance & Transactions"
+msgstr "Баланс и транзакции"
+
+#: templates/pages/users/balance.html:11
+msgid "Manage your account balance and view transaction history"
+msgstr "Управляйте балансом аккаунта и просматривайте историю транзакций"
+
+#: templates/pages/users/balance.html:15 templates/pages/users/profile.html:124
+msgid "Current balance"
+msgstr "Текущий баланс"
+
+#: templates/pages/users/balance.html:19
+msgid "Quick top-up"
+msgstr "Быстрое пополнение"
+
+#: templates/pages/users/balance.html:38
+msgid "Custom amount"
+msgstr "Произвольная сумма"
+
+#: templates/pages/users/balance.html:42
+msgid "Enter amount"
+msgstr "Введите сумму"
+
+#: templates/pages/users/balance.html:47 templates/pages/users/profile.html:128
+msgid "Top up"
+msgstr "Пополнить"
+
+#: templates/pages/users/balance.html:55
+msgid "Transaction history"
+msgstr "История транзакций"
+
+#: templates/pages/users/balance.html:64 templates/pages/users/profile.html:81
+msgid "Type"
+msgstr "Тип"
+
+#: templates/pages/users/balance.html:104 templates/pages/users/orders.html:87
+#: templates/pages/users/tickets.html:90
+#, python-format
+msgid ""
+"\n"
+"            Showing %(start)s–%(end)s of %(total)s\n"
+"            "
+msgstr ""
+"\n"
+"            Показано %(start)s–%(end)s из %(total)s\n"
+"            "
+
+#: templates/pages/users/balance.html:134
+#: templates/pages/users/profile.html:116
+msgid "No transactions yet."
+msgstr "Транзакций пока нет."
+
+#: templates/pages/users/balance.html:135
+msgid "Make a top-up to get started."
+msgstr "Пополните баланс для начала."
+
+#: templates/pages/users/balance_success.html:2
+msgid "Top-up Successful"
+msgstr "Пополнение выполнено"
+
+#: templates/pages/users/balance_success.html:10
+msgid "Top-up Successful!"
+msgstr "Пополнение выполнено!"
+
+#: templates/pages/users/balance_success.html:11
+msgid "Your balance has been successfully replenished."
+msgstr "Ваш баланс успешно пополнен."
+
+#: templates/pages/users/balance_success.html:16
+#: templates/pages/users/balance_success.html:20
+msgid "₽"
+msgstr "₽"
+
+#: templates/pages/users/balance_success.html:19
+#| msgid "Balance"
+msgid "New balance"
+msgstr "Баланс"
+
+#: templates/pages/users/balance_success.html:30
+#| msgid "Transactions"
+msgid "View Transactions"
+msgstr "Транзакции"
+
+#: templates/pages/users/balance_success.html:33
+#| msgid "Calculate cost"
+msgid "Calculate Shipping"
+msgstr "Рассчитать стоимость"
+
+#: templates/pages/users/balance_topup.html:4
+#: templates/pages/users/balance_topup.html:9
+#| msgid "Role & Balance"
+msgid "Top up balance"
+msgstr "Роль и баланс"
+
+#: templates/pages/users/balance_topup.html:10
+msgid "You will be redirected to the balance page."
+msgstr "Вы будете перенаправлены на страницу баланса."
+
+#: templates/pages/users/balance_topup.html:12
+#| msgid "Role & Balance"
+msgid "Go to Balance"
+msgstr "Роль и баланс"
+
+#: templates/pages/users/login.html:21
+msgid "Welcome back"
+msgstr "С возвращением"
+
+#: templates/pages/users/login.html:22
+msgid "Sign in to your account to manage shipments and more"
+msgstr "Войдите в аккаунт для управления отправлениями и не только"
+
+#: templates/pages/users/login.html:60
+msgid "Remember me"
+msgstr "Запомнить меня"
+
+#: templates/pages/users/login.html:62
+msgid "Forgot password?"
+msgstr "Забыли пароль?"
+
+#: templates/pages/users/login.html:66 templates/pages/users/register.html:163
+msgid "Sign in"
+msgstr "Войти"
+
+#: templates/pages/users/login.html:71
+msgid "Don't have an account?"
+msgstr "Нет аккаунта?"
+
+#: templates/pages/users/login.html:72 templates/pages/users/register.html:22
+#: templates/pages/users/register.html:157
+msgid "Create account"
+msgstr "Создать аккаунт"
+
+#: templates/pages/users/orders.html:4 templates/pages/users/orders.html:10
+#| msgid "My orders"
+msgid "My Orders"
+msgstr "Мои заказы"
+
+#: templates/pages/users/orders.html:11
+msgid "Track and manage your shipments"
+msgstr "Отслеживайте и управляйте вашими отправлениями"
+
+#: templates/pages/users/orders.html:20
+#| msgid "Tracking number"
+msgid "Tracking Number"
+msgstr "Трек-номер"
+
+#: templates/pages/users/orders.html:49
+#| msgid "Picked up"
+msgid "Picked Up"
+msgstr "Забран"
+
+#: templates/pages/users/orders.html:57
+#| msgid "At warehouse"
+msgid "At Warehouse"
+msgstr "На складе"
+
+#: templates/pages/users/orders.html:61
+#| msgid "Out for delivery"
+msgid "Out for Delivery"
+msgstr "Доставляется"
+
+#: templates/pages/users/orders.html:120
+#| msgid "My orders"
+msgid "No orders yet"
+msgstr "Мои заказы"
+
+#: templates/pages/users/orders.html:121
+msgid "Your orders will appear here once you create a shipment."
+msgstr "Ваши заказы появятся здесь после создания отправки."
+
+#: templates/pages/users/orders.html:123
+msgid "Create your first order"
+msgstr "Создайте первый заказ"
+
+#: templates/pages/users/profile.html:12
+msgid "Welcome"
+msgstr "Добро пожаловать"
+
+#: templates/pages/users/profile.html:14
+msgid "Here is your account overview"
+msgstr "Обзор вашего аккаунта"
+
+#: templates/pages/users/profile.html:34
+msgid "Active orders"
+msgstr "Активные заказы"
+
+#: templates/pages/users/profile.html:47
+msgid "Open tickets"
+msgstr "Открытые тикеты"
+
+#: templates/pages/users/profile.html:73
+msgid "Recent transactions"
+msgstr "Последние транзакции"
+
+#: templates/pages/users/profile.html:131
+msgid "History"
+msgstr "История"
+
+#: templates/pages/users/profile.html:137
+msgid "Quick actions"
+msgstr "Быстрые действия"
+
+#: templates/pages/users/profile.html:143
+msgid "New Order"
+msgstr "Новый заказ"
+
+#: templates/pages/users/profile.html:149
+msgid "Track Shipment"
+msgstr "Отследить отправление"
+
+#: templates/pages/users/profile.html:155
+msgid "Open Ticket"
+msgstr "Открыть тикет"
+
+#: templates/pages/users/register.html:23
+msgid "Join Baikal-Service and start shipping with ease"
+msgstr "Зарегистрируйтесь в Baikal-Service и начните перевозить грузы"
+
+#: templates/pages/users/register.html:30
+msgid "Private person"
+msgstr "Физическое лицо"
+
+#: templates/pages/users/register.html:120
+#| msgid "Requirements"
+msgid "Show requirements"
+msgstr "Требования"
+
+#: templates/pages/users/register.html:121
+#| msgid "Requirements"
+msgid "Hide requirements"
+msgstr "Требования"
+
+#: templates/pages/users/register.html:145
+msgid "I accept the"
+msgstr "Я принимаю"
+
+#: templates/pages/users/register.html:146
+msgid "terms and conditions"
+msgstr "условия использования"
+
+#: templates/pages/users/register.html:147
+msgid "and"
+msgstr "и"
+
+#: templates/pages/users/register.html:148
+msgid "privacy policy"
+msgstr "политику конфиденциальности"
+
+#: templates/pages/users/register.html:162
+msgid "Already have an account?"
+msgstr "Уже есть аккаунт?"
+
+#: templates/pages/users/settings.html:4 templates/pages/users/settings.html:10
+msgid "Profile Settings"
+msgstr "Настройки профиля"
+
+#: templates/pages/users/settings.html:11
+msgid "Manage your account settings and preferences"
+msgstr "Управляйте настройками и предпочтениями аккаунта"
+
+#: templates/pages/users/settings.html:19
+#: templates/pages/users/ticket_create.html:16
+msgid "Please correct the errors below."
+msgstr "Пожалуйста, исправьте ошибки ниже."
+
+#: templates/pages/users/settings.html:29
+msgid "Personal information"
+msgstr "Личная информация"
+
+#: templates/pages/users/settings.html:47
+msgid "Max 2 MB. JPG, PNG."
+msgstr "Макс. 2 МБ. JPG, PNG."
+
+#: templates/pages/users/settings.html:74
+msgid "Email cannot be changed"
+msgstr "Email нельзя изменить"
+
+#: templates/pages/users/settings.html:95
+msgid "Company details"
+msgstr "Данные компании"
+
+#: templates/pages/users/settings.html:110
+msgid "Change password"
+msgstr "Изменить пароль"
+
+#: templates/pages/users/settings.html:113
+#: templates/pages/users/settings.html:114
+msgid "Current password"
+msgstr "Текущий пароль"
+
+#: templates/pages/users/settings.html:117
+#: templates/pages/users/settings.html:118
+msgid "New password"
+msgstr "Новый пароль"
+
+#: templates/pages/users/settings.html:131
+msgid "Save changes"
+msgstr "Сохранить изменения"
+
+#: templates/pages/users/ticket_create.html:2
+#: templates/pages/users/ticket_create.html:63
+#| msgid "Created at"
+msgid "Create Ticket"
+msgstr "Дата создания"
+
+#: templates/pages/users/ticket_create.html:7
+#| msgid "Support tickets"
+msgid "Create Support Ticket"
+msgstr "Тикеты поддержки"
+
+#: templates/pages/users/ticket_create.html:8
+msgid "Describe your issue and we will respond as soon as possible."
+msgstr "Опишите вашу проблему, и мы ответим как можно скорее."
+
+#: templates/pages/users/ticket_create.html:49
+msgid "Describe your issue in detail."
+msgstr "Опишите вашу проблему подробно."
+
+#: templates/pages/users/ticket_create.html:53
+msgid "Attachment (optional)"
+msgstr "Вложение (необязательно)"
+
+#: templates/pages/users/ticket_create.html:55
+msgid "Max 10 MB. Allowed: PDF, DOC, DOCX, JPG, PNG"
+msgstr "Макс. 10 МБ. Допустимые форматы: PDF, DOC, DOCX, JPG, PNG"
+
+#: templates/pages/users/ticket_detail.html:12
+msgid "Back to tickets"
+msgstr "Назад к тикетам"
+
+#: templates/pages/users/ticket_detail.html:26
+msgid "Updated"
+msgstr "Обновлён"
+
+#: templates/pages/users/ticket_detail.html:33
+msgid "High priority"
+msgstr "Высокий приоритет"
+
+#: templates/pages/users/ticket_detail.html:37
+msgid "Medium priority"
+msgstr "Средний приоритет"
+
+#: templates/pages/users/ticket_detail.html:41
+msgid "Low priority"
+msgstr "Низкий приоритет"
+
+#: templates/pages/users/ticket_detail.html:67
+msgid "You"
+msgstr "Вы"
+
+#: templates/pages/users/ticket_detail.html:71
+msgid "Internal"
+msgstr "Внутреннее"
+
+#: templates/pages/users/ticket_detail.html:81
+msgid "No messages yet."
+msgstr "Сообщений пока нет."
+
+#: templates/pages/users/ticket_detail.html:90
+msgid "Add a message"
+msgstr "Добавить сообщение"
+
+#: templates/pages/users/ticket_detail.html:97
+msgid "Our support team will respond within 24 hours"
+msgstr "Наша служба поддержки ответит в течение 24 часов"
+
+#: templates/pages/users/ticket_detail.html:100
+msgid "Close ticket"
+msgstr "Закрыть тикет"
+
+#: templates/pages/users/ticket_detail.html:113
+msgid "This ticket is closed."
+msgstr "Этот тикет закрыт."
+
+#: templates/pages/users/ticket_detail.html:114
+msgid "Create a new ticket"
+msgstr "Создать новый тикет"
+
+#: templates/pages/users/tickets.html:4 templates/pages/users/tickets.html:11
+msgid "Support Tickets"
+msgstr "Тикеты поддержки"
+
+#: templates/pages/users/tickets.html:12
+msgid "Manage your support requests"
+msgstr "Управляйте запросами в поддержку"
+
+#: templates/pages/users/tickets.html:17
+msgid "Create ticket"
+msgstr "Создать тикет"
+
+#: templates/pages/users/tickets.html:116
+msgid "No tickets yet."
+msgstr "Тикетов пока нет."
+
+#: templates/pages/users/tickets.html:117
+msgid "Create a ticket for any support issue."
+msgstr "Создайте тикет по любому вопросу поддержки."
+
+#: templates/pages/users/tickets.html:119
+msgid "Create your first ticket"
+msgstr "Создайте первый тикет"

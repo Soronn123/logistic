@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% translate 'Accounting Documents' %} — Baikal-Service{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+  <div class="animate-fade-in">
+    <div class="mb-8">
+      <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-100">{% translate 'Accounting Documents' %}</h1>
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{% translate 'Request accounting and financial documents for your account' %}</p>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 lg:p-8 transition-colors duration-300">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">{% translate 'Request documents' %}</h2>
+
+      <form method="post" class="space-y-5">
+        {% csrf_token %}
+
+        <div>
+          <label for="id_document_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Document type' %}</label>
+          <select name="document_type" id="id_document_type" required
+                  class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all">
+            <option value="">{% translate 'Select document type' %}</option>
+            <option value="contracts">{% translate 'Contracts' %}</option>
+            <option value="shipping_docs">{% translate 'Shipping Documents' %}</option>
+            <option value="receipt_docs">{% translate 'Receipt Documents' %}</option>
+            <option value="power_of_attorney">{% translate 'Power of Attorney' %}</option>
+            <option value="charter">{% translate 'Charter' %}</option>
+            <option value="claims">{% translate 'Claims' %}</option>
+            <option value="refunds">{% translate 'Refunds' %}</option>
+            <option value="tue_replacement">{% translate 'TUE Replacement' %}</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label for="id_period_start" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Period start' %}</label>
+            <input type="date" name="period_start" id="id_period_start" required
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all">
+          </div>
+          <div>
+            <label for="id_period_end" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Period end' %}</label>
+            <input type="date" name="period_end" id="id_period_end" required
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all">
+          </div>
+        </div>
+
+        <div class="flex justify-end pt-2">
+          <button type="submit" class="px-8 py-3 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl shadow-lg shadow-baikal-600/25 hover:shadow-baikal-600/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-baikal-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+            {% translate 'Request documents' %}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="mt-8 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+      <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{% translate 'Previous requests' %}</h2>
+      </div>
+
+      <div class="px-5 py-12 text-center">
+        <svg class="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <p class="text-sm text-gray-500 dark:text-gray-400">{% translate 'No previous requests.' %}</p>
+        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{% translate 'Your document requests will appear here.' %}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% translate 'Support Tickets' %} — Baikal-Service{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+  <div class="animate-fade-in">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+      <div>
+        <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-100">{% translate 'Support Tickets' %}</h1>
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{% translate 'Manage your support requests' %}</p>
+      </div>
+      <div class="mt-4 sm:mt-0">
+        <a href="{% url 'users:ticket_create' %}" class="inline-flex items-center px-5 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl shadow-lg shadow-baikal-600/25 hover:shadow-baikal-600/40 transition-all duration-300">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+          {% translate 'Create ticket' %}
+        </a>
+      </div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+      <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+        <div class="flex items-center space-x-2 rtl:space-x-reverse overflow-x-auto pb-1">
+          <a href="{% url 'users:tickets' %}" class="px-4 py-2 text-sm font-medium rounded-lg {% if not request.GET.status %}bg-baikal-100 dark:bg-baikal-900/30 text-baikal-700 dark:text-baikal-300{% else %}text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700{% endif %} transition-colors whitespace-nowrap">
+            {% translate 'All' %}
+          </a>
+          <a href="{% url 'users:tickets' %}?status=open" class="px-4 py-2 text-sm font-medium rounded-lg {% if request.GET.status == 'open' %}bg-baikal-100 dark:bg-baikal-900/30 text-baikal-700 dark:text-baikal-300{% else %}text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700{% endif %} transition-colors whitespace-nowrap">
+            {% translate 'Open' %}
+          </a>
+          <a href="{% url 'users:tickets' %}?status=in_progress" class="px-4 py-2 text-sm font-medium rounded-lg {% if request.GET.status == 'in_progress' %}bg-baikal-100 dark:bg-baikal-900/30 text-baikal-700 dark:text-baikal-300{% else %}text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700{% endif %} transition-colors whitespace-nowrap">
+            {% translate 'In progress' %}
+          </a>
+          <a href="{% url 'users:tickets' %}?status=closed" class="px-4 py-2 text-sm font-medium rounded-lg {% if request.GET.status == 'closed' %}bg-baikal-100 dark:bg-baikal-900/30 text-baikal-700 dark:text-baikal-300{% else %}text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700{% endif %} transition-colors whitespace-nowrap">
+            {% translate 'Closed' %}
+          </a>
+        </div>
+      </div>
+
+      {% if tickets %}
+      <div class="divide-y divide-gray-100 dark:divide-gray-700/50">
+        {% for ticket in tickets %}
+        <a href="{% url 'users:ticket_detail' ticket.pk %}" class="flex items-center px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors group">
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center space-x-2 rtl:space-x-reverse">
+              <span class="text-sm font-medium text-gray-400 dark:text-gray-500">#{{ ticket.id }}</span>
+              <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate group-hover:text-baikal-600 dark:group-hover:text-baikal-400 transition-colors">{{ ticket.subject }}</h3>
+            </div>
+            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ ticket.created_at|date:"d.m.Y H:i" }}</p>
+          </div>
+          <div class="flex items-center space-x-3 rtl:space-x-reverse ml-4">
+            {% if ticket.priority == 'high' %}
+            <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300">
+              {% translate 'High' %}
+            </span>
+            {% elif ticket.priority == 'medium' %}
+            <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300">
+              {% translate 'Medium' %}
+            </span>
+            {% else %}
+            <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+              {% translate 'Low' %}
+            </span>
+            {% endif %}
+
+            {% if ticket.status == 'open' %}
+            <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+              {% translate 'Open' %}
+            </span>
+            {% elif ticket.status == 'in_progress' %}
+            <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300">
+              {% translate 'In progress' %}
+            </span>
+            {% elif ticket.status == 'closed' %}
+            <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+              {% translate 'Closed' %}
+            </span>
+            {% endif %}
+
+            <svg class="w-5 h-5 text-gray-300 dark:text-gray-600 group-hover:text-gray-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+
+      {% if page_obj.paginator.num_pages > 1 %}
+      <div class="px-5 py-4 border-t border-gray-200 dark:border-gray-700">
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            {% blocktranslate with start=page_obj.start_index end=page_obj.end_index total=page_obj.paginator.count %}
+            Showing {{ start }}–{{ end }} of {{ total }}
+            {% endblocktranslate %}
+          </p>
+          <div class="flex items-center space-x-2 rtl:space-x-reverse">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}" class="px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">&larr;</a>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+              {% if num == page_obj.number %}
+              <span class="px-3 py-1.5 text-sm font-medium rounded-lg bg-baikal-600 text-white">{{ num }}</span>
+              {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <a href="?page={{ num }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}" class="px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">{{ num }}</a>
+              {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}" class="px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">&rarr;</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      {% else %}
+      <div class="px-5 py-12 text-center">
+        <svg class="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        <p class="text-sm text-gray-500 dark:text-gray-400">{% translate 'No tickets yet.' %}</p>
+        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{% translate 'Create a ticket for any support issue.' %}</p>
+        <a href="{% url 'users:ticket_create' %}" class="mt-4 inline-flex items-center px-5 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl text-sm transition-all duration-300">
+          {% translate 'Create your first ticket' %}
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

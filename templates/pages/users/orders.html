@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% translate 'My Orders' %} — Baikal-Service{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+  <div class="animate-fade-in">
+    <div class="mb-8">
+      <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-100">{% translate 'My Orders' %}</h1>
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{% translate 'Track and manage your shipments' %}</p>
+    </div>
+
+    {% if orders %}
+    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-200 dark:border-gray-700">
+              <th class="text-left px-5 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Tracking Number' %}</th>
+              <th class="text-left px-5 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Route' %}</th>
+              <th class="text-left px-5 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Status' %}</th>
+              <th class="text-left px-5 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Date' %}</th>
+              <th class="text-right px-5 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Amount' %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in orders %}
+            <tr class="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+              <td class="px-5 py-3">
+                <a href="{% url 'users:order_detail' order.tracking_number %}" class="font-mono text-sm font-medium text-baikal-600 dark:text-baikal-400 hover:underline">
+                  {{ order.tracking_number }}
+                </a>
+              </td>
+              <td class="px-5 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                {{ order.sender_address|default:"—" }} → {{ order.recipient_address|default:"—" }}
+              </td>
+              <td class="px-5 py-3">
+                {% if order.status == 'draft' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                  {% translate 'Draft' %}
+                </span>
+                {% elif order.status == 'confirmed' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+                  {% translate 'Confirmed' %}
+                </span>
+                {% elif order.status == 'picked_up' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300">
+                  {% translate 'Picked Up' %}
+                </span>
+                {% elif order.status == 'in_transit' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300">
+                  {% translate 'In Transit' %}
+                </span>
+                {% elif order.status == 'at_warehouse' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300">
+                  {% translate 'At Warehouse' %}
+                </span>
+                {% elif order.status == 'out_for_delivery' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300">
+                  {% translate 'Out for Delivery' %}
+                </span>
+                {% elif order.status == 'delivered' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">
+                  {% translate 'Delivered' %}
+                </span>
+                {% elif order.status == 'cancelled' %}
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300">
+                  {% translate 'Cancelled' %}
+                </span>
+                {% endif %}
+              </td>
+              <td class="px-5 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap">{{ order.created_at|date:"d.m.Y" }}</td>
+              <td class="px-5 py-3 text-right font-medium text-gray-900 dark:text-gray-100">
+                {% if order.total_price %}{{ order.total_price|floatformat:2 }} ₽{% else %}—{% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% if page_obj.paginator.num_pages > 1 %}
+      <div class="px-5 py-4 border-t border-gray-200 dark:border-gray-700">
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            {% blocktranslate with start=page_obj.start_index end=page_obj.end_index total=page_obj.paginator.count %}
+            Showing {{ start }}–{{ end }} of {{ total }}
+            {% endblocktranslate %}
+          </p>
+          <div class="flex items-center space-x-2 rtl:space-x-reverse">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+              &larr;
+            </a>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+              {% if num == page_obj.number %}
+              <span class="px-3 py-1.5 text-sm font-medium rounded-lg bg-baikal-600 text-white">{{ num }}</span>
+              {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <a href="?page={{ num }}" class="px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">{{ num }}</a>
+              {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+              &rarr;
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    {% else %}
+    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 px-5 py-16 text-center transition-colors duration-300">
+      <svg class="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+      </svg>
+      <p class="text-lg font-medium text-gray-700 dark:text-gray-300">{% translate 'No orders yet' %}</p>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{% translate 'Your orders will appear here once you create a shipment.' %}</p>
+      <a href="{% url 'orders:create' %}" class="mt-6 inline-flex items-center px-6 py-3 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl shadow-lg shadow-baikal-600/25 hover:shadow-baikal-600/40 transition-all duration-300">
+        {% translate 'Create your first order' %}
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

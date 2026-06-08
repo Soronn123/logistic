@@ -1,0 +1,94 @@
+{% extends 'pages/dashboard/base_dashboard.html' %}{% load i18n %}
+{% block dash_title %}{% translate 'Edit User' %}{% endblock %}
+{% block dash_page_title %}{% translate 'Edit User' %}{% endblock %}
+{% block dash_content %}
+<div class="max-w-2xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{% translate 'Edit User' %}</h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-1">{% translate 'Update user details' %}</p>
+    </div>
+    <a href="{% url 'dashboard:users' %}" class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium">
+      {% translate 'Back to List' %}
+    </a>
+  </div>
+
+  <form method="post" enctype="multipart/form-data" class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 lg:p-8 space-y-6">
+    {% csrf_token %}
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div>
+        <label for="{{ form.first_name.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'First name' %}</label>
+        {{ form.first_name }}
+        {% if form.first_name.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.first_name.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label for="{{ form.last_name.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Last name' %}</label>
+        {{ form.last_name }}
+        {% if form.last_name.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.last_name.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Email' %}</label>
+        {{ form.email }}
+        {% if form.email.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.email.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label for="{{ form.phone.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Phone' %}</label>
+        {{ form.phone }}
+        {% if form.phone.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.phone.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label for="{{ form.role.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Role' %}</label>
+        {{ form.role }}
+        {% if form.role.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.role.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label class="flex items-center gap-2">
+          {{ form.is_active }}
+          <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{% translate 'Active' %}</span>
+        </label>
+      </div>
+      <div>
+        <label for="{{ form.balance.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Balance' %}</label>
+        {{ form.balance }}
+        {% if form.balance.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.balance.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label for="{{ form.company_name.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Company name' %}</label>
+        {{ form.company_name }}
+        {% if form.company_name.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.company_name.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label for="{{ form.inn.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'INN' %}</label>
+        {{ form.inn }}
+        {% if form.inn.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.inn.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label class="flex items-center gap-2">
+          {{ form.is_company }}
+          <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{% translate 'Legal entity' %}</span>
+        </label>
+      </div>
+      <div>
+        <label for="{{ form.language.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Language' %}</label>
+        {{ form.language }}
+        {% if form.language.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.language.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label for="{{ form.theme.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Theme' %}</label>
+        {{ form.theme }}
+        {% if form.theme.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.theme.errors.0 }}</p>{% endif %}
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+      <a href="{% url 'dashboard:users' %}" class="px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium">
+        {% translate 'Cancel' %}
+      </a>
+      <button type="submit" class="px-6 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white rounded-xl transition-colors text-sm font-medium">
+        {% translate 'Save Changes' %}
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'pages/dashboard/base_dashboard.html' %}{% load i18n %}
+{% block dash_title %}{% translate 'Contact Messages' %}{% endblock %}
+{% block dash_page_title %}{% translate 'Contact Messages' %}{% endblock %}
+{% block dash_content %}
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
+  <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
+    <div class="flex items-center justify-between mb-3">
+      <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{% translate 'Total Messages' %}</p>
+      <span class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center">
+        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      </span>
+    </div>
+    <div class="text-3xl font-bold text-gray-900 dark:text-white">{{ total_messages|default:0 }}</div>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{% translate 'all contact form submissions' %}</p>
+  </div>
+  <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
+    <div class="flex items-center justify-between mb-3">
+      <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{% translate 'Unread Messages' %}</p>
+      <span class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-900/30 flex items-center justify-center">
+        <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+      </span>
+    </div>
+    <div class="text-3xl font-bold text-amber-600 dark:text-amber-400">{{ unread_count|default:0 }}</div>
+    <p class="mt-1 text-sm text-amber-600 dark:text-amber-400">{% translate 'need attention' %}</p>
+  </div>
+</div>
+
+<!-- Messages Table -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+  <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'All Messages' %}</h3>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 dark:bg-gray-900 text-left">
+        <tr>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Name' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Email' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Subject' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Message' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Date' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Read' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Actions' %}</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+        {% for msg in messages %}
+        <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors {% if not msg.is_read %}font-semibold bg-blue-50/50 dark:bg-blue-900/10{% endif %}" x-data="{ expanded: false }">
+          <td class="px-6 py-3">
+            <div class="flex items-center gap-2">
+              {% if not msg.is_read %}
+              <span class="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0"></span>
+              {% endif %}
+              <span class="text-gray-900 dark:text-white">{{ msg.name }}</span>
+            </div>
+          </td>
+          <td class="px-6 py-3">
+            <a href="mailto:{{ msg.email }}" class="text-baikal-600 dark:text-baikal-400 hover:underline text-xs">{{ msg.email }}</a>
+          </td>
+          <td class="px-6 py-3 text-gray-700 dark:text-gray-300">{{ msg.subject|default:'—' }}</td>
+          <td class="px-6 py-3">
+            <button @click="expanded = !expanded" class="text-left text-gray-600 dark:text-gray-400 hover:text-baikal-600 dark:hover:text-baikal-400 transition-colors cursor-pointer">
+              <span x-show="!expanded">{{ msg.message|truncatechars:50 }}</span>
+              <span x-show="expanded" class="text-gray-900 dark:text-gray-200">{{ msg.message }}</span>
+            </button>
+          </td>
+          <td class="px-6 py-3 text-gray-500 dark:text-gray-400 whitespace-nowrap">{{ msg.created_at|date:'d M Y H:i' }}</td>
+          <td class="px-6 py-3">
+            {% if msg.is_read %}
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">{% translate 'Read' %}</span>
+            {% else %}
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400">{% translate 'Unread' %}</span>
+            {% endif %}
+          </td>
+          <td class="px-6 py-3">
+            <div class="flex items-center gap-2">
+              <a href="#" class="p-1.5 rounded-lg text-gray-400 hover:text-baikal-600 dark:hover:text-baikal-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" title="{% translate 'Mark as read' %}">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76"/></svg>
+              </a>
+              <a href="#" class="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors" title="{% translate 'Delete' %}">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">{% translate 'No messages yet.' %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

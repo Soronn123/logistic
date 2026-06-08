@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}#{{ ticket.id }} {{ ticket.subject }} — Baikal-Service{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+  <div class="animate-fade-in">
+    <div class="mb-6">
+      <a href="{% url 'users:tickets' %}" class="inline-flex items-center text-sm text-gray-500 dark:text-gray-400 hover:text-baikal-600 dark:hover:text-baikal-400 transition-colors">
+        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        {% translate 'Back to tickets' %}
+      </a>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 lg:p-8 transition-colors duration-300">
+      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-6">
+        <div>
+          <div class="flex items-center space-x-2 rtl:space-x-reverse mb-1">
+            <span class="text-sm font-medium text-gray-400 dark:text-gray-500">#{{ ticket.id }}</span>
+            <h1 class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-gray-100">{{ ticket.subject }}</h1>
+          </div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            {% translate 'Created' %} {{ ticket.created_at|date:"d.m.Y H:i" }}
+            {% if ticket.updated_at != ticket.created_at %}
+            &middot; {% translate 'Updated' %} {{ ticket.updated_at|date:"d.m.Y H:i" }}
+            {% endif %}
+          </p>
+        </div>
+        <div class="flex items-center space-x-2 rtl:space-x-reverse mt-3 sm:mt-0">
+          {% if ticket.priority == 'high' %}
+          <span class="px-3 py-1 text-xs font-medium rounded-full bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300">
+            {% translate 'High priority' %}
+          </span>
+          {% elif ticket.priority == 'medium' %}
+          <span class="px-3 py-1 text-xs font-medium rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300">
+            {% translate 'Medium priority' %}
+          </span>
+          {% else %}
+          <span class="px-3 py-1 text-xs font-medium rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+            {% translate 'Low priority' %}
+          </span>
+          {% endif %}
+
+          {% if ticket.status == 'open' %}
+          <span class="px-3 py-1 text-xs font-medium rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+            {% translate 'Open' %}
+          </span>
+          {% elif ticket.status == 'in_progress' %}
+          <span class="px-3 py-1 text-xs font-medium rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300">
+            {% translate 'In progress' %}
+          </span>
+          {% elif ticket.status == 'closed' %}
+          <span class="px-3 py-1 text-xs font-medium rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+            {% translate 'Closed' %}
+          </span>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="space-y-4 mb-6 max-h-[500px] overflow-y-auto pr-2" x-data="{ container: $el }">
+        {% for msg in ticket.messages.all %}
+        <div class="flex {% if msg.sender == user %}justify-end{% endif %}">
+          <div class="max-w-[85%] lg:max-w-[75%]">
+            <div class="flex items-center space-x-2 rtl:space-x-reverse mb-1 {% if msg.sender == user %}justify-end{% endif %}">
+              <span class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                {% if msg.sender == user %}{% translate 'You' %}{% else %}{{ msg.sender.get_full_name|default:msg.sender.email }}{% endif %}
+              </span>
+              <span class="text-xs text-gray-400 dark:text-gray-500">{{ msg.created_at|date:"H:i" }}</span>
+              {% if msg.is_internal_note %}
+              <span class="px-1.5 py-0.5 text-[10px] font-medium rounded bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">{% translate 'Internal' %}</span>
+              {% endif %}
+            </div>
+            <div class="rounded-2xl px-4 py-3 {% if msg.sender == user %}bg-baikal-600 text-white rounded-br-md{% else %}bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-bl-md{% endif %}">
+              <p class="text-sm leading-relaxed whitespace-pre-wrap">{{ msg.message }}</p>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-8">
+          <p class="text-sm text-gray-500 dark:text-gray-400">{% translate 'No messages yet.' %}</p>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% if ticket.status != 'closed' %}
+      <form method="post" class="border-t border-gray-200 dark:border-gray-700 pt-6">
+        {% csrf_token %}
+        <div>
+          <label for="{{ form.message.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{% translate 'Add a message' %}</label>
+          {{ form.message }}
+          {% if form.message.errors %}
+          <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.message.errors.0 }}</p>
+          {% endif %}
+        </div>
+        <div class="mt-4 flex items-center justify-between">
+          <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'Our support team will respond within 24 hours' %}</p>
+          <div class="flex items-center space-x-3 rtl:space-x-reverse">
+            {% if ticket.status != 'closed' %}
+            <a href="#" class="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors">{% translate 'Close ticket' %}</a>
+            {% endif %}
+            <button type="submit" class="px-6 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl shadow-lg shadow-baikal-600/25 hover:shadow-baikal-600/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-baikal-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+              <span class="flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                {% translate 'Send message' %}
+              </span>
+            </button>
+          </div>
+        </div>
+      </form>
+      {% else %}
+      <div class="border-t border-gray-200 dark:border-gray-700 pt-6 text-center">
+        <p class="text-sm text-gray-500 dark:text-gray-400">{% translate 'This ticket is closed.' %}</p>
+        <a href="{% url 'users:ticket_create' %}" class="mt-2 inline-block text-sm text-baikal-600 dark:text-baikal-400 hover:underline">{% translate 'Create a new ticket' %}</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

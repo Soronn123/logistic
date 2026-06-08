@@ -1,0 +1,68 @@
+{% extends 'base.html' %}{% load i18n static i18n_extras %}
+{% block title %}{% translate 'Services' %} — Baikal-Service{% endblock %}
+{% block meta_description %}{% translate 'All cargo transportation services offered by Baikal-Service' %}{% endblock %}
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "itemListElement": [
+    {% for cat in categories %}
+    {
+      "@type": "ListItem",
+      "position": {{ forloop.counter }},
+      "item": {
+        "@type": "Service",
+        "name": "{{ cat|localized }}",
+        "url": "{{ request.build_absolute_uri }}{% url 'services:category' slug=cat.slug %}"
+      }
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center mb-2">{% translate 'Our Services' %}</h1>
+    <p class="text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto mb-10">{% translate 'Comprehensive cargo transportation solutions across Russia and neighboring countries' %}</p>
+
+    <!-- Search -->
+    <div class="max-w-xl mx-auto mb-10">
+      <form method="get" class="relative">
+        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="{% translate 'Search services...' %}" class="w-full pl-12 pr-4 py-3 rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors shadow-sm">
+      </form>
+    </div>
+
+    <!-- Categories Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for category in categories %}
+      <a href="{% url 'services:category' slug=category.slug %}" class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300">
+        <div class="w-14 h-14 rounded-2xl bg-baikal-50 dark:bg-baikal-900/30 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-baikal-100 dark:group-hover:bg-baikal-900/50 transition-all duration-300">
+          {% if category.icon %}
+          <i class="{{ category.icon }} text-2xl text-baikal-600 dark:text-baikal-400"></i>
+          {% else %}
+          <svg class="w-7 h-7 text-baikal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
+          {% endif %}
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-baikal-600 dark:group-hover:text-baikal-400 transition-colors">{{ category|localized }}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">{{ category|localized_field:'description' }}</p>
+        {% if category.service_set.active.count %}
+        <div class="mt-3 flex items-center gap-1 text-xs text-baikal-600 dark:text-baikal-400 font-medium">
+          <span>{{ category.service_set.active.count }} {% translate 'services' %}</span>
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </div>
+        {% endif %}
+      </a>
+      {% empty %}
+      <div class="col-span-full text-center py-16">
+        <svg class="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        <p class="text-gray-500 dark:text-gray-400 text-lg">{% translate 'No services found.' %}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

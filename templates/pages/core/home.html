@@ -1,0 +1,423 @@
+{% extends 'base.html' %}
+{% load static i18n i18n_extras %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+{% endblock %}
+
+{% block title %}{% translate 'Baikal-Service — Cargo Transportation Across Russia and CIS' %}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative overflow-hidden bg-gradient-to-br from-baikal-700 via-baikal-800 to-baikal-900 text-white">
+  <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-40"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-28">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div class="animate-fade-in">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+          {% translate 'Baikal-Service' %}
+          <span class="block text-baikal-200 text-xl sm:text-2xl lg:text-3xl font-normal mt-3">
+            {% translate 'Reliable cargo transportation across Russia, Kazakhstan, Belarus, Kyrgyzstan, and China' %}
+          </span>
+        </h1>
+        <p class="text-lg sm:text-xl text-baikal-100 mb-8 max-w-xl leading-relaxed">
+          {% translate 'Full-cycle logistics services: from document delivery to container shipping. 19 years of trust.' %}
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="{% url 'core:calculator' %}" class="inline-flex items-center px-6 py-3 bg-white text-baikal-700 font-semibold rounded-xl hover:bg-baikal-50 transition-all shadow-lg hover:shadow-xl">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            {% translate 'Calculate cost' %}
+          </a>
+          <a href="{% url 'orders:create' %}" class="inline-flex items-center px-6 py-3 border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-all">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+            {% translate 'Submit request' %}
+          </a>
+        </div>
+      </div>
+
+      <div class="space-y-6 animate-fade-in" style="animation-delay: 0.2s;">
+        <!-- Tracking Form -->
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+          <h2 class="text-lg font-semibold mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            {% translate 'Track your cargo' %}
+          </h2>
+          <form hx-get="{% url 'core:track' %}" hx-target="#track-result" hx-swap="innerHTML" class="flex flex-col sm:flex-row gap-3">
+            <input type="text" name="tracking_number" placeholder="{% translate 'Enter tracking number' %}" class="flex-1 px-4 py-3 rounded-xl bg-white/90 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-baikal-400 outline-none transition-all">
+            <button type="submit" class="px-6 py-3 bg-baikal-500 hover:bg-baikal-400 text-white font-semibold rounded-xl transition-all whitespace-nowrap">
+              {% translate 'Track' %}
+            </button>
+          </form>
+          <div id="track-result" class="mt-4"></div>
+        </div>
+
+        <!-- Quick Calculator -->
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+          <h2 class="text-lg font-semibold mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            {% translate 'Quick estimate' %}
+          </h2>
+          <form hx-post="{% url 'core:calculator' %}" hx-target="#calc-result" hx-swap="innerHTML" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {% csrf_token %}
+            <select name="from_city" class="px-4 py-3 rounded-xl bg-white/90 text-gray-900 focus:ring-2 focus:ring-baikal-400 outline-none transition-all">
+              <option value="">{% translate 'From city' %}</option>
+              {% for city in cities %}
+               <option value="{{ city.id }}">{{ city|localized }}</option>
+               {% endfor %}
+             </select>
+             <select name="to_city" class="px-4 py-3 rounded-xl bg-white/90 text-gray-900 focus:ring-2 focus:ring-baikal-400 outline-none transition-all">
+               <option value="">{% translate 'To city' %}</option>
+               {% for city in cities %}
+               <option value="{{ city.id }}">{{ city|localized }}</option>
+              {% endfor %}
+            </select>
+            <div class="sm:col-span-3 flex flex-col sm:flex-row gap-2">
+              <input type="number" name="weight" placeholder="{% translate 'Weight, kg' %}" class="flex-1 px-4 py-3 rounded-xl bg-white/90 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-baikal-400 outline-none transition-all">
+              <button type="submit" class="w-full sm:w-auto px-4 py-3 bg-baikal-500 hover:bg-baikal-400 text-white font-semibold rounded-xl transition-all whitespace-nowrap">
+                {% translate 'Go' %}
+              </button>
+            </div>
+          </form>
+          <div id="calc-result" class="mt-4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Counter Section -->
+<section class="relative -mt-10 z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6" x-data="{ counters: {} }" x-init="
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('[data-count]').forEach(el => {
+            const target = parseInt(el.dataset.count);
+            const duration = 2000;
+            const step = Math.ceil(target / (duration / 16));
+            let current = 0;
+            const timer = setInterval(() => {
+              current += step;
+              if (current >= target) {
+                current = target;
+                clearInterval(timer);
+              }
+              el.textContent = current.toLocaleString() + (el.dataset.suffix || '');
+            }, 16);
+          });
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    observer.observe($el);
+  ">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8 text-center border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-shadow">
+      <div class="text-3xl sm:text-4xl font-extrabold text-baikal-600 dark:text-baikal-400 mb-2" data-count="19" data-suffix="">0</div>
+      <div class="text-sm sm:text-base text-gray-600 dark:text-gray-400 font-medium">{% translate 'Years in business' %}</div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8 text-center border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-shadow">
+      <div class="text-3xl sm:text-4xl font-extrabold text-baikal-600 dark:text-baikal-400 mb-2" data-count="200" data-suffix="+">0</div>
+      <div class="text-sm sm:text-base text-gray-600 dark:text-gray-400 font-medium">{% translate 'Cities served' %}</div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8 text-center border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-shadow">
+      <div class="text-3xl sm:text-4xl font-extrabold text-baikal-600 dark:text-baikal-400 mb-2" data-count="1500000" data-suffix="+">0</div>
+      <div class="text-sm sm:text-base text-gray-600 dark:text-gray-400 font-medium">{% translate 'Shipments delivered' %}</div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8 text-center border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-shadow">
+      <div class="text-3xl sm:text-4xl font-extrabold text-baikal-600 dark:text-baikal-400 mb-2" data-count="50000" data-suffix="+">0</div>
+      <div class="text-sm sm:text-base text-gray-600 dark:text-gray-400 font-medium">{% translate 'Happy clients' %}</div>
+    </div>
+  </div>
+</section>
+
+<!-- Service Categories -->
+<section class="py-16 sm:py-20 lg:py-24 bg-gray-50 dark:bg-gray-800/50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">{% translate 'Our Services' %}</h2>
+      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{% translate 'Comprehensive logistics solutions for any cargo' %}</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <a href="{% url 'services:category' slug='cargo-transportation' %}" class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-2xl border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:-translate-y-1">
+        <div class="w-14 h-14 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-7 h-7 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{% translate 'Cargo Transportation' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{% translate 'Full range of road, rail, air, and sea freight services' %}</p>
+      </a>
+      <a href="{% url 'services:category' slug='marketplaces' %}" class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-2xl border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:-translate-y-1">
+        <div class="w-14 h-14 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-7 h-7 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{% translate 'Marketplaces Delivery' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{% translate 'Delivery to Wildberries, Ozon, Yandex Market and more' %}</p>
+      </a>
+      <a href="{% url 'services:category' slug='pallet-transportation' %}" class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-2xl border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:-translate-y-1">
+        <div class="w-14 h-14 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-7 h-7 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{% translate 'Pallet Transportation' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{% translate 'Palletized cargo shipping with loading equipment' %}</p>
+      </a>
+      <a href="{% url 'services:category' slug='consolidated-cargo' %}" class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-2xl border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:-translate-y-1">
+        <div class="w-14 h-14 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-7 h-7 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{% translate 'Consolidated Cargo' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{% translate 'Cost-effective groupage shipping solutions' %}</p>
+      </a>
+      <a href="{% url 'services:category' slug='air-cargo' %}" class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-2xl border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:-translate-y-1">
+        <div class="w-14 h-14 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-7 h-7 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{% translate 'Air Cargo' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{% translate 'Express air freight to any destination' %}</p>
+      </a>
+      <a href="{% url 'services:category' slug='container' %}" class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-2xl border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:-translate-y-1">
+        <div class="w-14 h-14 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-7 h-7 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{% translate 'Container Shipping' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{% translate '20ft and 40ft container transportation' %}</p>
+      </a>
+      <a href="{% url 'services:category' slug='ftl' %}" class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-2xl border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:-translate-y-1">
+        <div class="w-14 h-14 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-7 h-7 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{% translate 'FTL' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{% translate 'Full truck load with dedicated transport' %}</p>
+      </a>
+      <a href="{% url 'services:category' slug='posylka-tariff' %}" class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-2xl border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:-translate-y-1">
+        <div class="w-14 h-14 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-7 h-7 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-1.414 1.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-1.414-1.414A1 1 0 006.586 13H4"/></svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{% translate 'Parcel Tariff' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{% translate 'Affordable small parcel shipping' %}</p>
+      </a>
+      <a href="{% url 'services:additional' %}" class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-2xl border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:-translate-y-1">
+        <div class="w-14 h-14 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-7 h-7 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{% translate 'Additional Services' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{% translate 'Insurance, packaging, loading, and more' %}</p>
+      </a>
+    </div>
+    <div class="text-center mt-8">
+      <a href="{% url 'services:list' %}" class="inline-flex items-center px-6 py-3 text-baikal-600 dark:text-baikal-400 font-semibold border-2 border-baikal-600 dark:border-baikal-400 rounded-xl hover:bg-baikal-50 dark:hover:bg-baikal-900/20 transition-all">
+        {% translate 'View all services' %}
+        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Map Section -->
+<section class="py-16 sm:py-20 bg-white dark:bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">{% translate 'Our Geography' %}</h2>
+      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{% translate '200+ cities across Russia and CIS countries' %}</p>
+    </div>
+    <div class="bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-xl aspect-[21/9] min-h-[300px] relative">
+      <div id="home-map" class="w-full h-full"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-16 sm:py-20 bg-gray-50 dark:bg-gray-800/50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">{% translate 'What Our Clients Say' %}</h2>
+      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{% translate 'Trusted by thousands of businesses and individuals' %}</p>
+    </div>
+    <div class="relative" x-data="{ current: 0 }">
+      <div class="overflow-hidden">
+        <div class="flex transition-transform duration-500 ease-out" :style="'transform: translateX(-' + current * 100 + '%)'">
+          {% for review in reviews %}
+          <div class="w-full flex-shrink-0 px-2">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700 h-full">
+              <div class="flex items-center mb-4">
+                <div class="w-12 h-12 rounded-full bg-baikal-100 dark:bg-baikal-900/30 flex items-center justify-center text-baikal-600 dark:text-baikal-400 font-bold text-lg">
+                  {{ review.author_name|first }}
+                </div>
+                <div class="ml-4">
+                  <h4 class="font-semibold text-gray-900 dark:text-white">{{ review.author_name }}</h4>
+                  {% if review.author_company %}
+                  <p class="text-sm text-gray-500 dark:text-gray-400">{{ review.author_company }}</p>
+                  {% endif %}
+                </div>
+                <div class="ml-auto flex">
+                  {% for i in "12345"|make_list %}
+                  <svg class="w-5 h-5 {% if forloop.counter <= review.rating %}text-yellow-400{% else %}text-gray-300 dark:text-gray-600{% endif %}" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  {% endfor %}
+                </div>
+              </div>
+              <p class="text-gray-600 dark:text-gray-400 leading-relaxed italic">"{{ review.text }}"</p>
+            </div>
+          </div>
+          {% empty %}
+          <div class="w-full flex-shrink-0 px-2">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700 text-center">
+              <p class="text-gray-500 dark:text-gray-400">{% translate 'No reviews yet' %}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% if reviews|length > 1 %}
+      <button @click="current = current > 0 ? current - 1 : {{ reviews|length }} - 1" class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-12 h-12 rounded-full bg-white dark:bg-gray-800 shadow-lg flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
+        <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <button @click="current = current < {{ reviews|length }} - 1 ? current + 1 : 0" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-12 h-12 rounded-full bg-white dark:bg-gray-800 shadow-lg flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
+        <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </button>
+      <div class="flex justify-center mt-6 space-x-2">
+        <template x-for="(_, i) in Array({{ reviews|length }}).fill()" :key="i">
+          <button @click="current = i" :class="current === i ? 'bg-baikal-600 w-8' : 'bg-gray-300 dark:bg-gray-600 w-3'" class="h-3 rounded-full transition-all duration-300"></button>
+        </template>
+      </div>
+      {% endif %}
+    </div>
+    <div class="text-center mt-8">
+      <a href="{% url 'core:reviews' %}" class="inline-flex items-center px-6 py-3 text-baikal-600 dark:text-baikal-400 font-semibold border-2 border-baikal-600 dark:border-baikal-400 rounded-xl hover:bg-baikal-50 dark:hover:bg-baikal-900/20 transition-all">
+        {% translate 'All reviews' %}
+        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Latest News -->
+<section class="py-16 sm:py-20 bg-white dark:bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-end justify-between mb-12">
+      <div>
+        <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">{% translate 'Latest News' %}</h2>
+        <p class="text-lg text-gray-600 dark:text-gray-400">{% translate 'Stay updated with Baikal-Service' %}</p>
+      </div>
+      <a href="{% url 'core:news_list' %}" class="hidden sm:inline-flex items-center px-4 py-2 text-sm font-medium text-baikal-600 dark:text-baikal-400 hover:bg-baikal-50 dark:hover:bg-baikal-900/20 rounded-lg transition-all">
+        {% translate 'All news' %}
+        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for item in news_items %}
+      <article class="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:-translate-y-1">
+        <div class="aspect-[16/9] bg-gray-200 dark:bg-gray-700 relative overflow-hidden">
+          {% if item.image %}
+          <img src="{{ item.image.url }}" alt="{{ item|localized }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          {% else %}
+          <div class="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500">
+            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          </div>
+          {% endif %}
+        </div>
+        <div class="p-5">
+          <time class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ item.published_at|date:"d E Y" }}</time>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mt-2 mb-2 line-clamp-2 group-hover:text-baikal-600 dark:group-hover:text-baikal-400 transition-colors">
+            <a href="{% url 'core:news_detail' slug=item.slug %}">{{ item|localized }}</a>
+          </h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">{{ item|localized_field:'short_text' }}</p>
+          <a href="{% url 'core:news_detail' slug=item.slug %}" class="inline-flex items-center mt-4 text-sm font-medium text-baikal-600 dark:text-baikal-400 hover:underline">
+            {% translate 'Read more' %}
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </div>
+      </article>
+      {% empty %}
+      <div class="col-span-full text-center py-12 text-gray-500 dark:text-gray-400">
+        <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
+        <p>{% translate 'No news yet' %}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% if news_items %}
+    <div class="text-center mt-8 sm:hidden">
+      <a href="{% url 'core:news_list' %}" class="inline-flex items-center px-6 py-3 text-baikal-600 dark:text-baikal-400 font-semibold border-2 border-baikal-600 dark:border-baikal-400 rounded-xl hover:bg-baikal-50 dark:hover:bg-baikal-900/20 transition-all">
+        {% translate 'All news' %}
+        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- CTA Banners -->
+<section class="py-16 sm:py-20 bg-gray-50 dark:bg-gray-800/50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-baikal-600 to-baikal-800 p-8 sm:p-10 text-white">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+        <div class="relative">
+          <h3 class="text-2xl sm:text-3xl font-bold mb-3">{% translate 'Become a Partner' %}</h3>
+          <p class="text-baikal-100 mb-6 max-w-md">{% translate 'Join our partner network and earn with Baikal-Service. Special conditions for agents and integrators.' %}</p>
+          <a href="{% url 'partners:apply' %}" class="inline-flex items-center px-5 py-3 bg-white text-baikal-700 font-semibold rounded-xl hover:bg-baikal-50 transition-all shadow-lg">
+            {% translate 'Apply now' %}
+            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 p-8 sm:p-10 text-white">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+        <div class="relative">
+          <div class="flex items-center mb-4">
+            <svg class="w-8 h-8 text-baikal-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            <h3 class="text-2xl sm:text-3xl font-bold">{% translate 'Mobile App' %}</h3>
+          </div>
+          <p class="text-gray-300 mb-6 max-w-md">{% translate 'Track shipments, calculate costs, and manage deliveries from your phone. Available on iOS and Android.' %}</p>
+          <div class="flex flex-wrap gap-3">
+            <a href="#" class="inline-flex items-center px-4 py-2 bg-black text-white text-sm font-medium rounded-xl hover:bg-gray-800 transition-all border border-gray-700">
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+              App Store
+            </a>
+            <a href="#" class="inline-flex items-center px-4 py-2 bg-black text-white text-sm font-medium rounded-xl hover:bg-gray-800 transition-all border border-gray-700">
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199l2.807 1.626a1 1 0 010 1.732l-2.807 1.626L15.206 12l2.492-2.492zM5.864 2.658L16.8 8.99l-2.302 2.302-8.634-8.634z"/></svg>
+              Google Play
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const branches = [
+    {% for branch in branches %}
+    {
+      id: {{ branch.id }},
+      lat: {{ branch.latitude|js_float }},
+      lng: {{ branch.longitude|js_float }},
+      address: '{{ branch|localized_field:'address'|escapejs }}',
+      city: '{{ branch.city|localized|escapejs }}',
+      type: '{{ branch.get_branch_type_display|escapejs }}',
+      phone: '{{ branch.phone|escapejs }}',
+      hours: '{{ branch.working_hours|escapejs }}'
+    },
+    {% endfor %}
+  ];
+  
+  if (branches.length > 0) {
+    const map = L.map('home-map').setView([branches[0].lat, branches[0].lng], 4);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+    
+    branches.forEach(b => {
+      const marker = L.marker([b.lat, b.lng]).addTo(map);
+      marker.bindPopup('<b>' + b.city + '</b><br>' + b.address + '<br>' + b.phone);
+    });
+    
+    const group = L.featureGroup(branches.map(b => L.marker([b.lat, b.lng])));
+    map.fitBounds(group.getBounds().pad(0.1));
+  }
+});
+</script>
+{% endblock %}

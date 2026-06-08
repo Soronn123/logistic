@@ -1,0 +1,34 @@
+{% extends 'base.html' %}{% load i18n static %}
+{% block title %}{% translate 'Track Cargo' %} — Baikal-Service{% endblock %}
+{% block meta_description %}{% translate 'Track your cargo shipment in real time' %}{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center mb-2">{% translate 'Track Your Cargo' %}</h1>
+    <p class="text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto mb-10">{% translate 'Enter your tracking number to get real-time status of your shipment' %}</p>
+
+    <!-- Tracking Form -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 sm:p-8 mb-8">
+      <form hx-post="{% url 'core:track' %}" hx-target="#tracking-result" hx-trigger="submit" hx-swap="innerHTML" class="flex flex-col sm:flex-row gap-4">
+          {% csrf_token %}
+        <div class="flex-1">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sr-only">{% translate 'Tracking number' %}</label>
+          <input type="text" name="tracking_number" required class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-3 px-4 text-base focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'Enter tracking number, e.g. BAIKAL-001234' %}">
+        </div>
+        <button type="submit" class="px-8 py-3 bg-baikal-600 hover:bg-baikal-700 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-baikal-600/25 whitespace-nowrap flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          {% translate 'Track' %}
+        </button>
+      </form>
+    </div>
+
+    <!-- Tracking Result -->
+    <div id="tracking-result">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 sm:p-12 text-center border-2 border-dashed border-gray-200 dark:border-gray-700">
+        <svg class="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <p class="text-gray-500 dark:text-gray-400 text-lg">{% translate 'Enter a tracking number and click "Track" to see your shipment status' %}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}{% load i18n static %}
+{% block title %}{% translate 'Partnership' %} — Baikal-Service{% endblock %}
+{% block meta_description %}{% translate 'Become a partner of Baikal-Service — agents, franchises, integrators' %}{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center mb-2">{% translate 'Partnership Programs' %}</h1>
+    <p class="text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto mb-10">{% translate 'Join our partner network and grow your business with Baikal-Service' %}</p>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-sm border border-gray-100 dark:border-gray-700">
+        <div class="text-3xl font-bold text-baikal-600 dark:text-baikal-400">200+</div>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{% translate 'Partner companies' %}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-sm border border-gray-100 dark:border-gray-700">
+        <div class="text-3xl font-bold text-baikal-600 dark:text-baikal-400">50+</div>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{% translate 'Cities with partners' %}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-sm border border-gray-100 dark:border-gray-700">
+        <div class="text-3xl font-bold text-baikal-600 dark:text-baikal-400">15%</div>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{% translate 'Average commission' %}</p>
+      </div>
+    </div>
+
+    <!-- Partner Types -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300">
+        <div class="w-14 h-14 rounded-2xl bg-baikal-50 dark:bg-baikal-900/30 flex items-center justify-center mb-4">
+          <svg class="w-7 h-7 text-baikal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{% translate 'Agent Partnership' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">{% translate 'Refer clients and earn commission on every shipment. Perfect for logistics consultants and agencies.' %}</p>
+      </div>
+
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300">
+        <div class="w-14 h-14 rounded-2xl bg-baikal-50 dark:bg-baikal-900/30 flex items-center justify-center mb-4">
+          <svg class="w-7 h-7 text-baikal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{% translate 'Franchise Partnership' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">{% translate 'Open your own logistics center under the Baikal-Service brand. Full operational and marketing support.' %}</p>
+      </div>
+
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300">
+        <div class="w-14 h-14 rounded-2xl bg-baikal-50 dark:bg-baikal-900/30 flex items-center justify-center mb-4">
+          <svg class="w-7 h-7 text-baikal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{% translate 'Integration Partnership' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">{% translate 'Integrate your platform with our API. Offer seamless shipping solutions to your customers.' %}</p>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="text-center">
+      <a href="{% url 'partners:apply' %}" class="inline-flex items-center gap-2 px-8 py-3.5 bg-baikal-600 hover:bg-baikal-700 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-baikal-600/25 text-lg">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+        {% translate 'Become a Partner' %}
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

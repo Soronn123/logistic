@@ -1,0 +1,85 @@
+{% extends 'base.html' %}{% load i18n static i18n_extras %}
+{% block title %}{{ category|localized }} — Baikal-Service{% endblock %}
+{% block meta_description %}{{ category|localized_field:'description' }}{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-8">
+      <a href="{% url 'services:list' %}" class="hover:text-baikal-600 dark:hover:text-baikal-400 transition-colors">{% translate 'Services' %}</a>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <span class="text-gray-900 dark:text-white">{{ category|localized }}</span>
+    </nav>
+
+    <!-- Category Header -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden mb-8">
+      <div class="p-6 sm:p-8 flex flex-col sm:flex-row items-start gap-6">
+        <div class="w-20 h-20 rounded-2xl bg-baikal-50 dark:bg-baikal-900/30 flex items-center justify-center flex-shrink-0">
+          {% if category.icon %}
+          <i class="{{ category.icon }} text-3xl text-baikal-600 dark:text-baikal-400"></i>
+          {% else %}
+          <svg class="w-10 h-10 text-baikal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
+          {% endif %}
+        </div>
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ category|localized }}</h1>
+          <p class="text-gray-600 dark:text-gray-400 max-w-2xl">{{ category|localized_field:'description' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subcategories -->
+    {% if category.children.active %}
+    <div class="mb-8">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">{% translate 'Subcategories' %}</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for sub in category.children.active %}
+        <a href="{% url 'services:category' slug=sub.slug %}" class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow border border-gray-100 dark:border-gray-700 transition-all duration-200 group">
+          {% if sub.icon %}<i class="{{ sub.icon }} text-xl"></i>{% endif %}
+          <span class="font-medium text-gray-900 dark:text-white group-hover:text-baikal-600 dark:group-hover:text-baikal-400 transition-colors">{{ sub|localized }}</span>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Services List -->
+    <div class="space-y-4">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">{% translate 'Available Services' %}</h2>
+      {% for service in services %}
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300">
+        <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              {% if service.icon %}<i class="{{ service.icon }} text-xl"></i>{% endif %}
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ service|localized }}</h3>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-gray-400">{{ service|localized_field:'short_description' }}</p>
+            {% if service.tariff_set.active %}
+            <div class="mt-3 flex flex-wrap gap-2">
+              {% for tariff in service.tariff_set.active|slice:":3" %}
+              <span class="text-xs px-2 py-1 rounded-full bg-baikal-50 dark:bg-baikal-900/30 text-baikal-600 dark:text-baikal-400">{% translate 'from' %} {{ tariff.price_per_kg }} ₽/{% translate 'kg' %}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+          <div class="flex items-center gap-2">
+            {% if service.base_price %}
+            <div class="text-right">
+              <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'Starting from' %}</p>
+              <p class="text-xl font-bold text-baikal-600 dark:text-baikal-400">{{ service.base_price }} ₽</p>
+            </div>
+            {% endif %}
+            <a href="{% url 'services:detail' category_slug=category.slug slug=service.slug %}" class="px-4 py-2 bg-baikal-600 hover:bg-baikal-700 text-white text-sm font-medium rounded-xl transition-colors">
+              {% translate 'Details' %}
+            </a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="text-center py-12 text-gray-500 dark:text-gray-400">{% translate 'No services in this category yet.' %}</div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

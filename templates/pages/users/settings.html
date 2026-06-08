@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% translate 'Profile Settings' %} — Baikal-Service{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+  <div class="animate-fade-in">
+    <div class="mb-8">
+      <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-100">{% translate 'Profile Settings' %}</h1>
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{% translate 'Manage your account settings and preferences' %}</p>
+    </div>
+
+    {% if messages %}
+    <div class="mb-6 space-y-2">
+      {% for message in messages %}
+      <div class="p-4 rounded-xl {% if message.tags == 'success' %}bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800{% else %}bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800{% endif %}" role="alert">
+        <div class="flex">
+          {% if message.tags == 'success' %}
+          <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          {% else %}
+          <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          {% endif %}
+          <div class="ml-3 text-sm {% if message.tags == 'success' %}text-green-700 dark:text-green-400{% else %}text-red-700 dark:text-red-400{% endif %}">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Profile Information Form -->
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="profile">
+
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 lg:p-8 transition-colors duration-300">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">{% translate 'Personal information' %}</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div class="sm:col-span-2 flex items-center gap-4">
+            <div class="w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden flex-shrink-0">
+              {% if profile_form.instance.avatar %}
+              <img src="{{ profile_form.instance.avatar.url }}" alt="{{ profile_form.instance.get_full_name|default:profile_form.instance.email }}" class="w-full h-full object-cover">
+              {% else %}
+              <div class="w-full h-full flex items-center justify-center">
+                <span class="text-2xl font-bold text-gray-400">{{ profile_form.instance.first_name|first|upper }}{{ profile_form.instance.last_name|first|upper }}</span>
+              </div>
+              {% endif %}
+            </div>
+            <div>
+              <label for="{{ profile_form.avatar.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Avatar' %}</label>
+              {{ profile_form.avatar }}
+              {% if profile_form.avatar.errors %}
+              <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ profile_form.avatar.errors.0 }}</p>
+              {% endif %}
+              <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{% translate 'Max 2 MB. JPG, PNG.' %}</p>
+            </div>
+          </div>
+          <div>
+            <label for="{{ profile_form.first_name.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'First name' %}</label>
+            {{ profile_form.first_name }}
+            {% if profile_form.first_name.errors %}
+            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ profile_form.first_name.errors.0 }}</p>
+            {% endif %}
+          </div>
+          <div>
+            <label for="{{ profile_form.last_name.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Last name' %}</label>
+            {{ profile_form.last_name }}
+            {% if profile_form.last_name.errors %}
+            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ profile_form.last_name.errors.0 }}</p>
+            {% endif %}
+          </div>
+          <div>
+            <label for="{{ profile_form.phone.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Phone' %}</label>
+            {{ profile_form.phone }}
+            {% if profile_form.phone.errors %}
+            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ profile_form.phone.errors.0 }}</p>
+            {% endif %}
+          </div>
+          <div>
+            <label for="{{ profile_form.email.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Email' %}</label>
+            {{ profile_form.email }}
+            {% if profile_form.email.errors %}
+            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ profile_form.email.errors.0 }}</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 lg:p-8 transition-colors duration-300">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">{% translate 'Preferences' %}</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label for="{{ profile_form.language.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Language' %}</label>
+            {{ profile_form.language }}
+          </div>
+          <div>
+            <label for="{{ profile_form.theme.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Theme' %}</label>
+            {{ profile_form.theme }}
+          </div>
+        </div>
+      </div>
+
+      {% if user.is_company %}
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 lg:p-8 transition-colors duration-300">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">{% translate 'Company details' %}</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label for="{{ profile_form.company_name.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Company name' %}</label>
+            {{ profile_form.company_name }}
+          </div>
+          <div>
+            <label for="{{ profile_form.inn.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'INN' %}</label>
+            {{ profile_form.inn }}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="flex items-center justify-between">
+        <button type="submit" class="px-8 py-3 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl shadow-lg shadow-baikal-600/25 hover:shadow-baikal-600/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-baikal-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+          {% translate 'Save profile' %}
+        </button>
+      </div>
+    </form>
+
+    <!-- Change Password Form -->
+    <form method="post" class="space-y-6 mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="password">
+
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 lg:p-8 transition-colors duration-300">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">{% translate 'Change password' %}</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div>
+            <label for="{{ password_form.old_password.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Current password' %}</label>
+            {{ password_form.old_password }}
+            {% if password_form.old_password.errors %}
+            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ password_form.old_password.errors.0 }}</p>
+            {% endif %}
+          </div>
+          <div>
+            <label for="{{ password_form.new_password1.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'New password' %}</label>
+            {{ password_form.new_password1 }}
+            {% if password_form.new_password1.errors %}
+            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ password_form.new_password1.errors.0 }}</p>
+            {% endif %}
+          </div>
+          <div>
+            <label for="{{ password_form.new_password2.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Confirm password' %}</label>
+            {{ password_form.new_password2 }}
+            {% if password_form.new_password2.errors %}
+            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ password_form.new_password2.errors.0 }}</p>
+            {% endif %}
+          </div>
+        </div>
+
+      </div>
+
+      <div class="flex items-center justify-end">
+        <button type="submit" class="px-8 py-3 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl shadow-lg shadow-baikal-600/25 hover:shadow-baikal-600/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-baikal-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+          {% translate 'Change password' %}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

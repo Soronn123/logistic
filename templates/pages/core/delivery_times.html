@@ -1,0 +1,84 @@
+{% extends 'base.html' %}{% load i18n static i18n_extras %}
+{% block title %}{% translate 'Delivery Times' %} — Baikal-Service{% endblock %}
+{% block meta_description %}{% translate 'Estimated delivery times for cargo transportation' %}{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center mb-2">{% translate 'Delivery Time Calculator' %}</h1>
+    <p class="text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto mb-10">{% translate 'Check estimated delivery times between cities' %}</p>
+
+    <!-- City Selector -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 sm:p-8 mb-8">
+      <form method="get" class="flex flex-col sm:flex-row gap-4">
+        <div class="flex-1">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'From' %}</label>
+          <select name="from" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors">
+            <option value="">{% translate 'Select city' %}</option>
+            {% for city in cities %}
+            <option value="{{ city.id }}" {% if request.GET.from|stringformat:'s' == city.id|stringformat:'s' %}selected{% endif %}>{{ city|localized }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="flex-1">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'To' %}</label>
+          <select name="to" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors">
+            <option value="">{% translate 'Select city' %}</option>
+            {% for city in cities %}
+            <option value="{{ city.id }}" {% if request.GET.to|stringformat:'s' == city.id|stringformat:'s' %}selected{% endif %}>{{ city|localized }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="flex items-end">
+          <button type="submit" class="w-full sm:w-auto px-8 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl transition-colors">{% translate 'Check' %}</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Delivery Times Table -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-baikal-50 dark:bg-gray-900">
+              <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">{% translate 'From' %}</th>
+              <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">{% translate 'To' %}</th>
+              <th class="text-center px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">{% translate 'Min days' %}</th>
+              <th class="text-center px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">{% translate 'Max days' %}</th>
+              <th class="text-center px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">{% translate 'Service type' %}</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+            {% for entry in delivery_times %}
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+              <td class="px-4 py-3 text-gray-900 dark:text-white font-medium">{{ entry.from_city|localized }}</td>
+              <td class="px-4 py-3 text-gray-900 dark:text-white font-medium">{{ entry.to_city|localized }}</td>
+              <td class="px-4 py-3 text-center text-gray-600 dark:text-gray-400">{{ entry.min_days }}</td>
+              <td class="px-4 py-3 text-center text-gray-600 dark:text-gray-400">{{ entry.max_days }}</td>
+              <td class="px-4 py-3 text-center">
+                <span class="px-2 py-1 text-xs rounded-full bg-baikal-50 dark:bg-baikal-900/30 text-baikal-600 dark:text-baikal-400">{{ entry.service_type }}</span>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="px-4 py-12 text-center text-gray-500 dark:text-gray-400">
+                {% if request.GET.from or request.GET.to %}
+                {% translate 'No delivery time data found for the selected route.' %}
+                {% else %}
+                {% translate 'Select cities and click "Check" to see delivery times.' %}
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Info note -->
+    <div class="mt-8 p-4 bg-baikal-50 dark:bg-baikal-900/20 rounded-xl flex items-start gap-3">
+      <svg class="w-5 h-5 text-baikal-600 dark:text-baikal-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <p class="text-sm text-gray-600 dark:text-gray-400">{% translate 'Delivery times are estimates and may vary depending on weather conditions, holidays, and other factors. Please confirm with your manager for exact dates.' %}</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

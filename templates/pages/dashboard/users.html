@@ -1,0 +1,102 @@
+{% extends 'pages/dashboard/base_dashboard.html' %}{% load i18n %}
+{% block dash_title %}{% translate 'User Management' %}{% endblock %}
+{% block dash_page_title %}{% translate 'User Management' %}{% endblock %}
+{% block dash_content %}
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{% translate 'User Management' %}</h1>
+    <p class="text-gray-500 dark:text-gray-400 mt-1">{% translate 'Manage all registered users' %}</p>
+  </div>
+  <div class="flex gap-2">
+    <a href="{% url 'dashboard:user_create' %}" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-xl transition-colors">
+      {% translate 'Create User' %}
+    </a>
+    <a href="#" class="px-4 py-2 bg-baikal-600 hover:bg-baikal-700 text-white text-sm font-medium rounded-xl transition-colors">
+      {% translate 'Export CSV' %}
+    </a>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 mb-6">
+  <div class="flex flex-col sm:flex-row gap-3">
+    <div class="relative flex-1">
+      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <input type="text" id="user-search" placeholder="{% translate 'Search by name or email...' %}" class="w-full pl-10 pr-4 py-2 rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors">
+    </div>
+    <select class="px-4 py-2 rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm focus:ring-2 focus:ring-baikal-500">
+      <option value="">{% translate 'All Roles' %}</option>
+      <option value="client">{% translate 'Client' %}</option>
+      <option value="manager">{% translate 'Manager' %}</option>
+      <option value="admin">{% translate 'Admin' %}</option>
+    </select>
+  </div>
+</div>
+
+<!-- Users Table -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm" id="users-table">
+      <thead class="bg-gray-50 dark:bg-gray-900 text-left">
+        <tr>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'User' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Email' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Phone' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Role' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Balance' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Joined' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Actions' %}</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+        {% for u in users %}
+        <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors user-row">
+          <td class="px-6 py-3">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-baikal-100 dark:bg-baikal-900/30 flex items-center justify-center text-baikal-600 dark:text-baikal-400 text-sm font-semibold">
+                {{ u.first_name|first|default:u.email|first|upper }}
+              </div>
+              <div>
+                <p class="font-medium text-gray-900 dark:text-white">{{ u.get_full_name|default:u.email }}</p>
+                {% if u.company_name %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ u.company_name }}</p>{% endif %}
+              </div>
+            </div>
+          </td>
+          <td class="px-6 py-3">
+            <div class="flex items-center gap-2">
+              <a href="{% url 'dashboard:user_edit' u.pk %}" class="text-baikal-600 dark:text-baikal-400 hover:underline text-sm">{% translate 'Edit' %}</a>
+              <span class="text-gray-300 dark:text-gray-600">|</span>
+              <a href="{% url 'dashboard:user_delete' u.pk %}" class="text-red-600 dark:text-red-400 hover:underline text-sm">{% translate 'Delete' %}</a>
+            </div>
+          </td>
+          <td class="px-6 py-3 text-gray-900 dark:text-white font-medium">{{ u.balance|floatformat:0 }} ₽</td>
+          <td class="px-6 py-3 text-gray-500 dark:text-gray-400">{{ u.date_joined|date:'d M Y' }}</td>
+          <td class="px-6 py-3">
+            <a href="#" class="text-baikal-600 dark:text-baikal-400 hover:underline text-sm">{% translate 'View' %}</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">{% translate 'No users found.' %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+{% block dash_extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const search = document.getElementById('user-search');
+  if (search) {
+    search.addEventListener('input', function() {
+      const q = this.value.toLowerCase();
+      document.querySelectorAll('.user-row').forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+    });
+  }
+});
+</script>
+{% endblock %}

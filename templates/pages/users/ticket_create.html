@@ -1,0 +1,69 @@
+{% extends 'base.html' %}{% load i18n static %}
+{% block title %}{% translate 'Create Ticket' %} — Baikal-Service{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+  <div class="animate-fade-in">
+    <div class="mb-8">
+      <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-100">{% translate 'Create Support Ticket' %}</h1>
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{% translate 'Describe your issue and we will respond as soon as possible.' %}</p>
+    </div>
+
+    {% if form.errors %}
+    <div class="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl" role="alert">
+      <div class="flex">
+        <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div class="ml-3 text-sm text-red-700 dark:text-red-400">
+          {% translate 'Please correct the errors below.' %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <form method="post" class="space-y-6" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 lg:p-8 transition-colors duration-300">
+        <div class="space-y-5">
+          <div>
+            <label for="{{ form.subject.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Subject' %} *</label>
+            {{ form.subject }}
+            {% if form.subject.errors %}
+            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.subject.errors.0 }}</p>
+            {% endif %}
+          </div>
+
+          <div>
+            <label for="{{ form.priority.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Priority' %} *</label>
+            {{ form.priority }}
+            {% if form.priority.errors %}
+            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.priority.errors.0 }}</p>
+            {% endif %}
+          </div>
+
+          <div>
+            <label for="{{ form.message.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Message' %} *</label>
+            {{ form.message }}
+            {% if form.message.errors %}
+            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.message.errors.0 }}</p>
+            {% endif %}
+            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{% translate 'Describe your issue in detail.' %}</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Attachment (optional)' %}</label>
+            <input type="file" name="attachment" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{% translate 'Max 10 MB. Allowed: PDF, DOC, DOCX, JPG, PNG' %}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <a href="{% url 'users:tickets' %}" class="px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">{% translate 'Cancel' %}</a>
+        <button type="submit" class="px-8 py-3 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl shadow-lg shadow-baikal-600/25 hover:shadow-baikal-600/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-baikal-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+          {% translate 'Create Ticket' %}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

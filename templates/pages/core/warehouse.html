@@ -1,0 +1,59 @@
+{% extends 'base.html' %}{% load static i18n %}
+{% block title %}{% translate 'Warehouse Services' %} — Baikal-Service{% endblock %}
+{% block meta_description %}{% translate 'Warehouse services: responsible storage, cargo packaging, and free storage from Baikal-Service' %}{% endblock %}
+{% block content %}
+<section class="bg-gradient-to-r from-baikal-700 to-baikal-900 text-white py-12 sm:py-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav class="flex items-center space-x-2 text-sm text-baikal-200 mb-4">
+      <a href="{% url 'core:home' %}" class="hover:text-white transition-colors">{% translate 'Home' %}</a>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <span class="text-white">{% translate 'Warehouse Services' %}</span>
+    </nav>
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold">{% translate 'Warehouse Services' %}</h1>
+    <p class="text-lg text-baikal-200 mt-3 max-w-2xl">{% translate 'Comprehensive warehouse solutions for your cargo' %}</p>
+  </div>
+</section>
+
+<section class="py-12 sm:py-16 bg-white dark:bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+        <div class="w-16 h-16 bg-baikal-100 dark:bg-baikal-900/50 rounded-2xl flex items-center justify-center mb-5">
+          <svg class="w-8 h-8 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">{% translate 'Responsible Storage' %}</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">{% translate 'Secure warehouse storage with temperature control, humidity monitoring, and 24/7 security surveillance.' %}</p>
+        <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> {% translate 'Temperature-controlled zones' %}</li>
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> {% translate '24/7 video surveillance' %}</li>
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> {% translate 'Flexible rental terms' %}</li>
+        </ul>
+      </div>
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+        <div class="w-16 h-16 bg-baikal-100 dark:bg-baikal-900/50 rounded-2xl flex items-center justify-center mb-5">
+          <svg class="w-8 h-8 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">{% translate 'Cargo Packaging' %}</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">{% translate 'Professional packaging services to ensure your cargo arrives safely at its destination.' %}</p>
+        <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> {% translate 'Custom crating' %}</li>
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> {% translate 'Pallet wrapping' %}</li>
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> {% translate 'Fragile item protection' %}</li>
+        </ul>
+      </div>
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+        <div class="w-16 h-16 bg-baikal-100 dark:bg-baikal-900/50 rounded-2xl flex items-center justify-center mb-5">
+          <svg class="w-8 h-8 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">{% translate 'Free Storage' %}</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">{% translate 'Complimentary storage period for your cargo with transparent terms and easy extension options.' %}</p>
+        <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> {% translate 'Free storage up to 3 days' %}</li>
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> {% translate 'Easy extension options' %}</li>
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> {% translate 'No hidden fees' %}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

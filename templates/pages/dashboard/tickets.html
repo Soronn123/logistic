@@ -1,0 +1,99 @@
+{% extends 'pages/dashboard/base_dashboard.html' %}{% load i18n %}
+{% block dash_title %}{% translate 'Ticket Management' %}{% endblock %}
+{% block dash_page_title %}{% translate 'Ticket Management' %}{% endblock %}
+{% block dash_content %}
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{% translate 'Ticket Management' %}</h1>
+    <p class="text-gray-500 dark:text-gray-400 mt-1">{% translate 'View and manage support tickets' %}</p>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+  <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-lg bg-red-50 dark:bg-red-900/30 flex items-center justify-center">
+        <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <div>
+        <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ open_count|default:0 }}</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'Open' %}</p>
+      </div>
+    </div>
+  </div>
+  <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-lg bg-yellow-50 dark:bg-yellow-900/30 flex items-center justify-center">
+        <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <div>
+        <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ in_progress_count|default:0 }}</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'In Progress' %}</p>
+      </div>
+    </div>
+  </div>
+  <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-lg bg-green-50 dark:bg-green-900/30 flex items-center justify-center">
+        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <div>
+        <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ closed_count|default:0 }}</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'Closed' %}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm" id="tickets-table">
+      <thead class="bg-gray-50 dark:bg-gray-900 text-left">
+        <tr>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">#</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Subject' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Created By' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Priority' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Status' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Assigned To' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Created' %}</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+        {% for ticket in tickets %}
+        <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors ticket-row" data-status="{{ ticket.status }}">
+          <td class="px-6 py-3 font-mono text-xs text-gray-500 dark:text-gray-400">#{{ ticket.id }}</td>
+          <td class="px-6 py-3">
+            <a href="#" class="font-medium text-gray-900 dark:text-white hover:text-baikal-600 dark:hover:text-baikal-400 transition-colors">{{ ticket.subject }}</a>
+          </td>
+          <td class="px-6 py-3 text-gray-600 dark:text-gray-400">{{ ticket.created_by.get_full_name|default:ticket.created_by.email }}</td>
+          <td class="px-6 py-3">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+              {% if ticket.priority == 'urgent' %}bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400
+              {% elif ticket.priority == 'high' %}bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400
+              {% elif ticket.priority == 'medium' %}bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400
+              {% else %}bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300{% endif %}">
+              {{ ticket.get_priority_display }}
+            </span>
+          </td>
+          <td class="px-6 py-3">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+              {% if ticket.status == 'open' %}bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400
+              {% elif ticket.status == 'in_progress' %}bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400
+              {% else %}bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400{% endif %}">
+              {{ ticket.get_status_display }}
+            </span>
+          </td>
+          <td class="px-6 py-3 text-gray-600 dark:text-gray-400">{{ ticket.assigned_to.get_full_name|default:'—' }}</td>
+          <td class="px-6 py-3 text-gray-500 dark:text-gray-400">{{ ticket.created_at|date:'d M Y' }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">{% translate 'No tickets found.' %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

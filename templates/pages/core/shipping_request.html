@@ -1,0 +1,26 @@
+{% extends 'base.html' %}{% load i18n static %}
+{% block title %}{% translate 'Shipping Request' %} — Baikal-Service{% endblock %}
+{% block meta_description %}{% translate 'Submit a shipping request online — multi-step form' %}{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <nav class="flex mb-8 text-sm" aria-label="Breadcrumb">
+      <ol class="inline-flex items-center space-x-2 text-gray-500 dark:text-gray-400">
+        <li><a href="{% url 'core:home' %}" class="hover:text-baikal-600 dark:hover:text-baikal-400 transition-colors">{% translate 'Home' %}</a></li>
+        <li><span class="mx-2">/</span></li>
+        <li><span class="mx-2">/</span></li>
+        <li class="text-gray-900 dark:text-white font-medium">{% translate 'Shipping Request' %}</li>
+      </ol>
+    </nav>
+
+    <div class="text-center mb-10">
+      <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-2">{% translate 'Submit a Shipping Request' %}</h1>
+      <p class="text-gray-600 dark:text-gray-400">{% translate 'Fill out the form and our manager will contact you within 15 minutes.' %}</p>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-10 shadow-sm border border-gray-100 dark:border-gray-700">
+      <p class="text-center text-gray-500 dark:text-gray-400 py-8">{% translate 'Please use our' %} <a href="{% url 'core:calculator' %}" class="text-baikal-600 dark:text-baikal-400 hover:underline font-medium">{% translate 'cargo calculator' %}</a> {% translate 'to get an instant estimate, or' %} <a href="{% url 'core:contact' %}" class="text-baikal-600 dark:text-baikal-400 hover:underline font-medium">{% translate 'contact us' %}</a> {% translate 'directly.' %}</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

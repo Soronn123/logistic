@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Server error" %} | Baikal-Service{% endblock %}
+
+{% block meta_description %}{% translate "An internal server error occurred. Please try again later." %}{% endblock %}
+
+{% block body_class %}min-h-screen bg-white dark:bg-gray-900{% endblock %}
+
+{% block content %}
+<div class="min-h-[80vh] flex items-center justify-center px-4 py-16">
+  <div class="text-center max-w-lg mx-auto animate-fade-in">
+    <div class="mb-8 relative inline-block">
+      <h1 class="text-[12rem] sm:text-[16rem] font-black leading-none text-red-500 dark:text-red-400 select-none">
+        500
+      </h1>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <svg class="w-32 h-32 sm:w-40 sm:h-40 text-red-400/20 dark:text-red-400/10" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+      </div>
+    </div>
+
+    <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+      {% translate "Something went wrong" %}
+    </h2>
+
+    <p class="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+      {% translate "An unexpected error occurred on our server. Our technical team has been notified and is working on a fix. Please try again in a few minutes." %}
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="{% url 'core:home' %}"
+         class="inline-flex items-center justify-center px-8 py-3 bg-baikal-600 hover:bg-baikal-700 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-baikal-500/25">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        {% translate "Go to homepage" %}
+      </a>
+      <button onclick="location.reload()"
+              class="inline-flex items-center justify-center px-8 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:border-baikal-500 hover:text-baikal-600 dark:hover:text-baikal-400 transition-all duration-300">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+        {% translate "Try again" %}
+      </button>
+    </div>
+
+    <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+      <p class="text-gray-500 dark:text-gray-500 text-sm">
+        {% translate "If the problem persists, please" %}
+        <a href="{% url 'core:contact' %}" class="text-baikal-600 dark:text-baikal-400 hover:underline font-medium">
+          {% translate "contact our support team" %}
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

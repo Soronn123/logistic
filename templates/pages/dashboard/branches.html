@@ -1,0 +1,133 @@
+{% extends 'pages/dashboard/base_dashboard.html' %}{% load i18n %}
+{% block dash_title %}{% translate 'Branch Management' %}{% endblock %}
+{% block dash_page_title %}{% translate 'Branch Management' %}{% endblock %}
+{% block dash_content %}
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+  <p class="text-gray-500 dark:text-gray-400">{% translate 'Manage all branches, warehouses, and pickup points' %}</p>
+  <a href="#" class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-baikal-600 hover:bg-baikal-700 rounded-xl transition-colors">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+    {% translate 'Add Branch' %}
+  </a>
+</div>
+
+<!-- Search -->
+<div class="mb-6">
+  <div class="relative max-w-md">
+    <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    <input type="text" id="branch-search" placeholder="{% translate 'Search by city, address, or phone...' %}" class="w-full pl-10 pr-4 py-2.5 text-sm bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-baikal-500/50 focus:border-baikal-500 transition-colors">
+  </div>
+</div>
+
+<!-- Branches Table -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 dark:bg-gray-900 text-left">
+        <tr>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'City' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Address' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Type' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Phone' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Has Pickup' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Has Delivery' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Status' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Actions' %}</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100 dark:divide-gray-700" id="branches-tbody">
+        {% for branch in branches %}
+        <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors branch-row">
+          <td class="px-6 py-3 text-gray-900 dark:text-white font-medium">{{ branch.city.name }}</td>
+          <td class="px-6 py-3 text-gray-600 dark:text-gray-400 max-w-xs truncate">{{ branch.address }}</td>
+          <td class="px-6 py-3">
+            {% if branch.branch_type == 'warehouse' %}
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400">
+              {% translate 'Warehouse' %}
+            </span>
+            {% elif branch.branch_type == 'pickup_point' %}
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
+              {% translate 'Pickup Point' %}
+            </span>
+            {% elif branch.branch_type == 'office' %}
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400">
+              {% translate 'Office' %}
+            </span>
+            {% else %}
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+              {{ branch.get_branch_type_display }}
+            </span>
+            {% endif %}
+          </td>
+          <td class="px-6 py-3 text-gray-600 dark:text-gray-400 font-mono text-xs">{{ branch.phone|default:'—' }}</td>
+          <td class="px-6 py-3">
+            {% if branch.has_pickup %}
+            <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 dark:bg-green-900/30">
+              <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            </span>
+            {% else %}
+            <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-red-100 dark:bg-red-900/30">
+              <svg class="w-4 h-4 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+            </span>
+            {% endif %}
+          </td>
+          <td class="px-6 py-3">
+            {% if branch.has_delivery %}
+            <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 dark:bg-green-900/30">
+              <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            </span>
+            {% else %}
+            <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-red-100 dark:bg-red-900/30">
+              <svg class="w-4 h-4 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+            </span>
+            {% endif %}
+          </td>
+          <td class="px-6 py-3">
+            {% if branch.is_active %}
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
+              <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+              {% translate 'Active' %}
+            </span>
+            {% else %}
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400">
+              <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+              {% translate 'Inactive' %}
+            </span>
+            {% endif %}
+          </td>
+          <td class="px-6 py-3">
+            <div class="flex items-center gap-2">
+              <a href="#" class="p-1.5 rounded-lg text-gray-400 hover:text-baikal-600 dark:hover:text-baikal-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" title="{% translate 'Edit' %}">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+              </a>
+              <a href="#" class="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors" title="{% translate 'Delete' %}">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="8" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">{% translate 'No branches found.' %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+{% block dash_extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('branch-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      const query = this.value.toLowerCase();
+      document.querySelectorAll('.branch-row').forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+      });
+    });
+  }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}{% translate 'About Company — Baikal-Service' %}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="bg-gradient-to-r from-baikal-700 to-baikal-900 text-white py-12 sm:py-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav class="flex items-center space-x-2 text-sm text-baikal-200 mb-4">
+      <a href="{% url 'core:home' %}" class="hover:text-white transition-colors">{% translate 'Home' %}</a>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <span class="text-white">{% translate 'About Company' %}</span>
+    </nav>
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold">{% translate 'About Baikal-Service' %}</h1>
+    <p class="text-lg text-baikal-200 mt-3 max-w-2xl">{% translate 'Your reliable partner in logistics since 2005' %}</p>
+  </div>
+</section>
+
+<!-- History Timeline -->
+<section class="py-16 sm:py-20 bg-white dark:bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">{% translate 'Our History' %}</h2>
+      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{% translate 'Two decades of growth and excellence in logistics' %}</p>
+    </div>
+    <div class="relative max-w-3xl mx-auto">
+      <div class="absolute left-4 sm:left-1/2 top-0 bottom-0 w-0.5 bg-baikal-200 dark:bg-baikal-800 -translate-x-1/2"></div>
+      <div class="space-y-12">
+        <div class="relative flex flex-col sm:flex-row items-start sm:items-center group">
+          <div class="absolute left-4 sm:left-1/2 w-4 h-4 bg-baikal-600 rounded-full border-4 border-white dark:border-gray-900 -translate-x-1/2 z-10 group-hover:scale-150 transition-transform"></div>
+          <div class="sm:w-1/2 sm:pr-8 sm:text-right pl-12 sm:pl-0">
+            <span class="inline-block px-3 py-1 bg-baikal-50 dark:bg-baikal-900/30 text-baikal-600 dark:text-baikal-400 text-sm font-semibold rounded-full mb-2">2005</span>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'Foundation' %}</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{% translate 'Baikal-Service was founded in Moscow, starting with domestic cargo transportation across Russia.' %}</p>
+          </div>
+          <div class="hidden sm:block sm:w-1/2 sm:pl-8"></div>
+        </div>
+        <div class="relative flex flex-col sm:flex-row items-start sm:items-center group">
+          <div class="absolute left-4 sm:left-1/2 w-4 h-4 bg-baikal-600 rounded-full border-4 border-white dark:border-gray-900 -translate-x-1/2 z-10 group-hover:scale-150 transition-transform"></div>
+          <div class="hidden sm:block sm:w-1/2 sm:pr-8"></div>
+          <div class="sm:w-1/2 sm:pl-8 pl-12 sm:pl-8">
+            <span class="inline-block px-3 py-1 bg-baikal-50 dark:bg-baikal-900/30 text-baikal-600 dark:text-baikal-400 text-sm font-semibold rounded-full mb-2">2008</span>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'Regional Expansion' %}</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{% translate 'Opened branches in St. Petersburg, Novosibirsk, and Yekaterinburg. Fleet expanded to 100+ vehicles.' %}</p>
+          </div>
+        </div>
+        <div class="relative flex flex-col sm:flex-row items-start sm:items-center group">
+          <div class="absolute left-4 sm:left-1/2 w-4 h-4 bg-baikal-600 rounded-full border-4 border-white dark:border-gray-900 -translate-x-1/2 z-10 group-hover:scale-150 transition-transform"></div>
+          <div class="sm:w-1/2 sm:pr-8 sm:text-right pl-12 sm:pl-0">
+            <span class="inline-block px-3 py-1 bg-baikal-50 dark:bg-baikal-900/30 text-baikal-600 dark:text-baikal-400 text-sm font-semibold rounded-full mb-2">2012</span>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'International Routes' %}</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{% translate 'Launched international shipping to Kazakhstan, Belarus, and Kyrgyzstan.' %}</p>
+          </div>
+          <div class="hidden sm:block sm:w-1/2 sm:pl-8"></div>
+        </div>
+        <div class="relative flex flex-col sm:flex-row items-start sm:items-center group">
+          <div class="absolute left-4 sm:left-1/2 w-4 h-4 bg-baikal-600 rounded-full border-4 border-white dark:border-gray-900 -translate-x-1/2 z-10 group-hover:scale-150 transition-transform"></div>
+          <div class="hidden sm:block sm:w-1/2 sm:pr-8"></div>
+          <div class="sm:w-1/2 sm:pl-8 pl-12 sm:pl-8">
+            <span class="inline-block px-3 py-1 bg-baikal-50 dark:bg-baikal-900/30 text-baikal-600 dark:text-baikal-400 text-sm font-semibold rounded-full mb-2">2016</span>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'China Direction' %}</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{% translate 'Established container shipping routes from China, including rail and multimodal solutions.' %}</p>
+          </div>
+        </div>
+        <div class="relative flex flex-col sm:flex-row items-start sm:items-center group">
+          <div class="absolute left-4 sm:left-1/2 w-4 h-4 bg-baikal-600 rounded-full border-4 border-white dark:border-gray-900 -translate-x-1/2 z-10 group-hover:scale-150 transition-transform"></div>
+          <div class="sm:w-1/2 sm:pr-8 sm:text-right pl-12 sm:pl-0">
+            <span class="inline-block px-3 py-1 bg-baikal-50 dark:bg-baikal-900/30 text-baikal-600 dark:text-baikal-400 text-sm font-semibold rounded-full mb-2">2020</span>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'Digital Transformation' %}</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{% translate 'Launched online tracking, mobile app, and digital document management system.' %}</p>
+          </div>
+          <div class="hidden sm:block sm:w-1/2 sm:pl-8"></div>
+        </div>
+        <div class="relative flex flex-col sm:flex-row items-start sm:items-center group">
+          <div class="absolute left-4 sm:left-1/2 w-4 h-4 bg-baikal-600 rounded-full border-4 border-white dark:border-gray-900 -translate-x-1/2 z-10 group-hover:scale-150 transition-transform"></div>
+          <div class="hidden sm:block sm:w-1/2 sm:pr-8"></div>
+          <div class="sm:w-1/2 sm:pl-8 pl-12 sm:pl-8">
+            <span class="inline-block px-3 py-1 bg-baikal-600 text-white text-sm font-semibold rounded-full mb-2">{% translate 'Today' %}</span>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'Industry Leader' %}</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{% translate '200+ cities, 80+ branches, 1.5M+ shipments delivered. Serving thousands of corporate clients across 5 countries.' %}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mission & Values -->
+<section class="py-16 sm:py-20 bg-gray-50 dark:bg-gray-800/50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">{% translate 'Mission & Values' %}</h2>
+      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{% translate 'What drives us every day' %}</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
+        <div class="w-14 h-14 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center mb-5">
+          <svg class="w-7 h-7 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">{% translate 'Reliability' %}</h3>
+        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">{% translate 'We deliver on our promises. Every shipment is tracked, insured, and handled with care.' %}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
+        <div class="w-14 h-14 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center mb-5">
+          <svg class="w-7 h-7 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">{% translate 'Security' %}</h3>
+        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">{% translate 'Your cargo is insured up to full declared value. Modern warehouses with 24/7 surveillance.' %}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
+        <div class="w-14 h-14 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center mb-5">
+          <svg class="w-7 h-7 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">{% translate 'Speed' %}</h3>
+        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">{% translate 'Fast transit times with real-time tracking. Express delivery options available.' %}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
+        <div class="w-14 h-14 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center mb-5">
+          <svg class="w-7 h-7 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">{% translate 'Teamwork' %}</h3>
+        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">{% translate '500+ dedicated professionals working together to deliver excellence.' %}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
+        <div class="w-14 h-14 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center mb-5">
+          <svg class="w-7 h-7 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">{% translate 'Innovation' %}</h3>
+        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">{% translate 'Constantly improving our technology and processes for better service.' %}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
+        <div class="w-14 h-14 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center mb-5">
+          <svg class="w-7 h-7 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">{% translate 'Client Focus' %}</h3>
+        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">{% translate 'Every client gets a personal manager. We tailor solutions to your needs.' %}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Executive Team -->
+<section class="py-16 sm:py-20 bg-white dark:bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">{% translate 'Leadership Team' %}</h2>
+      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{% translate 'Experienced professionals guiding Baikal-Service' %}</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="text-center group">
+        <div class="w-40 h-40 mx-auto rounded-full bg-gray-200 dark:bg-gray-700 mb-4 overflow-hidden">
+          <div class="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500">
+            <svg class="w-20 h-20" fill="currentColor" viewBox="0 0 24 24"><path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          </div>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'Alexei Petrov' %}</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400">{% translate 'CEO & Founder' %}</p>
+      </div>
+      <div class="text-center group">
+        <div class="w-40 h-40 mx-auto rounded-full bg-gray-200 dark:bg-gray-700 mb-4 overflow-hidden">
+          <div class="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500">
+            <svg class="w-20 h-20" fill="currentColor" viewBox="0 0 24 24"><path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          </div>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'Elena Ivanova' %}</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400">{% translate 'Chief Operations Officer' %}</p>
+      </div>
+      <div class="text-center group">
+        <div class="w-40 h-40 mx-auto rounded-full bg-gray-200 dark:bg-gray-700 mb-4 overflow-hidden">
+          <div class="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500">
+            <svg class="w-20 h-20" fill="currentColor" viewBox="0 0 24 24"><path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          </div>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'Dmitry Sidorov' %}</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400">{% translate 'Chief Commercial Officer' %}</p>
+      </div>
+      <div class="text-center group">
+        <div class="w-40 h-40 mx-auto rounded-full bg-gray-200 dark:bg-gray-700 mb-4 overflow-hidden">
+          <div class="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500">
+            <svg class="w-20 h-20" fill="currentColor" viewBox="0 0 24 24"><path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          </div>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'Olga Smirnova' %}</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400">{% translate 'Chief Financial Officer' %}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Certificates -->
+<section class="py-16 sm:py-20 bg-gray-50 dark:bg-gray-800/50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">{% translate 'Certificates & Licenses' %}</h2>
+      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{% translate 'We operate with full regulatory compliance and industry certifications' %}</p>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md border border-gray-100 dark:border-gray-700 text-center hover:shadow-lg transition-shadow">
+        <div class="w-16 h-16 mx-auto mb-3 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center">
+          <svg class="w-8 h-8 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+        </div>
+        <p class="text-sm font-medium text-gray-900 dark:text-white">{% translate 'ISO 9001:2015' %}</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{% translate 'Quality Management' %}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md border border-gray-100 dark:border-gray-700 text-center hover:shadow-lg transition-shadow">
+        <div class="w-16 h-16 mx-auto mb-3 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center">
+          <svg class="w-8 h-8 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <p class="text-sm font-medium text-gray-900 dark:text-white">{% translate 'License' %}</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{% translate 'Ministry of Transport' %}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md border border-gray-100 dark:border-gray-700 text-center hover:shadow-lg transition-shadow">
+        <div class="w-16 h-16 mx-auto mb-3 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center">
+          <svg class="w-8 h-8 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <p class="text-sm font-medium text-gray-900 dark:text-white">{% translate 'AEO' %}</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{% translate 'Authorized Economic Operator' %}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md border border-gray-100 dark:border-gray-700 text-center hover:shadow-lg transition-shadow">
+        <div class="w-16 h-16 mx-auto mb-3 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center">
+          <svg class="w-8 h-8 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        </div>
+        <p class="text-sm font-medium text-gray-900 dark:text-white">{% translate 'SRO Membership' %}</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{% translate 'Self-Regulatory Organization' %}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md border border-gray-100 dark:border-gray-700 text-center hover:shadow-lg transition-shadow">
+        <div class="w-16 h-16 mx-auto mb-3 bg-baikal-50 dark:bg-baikal-900/30 rounded-xl flex items-center justify-center">
+          <svg class="w-8 h-8 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        </div>
+        <p class="text-sm font-medium text-gray-900 dark:text-white">{% translate 'Insurance' %}</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{% translate 'Cargo Liability Insurance' %}</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

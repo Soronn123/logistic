@@ -1,0 +1,114 @@
+{% extends 'base.html' %}{% load i18n static i18n_extras %}
+{% block title %}{% translate 'Branches & Offices' %} — Baikal-Service{% endblock %}
+{% block meta_description %}{% translate 'Baikal-Service offices, warehouses, and pickup points across Russia' %}{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center mb-2">{% translate 'Our Branches & Offices' %}</h1>
+    <p class="text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto mb-10">{% translate 'Find the nearest branch for cargo pickup or delivery' %}</p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-1 space-y-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
+          <div class="relative">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input type="text" id="branch-search" placeholder="{% translate 'Search city...' %}" class="w-full pl-10 pr-4 py-2.5 rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors">
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 divide-y divide-gray-100 dark:divide-gray-700 max-h-[600px] overflow-y-auto">
+          {% for branch in branches %}
+          <div class="branch-item p-4 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors cursor-pointer" data-branch-id="{{ branch.id }}" data-lat="{{ branch.latitude|js_float }}" data-lng="{{ branch.longitude|js_float }}">
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 rounded-xl bg-baikal-50 dark:bg-baikal-900/30 flex items-center justify-center flex-shrink-0">
+                {% if branch.branch_type == 'warehouse' %}
+                <svg class="w-5 h-5 text-baikal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                {% elif branch.branch_type == 'pickup_point' %}
+                <svg class="w-5 h-5 text-baikal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                {% else %}
+                <svg class="w-5 h-5 text-baikal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                {% endif %}
+              </div>
+              <div class="min-w-0">
+                <p class="font-semibold text-gray-900 dark:text-white text-sm">{{ branch|localized_field:'address' }}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ branch.city|localized }}</p>
+                <div class="flex flex-wrap gap-1.5 mt-2">
+                  <span class="text-xs px-2 py-0.5 rounded-full {% if branch.branch_type == 'warehouse' %}bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400{% elif branch.branch_type == 'pickup_point' %}bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400{% else %}bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400{% endif %}">
+                    {{ branch.get_branch_type_display }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <div class="p-6 text-center text-sm text-gray-500 dark:text-gray-400">{% translate 'No branches found.' %}</div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="lg:col-span-2">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden sticky top-24">
+          <div id="branches-map" class="w-full h-[600px] lg:h-[700px] bg-gray-100 dark:bg-gray-900">
+            <div class="flex items-center justify-center h-full">
+              <div class="text-center">
+                <svg class="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                <p class="text-sm text-gray-400">{% translate 'Loading map...' %}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const branches = [
+    {% for branch in branches %}
+    {
+      id: {{ branch.id }},
+      lat: {{ branch.latitude|js_float }},
+      lng: {{ branch.longitude|js_float }},
+      address: '{{ branch|localized_field:'address'|escapejs }}',
+      city: '{{ branch.city|localized|escapejs }}',
+      type: '{{ branch.get_branch_type_display|escapejs }}',
+      phone: '{{ branch.phone|escapejs }}',
+      hours: '{{ branch.working_hours|escapejs }}'
+    },
+    {% endfor %}
+  ];
+
+  if (branches.length > 0) {
+    const map = L.map('branches-map').setView([branches[0].lat, branches[0].lng], 4);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    branches.forEach(b => {
+      const marker = L.marker([b.lat, b.lng]).addTo(map);
+      marker.bindPopup('<b>' + b.city + '</b><br>' + b.address + '<br>' + b.phone);
+    });
+
+    const group = L.featureGroup(branches.map(b => L.marker([b.lat, b.lng])));
+    map.fitBounds(group.getBounds().pad(0.1));
+  }
+
+  const searchInput = document.getElementById('branch-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      const query = this.value.toLowerCase();
+      document.querySelectorAll('.branch-item').forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(query) ? '' : 'none';
+      });
+    });
+  }
+});
+</script>
+{% endblock %}

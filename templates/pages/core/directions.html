@@ -1,0 +1,72 @@
+{% extends 'base.html' %}{% load i18n static %}
+{% block title %}{% translate 'Shipping Directions' %} — Baikal-Service{% endblock %}
+{% block meta_description %}{% translate 'Cargo transportation directions across Russia, Kazakhstan, Belarus, Kyrgyzstan, and China' %}{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center mb-2">{% translate 'Shipping Directions' %}</h1>
+    <p class="text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto mb-10">{% translate 'We deliver cargo across Russia and neighboring countries' %}</p>
+
+    <!-- Map placeholder -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden mb-10">
+      <div class="aspect-[21/9] bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+        <div class="text-center">
+          <svg class="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+          <p class="text-sm text-gray-400">{% translate 'Interactive map loading...' %}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Directions Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <a href="{% url 'core:info_page' page_type='russia' %}" class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300">
+        <div class="w-14 h-14 rounded-2xl bg-baikal-100 dark:bg-baikal-900/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+          <span class="text-2xl">🇷🇺</span>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-baikal-600 dark:group-hover:text-baikal-400 transition-colors">{% translate 'Shipping Within Russia' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">{% translate 'Cargo transportation across all regions of Russia' %}</p>
+      </a>
+
+      <a href="{% url 'core:info_page' page_type='to-kazakhstan' %}" class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300">
+        <div class="w-14 h-14 rounded-2xl bg-baikal-100 dark:bg-baikal-900/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+          <span class="text-2xl">🇰🇿</span>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-baikal-600 dark:group-hover:text-baikal-400 transition-colors">{% translate 'Shipping to Kazakhstan' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">{% translate 'Direct routes to major cities of Kazakhstan' %}</p>
+      </a>
+
+      <a href="{% url 'core:info_page' page_type='to-belarus' %}" class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300">
+        <div class="w-14 h-14 rounded-2xl bg-baikal-100 dark:bg-baikal-900/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+          <span class="text-2xl">🇧🇾</span>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-baikal-600 dark:group-hover:text-baikal-400 transition-colors">{% translate 'Shipping to Belarus' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">{% translate 'Simplified procedures within the Union State' %}</p>
+      </a>
+
+      <a href="{% url 'core:info_page' page_type='to-kyrgyzstan' %}" class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300">
+        <div class="w-14 h-14 rounded-2xl bg-baikal-100 dark:bg-baikal-900/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+          <span class="text-2xl">🇰🇬</span>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-baikal-600 dark:group-hover:text-baikal-400 transition-colors">{% translate 'Shipping to Kyrgyzstan' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">{% translate 'Regular shipments to Kyrgyz Republic' %}</p>
+      </a>
+
+      <a href="{% url 'core:info_page' page_type='from-china' %}" class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300">
+        <div class="w-14 h-14 rounded-2xl bg-baikal-100 dark:bg-baikal-900/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+          <span class="text-2xl">🇨🇳</span>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-baikal-600 dark:group-hover:text-baikal-400 transition-colors">{% translate 'Shipping from China' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">{% translate 'Import from China, customs clearance, container and rail options' %}</p>
+      </a>
+
+      <a href="{% url 'core:info_page' page_type='kaliningrad' %}" class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300">
+        <div class="w-14 h-14 rounded-2xl bg-baikal-100 dark:bg-baikal-900/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+          <span class="text-2xl">📍</span>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-baikal-600 dark:group-hover:text-baikal-400 transition-colors">{% translate 'Shipping to Kaliningrad' %}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">{% translate 'Special transit conditions for Kaliningrad region' %}</p>
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

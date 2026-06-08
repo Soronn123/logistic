@@ -1,0 +1,84 @@
+{% extends 'base.html' %}{% load i18n static %}
+{% block title %}{% translate 'Become a Partner' %} — Baikal-Service{% endblock %}
+{% block meta_description %}{% translate 'Apply to become a partner of Baikal-Service' %}{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center mb-2">{% translate 'Partner Application' %}</h1>
+    <p class="text-gray-600 dark:text-gray-400 text-center max-w-xl mx-auto mb-10">{% translate 'Fill out the form and our partnership team will contact you within 2 business days' %}</p>
+
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 sm:p-8">
+      <form method="post" class="space-y-6">
+        {% csrf_token %}
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Company name' %} *</label>
+            <input type="text" name="company_name" required class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'LLC Company Name' %}">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Website' %}</label>
+            <input type="url" name="website" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="https://example.com">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Contact person' %} *</label>
+            <input type="text" name="contact_person" required class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'Ivan Ivanov' %}">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Phone' %} *</label>
+            <input type="tel" name="phone" required class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="+7 (999) 123-45-67">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Email' %} *</label>
+          <input type="email" name="email" required class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="partner@example.com">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Partner type' %} *</label>
+          <select name="partner_type" required class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors">
+            <option value="">{% translate 'Select partner type' %}</option>
+            <option value="agent">{% translate 'Agent' %}</option>
+            <option value="franchise">{% translate 'Franchise' %}</option>
+            <option value="integrator">{% translate 'Integrator' %}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Expected monthly shipment volume' %} *</label>
+          <select name="expected_volume" required class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors">
+            <option value="">{% translate 'Select volume' %}</option>
+            <option value="small">{% translate 'Up to 10 shipments/month' %}</option>
+            <option value="medium">{% translate '10-50 shipments/month' %}</option>
+            <option value="large">{% translate '50-200 shipments/month' %}</option>
+            <option value="enterprise">{% translate '200+ shipments/month' %}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Region of operation' %} *</label>
+          <input type="text" name="region" required class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'e.g. Moscow and Moscow region' %}">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Additional information' %}</label>
+          <textarea name="notes" rows="4" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'Tell us about your company, experience in logistics, and why you want to partner with us...' %}"></textarea>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <input type="checkbox" name="agreement" required class="mt-1 rounded border-gray-300 dark:border-gray-600 text-baikal-600 focus:ring-baikal-500">
+          <label class="text-sm text-gray-600 dark:text-gray-400">{% translate 'I agree to the processing of personal data and the terms of the partnership agreement' %} *</label>
+        </div>
+
+        <button type="submit" class="w-full px-8 py-3.5 bg-baikal-600 hover:bg-baikal-700 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-baikal-600/25">
+          {% translate 'Submit Application' %}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

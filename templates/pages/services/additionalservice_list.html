@@ -1,0 +1,64 @@
+{% extends 'base.html' %}{% load i18n static i18n_extras %}
+{% block title %}{% translate 'Additional Services' %} — Baikal-Service{% endblock %}
+{% block meta_description %}{% translate 'All additional services for cargo transportation' %}{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <nav class="flex mb-8 text-sm" aria-label="Breadcrumb">
+      <ol class="inline-flex items-center space-x-2 text-gray-500 dark:text-gray-400">
+        <li><a href="{% url 'core:home' %}" class="hover:text-baikal-600 dark:hover:text-baikal-400 transition-colors">{% translate 'Home' %}</a></li>
+        <li><span class="mx-2">/</span></li>
+        <li><a href="{% url 'services:list' %}" class="hover:text-baikal-600 dark:hover:text-baikal-400 transition-colors">{% translate 'Services' %}</a></li>
+        <li><span class="mx-2">/</span></li>
+        <li class="text-gray-900 dark:text-white font-medium">{% translate 'Additional Services' %}</li>
+      </ol>
+    </nav>
+    <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-2">{% translate 'Additional Services' %}</h1>
+    <p class="text-gray-600 dark:text-gray-400 max-w-2xl mb-10">{% translate 'Enhance your shipment with our additional services.' %}</p>
+
+    {% if services %}
+      <div class="space-y-4">
+        {% for service in services %}
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300" x-data="{ open: false }">
+            <div @click="open = !open" class="cursor-pointer flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-baikal-50 dark:bg-baikal-900/30 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-baikal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ service|localized }}</h3>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">{{ service|localized_field:'short_description'|default:service|localized_field:'description'|striptags|truncatewords:20 }}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                {% if service.price %}
+                  <span class="text-lg font-bold text-baikal-600 dark:text-baikal-400">{{ service.price }} ₽</span>
+                {% endif %}
+                <svg class="w-5 h-5 text-gray-400 transition-transform duration-300" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </div>
+            </div>
+            <div x-show="open" x-collapse.duration.300ms class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+              <div class="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">{{ service|localized_field:'description'|safe }}</div>
+              {% if service.price %}
+                <div class="mt-4 flex items-center gap-2">
+                  <span class="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">{% translate 'Price' %}:</span>
+                  <span class="text-lg font-bold text-baikal-600 dark:text-baikal-400">{{ service.price }} ₽</span>
+                  {% if service.price_type == 'per_unit' %}
+                    <span class="text-sm text-gray-500">{% translate 'per unit' %}</span>
+                  {% elif service.price_type == 'percentage' %}
+                    <span class="text-sm text-gray-500">{% translate 'of cargo value' %}</span>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="text-center py-16">
+        <p class="text-gray-500 dark:text-gray-400">{% translate 'No additional services available at the moment.' %}</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

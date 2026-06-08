@@ -1,0 +1,87 @@
+{% extends 'pages/dashboard/base_dashboard.html' %}{% load i18n %}
+{% block dash_title %}{% translate 'Order Management' %}{% endblock %}
+{% block dash_page_title %}{% translate 'Order Management' %}{% endblock %}
+{% block dash_content %}
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{% translate 'Order Management' %}</h1>
+    <p class="text-gray-500 dark:text-gray-400 mt-1">{% translate 'View and manage all orders' %}</p>
+  </div>
+</div>
+
+<div class="flex flex-wrap gap-2 mb-6">
+  <button class="px-4 py-2 text-sm font-medium rounded-xl bg-baikal-600 text-white transition-colors order-tab active" data-status="all">{% translate 'All' %}</button>
+  <button class="px-4 py-2 text-sm font-medium rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors order-tab" data-status="draft">{% translate 'Draft' %}</button>
+  <button class="px-4 py-2 text-sm font-medium rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors order-tab" data-status="confirmed">{% translate 'Confirmed' %}</button>
+  <button class="px-4 py-2 text-sm font-medium rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors order-tab" data-status="in_transit">{% translate 'In Transit' %}</button>
+  <button class="px-4 py-2 text-sm font-medium rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors order-tab" data-status="delivered">{% translate 'Delivered' %}</button>
+</div>
+
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm" id="orders-table">
+      <thead class="bg-gray-50 dark:bg-gray-900 text-left">
+        <tr>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Tracking #' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Customer' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Route' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Status' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Weight' %}</th>
+          <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Date' %}</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+        {% for order in orders %}
+        <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors order-row" data-status="{{ order.status }}">
+          <td class="px-6 py-3">
+            <a href="#" class="font-mono text-xs text-baikal-600 dark:text-baikal-400 hover:underline">{{ order.tracking_number }}</a>
+          </td>
+          <td class="px-6 py-3 text-gray-900 dark:text-white">{{ order.user.get_full_name|default:order.user.email }}</td>
+          <td class="px-6 py-3 text-gray-600 dark:text-gray-400">{{ order.sender_address }} → {{ order.recipient_address }}</td>
+          <td class="px-6 py-3">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+              {% if order.status == 'delivered' %}bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400
+              {% elif order.status == 'cancelled' %}bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400
+              {% elif order.status == 'in_transit' %}bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400
+              {% elif order.status == 'draft' %}bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300
+              {% else %}bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400{% endif %}">
+              {{ order.get_status_display }}
+            </span>
+          </td>
+          <td class="px-6 py-3 text-gray-600 dark:text-gray-400">{{ order.weight|default:'—' }} kg</td>
+          <td class="px-6 py-3 text-gray-500 dark:text-gray-400">{{ order.created_at|date:'d M Y' }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">{% translate 'No orders found.' %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+{% block dash_extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.order-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.order-tab').forEach(t => {
+        t.classList.remove('bg-baikal-600', 'text-white', 'active');
+        t.classList.add('bg-gray-100', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+      });
+      this.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+      this.classList.add('bg-baikal-600', 'text-white', 'active');
+      const status = this.dataset.status;
+      document.querySelectorAll('.order-row').forEach(row => {
+        if (status === 'all' || row.dataset.status === status) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  });
+});
+</script>
+{% endblock %}

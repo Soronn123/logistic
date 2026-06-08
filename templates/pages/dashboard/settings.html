@@ -1,0 +1,120 @@
+{% extends 'pages/dashboard/base_dashboard.html' %}{% load i18n %}
+{% block dash_title %}{% translate 'Site Settings' %}{% endblock %}
+{% block dash_page_title %}{% translate 'Site Settings' %}{% endblock %}
+{% block dash_content %}
+<div class="mb-6">
+  <p class="text-gray-500 dark:text-gray-400">{% translate 'Configure general site settings, contact info, and social links' %}</p>
+</div>
+
+<form method="post" class="space-y-6">
+  {% csrf_token %}
+
+  <!-- General Section -->
+  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+      <div class="flex items-center gap-3">
+        <svg class="w-5 h-5 text-baikal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'General' %}</h3>
+      </div>
+    </div>
+    <div class="px-6 py-5 space-y-5">
+      <div>
+        <label for="site_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{% translate 'Site Name' %}</label>
+        <input type="text" id="site_name" name="site_name" value="Baikal-Service" class="w-full px-4 py-2.5 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-baikal-500/50 focus:border-baikal-500 transition-colors">
+        <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">{% translate 'The name of your website as displayed in the browser tab and headers.' %}</p>
+      </div>
+      <div>
+        <label for="site_description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{% translate 'Site Description' %}</label>
+        <textarea id="site_description" name="site_description" rows="3" class="w-full px-4 py-2.5 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-baikal-500/50 focus:border-baikal-500 transition-colors">{% translate 'Leading logistics company providing cargo transportation across Russia, Kazakhstan, Belarus, Kyrgyzstan, and China.' %}</textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Section -->
+  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+      <div class="flex items-center gap-3">
+        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'Contact Information' %}</h3>
+      </div>
+    </div>
+    <div class="px-6 py-5 space-y-5">
+      <div>
+        <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{% translate 'Phone' %}</label>
+        <input type="text" id="phone" name="phone" value="+7 (495) 123-45-67" class="w-full px-4 py-2.5 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-baikal-500/50 focus:border-baikal-500 transition-colors">
+      </div>
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{% translate 'Email' %}</label>
+        <input type="email" id="email" name="email" value="info@baikal-service.ru" class="w-full px-4 py-2.5 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-baikal-500/50 focus:border-baikal-500 transition-colors">
+      </div>
+      <div>
+        <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{% translate 'Address' %}</label>
+        <input type="text" id="address" name="address" value="{% translate 'Moscow, ul. Transportnaya, 1' %}" class="w-full px-4 py-2.5 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-baikal-500/50 focus:border-baikal-500 transition-colors">
+      </div>
+    </div>
+  </div>
+
+  <!-- Social Section -->
+  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+      <div class="flex items-center gap-3">
+        <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'Social Links' %}</h3>
+      </div>
+    </div>
+    <div class="px-6 py-5 space-y-5">
+      <div>
+        <label for="vk_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">VK</label>
+        <div class="relative">
+          <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">vk.com/</span>
+          <input type="text" id="vk_url" name="vk_url" value="baikalservice" class="w-full pl-16 pr-4 py-2.5 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-baikal-500/50 focus:border-baikal-500 transition-colors">
+        </div>
+      </div>
+      <div>
+        <label for="telegram_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Telegram</label>
+        <div class="relative">
+          <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">t.me/</span>
+          <input type="text" id="telegram_url" name="telegram_url" value="baikalservice" class="w-full pl-16 pr-4 py-2.5 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-baikal-500/50 focus:border-baikal-500 transition-colors">
+        </div>
+      </div>
+      <div>
+        <label for="whatsapp_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">WhatsApp</label>
+        <div class="relative">
+          <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">wa.me/</span>
+          <input type="text" id="whatsapp_url" name="whatsapp_url" value="74951234567" class="w-full pl-16 pr-4 py-2.5 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-baikal-500/50 focus:border-baikal-500 transition-colors">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Maintenance Mode -->
+  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+      <div class="flex items-center gap-3">
+        <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'Maintenance Mode' %}</h3>
+      </div>
+    </div>
+    <div class="px-6 py-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-900 dark:text-white">{% translate 'Enable Maintenance Mode' %}</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{% translate 'When enabled, the site will show a maintenance page to all visitors except staff.' %}</p>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" name="maintenance_mode" class="sr-only peer">
+          <div class="w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit -->
+  <div class="flex justify-end">
+    <button type="submit" class="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-baikal-600 hover:bg-baikal-700 rounded-xl transition-colors shadow-sm hover:shadow-md">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+      {% translate 'Save Changes' %}
+    </button>
+  </div>
+</form>
+{% endblock %}
