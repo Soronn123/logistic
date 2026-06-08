@@ -152,8 +152,8 @@
                                     <a
                                         href="{% url 'services:category' slug='cargo-transportation' %}"
                                         class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-baikal-50 dark:hover:bg-gray-700"
-                                        >{% translate 'Cargo transportation'
-                                        %}</a
+                                        >{% translate 'Cargo
+                                        transportation'%}</a
                                     >
                                     <a
                                         href="{% url 'services:category' slug='consolidated-cargo' %}"
@@ -286,16 +286,28 @@
                                 href="{% url 'orders:create' %}"
                                 class="hidden lg:inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-baikal-600 hover:bg-baikal-700 rounded-lg transition-colors shadow-lg shadow-baikal-600/25"
                             >
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                                <svg
+                                    class="w-4 h-4 mr-1"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                    />
+                                </svg>
                                 {% translate 'Create Order' %}
                             </a>
 
                             <!-- Language Switcher -->
                             <div class="lang-switcher hidden sm:block">
-                                {% get_current_language as LANGUAGE_CODE %}
-                                {% get_available_languages as LANGUAGES %}
-                                {% for lang_code, lang_name in LANGUAGES %}
-                                    {% if lang_code != LANGUAGE_CODE %}
+                                {% get_current_language as LANGUAGE_CODE %} {%
+                                get_available_languages as LANGUAGES %} {% for
+                                lang_code, lang_name in LANGUAGES %} {% if
+                                lang_code != LANGUAGE_CODE %}
                                 <form
                                     action="{% url 'set_language' %}"
                                     method="post"
@@ -367,13 +379,26 @@
                                     class="flex items-center space-x-2 rtl:space-x-reverse px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-baikal-600 dark:hover:text-baikal-400 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
                                 >
                                     {% if user.avatar %}
-                                    <img src="{{ user.avatar.url }}" alt="{{ user.get_full_name|default:user.email }}" class="w-8 h-8 rounded-full object-cover ring-2 ring-white dark:ring-gray-800">
+                                    <img
+                                        src="{{ user.avatar.url }}"
+                                        alt="{{ user.get_full_name|default:user.email }}"
+                                        class="w-8 h-8 rounded-full object-cover ring-2 ring-white dark:ring-gray-800"
+                                    />
                                     {% else %}
-                                    <div class="w-8 h-8 rounded-full bg-baikal-100 dark:bg-baikal-900/30 flex items-center justify-center ring-2 ring-white dark:ring-gray-800">
-                                        <span class="text-sm font-bold text-baikal-600 dark:text-baikal-400">{{ user.first_name|first|upper }}{{ user.last_name|first|upper }}</span>
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-baikal-100 dark:bg-baikal-900/30 flex items-center justify-center ring-2 ring-white dark:ring-gray-800"
+                                    >
+                                        <span
+                                            class="text-sm font-bold text-baikal-600 dark:text-baikal-400"
+                                            >{{ user.first_name|first|upper }}{{
+                                            user.last_name|first|upper }}</span
+                                        >
                                     </div>
                                     {% endif %}
-                                    <span class="hidden sm:inline-block max-w-[150px] truncate">{{ user.email }}</span>
+                                    <span
+                                        class="hidden sm:inline-block max-w-[150px] truncate"
+                                        >{{ user.email }}</span
+                                    >
                                 </button>
                                 <div
                                     x-show="open"
@@ -401,7 +426,8 @@
                                         class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-baikal-50 dark:hover:bg-gray-700"
                                         >{% translate 'Balance' %}</a
                                     >
-                                    {% if user.role == 'admin' or user.role == 'manager' or user.is_staff %}
+                                    {% if user.role == 'admin' or user.role ==
+                                    'manager' or user.is_staff %}
                                     <hr
                                         class="my-1 border-gray-200 dark:border-gray-700"
                                     />
@@ -541,15 +567,34 @@
                             class="mb-4 p-3 bg-baikal-50 dark:bg-gray-800 rounded-xl flex items-center gap-3"
                         >
                             {% if user.avatar %}
-                            <img src="{{ user.avatar.url }}" alt="{{ user.get_full_name|default:user.email }}" class="w-10 h-10 rounded-full object-cover ring-2 ring-white dark:ring-gray-800">
+                            <img
+                                src="{{ user.avatar.url }}"
+                                alt="{{ user.get_full_name|default:user.email }}"
+                                class="w-10 h-10 rounded-full object-cover ring-2 ring-white dark:ring-gray-800"
+                            />
                             {% else %}
-                            <div class="w-10 h-10 rounded-full bg-baikal-100 dark:bg-baikal-900/30 flex items-center justify-center ring-2 ring-white dark:ring-gray-800">
-                                <span class="text-lg font-bold text-baikal-600 dark:text-baikal-400">{{ user.first_name|first|upper }}{{ user.last_name|first|upper }}</span>
+                            <div
+                                class="w-10 h-10 rounded-full bg-baikal-100 dark:bg-baikal-900/30 flex items-center justify-center ring-2 ring-white dark:ring-gray-800"
+                            >
+                                <span
+                                    class="text-lg font-bold text-baikal-600 dark:text-baikal-400"
+                                    >{{ user.first_name|first|upper }}{{
+                                    user.last_name|first|upper }}</span
+                                >
                             </div>
                             {% endif %}
                             <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{{ user.email }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{% translate 'Balance' %}: {{ user.balance }} ₽</p>
+                                <p
+                                    class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate"
+                                >
+                                    {{ user.email }}
+                                </p>
+                                <p
+                                    class="text-xs text-gray-500 dark:text-gray-400 mt-1"
+                                >
+                                    {% translate 'Balance' %}: {{ user.balance
+                                    }} ₽
+                                </p>
                             </div>
                         </div>
                         {% endif %}
@@ -623,7 +668,19 @@
                             href="{% url 'orders:create' %}"
                             class="w-full inline-flex items-center justify-center px-4 py-3 text-sm font-semibold text-white bg-baikal-600 hover:bg-baikal-700 rounded-lg transition-colors mb-2"
                         >
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                            <svg
+                                class="w-4 h-4 mr-1"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                />
+                            </svg>
                             {% translate 'Create Order' %}
                         </a>
                         {% endif %}
@@ -759,7 +816,8 @@
                             class="block px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-baikal-50 dark:hover:bg-gray-800 rounded-lg"
                             >{% translate 'Balance' %}</a
                         >
-                        {% if user.role == 'admin' or user.role == 'manager' or user.is_staff %}
+                        {% if user.role == 'admin' or user.role == 'manager' or
+                        user.is_staff %}
                         <a
                             href="{% url 'dashboard:home' %}"
                             class="block px-4 py-3 text-sm font-medium text-baikal-600 dark:text-baikal-400 hover:bg-baikal-50 dark:hover:bg-gray-800 rounded-lg"
@@ -817,8 +875,8 @@
                                     type="hidden"
                                     value="{{ request.path }}"
                                 />
-                                {% get_current_language as LANGUAGE_CODE %}
-                                {% if LANGUAGE_CODE != 'ru' %}
+                                {% get_current_language as LANGUAGE_CODE %} {%
+                                if LANGUAGE_CODE != 'ru' %}
                                 <button
                                     name="language"
                                     value="ru"

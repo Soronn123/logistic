@@ -9,7 +9,7 @@ class ContactForm(forms.ModelForm):
         model = ContactMessage
         fields = ['name', 'email', 'phone', 'subject', 'message']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', '.': _('Your name')}),
+            'name': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Your name')}),
             'email': forms.EmailInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Your email')}),
             'phone': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Your phone')}),
             'subject': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Subject')}),
@@ -48,5 +48,5 @@ class CalculatorForm(forms.Form):
     def __init__(self, *args, **kwargs):
         from apps.geo.models import City
         super().__init__(*args, **kwargs)
-        self.fields['from_city'].queryset = City.objects.filter(is_active=True)
-        self.fields['to_city'].queryset = City.objects.filter(is_active=True)
+        self.fields['from_city'].queryset = City.objects.filter(is_active=True).distinct()
+        self.fields['to_city'].queryset = City.objects.filter(is_active=True).distinct()

@@ -56,7 +56,7 @@ class Branch(models.Model):
 
 class BranchImage(models.Model):
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='images', verbose_name=_('Branch'))
-    image = models.ImageField(upload_to='branches/', verbose_name=_('Image'))
+    image = models.ImageField(upload_to='uploads/branches/', verbose_name=_('Image'))
     caption = models.CharField(max_length=500, blank=True, verbose_name=_('Caption'))
     order = models.IntegerField(default=0, verbose_name=_('Order'))
 

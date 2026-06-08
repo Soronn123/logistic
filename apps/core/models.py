@@ -75,9 +75,10 @@ class NewsItem(models.Model):
     short_text_en = models.TextField(blank=True, verbose_name=_('Short text (EN)'))
     full_text = models.TextField(verbose_name=_('Full text'))
     full_text_en = models.TextField(blank=True, verbose_name=_('Full text (EN)'))
-    image = models.ImageField(upload_to='news/', blank=True, verbose_name=_('Image'))
+    image = models.ImageField(upload_to='uploads/news/', blank=True, verbose_name=_('Image'))
     published_at = models.DateTimeField(verbose_name=_('Published at'))
     is_published = models.BooleanField(default=False, verbose_name=_('Published'))
+    is_pinned = models.BooleanField(default=False, verbose_name=_('Pinned to homepage'))
 
     class Meta:
         verbose_name = _('News item')
@@ -152,7 +153,7 @@ class Promotion(models.Model):
     slug = models.SlugField(unique=True, verbose_name=_('Slug'))
     short_description = models.TextField(verbose_name=_('Short description'))
     full_description = models.TextField(verbose_name=_('Full description'))
-    image = models.ImageField(upload_to='promotions/', blank=True, verbose_name=_('Image'))
+    image = models.ImageField(upload_to='uploads/promotions/', blank=True, verbose_name=_('Image'))
     start_date = models.DateTimeField(verbose_name=_('Start date'))
     end_date = models.DateTimeField(verbose_name=_('End date'))
     is_active = models.BooleanField(default=True, verbose_name=_('Active'))

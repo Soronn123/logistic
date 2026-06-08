@@ -1,15 +1,19 @@
 {% extends 'base.html' %}{% load i18n static %}
 {% block title %}{% translate 'Shipping Directions' %} — Baikal-Service{% endblock %}
 {% block meta_description %}{% translate 'Cargo transportation directions across Russia, Kazakhstan, Belarus, Kyrgyzstan, and China' %}{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+{% endblock %}
 {% block content %}
 <div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
     <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center mb-2">{% translate 'Shipping Directions' %}</h1>
     <p class="text-gray-600 dark:text-gray-400 text-center max-w-2xl mx-auto mb-10">{% translate 'We deliver cargo across Russia and neighboring countries' %}</p>
 
-    <!-- Map placeholder -->
+    <!-- Interactive Map -->
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden mb-10">
-      <div class="aspect-[21/9] bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+      <div id="directions-map" class="aspect-[21/9] bg-gray-100 dark:bg-gray-900 flex items-center justify-center min-h-[400px]">
         <div class="text-center">
           <svg class="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
           <p class="text-sm text-gray-400">{% translate 'Interactive map loading...' %}</p>
@@ -69,4 +73,37 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const mapEl = document.getElementById('directions-map');
+  if (mapEl) {
+    const map = L.map('directions-map').setView([55.7558, 37.6173], 4);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap',
+      maxZoom: 18,
+    }).addTo(map);
+
+    const locations = [
+      { name: '{% translate "Moscow" %}', lat: 55.7558, lng: 37.6173 },
+      { name: '{% translate "Saint Petersburg" %}', lat: 59.9343, lng: 30.3351 },
+      { name: '{% translate "Novosibirsk" %}', lat: 55.0084, lng: 82.9357 },
+      { name: '{% translate "Nur-Sultan" %}', lat: 51.1694, lng: 71.4491 },
+      { name: '{% translate "Minsk" %}', lat: 53.9045, lng: 27.5615 },
+      { name: '{% translate "Bishkek" %}', lat: 42.8746, lng: 74.5698 },
+      { name: '{% translate "Beijing" %}', lat: 39.9042, lng: 116.4074 },
+    ];
+
+    locations.forEach(function(loc) {
+      L.circleMarker([loc.lat, loc.lng], {
+        radius: 8, fillColor: '#1d4ed8', color: '#fff', weight: 2, opacity: 1, fillOpacity: 0.8
+      }).addTo(map).bindPopup(loc.name);
+    });
+
+    setTimeout(function() { map.invalidateSize(); }, 300);
+  }
+});
+</script>
 {% endblock %}

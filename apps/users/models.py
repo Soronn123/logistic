@@ -21,7 +21,7 @@ class CustomUser(AbstractUser):
     company_name = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'))
     inn = models.CharField(max_length=12, blank=True, verbose_name=_('INN'))
     is_company = models.BooleanField(default=False, verbose_name=_('Legal entity'))
-    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True, verbose_name=_('Avatar'))
+    avatar = models.ImageField(upload_to='uploads/avatars/', blank=True, null=True, verbose_name=_('Avatar'))
 
     class Meta:
         verbose_name = _('User')
@@ -29,6 +29,45 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+class ContactTemplate(models.Model):
+    user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='contact_templates', verbose_name=_('User'))
+    name = models.CharField(max_length=255, verbose_name=_('Template name'))
+    recipient_name = models.CharField(max_length=255, verbose_name=_('Recipient name'))
+    recipient_phone = models.CharField(max_length=20, verbose_name=_('Recipient phone'))
+    recipient_email = models.EmailField(blank=True, verbose_name=_('Recipient email'))
+    city = models.ForeignKey('geo.City', on_delete=models.SET_NULL, null=True, verbose_name=_('City'))
+    address_detail = models.CharField(max_length=500, blank=True, verbose_name=_('Address detail'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+
+    class Meta:
+        verbose_name = _('Contact template')
+        verbose_name_plural = _('Contact templates')
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.name} - {self.recipient_name}'
+
+
+class DeliveryTemplate(models.Model):
+    user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='delivery_templates', verbose_name=_('User'))
+    name = models.CharField(max_length=255, verbose_name=_('Template name'))
+    from_city = models.ForeignKey('geo.City', on_delete=models.SET_NULL, null=True, related_name='delivery_template_from', verbose_name=_('From city'))
+    to_city = models.ForeignKey('geo.City', on_delete=models.SET_NULL, null=True, related_name='delivery_template_to', verbose_name=_('To city'))
+    weight = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_('Weight (kg)'))
+    cargo_description = models.TextField(blank=True, verbose_name=_('Cargo description'))
+    service = models.ForeignKey('services.Service', on_delete=models.SET_NULL, null=True, verbose_name=_('Service'))
+    declared_value = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True, verbose_name=_('Declared value'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+
+    class Meta:
+        verbose_name = _('Delivery template')
+        verbose_name_plural = _('Delivery templates')
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.name} - {self.from_city} → {self.to_city}'
 
 
 class Ticket(models.Model):

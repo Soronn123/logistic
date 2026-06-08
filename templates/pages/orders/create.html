@@ -1,6 +1,13 @@
 {% extends 'base.html' %}{% load i18n static i18n_extras %}
 {% block title %}{% translate 'Create Order' %} — Baikal-Service{% endblock %}
 {% block meta_description %}{% translate 'Submit a cargo shipping request' %}{% endblock %}
+{% block extra_head %}
+<style>
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; }
+</style>
+{% endblock %}
 {% block content %}
 <div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
@@ -195,7 +202,7 @@
           <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 sm:p-6 space-y-4 mb-6">
             <div>
               <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{% translate 'Route' %}</h3>
-              <p class="text-gray-900 dark:text-white mt-1" x-text="getCityName(fields.sender_address) + ' → ' + getCityName(fields.recipient_address)"></p>
+              <p class="text-gray-900 dark:text-white mt-1" x-text="getCityName(fields.sender_address, 'sender') + ' → ' + getCityName(fields.recipient_address, 'recipient')"></p>
               <p class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="fields.sender_address_detail || '—'"></p>
               <p class="text-sm text-gray-500 dark:text-gray-400" x-text="fields.recipient_address_detail || '—'"></p>
             </div>
@@ -363,10 +370,16 @@ function orderForm() {
       }
       return el.value || '—';
     },
-    getCityName(cityId) {
+    getCityName(cityId, type) {
       if (!cityId) return '—';
-      const select = document.querySelector('[name="sender_address"]') || document.querySelector('[name="recipient_address"]');
-      if (!select) return '—';
+      const selectName = type === 'sender' ? 'sender_address' : 'recipient_address';
+      const select = document.querySelector('[name="' + selectName + '"]');
+      if (!select) {
+        const altSelect = document.querySelector('[name="sender_address"]') || document.querySelector('[name="recipient_address"]');
+        if (!altSelect) return '—';
+        const option = altSelect.querySelector('option[value="' + cityId + '"]');
+        return option?.textContent || '—';
+      }
       const option = select.querySelector('option[value="' + cityId + '"]');
       return option?.textContent || '—';
     },
@@ -393,7 +406,14 @@ function orderForm() {
       if (!checked) return 0;
       const label = checked.closest('label');
       const priceEl = label?.querySelector('[data-base-price]');
-      const basePrice = priceEl ? parseFloat(priceEl.dataset.basePrice) : 0;
+      let basePrice = priceEl ? parseFloat(priceEl.dataset.basePrice) : 0;
+      if (!basePrice) {
+        const priceText = label?.querySelector('.text-baikal-600, .text-sm.text-baikal-600');
+        if (priceText) {
+          const match = priceText.textContent.match(/([\d\s]+)\s*₽/);
+          if (match) basePrice = parseFloat(match[1].replace(/\s/g, '')) || 0;
+        }
+      }
       const weight = parseFloat(this.fields.weight) || 0;
       return basePrice * weight;
     },

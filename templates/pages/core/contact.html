@@ -3,6 +3,11 @@
 
 {% block title %}{% translate 'Contact Us — Baikal-Service' %}{% endblock %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+{% endblock %}
+
 {% block content %}
 <!-- Page Header -->
 <section class="bg-gradient-to-r from-baikal-700 to-baikal-900 text-white py-12 sm:py-16">
@@ -167,4 +172,22 @@
     </div>
   </div>
 </section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const mapEl = document.getElementById('contact-map');
+  if (mapEl) {
+    const map = L.map('contact-map').setView([55.7558, 37.6173], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap',
+      maxZoom: 18,
+    }).addTo(map);
+    L.marker([55.7558, 37.6173]).addTo(map)
+      .bindPopup('Baikal-Service<br>{% translate "Moscow, st. Transportnaya, 1" %}');
+    setTimeout(() => map.invalidateSize(), 300);
+  }
+});
+</script>
 {% endblock %}

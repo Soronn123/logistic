@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
@@ -89,10 +91,10 @@ class OrderForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         from apps.geo.models import City
         from apps.services.models import AdditionalService, Service
-        self.fields['sender_address'].queryset = City.objects.filter(is_active=True)
-        self.fields['recipient_address'].queryset = City.objects.filter(is_active=True)
-        self.fields['service'].queryset = Service.objects.filter(is_active=True)
-        self.fields['additional_services'].queryset = AdditionalService.objects.all()
+        self.fields['sender_address'].queryset = City.objects.filter(is_active=True).distinct()
+        self.fields['recipient_address'].queryset = City.objects.filter(is_active=True).distinct()
+        self.fields['service'].queryset = Service.objects.filter(is_active=True).distinct()
+        self.fields['additional_services'].queryset = AdditionalService.objects.all().distinct()
         self.fields['sender_address'].empty_label = _('Select city')
         self.fields['recipient_address'].empty_label = _('Select city')
         self.fields['volume'].required = False
@@ -122,6 +124,7 @@ class OrderForm(forms.ModelForm):
         recipient_name = cleaned_data.get('recipient_name', '').strip()
         recipient_phone = cleaned_data.get('recipient_phone', '').strip()
         recipient_address = cleaned_data.get('recipient_address')
+        additional_services = cleaned_data.get('additional_services')
 
         if not sender_name:
             self.add_error('sender_name', _('Sender name is required'))
@@ -135,5 +138,24 @@ class OrderForm(forms.ModelForm):
             self.add_error('recipient_phone', _('Recipient phone is required'))
         if not recipient_address:
             self.add_error('recipient_address', _('Recipient city is required'))
+
+        if additional_services and recipient_address:
+            from apps.geo.models import Branch
+            is_branch_delivery = Branch.objects.filter(
+                city=recipient_address, is_active=True
+            ).exists()
+            if is_branch_delivery:
+                door_services = additional_services.filter(is_door_service=True)
+                if door_services.exists():
+                    self.add_error(
+                        'additional_services',
+                        _('Door-to-door services are not available for pickup point delivery')
+                    )
+
+        phone_pattern = re.compile(r'^(\+7|8)?[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$')
+        if sender_phone and not phone_pattern.match(sender_phone):
+            self.add_error('sender_phone', _('Invalid phone format. Use +7 (999) 123-45-67'))
+        if recipient_phone and not phone_pattern.match(recipient_phone):
+            self.add_error('recipient_phone', _('Invalid phone format. Use +7 (999) 123-45-67'))
 
         return cleaned_data

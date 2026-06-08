@@ -1,0 +1,70 @@
+{% extends 'pages/dashboard/base_dashboard.html' %}{% load i18n static %}
+{% block dash_title %}{% if is_create %}{% translate 'Create Branch' %}{% else %}{% translate 'Edit Branch' %}{% endif %}{% endblock %}
+{% block dash_page_title %}{% if is_create %}{% translate 'Create Branch' %}{% else %}{% translate 'Edit Branch' %}{% endif %}{% endblock %}
+{% block dash_extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+{% endblock %}
+{% block dash_content %}
+<div class="max-w-4xl mx-auto">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <form method="post" class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-5">
+      {% csrf_token %}
+      {% for field in form %}
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<p class="mt-1 text-xs text-gray-500">{{ field.help_text }}</p>{% endif %}
+        {% if field.errors %}<p class="mt-1 text-sm text-red-600">{{ field.errors.0 }}</p>{% endif %}
+      </div>
+      {% endfor %}
+      <div class="flex items-center gap-3 pt-4">
+        <button type="submit" class="px-6 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl transition-colors">{% translate 'Save' %}</button>
+        <a href="{% url 'dashboard:branches' %}" class="px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">{% translate 'Cancel' %}</a>
+      </div>
+    </form>
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden h-[500px]">
+      <div id="branch-picker-map" class="w-full h-full"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block dash_extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const latField = document.querySelector('[name="latitude"]');
+  const lngField = document.querySelector('[name="longitude"]');
+  const addressField = document.querySelector('[name="address"]');
+  const map = L.map('branch-picker-map').setView([55.7558, 37.6173], 5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap', maxZoom: 18 }).addTo(map);
+  let marker = null;
+  if (latField && lngField && latField.value && lngField.value) {
+    marker = L.marker([parseFloat(latField.value), parseFloat(lngField.value)]).addTo(map);
+    map.setView([parseFloat(latField.value), parseFloat(lngField.value)], 12);
+  }
+  map.on('click', function(e) {
+    if (marker) map.removeLayer(marker);
+    marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+    if (latField) latField.value = e.latlng.lat;
+    if (lngField) lngField.value = e.latlng.lng;
+  });
+  if (addressField) {
+    addressField.addEventListener('change', function() {
+      const geocodeUrl = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(this.value) + '&limit=1';
+      fetch(geocodeUrl).then(r => r.json()).then(data => {
+        if (data.length > 0) {
+          const lat = parseFloat(data[0].lat);
+          const lng = parseFloat(data[0].lon);
+          if (latField) latField.value = lat;
+          if (lngField) lngField.value = lng;
+          map.setView([lat, lng], 14);
+          if (marker) map.removeLayer(marker);
+          marker = L.marker([lat, lng]).addTo(map);
+        }
+      }).catch(function() {});
+    });
+  }
+  setTimeout(function() { map.invalidateSize(); }, 500);
+});
+</script>
+{% endblock %}

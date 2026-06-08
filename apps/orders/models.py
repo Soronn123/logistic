@@ -12,6 +12,9 @@ class Order(models.Model):
     class Status(models.TextChoices):
         DRAFT = 'draft', _('Draft')
         CONFIRMED = 'confirmed', _('Confirmed')
+        AWAITING_DELIVERY_TO_BRANCH = 'awaiting_delivery_to_branch', _('Awaiting delivery to branch')
+        AVAILABLE_IN_WAREHOUSE = 'available_in_warehouse', _('Available in warehouse')
+        AWAITING_COURIER = 'awaiting_courier', _('Awaiting courier')
         PICKED_UP = 'picked_up', _('Picked up')
         IN_TRANSIT = 'in_transit', _('In transit')
         AT_WAREHOUSE = 'at_warehouse', _('At warehouse')
@@ -40,7 +43,7 @@ class Order(models.Model):
     declared_value = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True, verbose_name=_('Declared value'))
     service = models.ForeignKey('services.Service', on_delete=models.SET_NULL, null=True, verbose_name=_('Service'))
     additional_services = models.ManyToManyField('services.AdditionalService', blank=True, verbose_name=_('Additional services'))
-    status = models.CharField(max_length=20, choices=Status.choices, default=Status.DRAFT, verbose_name=_('Status'))
+    status = models.CharField(max_length=40, choices=Status.choices, default=Status.DRAFT, verbose_name=_('Status'))
     total_price = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True, verbose_name=_('Total price'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
@@ -58,7 +61,7 @@ class Order(models.Model):
 
 class OrderStatusHistory(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='status_history', verbose_name=_('Order'))
-    status = models.CharField(max_length=20, choices=Order.Status.choices, verbose_name=_('Status'))
+    status = models.CharField(max_length=40, choices=Order.Status.choices, verbose_name=_('Status'))
     changed_by = models.ForeignKey('users.CustomUser', on_delete=models.SET_NULL, null=True, verbose_name=_('Changed by'))
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name=_('Timestamp'))
     comment = models.TextField(blank=True, verbose_name=_('Comment'))
@@ -75,7 +78,7 @@ class OrderStatusHistory(models.Model):
 class OrderDocument(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='documents', verbose_name=_('Order'))
     document_type = models.CharField(max_length=100, verbose_name=_('Document type'))
-    file = models.FileField(upload_to='order_docs/', verbose_name=_('File'))
+    file = models.FileField(upload_to='uploads/order_docs/', verbose_name=_('File'))
     uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Uploaded at'))
 
     class Meta:

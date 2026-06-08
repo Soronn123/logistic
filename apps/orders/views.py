@@ -1,10 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, DetailView, TemplateView
+from django.views.generic import CreateView, DetailView, TemplateView, View
 
 from .forms import OrderForm
-from .models import Order
+from .models import Order, OrderStatusHistory
+from .routing import calculate_price, compute_eta, get_initial_status, has_branch_in_city
+from apps.geo.models import City
 
 
 class OrderCreateView(LoginRequiredMixin, CreateView):
@@ -22,14 +25,34 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         from apps.geo.models import City
         from apps.services.models import AdditionalService, Service
-        context['cities'] = City.objects.filter(is_active=True)
-        context['services'] = Service.objects.filter(is_active=True)
-        context['additional_services'] = AdditionalService.objects.all()
+        context['cities'] = City.objects.filter(is_active=True).distinct()
+        context['services'] = Service.objects.filter(is_active=True).distinct()
+        context['additional_services'] = AdditionalService.objects.all().distinct()
         return context
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super().form_valid(form)
+
+        from_city = form.cleaned_data.get('sender_address')
+        to_city = form.cleaned_data.get('recipient_address')
+        weight = form.cleaned_data.get('weight') or 0
+        service = form.cleaned_data.get('service')
+
+        pricing = calculate_price(from_city, to_city, float(weight), service)
+        form.instance.total_price = pricing['total_price']
+        form.instance.status = get_initial_status(from_city)
+        form.instance.estimated_delivery_date = compute_eta(from_city, to_city)
+
+        response = super().form_valid(form)
+
+        OrderStatusHistory.objects.create(
+            order=self.object,
+            status=self.object.status,
+            changed_by=self.request.user,
+            comment=_('Order created'),
+        )
+
+        return response
 
 
 class OrderTrackView(DetailView):

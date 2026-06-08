@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, FormView, ListView, TemplateView, RedirectView
 
 from .forms import CalculatorForm, ContactForm, TrackingForm
-from .models import ContentPage, FAQ, NewsItem, Promotion, Review, Vacancy, Tender
+from .models import ContactMessage, ContentPage, FAQ, NewsItem, Promotion, Review, Vacancy, Tender
 
 
 class HomeView(TemplateView):
@@ -12,7 +12,7 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['news_items'] = NewsItem.objects.filter(is_published=True)[:3]
+        context['news_items'] = NewsItem.objects.filter(is_published=True, is_pinned=True)[:3]
         context['reviews'] = Review.objects.filter(is_approved=True)[:5]
         context['tracking_form'] = TrackingForm()
         context['calculator_form'] = CalculatorForm()
@@ -87,7 +87,7 @@ class VacancyDetailView(DetailView):
 
 
 class ContactView(CreateView):
-    model = None
+    model = ContactMessage
     form_class = ContactForm
     template_name = 'pages/core/contact.html'
     success_url = reverse_lazy('core:contact')
@@ -199,6 +199,42 @@ class TrackView(FormView):
 
 class DeliveryTimesView(TemplateView):
     template_name = 'pages/core/delivery_times.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from apps.geo.models import City
+        from apps.services.models import Tariff
+        context['cities'] = City.objects.filter(is_active=True).distinct()
+        from_city = self.request.GET.get('from')
+        to_city = self.request.GET.get('to')
+        delivery_times = []
+        if from_city and to_city:
+            try:
+                from_city_obj = City.objects.get(id=from_city)
+                to_city_obj = City.objects.get(id=to_city)
+            except (City.DoesNotExist, ValueError):
+                from_city_obj = None
+                to_city_obj = None
+            if from_city_obj and to_city_obj:
+                tariffs = Tariff.objects.all()
+                for tariff in tariffs:
+                    delivery_times.append({
+                        'from_city': from_city_obj,
+                        'to_city': to_city_obj,
+                        'min_days': tariff.delivery_days_min or 1,
+                        'max_days': tariff.delivery_days_max or 14,
+                        'service_type': tariff.name,
+                    })
+                if not delivery_times:
+                    delivery_times.append({
+                        'from_city': from_city_obj,
+                        'to_city': to_city_obj,
+                        'min_days': 1,
+                        'max_days': 7,
+                        'service_type': 'Standard',
+                    })
+        context['delivery_times'] = delivery_times
+        return context
 
 
 class CreateOrderRedirectView(RedirectView):

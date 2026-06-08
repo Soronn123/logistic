@@ -181,17 +181,19 @@ class DashboardServicesView(StaffRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        try:
-            from apps.services.models import ServiceCategory, Service, AdditionalService, Tariff
-            context['categories'] = ServiceCategory.objects.all()
-            context['services'] = Service.objects.all()[:50]
-            context['additional_services'] = AdditionalService.objects.all()
-            context['tariffs'] = Tariff.objects.all()
-        except ImportError:
-            context['categories'] = []
-            context['services'] = []
-            context['additional_services'] = []
-            context['tariffs'] = []
+        from apps.services.models import ServiceCategory, Service, AdditionalService, Tariff
+        context['categories'] = ServiceCategory.objects.all()
+        context['services'] = Service.objects.all()[:50]
+        context['additional_services'] = AdditionalService.objects.all()
+        context['tariffs'] = Tariff.objects.all()
+        context['icon_choices'] = [
+            'fa-truck', 'fa-box', 'fa-plane', 'fa-ship', 'fa-train',
+            'fa-warehouse', 'fa-store', 'fa-laptop', 'fa-archive',
+            'fa-pallet', 'fa-envelope', 'fa-clock', 'fa-shield',
+            'fa-truck-fast', 'fa-people-carry-box', 'fa-handshake',
+        ]
+        from apps.geo.models import City
+        context['cities'] = City.objects.filter(is_active=True).distinct()
         return context
 
 
@@ -282,3 +284,121 @@ class DashboardContactsView(StaffRequiredMixin, TemplateView):
 
 class DashboardSettingsView(StaffRequiredMixin, TemplateView):
     template_name = 'pages/dashboard/settings.html'
+
+
+from apps.services.models import Service, ServiceCategory
+from apps.geo.models import Branch, City
+
+
+class ServiceForm(forms.ModelForm):
+    class Meta:
+        model = Service
+        fields = ['category', 'name', 'name_en', 'slug', 'description', 'description_en',
+                  'short_description', 'short_description_en', 'icon', 'base_price',
+                  'price_unit', 'is_active', 'sort_order']
+        widgets = {
+            'category': forms.Select(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'name': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'name_en': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'slug': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'description': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 3}),
+            'description_en': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 3}),
+            'short_description': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'short_description_en': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'icon': forms.Select(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'base_price': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'price_unit': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'sort_order': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['icon'].widget = forms.Select(choices=[(c, c) for c in [
+            'fa-truck', 'fa-box', 'fa-plane', 'fa-ship', 'fa-train',
+            'fa-warehouse', 'fa-store', 'fa-laptop', 'fa-archive',
+            'fa-pallet', 'fa-envelope', 'fa-clock', 'fa-shield',
+            'fa-truck-fast', 'fa-people-carry-box', 'fa-handshake',
+        ]], attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'})
+
+
+class BranchForm(forms.ModelForm):
+    class Meta:
+        model = Branch
+        fields = ['city', 'branch_type', 'address', 'address_en', 'phone', 'email',
+                  'working_hours', 'latitude', 'longitude', 'is_active',
+                  'has_pickup', 'has_delivery', 'has_loading_equipment']
+        widgets = {
+            'city': forms.Select(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'branch_type': forms.Select(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'address': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'address_en': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'phone': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'email': forms.EmailInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'working_hours': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm font-mono text-xs', 'rows': 4, 'placeholder': '{"mon-fri": "09:00-20:00", "sat": "10:00-18:00", "sun": "closed"}'}),
+            'latitude': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'step': 'any'}),
+            'longitude': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'step': 'any'}),
+        }
+
+
+class DashboardServiceCreateView(StaffRequiredMixin, CreateView):
+    model = Service
+    form_class = ServiceForm
+    template_name = 'pages/dashboard/service_form.html'
+    success_url = reverse_lazy('dashboard:services')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Service created successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardServiceUpdateView(StaffRequiredMixin, UpdateView):
+    model = Service
+    form_class = ServiceForm
+    template_name = 'pages/dashboard/service_form.html'
+    success_url = reverse_lazy('dashboard:services')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Service updated successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardServiceDeleteView(StaffRequiredMixin, DeleteView):
+    model = Service
+    template_name = 'pages/dashboard/service_confirm_delete.html'
+    success_url = reverse_lazy('dashboard:services')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Service deleted successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardBranchCreateView(StaffRequiredMixin, CreateView):
+    model = Branch
+    form_class = BranchForm
+    template_name = 'pages/dashboard/branch_form.html'
+    success_url = reverse_lazy('dashboard:branches')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Branch created successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardBranchUpdateView(StaffRequiredMixin, UpdateView):
+    model = Branch
+    form_class = BranchForm
+    template_name = 'pages/dashboard/branch_form.html'
+    success_url = reverse_lazy('dashboard:branches')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Branch updated successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardBranchDeleteView(StaffRequiredMixin, DeleteView):
+    model = Branch
+    template_name = 'pages/dashboard/branch_confirm_delete.html'
+    success_url = reverse_lazy('dashboard:branches')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Branch deleted successfully.'))
+        return super().form_valid(form)

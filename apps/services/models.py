@@ -84,6 +84,7 @@ class AdditionalService(models.Model):
     description_en = models.TextField(blank=True, verbose_name=_('Description (EN)'))
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_('Price'))
     price_type = models.CharField(max_length=20, choices=PriceType.choices, default=PriceType.FIXED, verbose_name=_('Price type'))
+    is_door_service = models.BooleanField(default=False, verbose_name=_('Door-to-door service'))
 
     class Meta:
         verbose_name = _('Additional service')
