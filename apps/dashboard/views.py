@@ -1,13 +1,25 @@
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import TemplateView, UpdateView, DeleteView, CreateView, ListView, FormView
+from django.views.generic import TemplateView, UpdateView, DeleteView, CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model, authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django import forms
 
+from apps.services.models import Service, ServiceCategory, AdditionalService, Tariff
+from apps.geo.models import Branch, City
+from apps.partners.models import PartnerApplication, Banner
+from apps.core.models import ContentPage, NewsItem, Vacancy, FAQ, Review, Tender
+
 User = get_user_model()
+
+ICON_CHOICES = [
+    'fa-truck', 'fa-box', 'fa-plane', 'fa-ship', 'fa-train',
+    'fa-warehouse', 'fa-store', 'fa-laptop', 'fa-archive',
+    'fa-pallet', 'fa-envelope', 'fa-clock', 'fa-shield',
+    'fa-truck-fast', 'fa-people-carry-box', 'fa-handshake',
+]
 
 
 class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -18,6 +30,26 @@ class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
         if not self.request.user.is_authenticated:
             return redirect('dashboard:login')
         return redirect('core:home')
+
+    @property
+    def is_admin(self):
+        return self.request.user.role == 'admin'
+
+    @property
+    def is_manager(self):
+        return self.request.user.role == 'manager'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+        if not (request.user.is_staff or request.user.role in ['admin', 'manager']):
+            return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)
+
+
+class ManagerRequiredMixin(StaffRequiredMixin):
+    def test_func(self):
+        return self.request.user.role == 'manager' or self.is_admin
 
 
 class DashboardLoginView(TemplateView):
@@ -138,6 +170,9 @@ class DashboardUserDeleteView(StaffRequiredMixin, DeleteView):
     template_name = 'pages/dashboard/user_confirm_delete.html'
     success_url = reverse_lazy('dashboard:users')
 
+    def test_func(self):
+        return self.is_admin
+
     def form_valid(self, form):
         messages.success(self.request, _('User deleted successfully.'))
         return super().form_valid(form)
@@ -181,18 +216,11 @@ class DashboardServicesView(StaffRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        from apps.services.models import ServiceCategory, Service, AdditionalService, Tariff
         context['categories'] = ServiceCategory.objects.all()
         context['services'] = Service.objects.all()[:50]
         context['additional_services'] = AdditionalService.objects.all()
         context['tariffs'] = Tariff.objects.all()
-        context['icon_choices'] = [
-            'fa-truck', 'fa-box', 'fa-plane', 'fa-ship', 'fa-train',
-            'fa-warehouse', 'fa-store', 'fa-laptop', 'fa-archive',
-            'fa-pallet', 'fa-envelope', 'fa-clock', 'fa-shield',
-            'fa-truck-fast', 'fa-people-carry-box', 'fa-handshake',
-        ]
-        from apps.geo.models import City
+        context['icon_choices'] = ICON_CHOICES
         context['cities'] = City.objects.filter(is_active=True)
         return context
 
@@ -290,10 +318,6 @@ class DashboardSettingsView(StaffRequiredMixin, TemplateView):
         return redirect('dashboard:settings')
 
 
-from apps.services.models import Service, ServiceCategory, AdditionalService, Tariff
-from apps.geo.models import Branch, City
-
-
 class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service
@@ -317,12 +341,7 @@ class ServiceForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['icon'].widget = forms.Select(choices=[(c, c) for c in [
-            'fa-truck', 'fa-box', 'fa-plane', 'fa-ship', 'fa-train',
-            'fa-warehouse', 'fa-store', 'fa-laptop', 'fa-archive',
-            'fa-pallet', 'fa-envelope', 'fa-clock', 'fa-shield',
-            'fa-truck-fast', 'fa-people-carry-box', 'fa-handshake',
-        ]], attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'})
+        self.fields['icon'].widget = forms.Select(choices=[(c, c) for c in ICON_CHOICES], attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'})
 
 
 class BranchForm(forms.ModelForm):
@@ -371,6 +390,9 @@ class DashboardServiceDeleteView(StaffRequiredMixin, DeleteView):
     template_name = 'pages/dashboard/service_confirm_delete.html'
     success_url = reverse_lazy('dashboard:services')
 
+    def test_func(self):
+        return self.is_admin
+
     def form_valid(self, form):
         messages.success(self.request, _('Service deleted successfully.'))
         return super().form_valid(form)
@@ -418,14 +440,6 @@ class DashboardBranchDeleteView(StaffRequiredMixin, DeleteView):
         return super().form_valid(form)
 
 
-icon_choices = [
-    'fa-truck', 'fa-box', 'fa-plane', 'fa-ship', 'fa-train',
-    'fa-warehouse', 'fa-store', 'fa-laptop', 'fa-archive',
-    'fa-pallet', 'fa-envelope', 'fa-clock', 'fa-shield',
-    'fa-truck-fast', 'fa-people-carry-box', 'fa-handshake',
-]
-
-
 class ServiceCategoryForm(forms.ModelForm):
     class Meta:
         model = ServiceCategory
@@ -442,7 +456,7 @@ class ServiceCategoryForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['icon'].widget = forms.Select(choices=[(c, c) for c in icon_choices], attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'})
+        self.fields['icon'].widget = forms.Select(choices=[(c, c) for c in ICON_CHOICES], attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'})
         self.fields['parent'].queryset = ServiceCategory.objects.all()
         self.fields['parent'].required = False
 
@@ -473,6 +487,9 @@ class DashboardServiceCategoryDeleteView(StaffRequiredMixin, DeleteView):
     model = ServiceCategory
     template_name = 'pages/dashboard/category_confirm_delete.html'
     success_url = reverse_lazy('dashboard:services')
+
+    def test_func(self):
+        return self.is_admin
 
     def form_valid(self, form):
         messages.success(self.request, _('Category deleted successfully.'))
@@ -523,12 +540,12 @@ class DashboardTariffDeleteView(StaffRequiredMixin, DeleteView):
     template_name = 'pages/dashboard/tariff_confirm_delete.html'
     success_url = reverse_lazy('dashboard:services')
 
+    def test_func(self):
+        return self.is_admin
+
     def form_valid(self, form):
         messages.success(self.request, _('Tariff deleted successfully.'))
         return super().form_valid(form)
-
-
-from apps.partners.models import PartnerApplication, Banner
 
 
 class PartnerApplicationForm(forms.ModelForm):
@@ -615,8 +632,6 @@ class DashboardBannerDeleteView(StaffRequiredMixin, DeleteView):
 # ──────────────────────────────────────────────
 # Content CRUD
 # ──────────────────────────────────────────────
-
-from apps.core.models import ContentPage, NewsItem, Vacancy, FAQ, Review, Tender
 
 
 class ContentPageForm(forms.ModelForm):
@@ -759,7 +774,6 @@ class VacancyForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        from apps.geo.models import City
         self.fields['city'].queryset = City.objects.all()
         self.fields['city'].required = False
 
@@ -970,4 +984,74 @@ class DashboardTenderDeleteView(StaffRequiredMixin, DeleteView):
 
     def form_valid(self, form):
         messages.success(self.request, _('Tender deleted successfully.'))
+        return super().form_valid(form)
+
+
+# ──────────────────────────────────────────────
+# Order CRUD
+# ──────────────────────────────────────────────
+
+from apps.orders.models import Order, OrderStatusHistory
+
+
+class DashboardOrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['status', 'sender_name', 'sender_phone', 'recipient_name', 'recipient_phone',
+                  'cargo_description', 'weight', 'length', 'width', 'height', 'declared_value', 'total_price']
+        widgets = {
+            'status': forms.Select(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'sender_name': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'sender_phone': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'recipient_name': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'recipient_phone': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'cargo_description': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 3}),
+            'weight': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'step': '0.01'}),
+            'length': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'step': '0.01'}),
+            'width': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'step': '0.01'}),
+            'height': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'step': '0.01'}),
+            'declared_value': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'step': '0.01'}),
+            'total_price': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'step': '0.01'}),
+        }
+
+
+class DashboardOrderDetailView(StaffRequiredMixin, TemplateView):
+    template_name = 'pages/dashboard/order_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order = get_object_or_404(Order, pk=self.kwargs['pk'])
+        context['order'] = order
+        context['status_history'] = order.status_history.all().order_by('-timestamp')
+        return context
+
+
+class DashboardOrderUpdateView(StaffRequiredMixin, UpdateView):
+    model = Order
+    form_class = DashboardOrderForm
+    template_name = 'pages/dashboard/order_form.html'
+    success_url = reverse_lazy('dashboard:orders')
+
+    def form_valid(self, form):
+        old_status = self.object.status
+        new_status = form.cleaned_data.get('status')
+        messages.success(self.request, _('Order updated successfully.'))
+        response = super().form_valid(form)
+        if old_status != new_status:
+            OrderStatusHistory.objects.create(
+                order=self.object,
+                status=new_status,
+                changed_by=self.request.user,
+                comment=_('Status changed from %(old)s to %(new)s') % {'old': old_status, 'new': new_status},
+            )
+        return response
+
+
+class DashboardOrderDeleteView(StaffRequiredMixin, DeleteView):
+    model = Order
+    template_name = 'pages/dashboard/order_confirm_delete.html'
+    success_url = reverse_lazy('dashboard:orders')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Order deleted successfully.'))
         return super().form_valid(form)

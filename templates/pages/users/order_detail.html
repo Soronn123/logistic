@@ -107,18 +107,133 @@
       </div>
     </div>
 
+    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 mb-6">
+      <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">{% translate 'How to Complete Your Order' %}</h3>
+      <div class="space-y-3">
+        {% if order.status == 'draft' %}
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-yellow-600 dark:text-yellow-400">1</span></div>
+          <div>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">{% translate 'Confirm your order' %}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'Your order is awaiting confirmation. Once confirmed, it will enter the processing queue.' %}</p>
+          </div>
+        </div>
+        {% elif order.status == 'confirmed' %}
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-blue-600 dark:text-blue-400">1</span></div>
+          <div>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">{% translate 'Order confirmed' %} ✓</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'Your order has been confirmed and is ready for pickup.' %}</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-yellow-600 dark:text-yellow-400">2</span></div>
+          <div>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">{% translate 'Mark as picked up' %}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'Once the carrier has picked up the cargo, click "Cargo Picked Up" below.' %}</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 opacity-40">
+          <div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-gray-400">3</span></div>
+          <div>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">{% translate 'Confirm delivery' %}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'After the cargo reaches the recipient, confirm delivery to close the order.' %}</p>
+          </div>
+        </div>
+        {% elif order.status == 'picked_up' or order.status == 'in_transit' or order.status == 'at_warehouse' or order.status == 'awaiting_delivery_to_branch' or order.status == 'available_in_warehouse' or order.status == 'awaiting_courier' %}
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-green-600 dark:text-green-400">1</span></div>
+          <div>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">{% translate 'Order confirmed' %} ✓</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'Your order has been confirmed.' %}</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-green-600 dark:text-green-400">2</span></div>
+          <div>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">{% translate 'Cargo picked up' %} ✓</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'The cargo has been picked up by the carrier.' %}</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-yellow-600 dark:text-yellow-400">3</span></div>
+          <div>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">{% translate 'Awaiting delivery' %}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'Your cargo is on its way. Once it reaches the final destination, confirm delivery.' %}</p>
+          </div>
+        </div>
+        {% elif order.status == 'out_for_delivery' %}
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-green-600 dark:text-green-400">1</span></div>
+          <div>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">{% translate 'Order confirmed' %} ✓</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'Your order has been confirmed.' %}</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-green-600 dark:text-green-400">2</span></div>
+          <div>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">{% translate 'Cargo picked up' %} ✓</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'The cargo has been picked up by the carrier.' %}</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-green-600 dark:text-green-400">3</span></div>
+          <div>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">{% translate 'Out for delivery' %} ✓</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'The cargo is out for delivery.' %}</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-yellow-600 dark:text-yellow-400">4</span></div>
+          <div>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">{% translate 'Confirm delivery' %}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'The recipient should click "Confirm Delivery" below to complete the order.' %}</p>
+          </div>
+        </div>
+        {% elif order.status == 'delivered' %}
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-green-600 dark:text-green-400">✓</span></div>
+          <div>
+            <p class="text-sm font-medium text-green-700 dark:text-green-400">{% translate 'Order completed!' %}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'The delivery has been confirmed. Thank you for using our service.' %}</p>
+          </div>
+        </div>
+        {% elif order.status == 'cancelled' %}
+        <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0 mt-0.5"><span class="text-xs font-bold text-red-600 dark:text-red-400">✗</span></div>
+          <div>
+            <p class="text-sm font-medium text-red-700 dark:text-red-400">{% translate 'Order cancelled' %}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'This order has been cancelled.' %}</p>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
     {% if user.is_authenticated and user == order.user %}
     <div class="flex flex-wrap gap-3">
-      {% if order.status == 'out_for_delivery' or order.status == 'delivered' %}
+      {% if order.status == 'out_for_delivery' %}
       <form method="post" action="{% url 'orders:api_deliver' order.tracking_number %}">
         {% csrf_token %}
-        <button type="submit" class="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white font-medium rounded-xl transition-colors">{% translate 'Confirm Delivery' %}</button>
+        <button type="submit" class="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white font-medium rounded-xl transition-colors flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          {% translate 'Confirm Delivery' %}
+        </button>
       </form>
+      {% elif order.status == 'delivered' %}
+      <span class="px-6 py-2.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-medium rounded-xl flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        {% translate 'Delivery Confirmed' %}
+      </span>
       {% endif %}
       {% if order.status == 'awaiting_delivery_to_branch' or order.status == 'available_in_warehouse' or order.status == 'awaiting_courier' or order.status == 'confirmed' %}
       <form method="post" action="{% url 'orders:api_pickup' order.tracking_number %}">
         {% csrf_token %}
-        <button type="submit" class="px-6 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl transition-colors">{% translate 'Cargo Picked Up' %}</button>
+        <button type="submit" class="px-6 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl transition-colors flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          {% translate 'Mark as Picked Up' %}
+        </button>
       </form>
       {% endif %}
       <a href="{% url 'orders:request_changes' order.tracking_number %}" class="px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">{% translate 'Request Changes' %}</a>
@@ -131,11 +246,29 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var mapEl = document.getElementById('detail-map');
-  var senderLat = {{ order.sender_address.latitude|default:0 }};
-  var senderLng = {{ order.sender_address.longitude|default:0 }};
-  var recipientLat = {{ order.recipient_address.latitude|default:0 }};
-  var recipientLng = {{ order.recipient_address.longitude|default:0 }};
-  if (mapEl && senderLat && recipientLat) {
+  if (!mapEl) return;
+
+  var senderLat = {{ order.sender_address.latitude|default:"null" }};
+  var senderLng = {{ order.sender_address.longitude|default:"null" }};
+  var recipientLat = {{ order.recipient_address.latitude|default:"null" }};
+  var recipientLng = {{ order.recipient_address.longitude|default:"null" }};
+
+  function showUnavailable() {
+    mapEl.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><div class="text-center"><svg class="w-10 h-10 mx-auto mb-2 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg><p class="text-sm">{% translate "Map unavailable" %}</p><p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{% translate "Location coordinates not available for this order" %}</p></div></div>';
+  }
+
+  if (!senderLat || !senderLng || !recipientLat || !recipientLng ||
+      senderLat === 0 || senderLng === 0 || recipientLat === 0 || recipientLng === 0) {
+    showUnavailable();
+    return;
+  }
+
+  if (typeof maplibregl === 'undefined') {
+    showUnavailable();
+    return;
+  }
+
+  try {
     var map = new maplibregl.Map({
       container: 'detail-map',
       style: {
@@ -143,7 +276,7 @@ document.addEventListener('DOMContentLoaded', function() {
         sources: { osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, attribution: '&copy; OpenStreetMap contributors' } },
         layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
       },
-      center: [{{ order.sender_address.longitude|default:37.6173 }}, {{ order.sender_address.latitude|default:55.7558 }}],
+      center: [senderLng, senderLat],
       zoom: 5
     });
     map.addControl(new maplibregl.NavigationControl(), 'top-right');
@@ -153,8 +286,9 @@ document.addEventListener('DOMContentLoaded', function() {
       var bounds = new maplibregl.LngLatBounds().extend([senderLng, senderLat]).extend([recipientLng, recipientLat]);
       map.fitBounds(bounds, { padding: 50 });
     });
-  } else if (mapEl) {
-    mapEl.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><p class="text-sm">{% translate "Map unavailable" %}</p></div>';
+    map.on('error', function() { showUnavailable(); });
+  } catch (e) {
+    showUnavailable();
   }
 });
 </script>

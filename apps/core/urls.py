@@ -29,4 +29,7 @@ urlpatterns = [
     path('press/', views.PressView.as_view(), name='press'),
     path('warehouse/', views.WarehouseView.as_view(), name='warehouse'),
     path('info/<slug:page_type>/', views.InfoPageView.as_view(), name='info_page'),
+    path('privacy-policy/', views.PrivacyPolicyView.as_view(), name='privacy_policy'),
+    path('terms-of-use/', views.TermsOfUseView.as_view(), name='terms_of_use'),
+    path('transport-terms/', views.TransportTermsView.as_view(), name='transport_terms'),
 ]

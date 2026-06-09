@@ -1,0 +1,92 @@
+{% extends 'pages/dashboard/base_dashboard.html' %}{% load i18n %}
+{% block dash_title %}{% translate 'Edit Order' %} — {{ object.tracking_number }}{% endblock %}
+{% block dash_page_title %}{% translate 'Edit Order' %}{% endblock %}
+{% block dash_content %}
+<div class="max-w-2xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{% translate 'Edit Order' %} {{ object.tracking_number }}</h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-1">{% translate 'Update order details' %}</p>
+    </div>
+    <a href="{% url 'dashboard:orders' %}" class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium">
+      {% translate 'Back to List' %}
+    </a>
+  </div>
+
+  <form method="post" class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 lg:p-8 space-y-6">
+    {% csrf_token %}
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div class="sm:col-span-2">
+        <label for="{{ form.status.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Status' %}</label>
+        {{ form.status }}
+        {% if form.status.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.status.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label for="{{ form.sender_name.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Sender name' %}</label>
+        {{ form.sender_name }}
+        {% if form.sender_name.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.sender_name.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label for="{{ form.sender_phone.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Sender phone' %}</label>
+        {{ form.sender_phone }}
+        {% if form.sender_phone.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.sender_phone.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label for="{{ form.recipient_name.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Recipient name' %}</label>
+        {{ form.recipient_name }}
+        {% if form.recipient_name.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.recipient_name.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label for="{{ form.recipient_phone.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Recipient phone' %}</label>
+        {{ form.recipient_phone }}
+        {% if form.recipient_phone.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.recipient_phone.errors.0 }}</p>{% endif %}
+      </div>
+      <div class="sm:col-span-2">
+        <label for="{{ form.cargo_description.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Cargo description' %}</label>
+        {{ form.cargo_description }}
+        {% if form.cargo_description.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.cargo_description.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label for="{{ form.weight.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Weight (kg)' %}</label>
+        {{ form.weight }}
+        {% if form.weight.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.weight.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label for="{{ form.length.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Length (cm)' %}</label>
+        {{ form.length }}
+        {% if form.length.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.length.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label for="{{ form.width.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Width (cm)' %}</label>
+        {{ form.width }}
+        {% if form.width.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.width.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label for="{{ form.height.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Height (cm)' %}</label>
+        {{ form.height }}
+        {% if form.height.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.height.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label for="{{ form.declared_value.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Declared value' %}</label>
+        {{ form.declared_value }}
+        {% if form.declared_value.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.declared_value.errors.0 }}</p>{% endif %}
+      </div>
+      <div>
+        <label for="{{ form.total_price.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Total price' %}</label>
+        {{ form.total_price }}
+        {% if form.total_price.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.total_price.errors.0 }}</p>{% endif %}
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+      <a href="{% url 'dashboard:orders' %}" class="px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium">
+        {% translate 'Cancel' %}
+      </a>
+      <button type="submit" class="px-6 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white rounded-xl transition-colors text-sm font-medium">
+        {% translate 'Save Changes' %}
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

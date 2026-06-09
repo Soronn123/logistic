@@ -1,0 +1,67 @@
+{% extends 'base.html' %}{% load i18n static %}
+{% block title %}{% translate 'Cargo Tracking' %} — Baikal-Service{% endblock %}
+{% block meta_description %}{% translate 'Track your cargo shipment in real time' %}{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <div class="text-center mb-10">
+      <div class="w-16 h-16 bg-baikal-100 dark:bg-baikal-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+        </svg>
+      </div>
+      <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-2">{% translate 'Track Your Cargo' %}</h1>
+      <p class="text-gray-600 dark:text-gray-400">{% translate 'Enter your tracking number to see the current status and location of your shipment' %}</p>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 sm:p-8">
+      <form method="get" action="{% url 'tracking_lookup' %}">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="flex-1">
+            <label for="tracking_number" class="sr-only">{% translate 'Tracking number' %}</label>
+            <input type="text" name="tracking_number" id="tracking_number" required
+              placeholder="{% translate 'Enter tracking number (e.g. BK-XXXXXXXXXX)' %}"
+              class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-3 px-4 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors">
+          </div>
+          <button type="submit" class="px-6 py-3 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl transition-colors shadow-lg shadow-baikal-600/20 flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            {% translate 'Track' %}
+          </button>
+        </div>
+      </form>
+
+      <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+          <div>
+            <p class="text-2xl font-bold text-baikal-600 dark:text-baikal-400">01</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{% translate 'Enter tracking number' %}</p>
+          </div>
+          <div>
+            <p class="text-2xl font-bold text-baikal-600 dark:text-baikal-400">02</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{% translate 'View current status' %}</p>
+          </div>
+          <div>
+            <p class="text-2xl font-bold text-baikal-600 dark:text-baikal-400">03</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{% translate 'See cargo location' %}</p>
+          </div>
+          <div>
+            <p class="text-2xl font-bold text-baikal-600 dark:text-baikal-400">04</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{% translate 'Estimated delivery' %}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 text-center">
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        {% translate 'Tracking numbers are sent via email and SMS after order creation.' %}
+      </p>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        {% translate 'Need help?' %} <a href="{% url 'core:contact' %}" class="text-baikal-600 dark:text-baikal-400 hover:underline">{% translate 'Contact support' %}</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

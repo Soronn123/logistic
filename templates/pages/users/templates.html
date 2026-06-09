@@ -3,6 +3,14 @@
 
 {% block title %}{% translate 'My Templates' %} — Baikal-Service{% endblock %}
 
+{% block extra_head %}
+<style>
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; }
+</style>
+{% endblock %}
+
 {% block content %}
 {% include 'partials/_profile_nav.html' %}
 <div x-data="{
@@ -10,6 +18,15 @@
   showCreateCargoForm: false,
   showEditContactForm: false,
   showEditCargoForm: false,
+  showViewCargoForm: false,
+  viewCargoName: '',
+  viewCargoDescription: '',
+  viewCargoWeight: '',
+  viewCargoLength: '',
+  viewCargoWidth: '',
+  viewCargoHeight: '',
+  viewCargoDeclaredValue: '',
+  viewCargoCreatedAt: '',
   editPk: null,
   editName: '',
   editTemplateType: 'sender',
@@ -26,6 +43,17 @@
   editCargoWidth: '',
   editCargoHeight: '',
   editCargoDeclaredValue: '',
+  viewCargo(name, description, weight, length, width, height, declaredValue, createdAt) {
+    this.viewCargoName = name;
+    this.viewCargoDescription = description;
+    this.viewCargoWeight = weight;
+    this.viewCargoLength = length;
+    this.viewCargoWidth = width;
+    this.viewCargoHeight = height;
+    this.viewCargoDeclaredValue = declaredValue;
+    this.viewCargoCreatedAt = createdAt;
+    this.showViewCargoForm = true;
+  },
   editContact(pk, name, templateType, recipientName, recipientPhone, recipientEmail, cityId, addressDetail) {
     this.editPk = pk;
     this.editName = name;
@@ -99,6 +127,9 @@
             <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-600 dark:text-gray-400">
               <span>{{ tpl.from_city|default:'—' }} → {{ tpl.to_city|default:'—' }}</span>
               <span>{{ tpl.weight }} kg</span>
+              {% if tpl.length or tpl.width or tpl.height %}
+              <span>{{ tpl.length|default:'0' }}×{{ tpl.width|default:'0' }}×{{ tpl.height|default:'0' }} cm</span>
+              {% endif %}
               <span>{{ tpl.service|default:'—' }}</span>
               {% if tpl.declared_value %}
               <span>{{ tpl.declared_value }} ₽</span>
@@ -254,6 +285,9 @@
             <a href="{% url 'orders:create' %}" class="p-2 text-gray-400 hover:text-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors" title="{% translate 'Use for order' %}">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
             </a>
+            <button type="button" @click="viewCargo('{{ tpl.name|escapejs }}', '{{ tpl.cargo_description|escapejs }}', '{{ tpl.weight|stringformat:'s'|escapejs }}', '{{ tpl.length|stringformat:'s'|escapejs }}', '{{ tpl.width|stringformat:'s'|escapejs }}', '{{ tpl.height|stringformat:'s'|escapejs }}', '{{ tpl.declared_value|stringformat:'s'|escapejs }}', '{{ tpl.created_at|date:"d.m.Y" }}')" class="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors" title="{% translate 'View' %}">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            </button>
             <button type="button" @click="editCargo({{ tpl.id }}, '{{ tpl.name|escapejs }}', '{{ tpl.cargo_description|escapejs }}', '{{ tpl.weight|stringformat:'s'|escapejs }}', '{{ tpl.length|stringformat:'s'|escapejs }}', '{{ tpl.width|stringformat:'s'|escapejs }}', '{{ tpl.height|stringformat:'s'|escapejs }}', '{{ tpl.declared_value|stringformat:'s'|escapejs }}')" class="p-2 text-gray-400 hover:text-baikal-500 hover:bg-baikal-50 dark:hover:bg-baikal-900/20 rounded-lg transition-colors" title="{% translate 'Edit' %}">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
             </button>
@@ -549,6 +583,64 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<!-- View Cargo Template Modal -->
+<div x-show="showViewCargoForm" x-cloak class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div x-show="showViewCargoForm" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-500 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75 transition-opacity" @click="showViewCargoForm = false"></div>
+    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+    <div x-show="showViewCargoForm" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full">
+      <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{% translate 'Cargo template details' %}</h3>
+      </div>
+      <div class="px-6 py-4 space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Template name' %}</label>
+          <p class="text-gray-900 dark:text-gray-100" x-text="viewCargoName"></p>
+        </div>
+        {% if viewCargoDescription %}
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Description' %}</label>
+          <p class="text-gray-900 dark:text-gray-100" x-text="viewCargoDescription"></p>
+        </div>
+        {% endif %}
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Weight (kg)' %}</label>
+            <p class="text-gray-900 dark:text-gray-100" x-text="viewCargoWeight"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Declared value' %}</label>
+            <p class="text-gray-900 dark:text-gray-100" x-text="viewCargoDeclaredValue ? viewCargoDeclaredValue + ' ₽' : '—'"></p>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Length (cm)' %}</label>
+            <p class="text-gray-900 dark:text-gray-100" x-text="viewCargoLength || '—'"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Width (cm)' %}</label>
+            <p class="text-gray-900 dark:text-gray-100" x-text="viewCargoWidth || '—'"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Height (cm)' %}</label>
+            <p class="text-gray-900 dark:text-gray-100" x-text="viewCargoHeight || '—'"></p>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Created' %}</label>
+          <p class="text-gray-900 dark:text-gray-100" x-text="viewCargoCreatedAt"></p>
+        </div>
+      </div>
+      <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3">
+        <button type="button" @click="showViewCargoForm = false" class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+          {% translate 'Close' %}
+        </button>
+      </div>
     </div>
   </div>
 </div>

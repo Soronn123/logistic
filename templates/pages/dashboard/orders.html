@@ -34,7 +34,7 @@
         {% for order in orders %}
         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors order-row" data-status="{{ order.status }}">
           <td class="px-6 py-3">
-            <a href="#" class="font-mono text-xs text-baikal-600 dark:text-baikal-400 hover:underline">{{ order.tracking_number }}</a>
+            <a href="{% url 'dashboard:order_detail' order.pk %}" class="font-mono text-xs text-baikal-600 dark:text-baikal-400 hover:underline">{{ order.tracking_number }}</a>
           </td>
           <td class="px-6 py-3 text-gray-900 dark:text-white">{{ order.user.get_full_name|default:order.user.email }}</td>
           <td class="px-6 py-3 text-gray-600 dark:text-gray-400">{{ order.sender_address }} → {{ order.recipient_address }}</td>

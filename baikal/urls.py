@@ -4,11 +4,15 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
+from apps.orders.views import TrackingLookupView, TrackingPublicDetailView
+
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
+    path('tracking/', TrackingLookupView.as_view(), name='tracking_lookup'),
 ]
 
 urlpatterns += i18n_patterns(
+    path('tracking/<slug:tracking_number>/', TrackingPublicDetailView.as_view(), name='tracking_detail'),
     path('admin/', admin.site.urls),
     path('', include('apps.core.urls', namespace='core')),
     path('', include('apps.users.urls', namespace='users')),

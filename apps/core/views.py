@@ -269,3 +269,15 @@ class PressView(TemplateView):
 
 class WarehouseView(TemplateView):
     template_name = 'pages/core/warehouse.html'
+
+
+class PrivacyPolicyView(TemplateView):
+    template_name = 'pages/core/privacy_policy.html'
+
+
+class TermsOfUseView(TemplateView):
+    template_name = 'pages/core/terms_of_use.html'
+
+
+class TransportTermsView(TemplateView):
+    template_name = 'pages/core/transport_terms.html'

@@ -494,6 +494,8 @@ function orderForm() {
           center: [lng, lat],
           zoom: 4,
         });
+        this.map.jumpTo({ center: [lng, lat], zoom: 2 });
+        setTimeout(() => { this.map.flyTo({ center: [lng, lat], zoom: 4, duration: 2000, essential: true }); }, 300);
         this.map.addControl(new maplibregl.NavigationControl(), 'top-right');
         this.map.on('click', (e) => this.handleMapClick(e));
       } catch (e) {

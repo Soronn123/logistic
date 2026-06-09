@@ -24,6 +24,38 @@
           </span>
         </div>
 
+        <div class="mb-6" x-data="{
+          progress: 0,
+          initProgress() {
+            this.fetchProgress();
+            this._timer = setInterval(() => this.fetchProgress(), 10000);
+          },
+          destroy() {
+            if (this._timer) clearInterval(this._timer);
+          },
+          fetchProgress() {
+            fetch('{% url "orders:api_track" order.tracking_number %}')
+              .then(function(r) { return r.json(); })
+              .then(function(data) {
+                if (data.current_location) {
+                  this.progress = data.current_location.progress || 0;
+                }
+              }.bind(this))
+              .catch(function() {});
+          }
+        }" x-init="initProgress()">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-gray-500 dark:text-gray-400">{{ order.sender_address|default:'—' }}</span>
+            <span class="text-xs font-medium text-baikal-600 dark:text-baikal-400" x-text="progress + '%'"></span>
+            <span class="text-xs text-gray-500 dark:text-gray-400">{{ order.recipient_address|default:'—' }}</span>
+          </div>
+          <div class="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+            <div class="h-full rounded-full transition-all duration-1000 ease-linear"
+                 :style="'width: ' + progress + '%'"
+                 :class="progress >= 100 ? 'bg-green-500' : 'bg-baikal-500'"></div>
+          </div>
+        </div>
+
         <div class="space-y-4">
           {% for entry in status_history %}
           <div class="flex items-start gap-4">
@@ -90,35 +122,110 @@
 {% block extra_scripts %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const mapEl = document.getElementById('track-map');
-  var senderLat = {{ order.sender_address.latitude|default:0 }};
-  var senderLng = {{ order.sender_address.longitude|default:0 }};
-  var recipientLat = {{ order.recipient_address.latitude|default:0 }};
-  var recipientLng = {{ order.recipient_address.longitude|default:0 }};
-  if (mapEl && senderLat && recipientLat) {
-    const map = new maplibregl.Map({
-      container: 'track-map',
-      style: {
-        version: 8,
-        sources: { osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, attribution: '&copy; OpenStreetMap contributors' } },
-        layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
-      },
-      center: [{{ order.sender_address.longitude|default:37.6173 }}, {{ order.sender_address.latitude|default:55.7558 }}],
-      zoom: 5
-    });
-    map.addControl(new maplibregl.NavigationControl(), 'top-right');
-    map.on('load', function() {
-      var senderPopup = new maplibregl.Popup({ offset: 25 }).setHTML('{% translate "From" %}: {{ order.sender_address|escapejs }}');
-      new maplibregl.Marker({ color: '#3b82f6' }).setLngLat([{{ order.sender_address.longitude|default:0 }}, {{ order.sender_address.latitude|default:0 }}]).setPopup(senderPopup).addTo(map);
-      var recipientPopup = new maplibregl.Popup({ offset: 25 }).setHTML('{% translate "To" %}: {{ order.recipient_address|escapejs }}');
-      new maplibregl.Marker({ color: '#10b981' }).setLngLat([{{ order.recipient_address.longitude|default:0 }}, {{ order.recipient_address.latitude|default:0 }}]).setPopup(recipientPopup).addTo(map);
-      var bounds = new maplibregl.LngLatBounds();
-      bounds.extend([{{ order.sender_address.longitude|default:0 }}, {{ order.sender_address.latitude|default:0 }}]);
-      bounds.extend([{{ order.recipient_address.longitude|default:0 }}, {{ order.recipient_address.latitude|default:0 }}]);
-      map.fitBounds(bounds, { padding: 50 });
-    });
-  } else if (mapEl) {
+  var mapEl = document.getElementById('track-map');
+  if (!mapEl) return;
+
+  var senderCity = {{ order.sender_address|yesno:"true,false" }};
+  var recipientCity = {{ order.recipient_address|yesno:"true,false" }};
+  if (!senderCity || !recipientCity) {
     mapEl.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><p class="text-sm">{% translate "Map unavailable" %}</p></div>';
+    return;
+  }
+
+  var senderLat = Number({{ order.sender_address.latitude }});
+  var senderLng = Number({{ order.sender_address.longitude }});
+  var recipientLat = Number({{ order.recipient_address.latitude }});
+  var recipientLng = Number({{ order.recipient_address.longitude }});
+
+  if (!isFinite(senderLat) || !isFinite(senderLng) || !isFinite(recipientLat) || !isFinite(recipientLng)) {
+    mapEl.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><p class="text-sm">{% translate "Map unavailable" %}</p></div>';
+    return;
+  }
+
+  if (typeof maplibregl === 'undefined') {
+    mapEl.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><p class="text-sm">{% translate "Map unavailable" %}</p></div>';
+    return;
+  }
+
+  var map = new maplibregl.Map({
+    container: 'track-map',
+    style: {
+      version: 8,
+      sources: { osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, attribution: '&copy; OpenStreetMap contributors' } },
+      layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
+    },
+    center: [senderLng, senderLat],
+    zoom: 5
+  });
+  map.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+  var cargoMarker = null;
+
+  map.on('load', function() {
+    var senderPopup = new maplibregl.Popup({ offset: 25 }).setHTML('{% translate "From" %}: {{ order.sender_address|escapejs }}');
+    new maplibregl.Marker({ color: '#3b82f6' }).setLngLat([senderLng, senderLat]).setPopup(senderPopup).addTo(map);
+
+    var recipientPopup = new maplibregl.Popup({ offset: 25 }).setHTML('{% translate "To" %}: {{ order.recipient_address|escapejs }}');
+    new maplibregl.Marker({ color: '#10b981' }).setLngLat([recipientLng, recipientLat]).setPopup(recipientPopup).addTo(map);
+
+    map.addSource('route', {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'LineString',
+          coordinates: [[senderLng, senderLat], [recipientLng, recipientLat]]
+        }
+      }
+    });
+    map.addLayer({
+      id: 'route',
+      type: 'line',
+      source: 'route',
+      layout: { 'line-join': 'round', 'line-cap': 'round' },
+      paint: { 'line-color': '#3b82f6', 'line-width': 3, 'line-opacity': 0.5, 'line-dasharray': [3, 2] }
+    });
+
+    var cargoEl = document.createElement('div');
+    cargoEl.style.width = '28px';
+    cargoEl.style.height = '28px';
+    cargoEl.style.borderRadius = '50%';
+    cargoEl.style.backgroundColor = '#f59e0b';
+    cargoEl.style.border = '3px solid #fff';
+    cargoEl.style.boxShadow = '0 0 12px rgba(245,158,11,0.6)';
+    cargoEl.style.cursor = 'pointer';
+    cargoEl.innerHTML = '<svg class="w-4 h-4 mx-auto mt-0.5" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10l2-1m12 0l2 1m-2-5h4m-4-3h4M9 16h6"/></svg>';
+
+    cargoMarker = new maplibregl.Marker({ element: cargoEl })
+      .setLngLat([senderLng, senderLat])
+      .setPopup(new maplibregl.Popup({ offset: 25 }).setHTML('<b>{% translate "Current cargo location" %}</b><br><span class="text-sm">{% translate "In transit" %}</span>'))
+      .addTo(map);
+
+    var bounds = new maplibregl.LngLatBounds();
+    bounds.extend([senderLng, senderLat]);
+    bounds.extend([recipientLng, recipientLat]);
+    map.fitBounds(bounds, { padding: 50 });
+
+    updateCargo();
+    setInterval(updateCargo, 10000);
+  });
+
+  function updateCargo() {
+    fetch('{% url "orders:api_track" order.tracking_number %}')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data.current_location || !cargoMarker) return;
+        var lng = Number(data.current_location.lng);
+        var lat = Number(data.current_location.lat);
+        if (!isFinite(lng) || !isFinite(lat)) return;
+        cargoMarker.setLngLat([lng, lat]);
+        var popup = cargoMarker.getPopup();
+        if (popup) {
+          popup.setHTML('<b>{% translate "Current cargo location" %}</b><br><span class="text-sm">' + (data.status_label || '') + ' (' + (data.current_location.progress || 0) + '%)</span>');
+        }
+      })
+      .catch(function() {});
   }
 });
 </script>

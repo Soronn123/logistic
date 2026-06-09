@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 
@@ -63,7 +64,7 @@ class OrderStatusHistory(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='status_history', verbose_name=_('Order'))
     status = models.CharField(max_length=40, choices=Order.Status.choices, verbose_name=_('Status'))
     changed_by = models.ForeignKey('users.CustomUser', on_delete=models.SET_NULL, null=True, verbose_name=_('Changed by'))
-    timestamp = models.DateTimeField(auto_now_add=True, verbose_name=_('Timestamp'))
+    timestamp = models.DateTimeField(default=timezone.now, verbose_name=_('Timestamp'))
     comment = models.TextField(blank=True, verbose_name=_('Comment'))
 
     class Meta:

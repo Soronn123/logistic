@@ -152,8 +152,7 @@
                                     <a
                                         href="{% url 'services:category' slug='cargo-transportation' %}"
                                         class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-baikal-50 dark:hover:bg-gray-700"
-                                        >{% translate 'Cargo transportation'
-                                        %}</a
+                                        >{% translate 'Cargo transportation'%}</a
                                     >
                                     <a
                                         href="{% url 'services:category' slug='consolidated-cargo' %}"
@@ -163,19 +162,17 @@
                                     <a
                                         href="{% url 'services:category' slug='marketplaces' %}"
                                         class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-baikal-50 dark:hover:bg-gray-700"
-                                        >{% translate 'Marketplaces delivery'
-                                        %}</a
+                                        >{% translate 'Marketplaces delivery'%}</a
                                     >
                                     <a
                                         href="{% url 'services:category' slug='pallet-transportation' %}"
                                         class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-baikal-50 dark:hover:bg-gray-700"
-                                        >{% translate 'Pallet transportation'
-                                        %}</a
+                                        >{% translate 'Pallet transportation'%}</a
                                     >
                                     <a
                                         href="{% url 'services:additional' %}"
                                         class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-baikal-50 dark:hover:bg-gray-700"
-                                        >Additional service</a
+                                        >{% translate 'Additional service'%}</a
                                     >
                                 </div>
                             </div>
@@ -215,8 +212,7 @@
                                     <a
                                         href="{% url 'core:calculator' %}"
                                         class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-baikal-50 dark:hover:bg-gray-700"
-                                        >{% translate 'Shipping calculator'
-                                        %}</a
+                                        >{% translate 'Shipping calculator'%}</a
                                     >
                                     <a
                                         href="{% url 'core:track' %}"
@@ -424,16 +420,16 @@
                                         class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-baikal-50 dark:hover:bg-gray-700"
                                         >{% translate 'Balance' %}</a
                                     >
-                                    {% if user.role == 'admin' or user.role == 'manager' or user.is_staff %}
+                                    {% if user.role == 'admin' or user.is_staff %}
                                     <hr
                                         class="my-1 border-gray-200 dark:border-gray-700"
                                     />
                                     <a
                                         href="{% url 'dashboard:home' %}"
-                                        class="block px-4 py-2 text-sm font-medium text-baikal-600 dark:text-baikal-400 hover:bg-baikal-50 dark:hover:bg-gray-700"
+                                        class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-baikal-600 dark:text-baikal-400 border border-baikal-300 dark:border-baikal-600 rounded-lg hover:bg-baikal-50 dark:hover:bg-baikal-900/20 transition-colors"
                                     >
                                         <svg
-                                            class="w-4 h-4 inline-block mr-1"
+                                            class="w-3.5 h-3.5 mr-1"
                                             fill="none"
                                             stroke="currentColor"
                                             viewBox="0 0 24 24"
@@ -446,6 +442,27 @@
                                             />
                                         </svg>
                                         {% translate 'Admin Panel' %}
+                                    </a>
+                                    {% endif %}
+                                    {% if user.role == 'manager' or user.role == 'admin' or user.is_staff %}
+                                    <a
+                                        href="{% url 'dashboard:home' %}"
+                                        class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-purple-600 dark:text-purple-400 border border-purple-300 dark:border-purple-600 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors ml-1"
+                                    >
+                                        <svg
+                                            class="w-3.5 h-3.5 mr-1"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"
+                                            />
+                                        </svg>
+                                        {% translate 'Manager Panel' %}
                                     </a>
                                     {% endif %}
                                     <hr
@@ -812,13 +829,13 @@
                             class="block px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-baikal-50 dark:hover:bg-gray-800 rounded-lg"
                             >{% translate 'Balance' %}</a
                         >
-                        {% if user.role == 'admin' or user.role == 'manager' or user.is_staff %}
+                        {% if user.role == 'admin' or user.is_staff %}
                         <a
                             href="{% url 'dashboard:home' %}"
-                            class="block px-4 py-3 text-sm font-medium text-baikal-600 dark:text-baikal-400 hover:bg-baikal-50 dark:hover:bg-gray-800 rounded-lg"
+                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-baikal-600 dark:text-baikal-400 border border-baikal-300 dark:border-baikal-600 rounded-lg hover:bg-baikal-50 dark:hover:bg-baikal-900/20 transition-colors"
                         >
                             <svg
-                                class="w-4 h-4 inline-block mr-1"
+                                class="w-3.5 h-3.5 mr-1"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -831,6 +848,27 @@
                                 />
                             </svg>
                             {% translate 'Admin Panel' %}
+                        </a>
+                        {% endif %}
+                        {% if user.role == 'manager' or user.role == 'admin' or user.is_staff %}
+                        <a
+                            href="{% url 'dashboard:home' %}"
+                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-purple-600 dark:text-purple-400 border border-purple-300 dark:border-purple-600 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors ml-1"
+                        >
+                            <svg
+                                class="w-3.5 h-3.5 mr-1"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"
+                                />
+                            </svg>
+                            {% translate 'Manager Panel' %}
                         </a>
                         {% endif %}
                         <form method="post" action="{% url 'users:logout' %}">
@@ -956,54 +994,9 @@
                                 >
                             </div>
                             <p class="text-sm leading-relaxed mb-4">
-                                {% translate 'Reliable cargo transportation
-                                across Russia, Kazakhstan, Belarus, Kyrgyzstan,
-                                and China since 2005.' %}
+                                {% blocktranslate trimmed %} Reliable cargo transportation across Russia, Kazakhstan, Belarus, 
+                                Kyrgyzstan, and China {% endblocktranslate %}
                             </p>
-                            <div class="flex space-x-3 rtl:space-x-reverse">
-                                <a
-                                    href="#"
-                                    class="w-8 h-8 rounded-full bg-gray-800 hover:bg-baikal-600 flex items-center justify-center transition-colors"
-                                >
-                                    <svg
-                                        class="w-4 h-4"
-                                        fill="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
-                                        />
-                                    </svg>
-                                </a>
-                                <a
-                                    href="#"
-                                    class="w-8 h-8 rounded-full bg-gray-800 hover:bg-baikal-600 flex items-center justify-center transition-colors"
-                                >
-                                    <svg
-                                        class="w-4 h-4"
-                                        fill="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"
-                                        />
-                                    </svg>
-                                </a>
-                                <a
-                                    href="#"
-                                    class="w-8 h-8 rounded-full bg-gray-800 hover:bg-baikal-600 flex items-center justify-center transition-colors"
-                                >
-                                    <svg
-                                        class="w-4 h-4"
-                                        fill="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zM17 16h-2v-3c0-1.653-1.327-3-2.96-3-1.633 0-2.96 1.347-2.96 3v3h-2v-6h2v1.041c.551-.657 1.444-1.041 2.44-1.041 1.726 0 3.12 1.395 3.12 3.12V16h2z"
-                                        />
-                                    </svg>
-                                </a>
-                            </div>
                         </div>
 
                         <!-- Services -->
@@ -1018,32 +1011,28 @@
                                     <a
                                         href="{% url 'services:category' slug='cargo-transportation' %}"
                                         class="text-sm hover:text-baikal-400 transition-colors"
-                                        >{% translate 'Cargo transportation'
-                                        %}</a
+                                        >{% translate 'Cargo transportation' %}</a
                                     >
                                 </li>
                                 <li>
                                     <a
                                         href="{% url 'services:category' slug='marketplaces' %}"
                                         class="text-sm hover:text-baikal-400 transition-colors"
-                                        >{% translate 'Marketplaces delivery'
-                                        %}</a
+                                        >{% translate 'Marketplaces delivery' %}</a
                                     >
                                 </li>
                                 <li>
                                     <a
                                         href="{% url 'services:category' slug='pallet-transportation' %}"
                                         class="text-sm hover:text-baikal-400 transition-colors"
-                                        >{% translate 'Pallet transportation'
-                                        %}</a
+                                        >{% translate 'Pallet transportation'%}</a
                                     >
                                 </li>
                                 <li>
                                     <a
                                         href="{% url 'services:category' slug='container' %}"
                                         class="text-sm hover:text-baikal-400 transition-colors"
-                                        >{% translate 'Container transportation'
-                                        %}</a
+                                        >{% translate 'Container transportation'%}</a
                                     >
                                 </li>
                                 <li>
@@ -1198,21 +1187,25 @@
                         class="mt-8 pt-8 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between"
                     >
                         <p class="text-sm text-gray-500">
-                            &copy; {% now 'Y' %} Baikal-Service. All rights
-                            reserved.
+                            &copy; {% now 'Y' %} Baikal-Service. {% translate 'All rights reserved' %}.
                         </p>
                         <div
                             class="flex space-x-4 rtl:space-x-reverse mt-4 sm:mt-0"
                         >
                             <a
-                                href="#"
+                                href="{% url 'core:privacy_policy' %}"
                                 class="text-sm text-gray-500 hover:text-gray-300 transition-colors"
                                 >{% translate 'Privacy policy' %}</a
                             >
                             <a
-                                href="#"
+                                href="{% url 'core:terms_of_use' %}"
                                 class="text-sm text-gray-500 hover:text-gray-300 transition-colors"
                                 >{% translate 'Terms of use' %}</a
+                            >
+                            <a
+                                href="{% url 'core:transport_terms' %}"
+                                class="text-sm text-gray-500 hover:text-gray-300 transition-colors"
+                                >{% translate 'Transport terms' %}</a
                             >
                         </div>
                     </div>

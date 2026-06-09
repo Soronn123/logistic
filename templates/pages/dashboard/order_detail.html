@@ -1,0 +1,167 @@
+{% extends 'pages/dashboard/base_dashboard.html' %}{% load i18n %}
+{% block dash_title %}{% translate 'Order Details' %} — {{ order.tracking_number }}{% endblock %}
+{% block dash_page_title %}{% translate 'Order Details' %}{% endblock %}
+{% block dash_content %}
+<div class="max-w-4xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{% translate 'Order' %} {{ order.tracking_number }}</h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-1">{% translate 'Order details and status history' %}</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="{% url 'dashboard:order_edit' order.pk %}" class="px-4 py-2 bg-baikal-600 hover:bg-baikal-700 text-white rounded-xl transition-colors text-sm font-medium">
+        {% translate 'Edit' %}
+      </a>
+      <a href="{% url 'dashboard:order_delete' order.pk %}" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl transition-colors text-sm font-medium">
+        {% translate 'Delete' %}
+      </a>
+      <a href="{% url 'dashboard:orders' %}" class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium">
+        {% translate 'Back to List' %}
+      </a>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Order Info -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{% translate 'Order Information' %}</h2>
+      <dl class="space-y-3">
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">{% translate 'Tracking number' %}</dt>
+          <dd class="text-sm font-mono text-gray-900 dark:text-white">{{ order.tracking_number }}</dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">{% translate 'Status' %}</dt>
+          <dd>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+              {% if order.status == 'delivered' %}bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400
+              {% elif order.status == 'cancelled' %}bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400
+              {% elif order.status == 'in_transit' %}bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400
+              {% elif order.status == 'draft' %}bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300
+              {% else %}bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400{% endif %}">
+              {{ order.get_status_display }}
+            </span>
+          </dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">{% translate 'Created' %}</dt>
+          <dd class="text-sm text-gray-900 dark:text-white">{{ order.created_at|date:'d M Y H:i' }}</dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">{% translate 'Updated' %}</dt>
+          <dd class="text-sm text-gray-900 dark:text-white">{{ order.updated_at|date:'d M Y H:i' }}</dd>
+        </div>
+        {% if order.estimated_delivery_date %}
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">{% translate 'Estimated delivery' %}</dt>
+          <dd class="text-sm text-gray-900 dark:text-white">{{ order.estimated_delivery_date|date:'d M Y' }}</dd>
+        </div>
+        {% endif %}
+        {% if order.actual_delivery_date %}
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">{% translate 'Actual delivery' %}</dt>
+          <dd class="text-sm text-gray-900 dark:text-white">{{ order.actual_delivery_date|date:'d M Y' }}</dd>
+        </div>
+        {% endif %}
+      </dl>
+    </div>
+
+    <!-- Sender/Recipient Info -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{% translate 'Sender & Recipient' %}</h2>
+      <dl class="space-y-3">
+        <div>
+          <dt class="text-sm text-gray-500 dark:text-gray-400 mb-1">{% translate 'Sender' %}</dt>
+          <dd class="text-sm text-gray-900 dark:text-white">{{ order.sender_name }}</dd>
+          <dd class="text-sm text-gray-500 dark:text-gray-400">{{ order.sender_phone }}</dd>
+          {% if order.sender_email %}<dd class="text-sm text-gray-500 dark:text-gray-400">{{ order.sender_email }}</dd>{% endif %}
+          {% if order.sender_address %}<dd class="text-sm text-gray-500 dark:text-gray-400">{{ order.sender_address }}</dd>{% endif %}
+          {% if order.sender_address_detail %}<dd class="text-sm text-gray-500 dark:text-gray-400">{{ order.sender_address_detail }}</dd>{% endif %}
+        </div>
+        <div class="border-t border-gray-200 dark:border-gray-700 pt-3">
+          <dt class="text-sm text-gray-500 dark:text-gray-400 mb-1">{% translate 'Recipient' %}</dt>
+          <dd class="text-sm text-gray-900 dark:text-white">{{ order.recipient_name }}</dd>
+          <dd class="text-sm text-gray-500 dark:text-gray-400">{{ order.recipient_phone }}</dd>
+          {% if order.recipient_email %}<dd class="text-sm text-gray-500 dark:text-gray-400">{{ order.recipient_email }}</dd>{% endif %}
+          {% if order.recipient_address %}<dd class="text-sm text-gray-500 dark:text-gray-400">{{ order.recipient_address }}</dd>{% endif %}
+          {% if order.recipient_address_detail %}<dd class="text-sm text-gray-500 dark:text-gray-400">{{ order.recipient_address_detail }}</dd>{% endif %}
+        </div>
+      </dl>
+    </div>
+
+    <!-- Cargo Info -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{% translate 'Cargo Information' %}</h2>
+      <dl class="space-y-3">
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">{% translate 'Description' %}</dt>
+          <dd class="text-sm text-gray-900 dark:text-white text-right max-w-xs">{{ order.cargo_description|default:'—' }}</dd>
+        </div>
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">{% translate 'Weight' %}</dt>
+          <dd class="text-sm text-gray-900 dark:text-white">{{ order.weight|default:'—' }} kg</dd>
+        </div>
+        {% if order.length or order.width or order.height %}
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">{% translate 'Dimensions' %}</dt>
+          <dd class="text-sm text-gray-900 dark:text-white">{{ order.length|default:'—' }} × {{ order.width|default:'—' }} × {{ order.height|default:'—' }} cm</dd>
+        </div>
+        {% endif %}
+        {% if order.declared_value %}
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">{% translate 'Declared value' %}</dt>
+          <dd class="text-sm text-gray-900 dark:text-white">{{ order.declared_value }} ₽</dd>
+        </div>
+        {% endif %}
+        {% if order.total_price %}
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">{% translate 'Total price' %}</dt>
+          <dd class="text-sm font-semibold text-gray-900 dark:text-white">{{ order.total_price }} ₽</dd>
+        </div>
+        {% endif %}
+        {% if order.service %}
+        <div class="flex justify-between">
+          <dt class="text-sm text-gray-500 dark:text-gray-400">{% translate 'Service' %}</dt>
+          <dd class="text-sm text-gray-900 dark:text-white">{{ order.service }}</dd>
+        </div>
+        {% endif %}
+      </dl>
+    </div>
+
+    <!-- Status History -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{% translate 'Status History' %}</h2>
+      {% if status_history %}
+      <div class="space-y-4">
+        {% for entry in status_history reversed %}
+        <div class="flex gap-3">
+          <div class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-baikal-500"></div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+                {% if entry.status == 'delivered' %}bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400
+                {% elif entry.status == 'cancelled' %}bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400
+                {% elif entry.status == 'in_transit' %}bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400
+                {% elif entry.status == 'draft' %}bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300
+                {% else %}bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400{% endif %}">
+                {{ entry.get_status_display }}
+              </span>
+              <span class="text-xs text-gray-500 dark:text-gray-400">{{ entry.timestamp|date:'d M Y H:i' }}</span>
+            </div>
+            {% if entry.changed_by %}
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{% translate 'by' %} {{ entry.changed_by.email }}</p>
+            {% endif %}
+            {% if entry.comment %}
+            <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">{{ entry.comment }}</p>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="text-sm text-gray-500 dark:text-gray-400">{% translate 'No status history yet.' %}</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

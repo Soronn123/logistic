@@ -1,0 +1,112 @@
+{% extends 'base.html' %}{% load i18n %}
+{% block title %}{% translate 'Privacy Policy' %} — Baikal-Service{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center mb-2">{% translate 'Privacy Policy' %}</h1>
+    <p class="text-gray-500 dark:text-gray-400 text-center text-sm mb-10">{% translate 'Last updated: January 2025' %}</p>
+
+    <div class="prose prose-gray dark:prose-invert max-w-none bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 sm:p-10">
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '1. General Provisions' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'This Privacy Policy defines the procedure for processing personal data and ensures the security of personal data of users of the Baikal-Service website (hereinafter referred to as the "Operator", "we", "us", or "our").' %}</p>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'We are committed to protecting your personal information and respecting your privacy. This policy applies to all information that we may receive about you while using our website and services.' %}</p>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'By using our website and services, you consent to the collection and use of your personal data in accordance with this Privacy Policy.' %}</p>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '2. Personal Data We Collect' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'We may collect the following categories of personal data:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'Contact information: name, email address, phone number, physical address' %}</li>
+        <li>{% translate 'Account information: username, password (encrypted), account preferences' %}</li>
+        <li>{% translate 'Transaction data: order history, payment information (processed securely through third-party payment processors)' %}</li>
+        <li>{% translate 'Technical data: IP address, browser type, device information, operating system' %}</li>
+        <li>{% translate 'Usage data: pages visited, time spent on pages, click patterns, search queries' %}</li>
+        <li>{% translate 'Location data: city and region based on IP address (approximate)' %}</li>
+        <li>{% translate 'Cargo data: shipment details, sender and recipient information, cargo descriptions' %}</li>
+      </ul>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '3. Purposes of Data Processing' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'We process your personal data for the following purposes:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'Providing cargo transportation services and order processing' %}</li>
+        <li>{% translate 'Communication regarding your orders, inquiries, and support requests' %}</li>
+        <li>{% translate 'Processing payments and managing your account balance' %}</li>
+        <li>{% translate 'Improving our website, services, and user experience' %}</li>
+        <li>{% translate 'Sending service-related notifications and updates' %}</li>
+        <li>{% translate 'Complying with legal obligations and resolving disputes' %}</li>
+        <li>{% translate 'Preventing fraud and ensuring security' %}</li>
+        <li>{% translate 'Marketing communications (only with your explicit consent)' %}</li>
+      </ul>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '4. Data Processing Legal Basis' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'We process your personal data based on the following legal grounds:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'Your explicit consent to data processing' %}</li>
+        <li>{% translate 'Necessity for the performance of a contract with you' %}</li>
+        <li>{% translate 'Compliance with legal obligations' %}</li>
+        <li>{% translate 'Legitimate interests pursued by the Operator' %}</li>
+      </ul>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '5. Data Storage and Security' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'Your personal data is stored on secure servers with appropriate technical and organizational measures to prevent unauthorized access, alteration, disclosure, or destruction of data.' %}</p>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'We implement the following security measures:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'SSL/TLS encryption for all data transmissions' %}</li>
+        <li>{% translate 'Encrypted storage of passwords using industry-standard hashing algorithms' %}</li>
+        <li>{% translate 'Regular security audits and vulnerability assessments' %}</li>
+        <li>{% translate 'Access controls limiting employee access to personal data' %}</li>
+        <li>{% translate 'Regular data backups with encrypted storage' %}</li>
+      </ul>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'Personal data is retained for as long as necessary to fulfill the purposes outlined in this policy, or as required by law. When data is no longer needed, it is securely deleted or anonymized.' %}</p>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '6. Data Sharing with Third Parties' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'We may share your personal data with the following categories of third parties:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'Payment processors for secure payment handling' %}</li>
+        <li>{% translate 'Delivery partners and logistics providers for order fulfillment' %}</li>
+        <li>{% translate 'Government authorities when required by law' %}</li>
+        <li>{% translate 'Technical service providers who assist in website operations (hosting, analytics)' %}</li>
+      </ul>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'We do not sell, rent, or trade your personal data to third parties for their marketing purposes without your explicit consent.' %}</p>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '7. Cookies and Tracking Technologies' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'Our website uses cookies and similar tracking technologies to enhance your browsing experience. Cookies are small text files stored on your device when you visit our website.' %}</p>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'We use the following types of cookies:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'Essential cookies: necessary for website functionality' %}</li>
+        <li>{% translate 'Analytics cookies: help us understand how visitors interact with our website' %}</li>
+        <li>{% translate 'Preference cookies: remember your settings and preferences' %}</li>
+        <li>{% translate 'Marketing cookies: used for targeted advertising (with your consent)' %}</li>
+      </ul>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'You can manage cookie preferences through your browser settings. Disabling certain cookies may affect website functionality.' %}</p>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '8. Your Rights' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'Under applicable data protection laws, you have the following rights:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'Right to access: request a copy of the personal data we hold about you' %}</li>
+        <li>{% translate 'Right to rectification: request correction of inaccurate personal data' %}</li>
+        <li>{% translate 'Right to erasure: request deletion of your personal data' %}</li>
+        <li>{% translate 'Right to restrict processing: request limitation of data processing' %}</li>
+        <li>{% translate 'Right to data portability: receive your data in a structured, machine-readable format' %}</li>
+        <li>{% translate 'Right to object: object to the processing of your personal data' %}</li>
+        <li>{% translate 'Right to withdraw consent: withdraw your consent at any time' %}</li>
+        <li>{% translate 'Right to lodge a complaint: file a complaint with the relevant data protection authority' %}</li>
+      </ul>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '9. Children\'s Privacy' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'Our services are not directed to individuals under the age of 18. We do not knowingly collect personal data from children. If we become aware that we have collected personal data from a child without parental consent, we will take steps to delete that information promptly.' %}</p>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '10. Changes to This Policy' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'We reserve the right to update this Privacy Policy at any time. Any changes will be posted on this page with an updated "Last updated" date. We encourage you to review this policy periodically. Continued use of our website after changes constitutes acceptance of the updated policy.' %}</p>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '11. Contact Information' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'If you have any questions about this Privacy Policy or wish to exercise your data protection rights, please contact us:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'Email: privacy@baikal-service.ru' %}</li>
+        <li>{% translate 'Phone: +7 (800) 555-35-35' %}</li>
+        <li>{% translate 'Address: Moscow, st. Transportnaya, 1' %}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

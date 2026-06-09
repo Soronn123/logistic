@@ -181,7 +181,7 @@ class AddressSuggestView(View):
 class DeliveryTemplateListView(LoginRequiredMixin, View):
     def get(self, request):
         templates = DeliveryTemplate.objects.filter(user=request.user).values(
-            'id', 'name', 'from_city', 'to_city', 'weight', 'cargo_description', 'service',
+            'id', 'name', 'from_city', 'to_city', 'weight', 'length', 'width', 'height', 'cargo_description', 'service',
             'declared_value', 'sender_address_detail', 'recipient_address_detail', 'total_price'
         )
         templates_list = list(templates)
@@ -206,6 +206,9 @@ class DeliveryTemplateListView(LoginRequiredMixin, View):
             from_city_id=data.get('from_city'),
             to_city_id=data.get('to_city'),
             weight=data.get('weight', 0),
+            length=data.get('length'),
+            width=data.get('width'),
+            height=data.get('height'),
             cargo_description=data.get('cargo_description', ''),
             service_id=data.get('service'),
             declared_value=data.get('declared_value'),
@@ -223,6 +226,9 @@ class DeliveryTemplateListView(LoginRequiredMixin, View):
             'from_city': template.from_city_id,
             'to_city': template.to_city_id,
             'weight': str(template.weight),
+            'length': str(template.length or ''),
+            'width': str(template.width or ''),
+            'height': str(template.height or ''),
             'cargo_description': template.cargo_description,
             'service': template.service_id,
             'declared_value': str(template.declared_value or ''),
@@ -247,6 +253,9 @@ class DeliveryTemplateDetailView(LoginRequiredMixin, View):
         if data.get('to_city'):
             template.to_city_id = data.get('to_city')
         template.weight = data.get('weight', template.weight)
+        template.length = data.get('length', template.length)
+        template.width = data.get('width', template.width)
+        template.height = data.get('height', template.height)
         template.cargo_description = data.get('cargo_description', template.cargo_description)
         if data.get('service'):
             template.service_id = data.get('service')
@@ -265,6 +274,9 @@ class DeliveryTemplateDetailView(LoginRequiredMixin, View):
             'from_city': template.from_city_id,
             'to_city': template.to_city_id,
             'weight': str(template.weight),
+            'length': str(template.length or ''),
+            'width': str(template.width or ''),
+            'height': str(template.height or ''),
             'cargo_description': template.cargo_description,
             'service': template.service_id,
             'declared_value': str(template.declared_value or ''),

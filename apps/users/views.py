@@ -242,7 +242,6 @@ class TemplatesView(LoginRequiredMixin, ListView):
             form = ContactTemplateForm(request.POST, instance=template)
             if form.is_valid():
                 form.save()
-                from django.contrib import messages
                 messages.success(request, _('Contact template updated successfully.'))
             return redirect('users:templates')
         elif action == 'delete_delivery':
@@ -257,7 +256,6 @@ class TemplatesView(LoginRequiredMixin, ListView):
                 template.user = request.user
                 template.save()
                 form.save_m2m()
-                from django.contrib import messages
                 messages.success(request, _('Delivery template created successfully.'))
             return redirect('users:templates')
         elif action == 'edit_delivery':
@@ -266,7 +264,6 @@ class TemplatesView(LoginRequiredMixin, ListView):
             form = DeliveryTemplateForm(request.POST, instance=template)
             if form.is_valid():
                 form.save()
-                from django.contrib import messages
                 messages.success(request, _('Delivery template updated successfully.'))
             return redirect('users:templates')
         elif action == 'delete_cargo':
@@ -280,7 +277,6 @@ class TemplatesView(LoginRequiredMixin, ListView):
                 template = form.save(commit=False)
                 template.user = request.user
                 template.save()
-                from django.contrib import messages
                 messages.success(request, _('Cargo template created successfully.'))
             return redirect('users:templates')
         elif action == 'edit_cargo':
@@ -289,7 +285,6 @@ class TemplatesView(LoginRequiredMixin, ListView):
             form = CargoTemplateForm(request.POST, instance=template)
             if form.is_valid():
                 form.save()
-                from django.contrib import messages
                 messages.success(request, _('Cargo template updated successfully.'))
             return redirect('users:templates')
         return self.get(request, *args, **kwargs)

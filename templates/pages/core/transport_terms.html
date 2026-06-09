@@ -1,0 +1,132 @@
+{% extends 'base.html' %}{% load i18n %}
+{% block title %}{% translate 'Transport Terms' %} — Baikal-Service{% endblock %}
+{% block content %}
+<div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center mb-2">{% translate 'Transport Terms' %}</h1>
+    <p class="text-gray-500 dark:text-gray-400 text-center text-sm mb-10">{% translate 'Last updated: January 2025' %}</p>
+
+    <div class="prose prose-gray dark:prose-invert max-w-none bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 sm:p-10">
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '1. General Conditions of Cargo Transportation' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'These Transport Terms define the rules and procedures for the transportation of cargo by Baikal-Service (hereinafter referred to as the "Carrier"). By placing a shipping order, the Customer agrees to these terms in full.' %}</p>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'The Carrier undertakes to transport cargo in accordance with the established route, timeframe, and conditions specified in the order, subject to compliance with these Transport Terms.' %}</p>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '2. Cargo Acceptance Requirements' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'Cargo is accepted for transportation subject to the following conditions:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'Cargo must be properly packaged to ensure safe transportation' %}</li>
+        <li>{% translate 'Each package must be labeled with sender and recipient information' %}</li>
+        <li>{% translate 'The declared value must accurately reflect the cargo\'s actual value' %}</li>
+        <li>{% translate 'Dangerous goods must be declared and properly labeled according to applicable regulations' %}</li>
+        <li>{% translate 'The weight and dimensions must be accurately reported' %}</li>
+        <li>{% translate 'All necessary customs and shipping documentation must be provided' %}</li>
+      </ul>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '3. Packaging Requirements' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'Proper packaging is the responsibility of the sender and is essential for the safe transportation of cargo. The following packaging standards apply:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'Items must be packaged in sturdy corrugated cardboard boxes appropriate for the weight and fragility of the contents' %}</li>
+        <li>{% translate 'Fragile items must be wrapped in protective materials (bubble wrap, foam, packing paper) with sufficient cushioning' %}</li>
+        <li>{% translate 'Multiple items in one box must be individually wrapped and separated to prevent damage from contact' %}</li>
+        <li>{% translate 'Liquid containers must be sealed with leak-proof caps and wrapped in absorbent material' %}</li>
+        <li>{% translate 'Electronics must be packaged in original manufacturer packaging when available' %}</li>
+        <li>{% translate 'Pallet shipments must be shrink-wrapped and secured with strapping bands' %}</li>
+        <li>{% translate 'The outer packaging must be clean, dry, and free of previous shipping labels' %}</li>
+        <li>{% translate 'Heavy items (over 30 kg) should be packaged in double-walled boxes and palletized when possible' %}</li>
+      </ul>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'The Carrier reserves the right to refuse transportation of improperly packaged cargo or to require repackaging at the sender\'s expense.' %}</p>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '4. Delivery Timeframes' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'Estimated delivery timeframes are provided at the time of order placement and depend on the following factors:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'Origin and destination cities' %}</li>
+        <li>{% translate 'Selected service type (standard, express, economy)' %}</li>
+        <li>{% translate 'Cargo weight and dimensions' %}</li>
+        <li>{% translate 'Customs clearance requirements (for international shipments)' %}</li>
+        <li>{% translate 'Weather conditions and force majeure circumstances' %}</li>
+      </ul>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'Delivery timeframes are estimates and not guaranteed. The Carrier is not liable for delays caused by circumstances beyond its reasonable control.' %}</p>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '5. Insurance Coverage' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'The Carrier provides basic liability coverage for cargo in accordance with applicable transportation laws. For enhanced protection, the following insurance options are available:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'Basic coverage: Standard liability as per transportation regulations (included in service price)' %}</li>
+        <li>{% translate 'Extended coverage: Up to declared value with a 1% surcharge on declared value' %}</li>
+        <li>{% translate 'Full coverage: Complete replacement value with a 2% surcharge on declared value' %}</li>
+      </ul>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'Insurance must be selected at the time of order placement. Insurance cannot be added after cargo has been dispatched. The declared value used for insurance must accurately reflect the cargo\'s actual market value.' %}</p>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '6. Claims Procedure' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'In the event of cargo damage, loss, or delay, the following claims procedure must be followed:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'Visual inspection: The recipient must inspect the cargo upon delivery and note any visible damage on the delivery receipt before signing' %}</li>
+        <li>{% translate 'Written notification: Any claims must be submitted in writing to the Carrier within 7 calendar days of delivery' %}</li>
+        <li>{% translate 'Required documentation: Claims must include the order number, detailed description of damage or loss, photographs of damaged cargo, and original packaging' %}</li>
+        <li>{% translate 'Hidden damage: Claims for hidden damage (not visible upon delivery) must be submitted within 30 calendar days of delivery' %}</li>
+        <li>{% translate 'Lost cargo: Claims for lost cargo must be submitted within 60 calendar days from the expected delivery date' %}</li>
+      </ul>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'The Carrier will investigate all claims and provide a resolution within 30 business days of receiving a complete claim submission.' %}</p>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '7. Prohibited Items' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'The following items are strictly prohibited from transportation through our services:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'Explosives, flammable liquids, and compressed gases (except as regulated by ADR/Dangerous Goods regulations)' %}</li>
+        <li>{% translate 'Radioactive materials and infectious substances' %}</li>
+        <li>{% translate 'Narcotic drugs, psychotropic substances, and their precursors' %}</li>
+        <li>{% translate 'Weapons, ammunition, and explosive devices' %}</li>
+        <li>{% translate 'Human remains and animal carcasses' %}</li>
+        <li>{% translate 'Perishable food products requiring temperature-controlled transportation (unless arranged separately)' %}</li>
+        <li>{% translate 'Live animals and plants' %}</li>
+        <li>{% translate 'Counterfeit goods and items infringing intellectual property rights' %}</li>
+        <li>{% translate 'Hazardous waste and environmentally harmful substances' %}</li>
+        <li>{% translate 'Items whose transportation is prohibited by applicable laws of any country in the transportation route' %}</li>
+      </ul>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'The Carrier reserves the right to inspect any shipment to verify compliance with these restrictions. Shipment of prohibited items may result in criminal liability.' %}</p>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '8. Storage and Warehousing' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'The Carrier provides short-term storage at origin and destination facilities under the following conditions:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'Free storage: Up to 3 business days from arrival at destination' %}</li>
+        <li>{% translate 'Extended storage: Available at a daily rate specified in the current tariff schedule' %}</li>
+        <li>{% translate 'Storage of perishable, hazardous, or temperature-sensitive goods is subject to additional conditions and charges' %}</li>
+        <li>{% translate 'The Carrier is not liable for cargo stored beyond 30 calendar days without arrangement' %}</li>
+      </ul>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '9. Customer Responsibilities' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'The Customer is responsible for:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'Ensuring all provided information (sender, recipient, cargo details) is accurate and complete' %}</li>
+        <li>{% translate 'Packaging cargo in accordance with these Transport Terms' %}</li>
+        <li>{% translate 'Being available at the specified pickup and delivery locations during agreed timeframes' %}</li>
+        <li>{% translate 'Providing necessary customs documentation for international shipments' %}</li>
+        <li>{% translate 'Paying all applicable transportation fees and charges' %}</li>
+        <li>{% translate 'Inspecting cargo upon delivery and noting any damage on the delivery receipt' %}</li>
+        <li>{% translate 'Picking up cargo from designated points within the specified storage period' %}</li>
+      </ul>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '10. Force Majeure' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'The Carrier shall not be liable for delays or failure to perform its obligations due to circumstances beyond its reasonable control, including but not limited to:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'Natural disasters, extreme weather conditions, and epidemics' %}</li>
+        <li>{% translate 'War, terrorism, civil unrest, and government actions' %}</li>
+        <li>{% translate 'Road closures, infrastructure failures, and transportation disruptions' %}</li>
+        <li>{% translate 'Changes in customs regulations or border restrictions' %}</li>
+        <li>{% translate 'Power outages and telecommunications failures' %}</li>
+      </ul>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'In the event of force majeure, the Carrier will notify the Customer as soon as reasonably possible and take all reasonable steps to minimize the impact on delivery.' %}</p>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '11. Governing Law' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'These Transport Terms are governed by the laws of the Russian Federation and applicable international transportation conventions and agreements. Any disputes shall be resolved in accordance with applicable legal procedures.' %}</p>
+
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">{% translate '12. Contact Information' %}</h2>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{% translate 'For questions about these Transport Terms or to file a claim, please contact us:' %}</p>
+      <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2 mb-4 ml-4">
+        <li>{% translate 'Email: transport@baikal-service.ru' %}</li>
+        <li>{% translate 'Phone: +7 (800) 555-35-35' %}</li>
+        <li>{% translate 'Address: Moscow, st. Transportnaya, 1' %}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

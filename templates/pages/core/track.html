@@ -1,6 +1,10 @@
 {% extends 'base.html' %}{% load i18n static %}
 {% block title %}{% translate 'Track Cargo' %} — Baikal-Service{% endblock %}
 {% block meta_description %}{% translate 'Track your cargo shipment in real time' %}{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+{% endblock %}
 {% block content %}
 <div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">

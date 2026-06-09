@@ -153,24 +153,42 @@ def compute_virtual_location(from_city, to_city, eta, created_at, current_status
     now = timezone.now()
     if eta is None:
         return {'lat': from_city.latitude, 'lng': from_city.longitude, 'progress': 0}
+
     total_seconds = (eta - created_at.date()).total_seconds()
     if total_seconds <= 0:
         return {'lat': to_city.latitude, 'lng': to_city.longitude, 'progress': 100}
 
     elapsed = (now - created_at).total_seconds()
-    base_progress = min(100, (elapsed / total_seconds) * 100)
+    raw_progress = (elapsed / total_seconds) * 100
 
-    probability = random.random()
-    if probability < 0.33:
-        deviation = random.uniform(-15, -5)
-    elif probability < 0.66:
-        deviation = random.uniform(5, 15)
-    else:
-        deviation = random.uniform(-3, 3)
+    status_progress = {
+        'confirmed': (0, 10),
+        'picked_up': (5, 25),
+        'in_transit': (20, 85),
+        'at_warehouse': (50, 75),
+        'awaiting_delivery_to_branch': (15, 40),
+        'available_in_warehouse': (15, 40),
+        'awaiting_courier': (15, 40),
+        'out_for_delivery': (85, 100),
+    }
+    lo, hi = status_progress.get(current_status, (0, 100))
+    status_progress = lo + (hi - lo) * min(1.0, raw_progress / 100.0)
+    base_progress = max(0, min(100, status_progress))
+
+    seed = created_at.timestamp() + (now.hour % 5) * 7.1
+    rng = random.Random(seed)
+    deviation = rng.uniform(-5, 5)
 
     progress = max(0, min(100, base_progress + deviation))
 
+    route_deviation = math.sin(progress / 100 * math.pi * 3) * 0.02
+
     lat = from_city.latitude + (to_city.latitude - from_city.latitude) * (progress / 100)
     lng = from_city.longitude + (to_city.longitude - from_city.longitude) * (progress / 100)
+    lat += route_deviation * (to_city.longitude - from_city.longitude)
+    lng += route_deviation * (from_city.latitude - to_city.latitude)
 
-    return {'lat': lat, 'lng': lng, 'progress': round(progress, 1)}
+    lat = max(min(from_city.latitude, to_city.latitude), min(max(from_city.latitude, to_city.latitude), lat))
+    lng = max(min(from_city.longitude, to_city.longitude), min(max(from_city.longitude, to_city.longitude), lng))
+
+    return {'lat': round(lat, 6), 'lng': round(lng, 6), 'progress': round(progress, 1)}

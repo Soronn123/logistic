@@ -114,6 +114,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const popup = new maplibregl.Popup({ offset: 25 }).setHTML(loc.name);
         new maplibregl.Marker({ element: el }).setLngLat([loc.lng, loc.lat]).setPopup(popup).addTo(map);
       });
+      var bounds = new maplibregl.LngLatBounds();
+      locations.forEach(function(loc) {
+        bounds.extend([loc.lng, loc.lat]);
+      });
+      map.fitBounds(bounds, { padding: 60, maxZoom: 6 });
     });
   }
 });
