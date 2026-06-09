@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from .models import CustomUser, Ticket, TicketMessage, Transaction
+from .models import CargoTemplate, ContactTemplate, CustomUser, DeliveryTemplate, Ticket, TicketMessage, Transaction
 
 
 @admin.register(CustomUser)
@@ -68,3 +68,11 @@ class TransactionAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+
+
+@admin.register(CargoTemplate)
+class CargoTemplateAdmin(admin.ModelAdmin):
+    list_display = ['name', 'user', 'weight', 'declared_value', 'created_at']
+    list_filter = ['created_at']
+    search_fields = ['name', 'user__email', 'cargo_description']
+    date_hierarchy = 'created_at'

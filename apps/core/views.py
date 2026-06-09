@@ -204,7 +204,7 @@ class DeliveryTimesView(TemplateView):
         context = super().get_context_data(**kwargs)
         from apps.geo.models import City
         from apps.services.models import Tariff
-        context['cities'] = City.objects.filter(is_active=True).distinct()
+        context['cities'] = City.objects.filter(is_active=True)
         from_city = self.request.GET.get('from')
         to_city = self.request.GET.get('to')
         delivery_times = []

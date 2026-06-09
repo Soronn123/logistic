@@ -37,8 +37,14 @@ class AccountingRequest(models.Model):
         FULFILLED = 'fulfilled', _('Fulfilled')
         REJECTED = 'rejected', _('Rejected')
 
+    class DocumentTypeChoices(models.TextChoices):
+        INVOICE = 'invoice', _('Invoice')
+        ACT = 'act', _('Certificate of Completion')
+        RECEIPT = 'receipt', _('Receipt')
+        OTHER = 'other', _('Other')
+
     user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='accounting_requests', verbose_name=_('User'))
-    document_type = models.CharField(max_length=100, verbose_name=_('Document type'))
+    document_type = models.CharField(max_length=100, choices=DocumentTypeChoices.choices, verbose_name=_('Document type'))
     period_start = models.DateField(verbose_name=_('Period start'))
     period_end = models.DateField(verbose_name=_('Period end'))
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING, verbose_name=_('Status'))

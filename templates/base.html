@@ -152,8 +152,8 @@
                                     <a
                                         href="{% url 'services:category' slug='cargo-transportation' %}"
                                         class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-baikal-50 dark:hover:bg-gray-700"
-                                        >{% translate 'Cargo
-                                        transportation'%}</a
+                                        >{% translate 'Cargo transportation'
+                                        %}</a
                                     >
                                     <a
                                         href="{% url 'services:category' slug='consolidated-cargo' %}"
@@ -175,8 +175,7 @@
                                     <a
                                         href="{% url 'services:additional' %}"
                                         class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-baikal-50 dark:hover:bg-gray-700"
-                                        >{% translate 'Additional services'
-                                        %}</a
+                                        >Additional service</a
                                     >
                                 </div>
                             </div>
@@ -304,10 +303,10 @@
 
                             <!-- Language Switcher -->
                             <div class="lang-switcher hidden sm:block">
-                                {% get_current_language as LANGUAGE_CODE %} {%
-                                get_available_languages as LANGUAGES %} {% for
-                                lang_code, lang_name in LANGUAGES %} {% if
-                                lang_code != LANGUAGE_CODE %}
+                                {% get_current_language as LANGUAGE_CODE %}
+                                {% get_available_languages as LANGUAGES %}
+                                {% for lang_code, lang_name in LANGUAGES %}
+                                {% if lang_code != LANGUAGE_CODE %}
                                 <form
                                     action="{% url 'set_language' %}"
                                     method="post"
@@ -390,8 +389,7 @@
                                     >
                                         <span
                                             class="text-sm font-bold text-baikal-600 dark:text-baikal-400"
-                                            >{{ user.first_name|first|upper }}{{
-                                            user.last_name|first|upper }}</span
+                                            >{% if user.first_name %}{{ user.first_name|first|upper }}{{ user.last_name|first|upper }}{% else %}{{ user.email|first|upper }}{% endif %}</span
                                         >
                                     </div>
                                     {% endif %}
@@ -426,8 +424,7 @@
                                         class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-baikal-50 dark:hover:bg-gray-700"
                                         >{% translate 'Balance' %}</a
                                     >
-                                    {% if user.role == 'admin' or user.role ==
-                                    'manager' or user.is_staff %}
+                                    {% if user.role == 'admin' or user.role == 'manager' or user.is_staff %}
                                     <hr
                                         class="my-1 border-gray-200 dark:border-gray-700"
                                     />
@@ -578,8 +575,7 @@
                             >
                                 <span
                                     class="text-lg font-bold text-baikal-600 dark:text-baikal-400"
-                                    >{{ user.first_name|first|upper }}{{
-                                    user.last_name|first|upper }}</span
+                                    >{% if user.first_name %}{{ user.first_name|first|upper }}{{ user.last_name|first|upper }}{% else %}{{ user.email|first|upper }}{% endif %}</span
                                 >
                             </div>
                             {% endif %}
@@ -646,7 +642,7 @@
                                 <a
                                     href="{% url 'services:additional' %}"
                                     class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-baikal-50 dark:hover:bg-gray-800 rounded-lg"
-                                    >{% translate 'Additional services' %}</a
+                                    >{% translate 'Additional service' %}</a
                                 >
                             </div>
                         </div>
@@ -816,8 +812,7 @@
                             class="block px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-baikal-50 dark:hover:bg-gray-800 rounded-lg"
                             >{% translate 'Balance' %}</a
                         >
-                        {% if user.role == 'admin' or user.role == 'manager' or
-                        user.is_staff %}
+                        {% if user.role == 'admin' or user.role == 'manager' or user.is_staff %}
                         <a
                             href="{% url 'dashboard:home' %}"
                             class="block px-4 py-3 text-sm font-medium text-baikal-600 dark:text-baikal-400 hover:bg-baikal-50 dark:hover:bg-gray-800 rounded-lg"
@@ -875,8 +870,8 @@
                                     type="hidden"
                                     value="{{ request.path }}"
                                 />
-                                {% get_current_language as LANGUAGE_CODE %} {%
-                                if LANGUAGE_CODE != 'ru' %}
+                                {% get_current_language as LANGUAGE_CODE %}
+                                {% if LANGUAGE_CODE != 'ru' %}
                                 <button
                                     name="language"
                                     value="ru"
@@ -1192,8 +1187,7 @@
                                         />
                                     </svg>
                                     <span class="text-sm"
-                                        >{% translate 'Moscow, st.
-                                        Transportnaya, 1' %}</span
+                                        >Moscow, st. Transportnaya, 1</span
                                     >
                                 </li>
                             </ul>
@@ -1204,8 +1198,8 @@
                         class="mt-8 pt-8 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between"
                     >
                         <p class="text-sm text-gray-500">
-                            &copy; {% now 'Y' %} Baikal-Service. {% translate
-                            'All rights reserved.' %}
+                            &copy; {% now 'Y' %} Baikal-Service. All rights
+                            reserved.
                         </p>
                         <div
                             class="flex space-x-4 rtl:space-x-reverse mt-4 sm:mt-0"

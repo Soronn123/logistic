@@ -8,7 +8,16 @@
     {% for field in form %}
     <div>
       <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ field.label }}</label>
+      {% if field.name == 'icon' %}
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-baikal-50 dark:bg-baikal-900/30 text-baikal-600 dark:text-baikal-400 text-lg" id="icon-preview">
+          <i class="fas {{ field.value|default:'fa-truck' }}"></i>
+        </span>
+        {{ field }}
+      </div>
+      {% else %}
       {{ field }}
+      {% endif %}
       {% if field.help_text %}<p class="mt-1 text-xs text-gray-500">{{ field.help_text }}</p>{% endif %}
       {% if field.errors %}<p class="mt-1 text-sm text-red-600">{{ field.errors.0 }}</p>{% endif %}
     </div>
@@ -19,4 +28,17 @@
     </div>
   </form>
 </div>
+{% endblock %}
+{% block dash_extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var iconSelect = document.querySelector('[name="icon"]');
+  if (iconSelect) {
+    iconSelect.addEventListener('change', function() {
+      var preview = document.querySelector('#icon-preview i');
+      if (preview) preview.className = 'fas ' + this.value;
+    });
+  }
+});
+</script>
 {% endblock %}

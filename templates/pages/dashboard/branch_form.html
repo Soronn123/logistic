@@ -2,8 +2,8 @@
 {% block dash_title %}{% if is_create %}{% translate 'Create Branch' %}{% else %}{% translate 'Edit Branch' %}{% endif %}{% endblock %}
 {% block dash_page_title %}{% if is_create %}{% translate 'Create Branch' %}{% else %}{% translate 'Edit Branch' %}{% endif %}{% endblock %}
 {% block dash_extra_head %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 {% endblock %}
 {% block dash_content %}
 <div class="max-w-4xl mx-auto">
@@ -35,36 +35,48 @@ document.addEventListener('DOMContentLoaded', function() {
   const latField = document.querySelector('[name="latitude"]');
   const lngField = document.querySelector('[name="longitude"]');
   const addressField = document.querySelector('[name="address"]');
-  const map = L.map('branch-picker-map').setView([55.7558, 37.6173], 5);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap', maxZoom: 18 }).addTo(map);
+  const map = new maplibregl.Map({
+    container: 'branch-picker-map',
+    style: {
+      version: 8,
+      sources: { osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, attribution: '&copy; OpenStreetMap contributors' } },
+      layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
+    },
+    center: [37.6173, 55.7558],
+    zoom: 5
+  });
+  map.addControl(new maplibregl.NavigationControl(), 'top-right');
   let marker = null;
   if (latField && lngField && latField.value && lngField.value) {
-    marker = L.marker([parseFloat(latField.value), parseFloat(lngField.value)]).addTo(map);
-    map.setView([parseFloat(latField.value), parseFloat(lngField.value)], 12);
+    map.on('load', function() {
+      marker = new maplibregl.Marker()
+        .setLngLat([parseFloat(lngField.value), parseFloat(latField.value)])
+        .addTo(map);
+      map.jumpTo({ center: [parseFloat(lngField.value), parseFloat(latField.value)], zoom: 12 });
+    });
   }
   map.on('click', function(e) {
-    if (marker) map.removeLayer(marker);
-    marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
-    if (latField) latField.value = e.latlng.lat;
-    if (lngField) lngField.value = e.latlng.lng;
+    if (marker) marker.remove();
+    marker = new maplibregl.Marker().setLngLat([e.lngLat.lng, e.lngLat.lat]).addTo(map);
+    if (latField) latField.value = e.lngLat.lat;
+    if (lngField) lngField.value = e.lngLat.lng;
   });
   if (addressField) {
     addressField.addEventListener('change', function() {
       const geocodeUrl = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(this.value) + '&limit=1';
-      fetch(geocodeUrl).then(r => r.json()).then(data => {
+      fetch(geocodeUrl).then(function(r) { return r.json(); }).then(function(data) {
         if (data.length > 0) {
           const lat = parseFloat(data[0].lat);
           const lng = parseFloat(data[0].lon);
           if (latField) latField.value = lat;
           if (lngField) lngField.value = lng;
-          map.setView([lat, lng], 14);
-          if (marker) map.removeLayer(marker);
-          marker = L.marker([lat, lng]).addTo(map);
+          map.jumpTo({ center: [lng, lat], zoom: 14 });
+          if (marker) marker.remove();
+          marker = new maplibregl.Marker().setLngLat([lng, lat]).addTo(map);
         }
       }).catch(function() {});
     });
   }
-  setTimeout(function() { map.invalidateSize(); }, 500);
 });
 </script>
 {% endblock %}

@@ -2,10 +2,21 @@
 {% block title %}{% translate 'Create Order' %} — Baikal-Service{% endblock %}
 {% block meta_description %}{% translate 'Submit a cargo shipping request' %}{% endblock %}
 {% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <style>
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 input[type="number"] { -moz-appearance: textfield; }
+#order-map { height: 280px; border-radius: 0.75rem; z-index: 0; cursor: crosshair; }
+#order-map .maplibregl-canvas { cursor: crosshair !important; }
+#order-map .maplibregl-ctrl-zoom-in,
+#order-map .maplibregl-ctrl-zoom-out { background: white; color: #333; }
+.dark #order-map .maplibregl-ctrl-zoom-in,
+.dark #order-map .maplibregl-ctrl-zoom-out { background: #374151; color: #d1d5db; }
+.dark #order-map .maplibregl-canvas { filter: brightness(0.85) invert(0.1); }
+.template-badge { transition: all 0.2s; }
+.template-badge:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,130,246,0.15); }
 </style>
 {% endblock %}
 {% block content %}
@@ -39,18 +50,79 @@ input[type="number"] { -moz-appearance: textfield; }
         </div>
       </div>
 
+      <!-- Delivery Templates Quick Access (collapsible card) -->
+      <div x-show="deliveryTemplates.length > 0" class="mx-6 sm:mx-8 mt-4 rounded-xl bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/15 dark:to-indigo-900/15 border border-purple-200 dark:border-purple-800 shadow-sm">
+        <button type="button" @click="showQuickAccess = !showQuickAccess" class="w-full flex items-center justify-between px-4 py-3 text-left">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-purple-100 dark:bg-purple-800/50 flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4 text-purple-600 dark:text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-purple-700 dark:text-purple-200">{% translate 'Quick fill from delivery template' %}</p>
+              <p class="text-xs text-purple-500 dark:text-purple-400" x-text="deliveryTemplates.length + ' template' + (deliveryTemplates.length !== 1 ? 's' : '') + ' available'"></p>
+            </div>
+          </div>
+          <svg x-show="showQuickAccess" class="w-4 h-4 text-purple-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+          <svg x-show="!showQuickAccess" class="w-4 h-4 text-purple-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div x-show="showQuickAccess" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" class="px-4 pb-3 pt-0 flex flex-wrap gap-2 border-t border-purple-200/50 dark:border-purple-700/50">
+          <template x-for="tpl in deliveryTemplates" :key="tpl.id">
+            <button type="button" @click="loadDeliveryTemplate(tpl)" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-purple-200 dark:border-purple-700 text-purple-700 dark:text-purple-300 hover:bg-white dark:hover:bg-gray-700 hover:border-purple-400 dark:hover:border-purple-500 hover:shadow-sm bg-white/60 dark:bg-gray-800/40 transition-all duration-150" x-text="tpl.name"></button>
+          </template>
+        </div>
+      </div>
+
       <!-- Validation Error Banner -->
       <div x-show="validationError" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="mx-6 sm:mx-8 mt-4 px-4 py-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 flex items-center gap-3" x-cloak>
         <svg class="w-5 h-5 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
         <p class="text-sm text-red-700 dark:text-red-300" x-text="validationError"></p>
       </div>
 
-        <form method="post" action="{% url 'orders:create' %}" class="p-6 sm:p-8" @submit.prevent="handleSubmit">
+      <!-- Map -->
+      <div class="mx-6 sm:mx-8 mt-4" x-show="step >= 1">
+        <div class="relative" x-data="{ citySearch: '', showResults: false }">
+          <div class="flex items-center gap-2 mb-2">
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input type="text" x-model="citySearch" @input="showResults = citySearch.length > 0" @blur.defer="setTimeout(() => showResults = false, 200)" @focus="showResults = citySearch.length > 0" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'Search city on map...' %}">
+          </div>
+          <div x-show="showResults" x-cloak class="absolute z-20 w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl shadow-lg max-h-48 overflow-y-auto">
+            <template x-for="city in cities.filter(c => c.name.toLowerCase().includes(citySearch.toLowerCase()))" :key="city.id">
+              <button type="button" @mousedown.prevent="selectMapCity(city); citySearch = city.name; showResults = false" class="w-full text-left px-4 py-2 text-sm hover:bg-baikal-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 transition-colors" x-text="city.name"></button>
+            </template>
+            <p x-show="cities.filter(c => c.name.toLowerCase().includes(citySearch.toLowerCase())).length === 0" class="px-4 py-2 text-sm text-gray-400">{% translate 'No cities found' %}</p>
+          </div>
+        </div>
+        <div id="order-map"></div>
+      </div>
+
+        <form method="post" action="{% url 'orders:create' %}" class="p-6 sm:p-8" x-ref="orderForm" novalidate>
           {% csrf_token %}
+
+          {% if form.errors %}
+          <div class="mb-6 p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+            <div class="flex items-center gap-2 mb-2">
+              <svg class="w-5 h-5 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <p class="text-sm font-semibold text-red-700 dark:text-red-300">{% translate 'Please fix the following errors:' %}</p>
+            </div>
+            <ul class="text-sm text-red-600 dark:text-red-400 space-y-1 ml-7 list-disc">
+              {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                <li>{% if field != '__all__' %}{{ field }}: {% endif %}{{ error }}</li>
+                {% endfor %}
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
 
         <!-- Step 1: Sender Info -->
         <div x-show="step === 1" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-8" x-transition:enter-end="opacity-100 translate-x-0">
-          <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">{% translate 'Sender Information' %}</h2>
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">{% translate 'Sender Information' %}</h2>
+            <button type="button" @click="saveTemplate('sender')" class="px-3 py-1.5 text-xs font-medium text-baikal-600 dark:text-baikal-400 border border-baikal-300 dark:border-baikal-600 rounded-xl hover:bg-baikal-50 dark:hover:bg-baikal-900/20 transition-colors flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2h2m3-4h4a2 2 0 012 2v2m-4 0h-2a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2z"/></svg>
+              {% translate 'Save as template' %}
+            </button>
+          </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="sm:col-span-2">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Sender name' %} *</label>
@@ -58,15 +130,16 @@ input[type="number"] { -moz-appearance: textfield; }
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Phone' %} *</label>
-              <input type="tel" name="sender_phone" required x-model="fields.sender_phone" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="+7 (999) 123-45-67">
+              <input type="tel" name="sender_phone" required x-model="fields.sender_phone" @input="formatPhone('sender_phone')" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="+7 (999) 123-45-67">
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Email' %}</label>
-              <input type="email" name="sender_email" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="email@example.com">
+              <input type="email" name="sender_email" x-model="fields.sender_email" @input="validateEmailField('sender_email')" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="email@example.com">
+              <p x-show="emailErrors.sender_email" class="text-xs text-red-500 mt-1" x-text="emailErrors.sender_email"></p>
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'From city' %} *</label>
-              <select name="sender_address" required x-model="fields.sender_address" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors">
+              <select name="sender_address" required x-model="fields.sender_address" @change="updateMapMarker('sender', $event.target.value)" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors">
                 <option value="">{% translate 'Select city' %}</option>
                 {% for city in cities %}
                 <option value="{{ city.id }}">{{ city|localized }}</option>
@@ -75,30 +148,47 @@ input[type="number"] { -moz-appearance: textfield; }
             </div>
             <div class="sm:col-span-2">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Address details' %}</label>
-              <input type="text" name="sender_address_detail" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'Street, building, apartment' %}">
+              <input type="text" name="sender_address_detail" x-model="fields.sender_address_detail" autocomplete="off"
+                class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'Street, building, apartment' %}">
+            </div>
+          </div>
+          <!-- Sender templates -->
+          <div x-show="senderTemplates.length > 0" class="mt-4">
+            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">{% translate 'Saved templates' %}</p>
+            <div class="flex flex-wrap gap-2">
+              <template x-for="tpl in senderTemplates" :key="tpl.id">
+                <button type="button" @click="loadSenderTemplate(tpl)" class="template-badge px-3 py-1.5 text-xs rounded-xl border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-baikal-400 dark:hover:border-baikal-500 hover:text-baikal-600 dark:hover:text-baikal-400 bg-gray-50 dark:bg-gray-700/50" x-text="tpl.name"></button>
+              </template>
             </div>
           </div>
         </div>
 
          <!-- Step 2: Recipient Info -->
          <div x-show="step === 2" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-8" x-transition:enter-end="opacity-100 translate-x-0">
-           <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">{% translate 'Recipient Information' %}</h2>
-           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-             <div class="sm:col-span-2">
-               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Recipient name' %} *</label>
-               <input type="text" name="recipient_name" required x-model="fields.recipient_name" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'Full name or company name' %}">
-             </div>
-             <div>
-               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Phone' %} *</label>
-               <input type="tel" name="recipient_phone" required x-model="fields.recipient_phone" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="+7 (999) 123-45-67">
-             </div>
-             <div>
-               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Email' %}</label>
-               <input type="email" name="recipient_email" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="email@example.com">
-             </div>
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">{% translate 'Recipient Information' %}</h2>
+            <button type="button" @click="saveTemplate('recipient')" class="px-3 py-1.5 text-xs font-medium text-baikal-600 dark:text-baikal-400 border border-baikal-300 dark:border-baikal-600 rounded-xl hover:bg-baikal-50 dark:hover:bg-baikal-900/20 transition-colors flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2h2m3-4h4a2 2 0 012 2v2m-4 0h-2a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2z"/></svg>
+              {% translate 'Save as template' %}
+            </button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="sm:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Recipient name' %} *</label>
+              <input type="text" name="recipient_name" required x-model="fields.recipient_name" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'Full name or company name' %}">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Phone' %} *</label>
+              <input type="tel" name="recipient_phone" required x-model="fields.recipient_phone" @input="formatPhone('recipient_phone')" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="+7 (999) 123-45-67">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Email' %}</label>
+              <input type="email" name="recipient_email" x-model="fields.recipient_email" @input="validateEmailField('recipient_email')" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="email@example.com">
+              <p x-show="emailErrors.recipient_email" class="text-xs text-red-500 mt-1" x-text="emailErrors.recipient_email"></p>
+            </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'To city' %} *</label>
-                <select name="recipient_address" required x-model="fields.recipient_address" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors">
+                <select name="recipient_address" required x-model="fields.recipient_address" @change="updateMapMarker('recipient', $event.target.value)" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors">
                   <option value="">{% translate 'Select city' %}</option>
                   {% for city in cities %}
                   <option value="{{ city.id }}">{{ city|localized }}</option>
@@ -107,15 +197,41 @@ input[type="number"] { -moz-appearance: textfield; }
               </div>
               <div class="sm:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Address details' %}</label>
-                <input type="text" name="recipient_address_detail" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'Street, building, apartment' %}">
+                <input type="text" name="recipient_address_detail" x-model="fields.recipient_address_detail" autocomplete="off"
+                  class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'Street, building, apartment' %}">
               </div>
             </div>
+          <!-- Recipient templates -->
+          <div x-show="recipientTemplates.length > 0" class="mt-4">
+            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">{% translate 'Saved templates' %}</p>
+            <div class="flex flex-wrap gap-2">
+              <template x-for="tpl in recipientTemplates" :key="tpl.id">
+                <button type="button" @click="loadRecipientTemplate(tpl)" class="template-badge px-3 py-1.5 text-xs rounded-xl border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-baikal-400 dark:hover:border-baikal-500 hover:text-baikal-600 dark:hover:text-baikal-400 bg-gray-50 dark:bg-gray-700/50" x-text="tpl.name"></button>
+              </template>
+            </div>
+          </div>
           </div>
 
         <!-- Step 3: Cargo Details -->
         <div x-show="step === 3" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-8" x-transition:enter-end="opacity-100 translate-x-0">
-          <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">{% translate 'Cargo Details' %}</h2>
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">{% translate 'Cargo Details' %}</h2>
+            <div class="flex items-center gap-2">
+              <button type="button" @click="saveCargoTemplate()" class="px-3 py-1.5 text-xs font-medium text-amber-600 dark:text-amber-400 border border-amber-300 dark:border-amber-600 rounded-xl hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2h2m3-4h4a2 2 0 012 2v2m-4 0h-2a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2z"/></svg>
+                {% translate 'Save as cargo template' %}
+              </button>
+            </div>
+          </div>
           <div class="space-y-4">
+            <div x-show="cargoTemplates.length > 0" class="pb-2">
+              <p class="text-xs font-medium text-amber-600 dark:text-amber-400 mb-2">{% translate 'Cargo templates' %}</p>
+              <div class="flex flex-wrap gap-2">
+                <template x-for="tpl in cargoTemplates" :key="tpl.id">
+                  <button type="button" @click="loadCargoTemplate(tpl)" class="px-3 py-1.5 text-xs rounded-xl border border-amber-200 dark:border-amber-700 text-amber-600 dark:text-amber-300 hover:border-amber-400 dark:hover:border-amber-500 bg-white dark:bg-gray-700/50" x-text="tpl.name"></button>
+                </template>
+              </div>
+            </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Cargo description' %} *</label>
               <textarea name="cargo_description" required x-model="fields.cargo_description" rows="3" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'Describe the cargo, contents, and special handling requirements...' %}"></textarea>
@@ -147,7 +263,9 @@ input[type="number"] { -moz-appearance: textfield; }
 
         <!-- Step 4: Services -->
         <div x-show="step === 4" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-8" x-transition:enter-end="opacity-100 translate-x-0">
-          <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">{% translate 'Select Services' %}</h2>
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">{% translate 'Select Services' %}</h2>
+          </div>
           <div class="space-y-6">
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">{% translate 'Service type' %} *</label>
@@ -199,36 +317,83 @@ input[type="number"] { -moz-appearance: textfield; }
         <!-- Step 5: Confirmation -->
         <div x-show="step === 5" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-8" x-transition:enter-end="opacity-100 translate-x-0">
           <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">{% translate 'Confirm Order' %}</h2>
-          <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 sm:p-6 space-y-4 mb-6">
-            <div>
-              <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{% translate 'Route' %}</h3>
-              <p class="text-gray-900 dark:text-white mt-1" x-text="getCityName(fields.sender_address, 'sender') + ' → ' + getCityName(fields.recipient_address, 'recipient')"></p>
-              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1" x-text="fields.sender_address_detail || '—'"></p>
-              <p class="text-sm text-gray-500 dark:text-gray-400" x-text="fields.recipient_address_detail || '—'"></p>
+
+          <!-- Route summary -->
+          <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10 rounded-xl p-4 sm:p-5 border border-blue-100 dark:border-blue-800 mb-4">
+            <div class="flex items-center gap-2 mb-4">
+              <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+              <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">{% translate 'Route' %}</h3>
             </div>
-            <div>
-              <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{% translate 'Cargo' %}</h3>
-              <p class="text-gray-900 dark:text-white mt-1" x-text="fields.cargo_description || '—'"></p>
-              <p class="text-sm text-gray-500 dark:text-gray-400" x-text="(fields.weight || '0') + ' kg'"></p>
-              <p class="text-sm text-gray-500 dark:text-gray-400" x-text="fields.length && fields.width && fields.height ? (fields.length + '×' + fields.width + '×' + fields.height + ' cm') : ''"></p>
+            <div class="flex flex-col sm:flex-row items-start gap-3">
+              <div class="flex-1 bg-white dark:bg-gray-800/60 rounded-lg p-3 border border-blue-200/50 dark:border-blue-700/30 w-full">
+                <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">{% translate 'From' %}</p>
+                <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="getCityName(fields.sender_address)"></p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5" x-text="fields.sender_address_detail || '—'"></p>
+              </div>
+              <div class="flex items-center justify-center sm:flex-col">
+                <svg class="w-5 h-5 text-blue-400 dark:text-blue-500 rotate-90 sm:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </div>
+              <div class="flex-1 bg-white dark:bg-gray-800/60 rounded-lg p-3 border border-blue-200/50 dark:border-blue-700/30 w-full">
+                <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">{% translate 'To' %}</p>
+                <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="getCityName(fields.recipient_address)"></p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5" x-text="fields.recipient_address_detail || '—'"></p>
+              </div>
             </div>
-            <div>
-              <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{% translate 'Service' %}</h3>
-              <p class="text-gray-900 dark:text-white mt-1" x-text="getServiceName()"></p>
-            </div>
-            <div x-show="getAddonNames().length > 0">
-              <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{% translate 'Additional services' %}</h3>
-              <ul class="mt-1 space-y-1">
-                <li x-for="name in getAddonNames()" class="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2" x-text="name"></li>
-              </ul>
-            </div>
-            <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
-              <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{% translate 'Total price' %}</h3>
-              <p class="mt-1 text-2xl font-bold text-baikal-600 dark:text-baikal-400" x-text="formatPrice(calculateTotal())"></p>
+            <div class="mt-3 flex justify-end">
+              <button type="button" @click="saveDeliveryTemplate()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2h2m3-4h4a2 2 0 012 2v2m-4 0h-2a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2z"/></svg>
+                {% translate 'Save as route template' %}
+              </button>
             </div>
           </div>
 
-          <div class="flex items-start gap-3">
+          <!-- Service and additional services -->
+          <div class="bg-white dark:bg-gray-800/60 rounded-xl p-4 sm:p-5 border border-gray-200 dark:border-gray-700 mb-4">
+            <div class="flex items-center gap-2 mb-3">
+              <svg class="w-4 h-4 text-baikal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+              <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">{% translate 'Service' %}</h3>
+            </div>
+            <p class="text-sm font-medium text-gray-900 dark:text-white mb-3" x-text="getServiceName() || '—'"></p>
+            <div x-show="getAddonNames().length > 0">
+              <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">{% translate 'Additional services' %}</p>
+              <div class="flex flex-wrap gap-2">
+                <template x-for="name in getAddonNames()" :key="name">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-md bg-baikal-50 dark:bg-baikal-900/20 text-baikal-700 dark:text-baikal-300 border border-baikal-200 dark:border-baikal-700">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <span x-text="name"></span>
+                  </span>
+                </template>
+              </div>
+            </div>
+            <p x-show="getAddonNames().length === 0" class="text-xs text-gray-400 dark:text-gray-500 italic">{% translate 'No additional services selected' %}</p>
+          </div>
+
+          <!-- Cargo summary -->
+          <div class="bg-white dark:bg-gray-800/60 rounded-xl p-4 sm:p-5 border border-gray-200 dark:border-gray-700 mb-4">
+            <div class="flex items-center gap-2 mb-3">
+              <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+              <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">{% translate 'Cargo' %}</h3>
+            </div>
+            <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="fields.cargo_description || '—'"></p>
+            <div class="flex flex-wrap gap-x-6 gap-y-1 mt-2 text-sm text-gray-500 dark:text-gray-400">
+              <span><span class="font-medium text-gray-700 dark:text-gray-300">{% translate 'Weight' %}:</span> <span x-text="(fields.weight || '0') + ' kg'"></span></span>
+              <span x-show="fields.length || fields.width || fields.height"><span class="font-medium text-gray-700 dark:text-gray-300">{% translate 'Dimensions' %}:</span> <span x-text="[fields.length, fields.width, fields.height].filter(Boolean).join('×') + ' cm'"></span></span>
+              <span><span class="font-medium text-gray-700 dark:text-gray-300">{% translate 'Declared value' %}:</span> <span x-text="fields.declared_value ? parseFloat(fields.declared_value).toLocaleString('ru-RU') + ' ₽' : '—'"></span></span>
+            </div>
+          </div>
+
+          <!-- Price summary -->
+          <div class="bg-gradient-to-br from-baikal-50 to-white dark:from-baikal-900/15 dark:to-gray-800/60 rounded-xl p-4 sm:p-5 border border-baikal-200 dark:border-baikal-800 mb-6">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-baikal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">{% translate 'Total price' %}</h3>
+              </div>
+              <p class="text-2xl font-bold text-baikal-600 dark:text-baikal-400" x-text="formatPrice(calculateTotal())"></p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3 mb-6">
             <input type="checkbox" name="terms" required x-model="fields.terms" class="mt-1 rounded border-gray-300 dark:border-gray-600 text-baikal-600 focus:ring-baikal-500">
             <label class="text-sm text-gray-600 dark:text-gray-400">{% translate 'I confirm that the provided information is accurate and I agree to the terms and conditions of cargo transportation' %} *</label>
           </div>
@@ -243,9 +408,10 @@ input[type="number"] { -moz-appearance: textfield; }
           <button type="button" x-show="step < 5" @click="nextStep()" class="px-6 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl transition-colors">
             {% translate 'Next' %} &rarr;
           </button>
-          <button type="submit" x-show="step === 5" class="px-8 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-baikal-600/25">
-            <svg class="w-5 h-5 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            {% translate 'Submit Order' %}
+          <button type="button" x-show="step === 5" @click="handleSubmit" :disabled="submitting" class="px-8 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-baikal-600/25 disabled:opacity-50 disabled:cursor-not-allowed">
+            <svg x-show="!submitting" class="w-5 h-5 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            <svg x-show="submitting" class="w-5 h-5 inline-block mr-1 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <span x-text="submitting ? '{% translate "Submitting..." %}' : '{% translate "Submit Order" %}'"></span>
           </button>
         </div>
       </form>
@@ -260,7 +426,9 @@ function orderForm() {
   return {
     step: 1,
     maxStep: 5,
+    showQuickAccess: true,
     validationError: '',
+    emailErrors: { sender_email: '', recipient_email: '' },
     fields: {
       sender_name: '',
       sender_phone: '',
@@ -282,74 +450,476 @@ function orderForm() {
       additional_services: [],
       terms: false,
     },
+    cities: {{ cities_json|safe }},
+    map: null,
+    senderMarker: null,
+    recipientMarker: null,
+    routeLine: null,
+    clickMarker: null,
+    senderTemplates: [],
+    recipientTemplates: [],
+    deliveryTemplates: [],
+    cargoTemplates: [],
+    submitting: false,
+
+    init() {
+      try {
+        this.$nextTick(() => {
+          this.initMap();
+          this.loadTemplates('sender');
+          this.loadTemplates('recipient');
+          this.loadDeliveryTemplates();
+          this.loadCargoTemplates();
+        });
+      } catch (e) {
+        console.error('OrderForm init error:', e);
+      }
+    },
+
+    initMap() {
+      try {
+        const el = document.getElementById('order-map');
+        if (!el || typeof maplibregl === 'undefined') return;
+        if (el._maplibregl_inited) return;
+        el._maplibregl_inited = true;
+        const lat = parseFloat('{{ default_lat }}') || 55.7558;
+        const lng = parseFloat('{{ default_lng }}') || 37.6173;
+        this.map = new maplibregl.Map({
+          container: el,
+          style: {
+            version: 8,
+            sources: { osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, attribution: '&copy; OpenStreetMap contributors' } },
+            layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
+          },
+          center: [lng, lat],
+          zoom: 4,
+        });
+        this.map.addControl(new maplibregl.NavigationControl(), 'top-right');
+        this.map.on('click', (e) => this.handleMapClick(e));
+      } catch (e) {
+        console.warn('Map init error:', e);
+      }
+    },
+
+    getCityById(id) {
+      return this.cities.find(c => c.id == id);
+    },
+
+    selectMapCity(city) {
+      if (!city || !this.map) return;
+      try {
+        if (this.clickMarker) { this.clickMarker.remove(); this.clickMarker = null; }
+        if (this.step === 1) {
+          this.fields.sender_address = city.id;
+          this.updateMapMarker('sender', city.id);
+        } else if (this.step === 2) {
+          this.fields.recipient_address = city.id;
+          this.updateMapMarker('recipient', city.id);
+        }
+      } catch (e) {
+        console.warn('Map select error:', e);
+      }
+    },
+
+    handleMapClick(e) {
+      const { lng, lat } = e.lngLat;
+      const el = document.createElement('div');
+      el.style.width = '14px';
+      el.style.height = '14px';
+      el.style.borderRadius = '50%';
+      el.style.backgroundColor = '#ef4444';
+      el.style.border = '2px solid #fff';
+      el.style.boxShadow = '0 0 6px rgba(0,0,0,0.4)';
+      el.style.cursor = 'pointer';
+      if (this.clickMarker) this.clickMarker.remove();
+      this.clickMarker = new maplibregl.Marker({ element: el })
+        .setLngLat([lng, lat])
+        .addTo(this.map);
+      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=ru`;
+      fetch(url, { headers: { 'User-Agent': 'BaikalService/1.0' } })
+        .then(r => r.json())
+        .then(data => {
+          const a = data.address || {};
+          const parts = [a.road, a.house_number, a.city_district, a.city || a.town || a.village].filter(Boolean);
+          const addr = parts.join(', ') || data.display_name || '';
+          if (this.step === 1) {
+            this.fields.sender_address_detail = addr;
+          } else if (this.step === 2) {
+            this.fields.recipient_address_detail = addr;
+          }
+        })
+        .catch(() => {});
+    },
+
+    updateMapMarker(type, cityId) {
+      try {
+        const city = this.getCityById(cityId);
+        if (!city || !this.map) return;
+        const lat = parseFloat(city.latitude);
+        const lng = parseFloat(city.longitude);
+        if (isNaN(lat) || isNaN(lng)) return;
+        const el = document.createElement('div');
+        el.style.width = '20px';
+        el.style.height = '20px';
+        el.style.borderRadius = '50%';
+        el.style.backgroundColor = type === 'sender' ? '#3b82f6' : '#10b981';
+        el.style.border = '2px solid #fff';
+        el.style.cursor = 'pointer';
+        const marker = new maplibregl.Marker({ element: el })
+          .setLngLat([lng, lat])
+          .setPopup(new maplibregl.Popup({ offset: 25 }).setHTML('<b>' + city.name + '</b><br>' + (type === 'sender' ? '{% translate "From" %}' : '{% translate "To" %}')))
+          .addTo(this.map);
+        if (type === 'sender') {
+          if (this.senderMarker) this.senderMarker.remove();
+          this.senderMarker = marker;
+        } else {
+          if (this.recipientMarker) this.recipientMarker.remove();
+          this.recipientMarker = marker;
+        }
+        this.fitMapBounds();
+      } catch (e) {
+        console.warn('Map marker error:', e);
+      }
+    },
+
+    fitMapBounds() {
+      try {
+        if (!this.map) return;
+        const pts = [];
+        if (this.senderMarker) {
+          const ll = this.senderMarker.getLngLat();
+          if (ll && typeof ll.lat === 'number' && isFinite(ll.lat)) pts.push([ll.lng, ll.lat]);
+        }
+        if (this.recipientMarker) {
+          const ll = this.recipientMarker.getLngLat();
+          if (ll && typeof ll.lat === 'number' && isFinite(ll.lat)) pts.push([ll.lng, ll.lat]);
+        }
+        if (pts.length === 0) {
+          const lat = parseFloat('{{ default_lat }}') || 55.7558;
+          const lng = parseFloat('{{ default_lng }}') || 37.6173;
+          this.map.jumpTo({ center: [lng, lat], zoom: 4 });
+          return;
+        }
+        if (pts.length === 1) {
+          this.map.jumpTo({ center: pts[0], zoom: 10 });
+          return;
+        }
+        const bounds = new maplibregl.LngLatBounds(pts[0], pts[1]);
+        this.map.fitBounds(bounds, { padding: 50 });
+
+        try { this.map.removeLayer('route-line'); this.map.removeSource('route-line'); } catch (e) {}
+        this.map.addSource('route-line', {
+          type: 'geojson',
+          data: { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: pts } }
+        });
+        this.map.addLayer({
+          id: 'route-line',
+          type: 'line',
+          source: 'route-line',
+          layout: { 'line-join': 'round', 'line-cap': 'round' },
+          paint: { 'line-color': '#3b82f6', 'line-width': 3, 'line-opacity': 0.6, 'line-dasharray': [2, 2] }
+        });
+      } catch (e) {
+        console.warn('Map fitBounds error:', e);
+      }
+    },
+
+    loadTemplates(type) {
+      fetch('{% url "orders:api_templates" %}?type=' + type)
+        .then(r => {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(data => {
+          if (type === 'sender') this.senderTemplates = data;
+          else this.recipientTemplates = data;
+        })
+        .catch(() => {});
+    },
+
+    saveTemplate(type) {
+      const name = prompt('{% translate "Enter template name:" %}');
+      if (!name) return;
+      const isSender = type === 'sender';
+      const data = {
+        name: name,
+        template_type: type,
+        contact_name: isSender ? this.fields.sender_name : this.fields.recipient_name,
+        contact_phone: isSender ? this.fields.sender_phone : this.fields.recipient_phone,
+        contact_email: isSender ? this.fields.sender_email : this.fields.recipient_email,
+        city: isSender ? this.fields.sender_address : this.fields.recipient_address,
+        address_detail: isSender ? this.fields.sender_address_detail : this.fields.recipient_address_detail,
+      };
+      const apiUrl = '{% url "orders:api_templates" %}';
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
+        body: JSON.stringify(data),
+      })
+        .then(r => {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(tpl => {
+          if (isSender) this.senderTemplates.unshift(tpl);
+          else this.recipientTemplates.unshift(tpl);
+        })
+        .catch(() => {});
+    },
+
+    loadSenderTemplate(tpl) {
+      this.fields.sender_name = tpl.recipient_name || '';
+      this.fields.sender_phone = tpl.recipient_phone || '';
+      this.fields.sender_email = tpl.recipient_email || '';
+      this.fields.sender_address = tpl.city || '';
+      this.fields.sender_address_detail = tpl.address_detail || '';
+      this.$nextTick(() => this.updateMapMarker('sender', tpl.city));
+    },
+
+    loadRecipientTemplate(tpl) {
+      this.fields.recipient_name = tpl.recipient_name || '';
+      this.fields.recipient_phone = tpl.recipient_phone || '';
+      this.fields.recipient_email = tpl.recipient_email || '';
+      this.fields.recipient_address = tpl.city || '';
+      this.fields.recipient_address_detail = tpl.address_detail || '';
+      this.$nextTick(() => this.updateMapMarker('recipient', tpl.city));
+    },
+
+    loadDeliveryTemplates() {
+      fetch('{% url "orders:api_delivery_templates" %}')
+        .then(r => {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(data => { this.deliveryTemplates = data; })
+        .catch(() => {});
+    },
+
+    loadDeliveryTemplate(tpl) {
+      this.fields.sender_address = tpl.from_city || '';
+      this.fields.recipient_address = tpl.to_city || '';
+      this.fields.sender_address_detail = tpl.sender_address_detail || '';
+      this.fields.recipient_address_detail = tpl.recipient_address_detail || '';
+      this.fields.weight = tpl.weight || '';
+      this.fields.cargo_description = tpl.cargo_description || '';
+      this.fields.service = tpl.service || '';
+      this.fields.declared_value = tpl.declared_value || '';
+      this.fields.additional_services = tpl.additional_services || [];
+      this.$nextTick(() => {
+        this.updateMapMarker('sender', tpl.from_city);
+        this.updateMapMarker('recipient', tpl.to_city);
+      });
+      this.step = 5;
+    },
+
+    saveDeliveryTemplate() {
+      const name = prompt('{% translate "Enter delivery template name:" %}');
+      if (!name) return;
+      const data = {
+        name: name,
+        from_city: this.fields.sender_address,
+        to_city: this.fields.recipient_address,
+        weight: this.fields.weight,
+        cargo_description: this.fields.cargo_description,
+        service: this.fields.service,
+        declared_value: this.fields.declared_value,
+        sender_address_detail: this.fields.sender_address_detail,
+        recipient_address_detail: this.fields.recipient_address_detail,
+        additional_services: this.fields.additional_services,
+        total_price: this.calculateTotal(),
+      };
+      fetch('{% url "orders:api_delivery_templates" %}', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
+        body: JSON.stringify(data),
+      })
+        .then(r => {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(tpl => {
+          this.deliveryTemplates.unshift(tpl);
+        })
+        .catch(() => {});
+    },
+
+    loadCargoTemplates() {
+      fetch('{% url "orders:api_cargo_templates" %}')
+        .then(r => {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(data => { this.cargoTemplates = data; })
+        .catch(() => {});
+    },
+
+    saveCargoTemplate() {
+      const name = prompt('{% translate "Enter cargo template name:" %}');
+      if (!name) return;
+      const data = {
+        name: name,
+        cargo_description: this.fields.cargo_description,
+        weight: this.fields.weight,
+        length: this.fields.length,
+        width: this.fields.width,
+        height: this.fields.height,
+        declared_value: this.fields.declared_value,
+      };
+      fetch('{% url "orders:api_cargo_templates" %}', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
+        body: JSON.stringify(data),
+      })
+        .then(r => {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(tpl => {
+          this.cargoTemplates.unshift(tpl);
+        })
+        .catch(() => {});
+    },
+
+    loadCargoTemplate(tpl) {
+      this.fields.cargo_description = tpl.cargo_description || '';
+      this.fields.weight = tpl.weight || '';
+      this.fields.length = tpl.length || '';
+      this.fields.width = tpl.width || '';
+      this.fields.height = tpl.height || '';
+      this.fields.declared_value = tpl.declared_value || '';
+      this.step = 4;
+    },
+
+    formatPhone(field) {
+      let raw = (this.fields[field] || '').replace(/[^\d]/g, '');
+      if (raw.startsWith('8')) raw = '7' + raw.slice(1);
+      else if (!raw.startsWith('7')) raw = '7' + raw;
+      let formatted = '+7';
+      if (raw.length > 1) formatted += ' (' + raw.slice(1, 4);
+      if (raw.length >= 5) formatted += ') ' + raw.slice(4, 7);
+      if (raw.length >= 8) formatted += '-' + raw.slice(7, 9);
+      if (raw.length >= 10) formatted += '-' + raw.slice(9, 11);
+      this.fields[field] = formatted;
+    },
+
+    validateEmailField(field) {
+      const val = this.fields[field] || '';
+      if (!val) { this.emailErrors[field] = ''; return; }
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      this.emailErrors[field] = re.test(val) ? '' : '{% translate "Invalid email format" %}';
+    },
+
     validateStep(step) {
       this.validationError = '';
-      if (step === 1) {
-        if (!this.fields.sender_name.trim()) {
-          this.validationError = '{% translate "Sender name is required" %}';
-          return false;
+      try {
+        if (step === 1) {
+          if (!(this.fields.sender_name || '').trim()) {
+            this.validationError = '{% translate "Sender name is required" %}';
+            return false;
+          }
+          if (!(this.fields.sender_phone || '').trim()) {
+            this.validationError = '{% translate "Sender phone is required" %}';
+            return false;
+          }
+          if (!this.fields.sender_address) {
+            this.validationError = '{% translate "Please select sender city" %}';
+            return false;
+          }
+          if ((this.fields.sender_email || '').trim() && this.emailErrors.sender_email) {
+            this.validationError = this.emailErrors.sender_email;
+            return false;
+          }
+        } else if (step === 2) {
+          if (!(this.fields.recipient_name || '').trim()) {
+            this.validationError = '{% translate "Recipient name is required" %}';
+            return false;
+          }
+          if (!(this.fields.recipient_phone || '').trim()) {
+            this.validationError = '{% translate "Recipient phone is required" %}';
+            return false;
+          }
+          if (!this.fields.recipient_address) {
+            this.validationError = '{% translate "Please select recipient city" %}';
+            return false;
+          }
+          if ((this.fields.recipient_email || '').trim() && this.emailErrors.recipient_email) {
+            this.validationError = this.emailErrors.recipient_email;
+            return false;
+          }
+        } else if (step === 3) {
+          if (!(this.fields.cargo_description || '').trim()) {
+            this.validationError = '{% translate "Cargo description is required" %}';
+            return false;
+          }
+          if (!this.fields.weight || parseFloat(this.fields.weight) <= 0) {
+            this.validationError = '{% translate "Weight must be greater than 0" %}';
+            return false;
+          }
+          if (this.fields.declared_value === '' || this.fields.declared_value === null || parseFloat(this.fields.declared_value) < 0) {
+            this.validationError = '{% translate "Declared value is required" %}';
+            return false;
+          }
+        } else if (step === 4) {
+          if (!this.fields.service) {
+            this.validationError = '{% translate "Please select a service type" %}';
+            return false;
+          }
+        } else if (step === 5) {
+          if (!this.fields.terms) {
+            this.validationError = '{% translate "You must accept the terms and conditions" %}';
+            return false;
+          }
         }
-        if (!this.fields.sender_phone.trim()) {
-          this.validationError = '{% translate "Sender phone is required" %}';
-          return false;
-        }
-        if (!this.fields.sender_address) {
-          this.validationError = '{% translate "Please select sender city" %}';
-          return false;
-        }
-      } else if (step === 2) {
-        if (!this.fields.recipient_name.trim()) {
-          this.validationError = '{% translate "Recipient name is required" %}';
-          return false;
-        }
-        if (!this.fields.recipient_phone.trim()) {
-          this.validationError = '{% translate "Recipient phone is required" %}';
-          return false;
-        }
-        if (!this.fields.recipient_address) {
-          this.validationError = '{% translate "Please select recipient city" %}';
-          return false;
-        }
-      } else if (step === 3) {
-        if (!this.fields.cargo_description.trim()) {
-          this.validationError = '{% translate "Cargo description is required" %}';
-          return false;
-        }
-        if (!this.fields.weight || parseFloat(this.fields.weight) <= 0) {
-          this.validationError = '{% translate "Weight must be greater than 0" %}';
-          return false;
-        }
-        if (!this.fields.declared_value || parseFloat(this.fields.declared_value) < 0) {
-          this.validationError = '{% translate "Declared value is required" %}';
-          return false;
-        }
-      } else if (step === 4) {
-        if (!this.fields.service) {
-          this.validationError = '{% translate "Please select a service type" %}';
-          return false;
-        }
-      } else if (step === 5) {
-        if (!this.fields.terms) {
-          this.validationError = '{% translate "You must accept the terms and conditions" %}';
-          return false;
-        }
+      } catch (e) {
+        console.error('Validation error:', e);
+        this.validationError = '{% translate "An unexpected error occurred. Please try again." %}';
+        return false;
       }
       return true;
     },
+
     nextStep() {
       if (this.validateStep(this.step)) {
         this.step++;
         this.validationError = '';
       }
     },
+
     prevStep() {
       this.validationError = '';
       this.step--;
     },
-    handleSubmit(e) {
-      if (!this.validateStep(this.step)) return;
-      e.target.submit();
+
+    handleSubmit() {
+      if (this.submitting) return;
+      if (!this.validateStep(this.step)) {
+        return;
+      }
+      this.submitting = true;
+      this.validationError = '';
+      const form = this.$refs.orderForm;
+      const formData = new FormData(form);
+      fetch(form.action, {
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => {
+        if (response.redirected) {
+          window.location.href = response.url;
+        } else {
+          return response.text().then(html => {
+            document.open();
+            document.write(html);
+            document.close();
+          });
+        }
+      })
+      .catch(() => {
+        this.submitting = false;
+        this.validationError = '{% translate "Network error. Please try again." %}';
+      });
     },
+
     toggleAddon(id) {
       const idx = this.fields.additional_services.indexOf(id);
       if (idx === -1) {
@@ -358,36 +928,32 @@ function orderForm() {
         this.fields.additional_services.splice(idx, 1);
       }
     },
+
     getSelectText(name) {
       const el = document.querySelector('[name=' + name + ']');
-      if (!el) return '—';
+      if (!el) return '\u2014';
       if (el.tagName === 'SELECT') {
-        return el.options[el.selectedIndex]?.text || '—';
+        return el.options[el.selectedIndex]?.text || '\u2014';
       }
       if (el.type === 'radio') {
         const checked = document.querySelector('[name=' + name + ']:checked');
-        return checked?.closest('label')?.querySelector('.font-medium')?.textContent || '—';
+        return checked?.closest('label')?.querySelector('.font-medium')?.textContent || '\u2014';
       }
-      return el.value || '—';
+      return el.value || '\u2014';
     },
-    getCityName(cityId, type) {
-      if (!cityId) return '—';
-      const selectName = type === 'sender' ? 'sender_address' : 'recipient_address';
-      const select = document.querySelector('[name="' + selectName + '"]');
-      if (!select) {
-        const altSelect = document.querySelector('[name="sender_address"]') || document.querySelector('[name="recipient_address"]');
-        if (!altSelect) return '—';
-        const option = altSelect.querySelector('option[value="' + cityId + '"]');
-        return option?.textContent || '—';
-      }
-      const option = select.querySelector('option[value="' + cityId + '"]');
-      return option?.textContent || '—';
+
+    getCityName(cityId) {
+      if (!cityId) return '\u2014';
+      const city = this.getCityById(cityId);
+      return city ? city.name : '\u2014';
     },
+
     getServiceName() {
-      if (!this.fields.service) return '—';
+      if (!this.fields.service) return '\u2014';
       const checked = document.querySelector('[name="service"]:checked');
-      return checked?.closest('label')?.querySelector('.font-medium')?.textContent || '—';
+      return checked?.closest('label')?.querySelector('.font-medium')?.textContent || '\u2014';
     },
+
     getAddonNames() {
       const names = [];
       this.fields.additional_services.forEach(id => {
@@ -400,6 +966,7 @@ function orderForm() {
       });
       return names;
     },
+
     calculateBasePrice() {
       if (!this.fields.service || !this.fields.weight) return 0;
       const checked = document.querySelector('[name="service"]:checked');
@@ -417,6 +984,7 @@ function orderForm() {
       const weight = parseFloat(this.fields.weight) || 0;
       return basePrice * weight;
     },
+
     calculateAddonsPrice() {
       let total = 0;
       this.fields.additional_services.forEach(id => {
@@ -438,14 +1006,17 @@ function orderForm() {
       });
       return total;
     },
+
     calculateInsurance() {
       if (!this.fields.declared_value) return 0;
       const declared = parseFloat(this.fields.declared_value) || 0;
       return declared * 0.01;
     },
+
     calculateTotal() {
       return this.calculateBasePrice() + this.calculateAddonsPrice() + this.calculateInsurance();
     },
+
     formatPrice(value) {
       return value.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₽';
     }

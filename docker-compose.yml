@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: baikal
+      POSTGRES_USER: baikal
+      POSTGRES_PASSWORD: baikal_secret
+
+  web:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    volumes:
+      - media_data:/app/media
+    environment:
+      DJANGO_SECRET_KEY: change-me-to-a-real-secret
+      DJANGO_DEBUG: "False"
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      DJANGO_DB_ENGINE: django.db.backends.postgresql
+      DJANGO_DB_NAME: baikal
+      DJANGO_DB_USER: baikal
+      DJANGO_DB_PASSWORD: baikal_secret
+      DJANGO_DB_HOST: db
+      DJANGO_DB_PORT: "5432"
+
+volumes:
+  postgres_data:
+  media_data:

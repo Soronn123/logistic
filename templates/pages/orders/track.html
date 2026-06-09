@@ -2,8 +2,8 @@
 {% block title %}{% translate 'Track Order' %} — {{ order.tracking_number }}{% endblock %}
 {% block meta_description %}{% translate 'Track your cargo shipment' %}{% endblock %}
 {% block extra_head %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 {% endblock %}
 {% block content %}
 <div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
@@ -91,13 +91,33 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const mapEl = document.getElementById('track-map');
-  if (mapEl && {{ order.sender_address.latitude|default:0 }} && {{ order.recipient_address.latitude|default:0 }}) {
-    const map = L.map('track-map').setView([{{ order.sender_address.latitude|default:55.7558 }}, {{ order.sender_address.longitude|default:37.6173 }}], 5);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }).addTo(map);
-    L.marker([{{ order.sender_address.latitude|default:0 }}, {{ order.sender_address.longitude|default:0 }}]).addTo(map).bindPopup('{% translate "From" %}: {{ order.sender_address|escapejs }}');
-    L.marker([{{ order.recipient_address.latitude|default:0 }}, {{ order.recipient_address.longitude|default:0 }}]).addTo(map).bindPopup('{% translate "To" %}: {{ order.recipient_address|escapejs }}');
-    setTimeout(function() { map.invalidateSize(); }, 300);
-  } else {
+  var senderLat = {{ order.sender_address.latitude|default:0 }};
+  var senderLng = {{ order.sender_address.longitude|default:0 }};
+  var recipientLat = {{ order.recipient_address.latitude|default:0 }};
+  var recipientLng = {{ order.recipient_address.longitude|default:0 }};
+  if (mapEl && senderLat && recipientLat) {
+    const map = new maplibregl.Map({
+      container: 'track-map',
+      style: {
+        version: 8,
+        sources: { osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, attribution: '&copy; OpenStreetMap contributors' } },
+        layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
+      },
+      center: [{{ order.sender_address.longitude|default:37.6173 }}, {{ order.sender_address.latitude|default:55.7558 }}],
+      zoom: 5
+    });
+    map.addControl(new maplibregl.NavigationControl(), 'top-right');
+    map.on('load', function() {
+      var senderPopup = new maplibregl.Popup({ offset: 25 }).setHTML('{% translate "From" %}: {{ order.sender_address|escapejs }}');
+      new maplibregl.Marker({ color: '#3b82f6' }).setLngLat([{{ order.sender_address.longitude|default:0 }}, {{ order.sender_address.latitude|default:0 }}]).setPopup(senderPopup).addTo(map);
+      var recipientPopup = new maplibregl.Popup({ offset: 25 }).setHTML('{% translate "To" %}: {{ order.recipient_address|escapejs }}');
+      new maplibregl.Marker({ color: '#10b981' }).setLngLat([{{ order.recipient_address.longitude|default:0 }}, {{ order.recipient_address.latitude|default:0 }}]).setPopup(recipientPopup).addTo(map);
+      var bounds = new maplibregl.LngLatBounds();
+      bounds.extend([{{ order.sender_address.longitude|default:0 }}, {{ order.sender_address.latitude|default:0 }}]);
+      bounds.extend([{{ order.recipient_address.longitude|default:0 }}, {{ order.recipient_address.latitude|default:0 }}]);
+      map.fitBounds(bounds, { padding: 50 });
+    });
+  } else if (mapEl) {
     mapEl.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><p class="text-sm">{% translate "Map unavailable" %}</p></div>';
   }
 });

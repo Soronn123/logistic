@@ -151,6 +151,8 @@ def compute_virtual_location(from_city, to_city, eta, created_at, current_status
         return {'lat': from_city.latitude, 'lng': from_city.longitude, 'progress': 0}
 
     now = timezone.now()
+    if eta is None:
+        return {'lat': from_city.latitude, 'lng': from_city.longitude, 'progress': 0}
     total_seconds = (eta - created_at.date()).total_seconds()
     if total_seconds <= 0:
         return {'lat': to_city.latitude, 'lng': to_city.longitude, 'progress': 100}

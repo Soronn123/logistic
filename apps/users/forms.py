@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.utils.translation import gettext_lazy as _
 
-from .models import CustomUser, Ticket, TicketMessage, Transaction
+from .models import CargoTemplate, ContactTemplate, CustomUser, DeliveryTemplate, Ticket, TicketMessage, Transaction
 
 
 class LoginForm(AuthenticationForm):
@@ -149,4 +149,66 @@ class TicketMessageForm(forms.ModelForm):
                 'rows': 3,
                 'placeholder': _('Write your message...'),
             }),
+        }
+
+
+class DeliveryTemplateForm(forms.ModelForm):
+    class Meta:
+        model = DeliveryTemplate
+        fields = ['name', 'from_city', 'to_city', 'weight', 'cargo_description', 'service', 'declared_value', 'sender_address_detail', 'recipient_address_detail', 'additional_services', 'total_price']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Template name')}),
+            'from_city': forms.Select(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all'}),
+            'to_city': forms.Select(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all'}),
+            'weight': forms.NumberInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'step': '0.1', 'min': '0.1', 'placeholder': _('Weight (kg)')}),
+            'cargo_description': forms.Textarea(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'rows': 3, 'placeholder': _('Cargo description')}),
+            'service': forms.Select(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all'}),
+            'declared_value': forms.NumberInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'step': '100', 'min': '0', 'placeholder': _('Declared value')}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from apps.geo.models import City
+        from apps.services.models import Service
+        self.fields['from_city'].queryset = City.objects.filter(is_active=True)
+        self.fields['to_city'].queryset = City.objects.filter(is_active=True)
+        self.fields['service'].queryset = Service.objects.filter(is_active=True)
+        self.fields['from_city'].empty_label = _('Select city')
+        self.fields['to_city'].empty_label = _('Select city')
+        self.fields['declared_value'].required = False
+
+
+class ContactTemplateForm(forms.ModelForm):
+    class Meta:
+        model = ContactTemplate
+        fields = ['name', 'recipient_name', 'recipient_phone', 'recipient_email', 'city', 'address_detail', 'template_type']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Template name')}),
+            'recipient_name': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Contact name')}),
+            'recipient_phone': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Contact phone')}),
+            'recipient_email': forms.EmailInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Contact email')}),
+            'address_detail': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Address detail')}),
+            'template_type': forms.Select(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from apps.geo.models import City
+        self.fields['city'].queryset = City.objects.filter(is_active=True)
+        self.fields['city'].empty_label = _('Select city')
+        self.fields['city'].required = False
+
+
+class CargoTemplateForm(forms.ModelForm):
+    class Meta:
+        model = CargoTemplate
+        fields = ['name', 'cargo_description', 'weight', 'length', 'width', 'height', 'declared_value']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Template name')}),
+            'cargo_description': forms.Textarea(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'rows': 3, 'placeholder': _('Cargo description')}),
+            'weight': forms.NumberInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'step': '0.1', 'min': '0.1', 'placeholder': _('Weight (kg)')}),
+            'length': forms.NumberInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'step': '1', 'min': '0', 'placeholder': _('Length (cm)')}),
+            'width': forms.NumberInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'step': '1', 'min': '0', 'placeholder': _('Width (cm)')}),
+            'height': forms.NumberInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'step': '1', 'min': '0', 'placeholder': _('Height (cm)')}),
+            'declared_value': forms.NumberInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'step': '100', 'min': '0', 'placeholder': _('Declared value (₽)')}),
         }

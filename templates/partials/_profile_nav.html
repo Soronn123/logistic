@@ -8,6 +8,7 @@
     {% url 'core:track' as track_url %}
     {% url 'users:settings' as settings_url %}
     {% url 'users:accounting_docs' as accounting_docs_url %}
+    {% url 'users:templates' as templates_url %}
     {% with current=request.path %}
     <a href="{{ profile_url }}" class="px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-colors rounded-t-lg {% if current == profile_url %}bg-baikal-50 dark:bg-baikal-900/30 text-baikal-700 dark:text-baikal-300 border-b-2 border-baikal-600{% else %}text-gray-600 dark:text-gray-400 hover:text-baikal-600 dark:hover:text-baikal-400 hover:bg-gray-50 dark:hover:bg-gray-800{% endif %}">
       <svg class="w-4 h-4 inline-block mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
@@ -37,6 +38,10 @@
       <svg class="w-4 h-4 inline-block mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
       {% translate 'Documents' %}
     </a>
+      <a href="{{ templates_url }}" class="px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-colors rounded-t-lg {% if current == templates_url %}bg-baikal-50 dark:bg-baikal-900/30 text-baikal-700 dark:text-baikal-300 border-b-2 border-baikal-600{% else %}text-gray-600 dark:text-gray-400 hover:text-baikal-600 dark:hover:text-baikal-400 hover:bg-gray-50 dark:hover:bg-gray-800{% endif %}">
+        <svg class="w-4 h-4 inline-block mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2h2m3-4h4a2 2 0 012 2v2m-4 0h-2a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2z"/></svg>
+        {% translate 'Templates' %}
+      </a>
     {% endwith %}
   </nav>
 </div>

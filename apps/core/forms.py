@@ -48,5 +48,5 @@ class CalculatorForm(forms.Form):
     def __init__(self, *args, **kwargs):
         from apps.geo.models import City
         super().__init__(*args, **kwargs)
-        self.fields['from_city'].queryset = City.objects.filter(is_active=True).distinct()
-        self.fields['to_city'].queryset = City.objects.filter(is_active=True).distinct()
+        self.fields['from_city'].queryset = City.objects.filter(is_active=True)
+        self.fields['to_city'].queryset = City.objects.filter(is_active=True)

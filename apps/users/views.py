@@ -9,8 +9,8 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, FormView, ListView, TemplateView, UpdateView, View
 
-from .forms import LoginForm, PasswordChangeForm, ProfileForm, RegisterForm, TicketForm, TicketMessageForm
-from .models import CustomUser, Ticket, TicketMessage, Transaction
+from .forms import CargoTemplateForm, ContactTemplateForm, DeliveryTemplateForm, LoginForm, PasswordChangeForm, ProfileForm, RegisterForm, TicketForm, TicketMessageForm
+from .models import CargoTemplate, ContactTemplate, CustomUser, DeliveryTemplate, Ticket, TicketMessage, Transaction
 
 
 class LoginView(AuthLoginView):
@@ -203,3 +203,113 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
 
 class AccountingDocumentsView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/users/accounting_docs.html'
+
+
+class TemplatesView(LoginRequiredMixin, ListView):
+    model = None
+    template_name = 'pages/users/templates.html'
+    context_object_name = 'templates'
+
+    def get_queryset(self):
+        from .models import ContactTemplate
+        return ContactTemplate.objects.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from apps.geo.models import City
+        from apps.services.models import Service, AdditionalService
+        context['delivery_templates'] = DeliveryTemplate.objects.filter(user=self.request.user)
+        context['cargo_templates'] = CargoTemplate.objects.filter(user=self.request.user)
+        context['delivery_form'] = DeliveryTemplateForm()
+        context['contact_form'] = ContactTemplateForm()
+        context['cargo_form'] = CargoTemplateForm()
+        context['cities'] = City.objects.filter(is_active=True)
+        context['services'] = Service.objects.filter(is_active=True)
+        context['additional_services'] = AdditionalService.objects.all()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        from .models import ContactTemplate
+        action = request.POST.get('action')
+        if action == 'delete':
+            pk = request.POST.get('pk')
+            if pk:
+                ContactTemplate.objects.filter(pk=pk, user=request.user).delete()
+            return self.get(request, *args, **kwargs)
+        elif action == 'edit_contact':
+            pk = request.POST.get('pk')
+            template = get_object_or_404(ContactTemplate, pk=pk, user=request.user)
+            form = ContactTemplateForm(request.POST, instance=template)
+            if form.is_valid():
+                form.save()
+                from django.contrib import messages
+                messages.success(request, _('Contact template updated successfully.'))
+            return redirect('users:templates')
+        elif action == 'delete_delivery':
+            pk = request.POST.get('pk')
+            if pk:
+                DeliveryTemplate.objects.filter(pk=pk, user=request.user).delete()
+            return self.get(request, *args, **kwargs)
+        elif action == 'create_delivery':
+            form = DeliveryTemplateForm(request.POST)
+            if form.is_valid():
+                template = form.save(commit=False)
+                template.user = request.user
+                template.save()
+                form.save_m2m()
+                from django.contrib import messages
+                messages.success(request, _('Delivery template created successfully.'))
+            return redirect('users:templates')
+        elif action == 'edit_delivery':
+            pk = request.POST.get('pk')
+            template = get_object_or_404(DeliveryTemplate, pk=pk, user=request.user)
+            form = DeliveryTemplateForm(request.POST, instance=template)
+            if form.is_valid():
+                form.save()
+                from django.contrib import messages
+                messages.success(request, _('Delivery template updated successfully.'))
+            return redirect('users:templates')
+        elif action == 'delete_cargo':
+            pk = request.POST.get('pk')
+            if pk:
+                CargoTemplate.objects.filter(pk=pk, user=request.user).delete()
+            return self.get(request, *args, **kwargs)
+        elif action == 'create_cargo':
+            form = CargoTemplateForm(request.POST)
+            if form.is_valid():
+                template = form.save(commit=False)
+                template.user = request.user
+                template.save()
+                from django.contrib import messages
+                messages.success(request, _('Cargo template created successfully.'))
+            return redirect('users:templates')
+        elif action == 'edit_cargo':
+            pk = request.POST.get('pk')
+            template = get_object_or_404(CargoTemplate, pk=pk, user=request.user)
+            form = CargoTemplateForm(request.POST, instance=template)
+            if form.is_valid():
+                form.save()
+                from django.contrib import messages
+                messages.success(request, _('Cargo template updated successfully.'))
+            return redirect('users:templates')
+        return self.get(request, *args, **kwargs)
+
+
+class DeliveryTemplateEditView(LoginRequiredMixin, UpdateView):
+    model = DeliveryTemplate
+    form_class = DeliveryTemplateForm
+    template_name = 'pages/users/template_edit.html'
+    success_url = reverse_lazy('users:templates')
+
+    def get_queryset(self):
+        return DeliveryTemplate.objects.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from apps.geo.models import City
+        from apps.services.models import Service, AdditionalService
+        context['cities'] = City.objects.filter(is_active=True)
+        context['services'] = Service.objects.filter(is_active=True)
+        context['additional_services'] = AdditionalService.objects.all()
+        context['template_addon_ids'] = list(self.object.additional_services.values_list('id', flat=True)) if self.object.pk else []
+        return context

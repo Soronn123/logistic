@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.utils.translation import gettext_lazy as _
 
@@ -31,7 +32,8 @@ class ServiceDetailView(DetailView):
     context_object_name = 'service'
 
     def get_object(self, queryset=None):
-        return Service.objects.select_related('category').get(
+        return get_object_or_404(
+            Service.objects.select_related('category'),
             category__slug=self.kwargs['category_slug'],
             slug=self.kwargs['slug'],
         )

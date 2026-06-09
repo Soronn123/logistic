@@ -2,8 +2,8 @@
 {% block title %}{% translate 'Branches & Offices' %} — Baikal-Service{% endblock %}
 {% block meta_description %}{% translate 'Baikal-Service offices, warehouses, and pickup points across Russia' %}{% endblock %}
 {% block extra_head %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 {% endblock %}
 {% block content %}
 <div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
@@ -28,7 +28,7 @@
 
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 divide-y divide-gray-100 dark:divide-gray-700 max-h-[600px] overflow-y-auto">
           {% for branch in branches %}
-          <div class="branch-item p-4 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors cursor-pointer" data-branch-id="{{ branch.id }}" data-lat="{{ branch.latitude|js_float }}" data-lng="{{ branch.longitude|js_float }}">
+          <div class="branch-item p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer" data-branch-id="{{ branch.id }}" data-lat="{{ branch.latitude|js_float }}" data-lng="{{ branch.longitude|js_float }}">
             <div class="flex items-start gap-3">
               <div class="w-10 h-10 rounded-xl bg-baikal-50 dark:bg-baikal-900/30 flex items-center justify-center flex-shrink-0">
                 {% if branch.branch_type == 'warehouse' %}
@@ -90,64 +90,89 @@ document.addEventListener('DOMContentLoaded', function() {
     {% endfor %}
   ];
 
-  let map, markers = [], markerGroup;
+  let map, markers = [];
   const typeColors = {
     warehouse: '#7c3aed',
     pickup_point: '#059669',
     office: '#2563eb'
   };
-  const typeIcons = {
-    warehouse: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#7c3aed" stroke="#fff" stroke-width="1.5"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>',
-    pickup_point: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#059669" stroke="#fff" stroke-width="1.5"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>',
-    office: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#2563eb" stroke="#fff" stroke-width="1.5"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>'
-  };
 
-  function initMap() {
-    if (branches.length === 0) return;
-    map = L.map('branches-map', { zoomControl: true, scrollWheelZoom: true }).setView([branches[0].lat, branches[0].lng], 4);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap',
-      maxZoom: 18
-    }).addTo(map);
-    renderMarkers('all');
-    setTimeout(function() { map.invalidateSize(); }, 300);
+  function createCircleElement(color) {
+    const el = document.createElement('div');
+    el.style.width = '20px';
+    el.style.height = '20px';
+    el.style.borderRadius = '50%';
+    el.style.backgroundColor = color;
+    el.style.border = '2px solid #fff';
+    el.style.cursor = 'pointer';
+    return el;
+  }
+
+  function makePopupHTML(b) {
+    var color = typeColors[b.type] || '#1d4ed8';
+    return '<div class="text-sm"><b>' + b.city + '</b><br>' + b.address +
+      '<br><span class="inline-block mt-1 px-2 py-0.5 rounded-full text-xs font-medium" style="background:' + color + '20;color:' + color + '">' +
+      b.typeLabel + '</span><br>' + (b.phone ? '<a href="tel:' + b.phone + '" class="text-baikal-600">' + b.phone + '</a>' : '') + '</div>';
+  }
+
+  function createMarker(b) {
+    var color = typeColors[b.type] || '#1d4ed8';
+    var el = createCircleElement(color);
+    var popup = new maplibregl.Popup({ offset: 25 }).setHTML(makePopupHTML(b));
+    var mkr = new maplibregl.Marker({ element: el })
+      .setLngLat([b.lng, b.lat])
+      .setPopup(popup)
+      .addTo(map);
+    mkr._branchData = b;
+    return mkr;
   }
 
   function renderMarkers(filter) {
-    if (markerGroup) map.removeLayer(markerGroup);
+    markers.forEach(function(m) { m.remove(); });
     markers = [];
-    const filtered = filter === 'all' ? branches : branches.filter(function(b) { return b.type === filter; });
-    const leafletMarkers = filtered.map(function(b) {
-      const color = typeColors[b.type] || '#1d4ed8';
-      const marker = L.circleMarker([b.lat, b.lng], {
-        radius: 10, fillColor: color, color: '#fff', weight: 2, opacity: 1, fillOpacity: 0.9
-      });
-      marker.bindPopup(
-        '<div class="text-sm"><b>' + b.city + '</b><br>' + b.address +
-        '<br><span class="inline-block mt-1 px-2 py-0.5 rounded-full text-xs font-medium" style="background:' + color + '20;color:' + color + '">' +
-        b.typeLabel + '</span><br>' + (b.phone ? '<a href="tel:' + b.phone + '" class="text-baikal-600">' + b.phone + '</a>' : '') + '</div>'
-      );
-      marker.branchData = b;
-      markers.push(marker);
-      return marker;
+    var filtered = filter === 'all' ? branches : branches.filter(function(b) { return b.type === filter; });
+    filtered.forEach(function(b) {
+      markers.push(createMarker(b));
     });
-    markerGroup = L.featureGroup(leafletMarkers).addTo(map);
-    if (leafletMarkers.length > 0) {
-      map.fitBounds(markerGroup.getBounds().pad(0.1));
+    if (markers.length > 0) {
+      var bounds = new maplibregl.LngLatBounds();
+      markers.forEach(function(m) {
+        bounds.extend(m.getLngLat());
+      });
+      map.fitBounds(bounds, { padding: 50 });
     }
+  }
+
+  function initMap() {
+    if (branches.length === 0) return;
+    map = new maplibregl.Map({
+      container: 'branches-map',
+      style: {
+        version: 8,
+        sources: { osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, attribution: '&copy; OpenStreetMap contributors' } },
+        layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
+      },
+      center: [branches[0].lng, branches[0].lat],
+      zoom: 4
+    });
+    map.addControl(new maplibregl.NavigationControl(), 'top-right');
+    map.on('load', function() {
+      renderMarkers('all');
+    });
   }
 
   initMap();
 
   document.querySelectorAll('.branch-item').forEach(function(item) {
     item.addEventListener('click', function() {
-      const lat = parseFloat(this.dataset.lat);
-      const lng = parseFloat(this.dataset.lng);
+      var lat = parseFloat(this.dataset.lat);
+      var lng = parseFloat(this.dataset.lng);
       if (map && lat && lng) {
-        map.setView([lat, lng], 12);
+        map.flyTo({ center: [lng, lat], zoom: 12 });
         markers.forEach(function(m) {
-          if (Math.abs(m.getLatLng().lat - lat) < 0.01 && Math.abs(m.getLatLng().lng - lng) < 0.01) {
-            m.openPopup();
+          var ll = m.getLngLat();
+          if (Math.abs(ll.lat - lat) < 0.01 && Math.abs(ll.lng - lng) < 0.01) {
+            m.togglePopup();
           }
         });
       }
@@ -166,10 +191,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  const searchInput = document.getElementById('branch-search');
+  var searchInput = document.getElementById('branch-search');
   if (searchInput) {
     searchInput.addEventListener('input', function() {
-      const query = this.value.toLowerCase();
+      var query = this.value.toLowerCase();
       document.querySelectorAll('.branch-item').forEach(function(item) {
         item.style.display = item.textContent.toLowerCase().includes(query) ? '' : 'none';
       });

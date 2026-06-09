@@ -84,7 +84,7 @@
       </thead>
       <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
         {% for order in recent_orders %}
-        <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
           <td class="px-6 py-3 font-mono text-xs text-baikal-600 dark:text-baikal-400">{{ order.tracking_number }}</td>
           <td class="px-6 py-3 text-gray-900 dark:text-white">{{ order.user.get_full_name|default:order.user.email }}</td>
           <td class="px-6 py-3 text-gray-600 dark:text-gray-400">{{ order.sender_address }} → {{ order.recipient_address }}</td>

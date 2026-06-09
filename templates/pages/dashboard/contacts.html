@@ -46,7 +46,7 @@
       </thead>
       <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
         {% for msg in messages %}
-        <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors {% if not msg.is_read %}font-semibold bg-blue-50/50 dark:bg-blue-900/10{% endif %}" x-data="{ expanded: false }">
+        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors {% if not msg.is_read %}font-semibold bg-blue-50/50 dark:bg-blue-900/10{% endif %}" x-data="{ expanded: false }">
           <td class="px-6 py-3">
             <div class="flex items-center gap-2">
               {% if not msg.is_read %}

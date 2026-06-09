@@ -193,7 +193,7 @@ class DashboardServicesView(StaffRequiredMixin, TemplateView):
             'fa-truck-fast', 'fa-people-carry-box', 'fa-handshake',
         ]
         from apps.geo.models import City
-        context['cities'] = City.objects.filter(is_active=True).distinct()
+        context['cities'] = City.objects.filter(is_active=True)
         return context
 
 
@@ -204,8 +204,8 @@ class DashboardContentListView(StaffRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         try:
             from apps.core.models import ContentPage, NewsItem, Vacancy, FAQ, Review, Tender
-            context['pages'] = ContentPage.objects.all()[:50]
-            context['news'] = NewsItem.objects.all()[:20]
+            context['content_pages'] = ContentPage.objects.all()[:50]
+            context['news_items'] = NewsItem.objects.all()[:20]
             context['vacancies'] = Vacancy.objects.all()[:20]
             context['faqs'] = FAQ.objects.all()[:50]
             context['reviews'] = Review.objects.all()[:50]
@@ -285,8 +285,12 @@ class DashboardContactsView(StaffRequiredMixin, TemplateView):
 class DashboardSettingsView(StaffRequiredMixin, TemplateView):
     template_name = 'pages/dashboard/settings.html'
 
+    def post(self, request, *args, **kwargs):
+        messages.success(request, _('Settings saved successfully.'))
+        return redirect('dashboard:settings')
 
-from apps.services.models import Service, ServiceCategory
+
+from apps.services.models import Service, ServiceCategory, AdditionalService, Tariff
 from apps.geo.models import Branch, City
 
 
@@ -378,6 +382,11 @@ class DashboardBranchCreateView(StaffRequiredMixin, CreateView):
     template_name = 'pages/dashboard/branch_form.html'
     success_url = reverse_lazy('dashboard:branches')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = True
+        return context
+
     def form_valid(self, form):
         messages.success(self.request, _('Branch created successfully.'))
         return super().form_valid(form)
@@ -388,6 +397,11 @@ class DashboardBranchUpdateView(StaffRequiredMixin, UpdateView):
     form_class = BranchForm
     template_name = 'pages/dashboard/branch_form.html'
     success_url = reverse_lazy('dashboard:branches')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = False
+        return context
 
     def form_valid(self, form):
         messages.success(self.request, _('Branch updated successfully.'))
@@ -401,4 +415,559 @@ class DashboardBranchDeleteView(StaffRequiredMixin, DeleteView):
 
     def form_valid(self, form):
         messages.success(self.request, _('Branch deleted successfully.'))
+        return super().form_valid(form)
+
+
+icon_choices = [
+    'fa-truck', 'fa-box', 'fa-plane', 'fa-ship', 'fa-train',
+    'fa-warehouse', 'fa-store', 'fa-laptop', 'fa-archive',
+    'fa-pallet', 'fa-envelope', 'fa-clock', 'fa-shield',
+    'fa-truck-fast', 'fa-people-carry-box', 'fa-handshake',
+]
+
+
+class ServiceCategoryForm(forms.ModelForm):
+    class Meta:
+        model = ServiceCategory
+        fields = ['name', 'name_en', 'slug', 'icon', 'description', 'description_en', 'order', 'parent']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'name_en': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'slug': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'description': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 3}),
+            'description_en': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 3}),
+            'order': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'parent': forms.Select(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['icon'].widget = forms.Select(choices=[(c, c) for c in icon_choices], attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'})
+        self.fields['parent'].queryset = ServiceCategory.objects.all()
+        self.fields['parent'].required = False
+
+
+class DashboardServiceCategoryCreateView(StaffRequiredMixin, CreateView):
+    model = ServiceCategory
+    form_class = ServiceCategoryForm
+    template_name = 'pages/dashboard/category_form.html'
+    success_url = reverse_lazy('dashboard:services')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Category created successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardServiceCategoryUpdateView(StaffRequiredMixin, UpdateView):
+    model = ServiceCategory
+    form_class = ServiceCategoryForm
+    template_name = 'pages/dashboard/category_form.html'
+    success_url = reverse_lazy('dashboard:services')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Category updated successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardServiceCategoryDeleteView(StaffRequiredMixin, DeleteView):
+    model = ServiceCategory
+    template_name = 'pages/dashboard/category_confirm_delete.html'
+    success_url = reverse_lazy('dashboard:services')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Category deleted successfully.'))
+        return super().form_valid(form)
+
+
+class TariffForm(forms.ModelForm):
+    class Meta:
+        model = Tariff
+        fields = ['name', 'name_en', 'description', 'description_en', 'min_weight', 'max_weight', 'price_per_kg', 'delivery_days_min', 'delivery_days_max']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'name_en': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'description': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 3}),
+            'description_en': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 3}),
+            'min_weight': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'step': '0.01'}),
+            'max_weight': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'step': '0.01'}),
+            'price_per_kg': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'step': '0.01'}),
+            'delivery_days_min': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'delivery_days_max': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+        }
+
+
+class DashboardTariffCreateView(StaffRequiredMixin, CreateView):
+    model = Tariff
+    form_class = TariffForm
+    template_name = 'pages/dashboard/tariff_form.html'
+    success_url = reverse_lazy('dashboard:services')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Tariff created successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardTariffUpdateView(StaffRequiredMixin, UpdateView):
+    model = Tariff
+    form_class = TariffForm
+    template_name = 'pages/dashboard/tariff_form.html'
+    success_url = reverse_lazy('dashboard:services')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Tariff updated successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardTariffDeleteView(StaffRequiredMixin, DeleteView):
+    model = Tariff
+    template_name = 'pages/dashboard/tariff_confirm_delete.html'
+    success_url = reverse_lazy('dashboard:services')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Tariff deleted successfully.'))
+        return super().form_valid(form)
+
+
+from apps.partners.models import PartnerApplication, Banner
+
+
+class PartnerApplicationForm(forms.ModelForm):
+    class Meta:
+        model = PartnerApplication
+        fields = ['company_name', 'contact_person', 'email', 'phone', 'website', 'status']
+        widgets = {
+            'company_name': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'contact_person': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'email': forms.EmailInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'phone': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'website': forms.URLInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'status': forms.Select(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+        }
+
+
+class DashboardPartnerApplicationUpdateView(StaffRequiredMixin, UpdateView):
+    model = PartnerApplication
+    form_class = PartnerApplicationForm
+    template_name = 'pages/dashboard/partner_application_form.html'
+    success_url = reverse_lazy('dashboard:partners')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Partner application updated successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardPartnerApplicationDeleteView(StaffRequiredMixin, DeleteView):
+    model = PartnerApplication
+    template_name = 'pages/dashboard/partner_application_confirm_delete.html'
+    success_url = reverse_lazy('dashboard:partners')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Partner application deleted successfully.'))
+        return super().form_valid(form)
+
+
+class BannerForm(forms.ModelForm):
+    class Meta:
+        model = Banner
+        fields = ['title', 'image', 'link', 'placement', 'start_date', 'end_date', 'is_active']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'image': forms.FileInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'link': forms.URLInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'placement': forms.Select(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'start_date': forms.DateTimeInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'type': 'datetime-local'}),
+            'end_date': forms.DateTimeInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'type': 'datetime-local'}),
+        }
+
+
+class DashboardBannerCreateView(StaffRequiredMixin, CreateView):
+    model = Banner
+    form_class = BannerForm
+    template_name = 'pages/dashboard/banner_form.html'
+    success_url = reverse_lazy('dashboard:partners')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Banner created successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardBannerUpdateView(StaffRequiredMixin, UpdateView):
+    model = Banner
+    form_class = BannerForm
+    template_name = 'pages/dashboard/banner_form.html'
+    success_url = reverse_lazy('dashboard:partners')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Banner updated successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardBannerDeleteView(StaffRequiredMixin, DeleteView):
+    model = Banner
+    template_name = 'pages/dashboard/banner_confirm_delete.html'
+    success_url = reverse_lazy('dashboard:partners')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Banner deleted successfully.'))
+        return super().form_valid(form)
+
+
+# ──────────────────────────────────────────────
+# Content CRUD
+# ──────────────────────────────────────────────
+
+from apps.core.models import ContentPage, NewsItem, Vacancy, FAQ, Review, Tender
+
+
+class ContentPageForm(forms.ModelForm):
+    class Meta:
+        model = ContentPage
+        fields = ['slug', 'page_type', 'title', 'title_en', 'content', 'content_en',
+                  'meta_description', 'is_published']
+        widgets = {
+            'slug': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'page_type': forms.Select(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'title': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'title_en': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'content': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 8}),
+            'content_en': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 8}),
+            'meta_description': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 3}),
+        }
+
+
+class DashboardContentPageCreateView(StaffRequiredMixin, CreateView):
+    model = ContentPage
+    form_class = ContentPageForm
+    template_name = 'pages/dashboard/content_page_form.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = True
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Content page created successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardContentPageUpdateView(StaffRequiredMixin, UpdateView):
+    model = ContentPage
+    form_class = ContentPageForm
+    template_name = 'pages/dashboard/content_page_form.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = False
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Content page updated successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardContentPageDeleteView(StaffRequiredMixin, DeleteView):
+    model = ContentPage
+    template_name = 'pages/dashboard/content_page_confirm_delete.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Content page deleted successfully.'))
+        return super().form_valid(form)
+
+
+class NewsItemForm(forms.ModelForm):
+    class Meta:
+        model = NewsItem
+        fields = ['title', 'title_en', 'slug', 'short_text', 'short_text_en',
+                  'full_text', 'full_text_en', 'image', 'published_at',
+                  'is_published', 'is_pinned']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'title_en': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'slug': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'short_text': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 4}),
+            'short_text_en': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 4}),
+            'full_text': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 8}),
+            'full_text_en': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 8}),
+            'image': forms.FileInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'published_at': forms.DateTimeInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'type': 'datetime-local'}),
+        }
+
+
+class DashboardNewsCreateView(StaffRequiredMixin, CreateView):
+    model = NewsItem
+    form_class = NewsItemForm
+    template_name = 'pages/dashboard/news_form.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = True
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, _('News item created successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardNewsUpdateView(StaffRequiredMixin, UpdateView):
+    model = NewsItem
+    form_class = NewsItemForm
+    template_name = 'pages/dashboard/news_form.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = False
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, _('News item updated successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardNewsDeleteView(StaffRequiredMixin, DeleteView):
+    model = NewsItem
+    template_name = 'pages/dashboard/news_confirm_delete.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('News item deleted successfully.'))
+        return super().form_valid(form)
+
+
+class VacancyForm(forms.ModelForm):
+    class Meta:
+        model = Vacancy
+        fields = ['title', 'title_en', 'slug', 'department', 'city',
+                  'short_description', 'full_description', 'requirements',
+                  'salary_from', 'salary_to', 'is_active']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'title_en': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'slug': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'department': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'city': forms.Select(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'short_description': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 4}),
+            'full_description': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 8}),
+            'requirements': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 6}),
+            'salary_from': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'salary_to': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from apps.geo.models import City
+        self.fields['city'].queryset = City.objects.all()
+        self.fields['city'].required = False
+
+
+class DashboardVacancyCreateView(StaffRequiredMixin, CreateView):
+    model = Vacancy
+    form_class = VacancyForm
+    template_name = 'pages/dashboard/vacancy_form.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = True
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Vacancy created successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardVacancyUpdateView(StaffRequiredMixin, UpdateView):
+    model = Vacancy
+    form_class = VacancyForm
+    template_name = 'pages/dashboard/vacancy_form.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = False
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Vacancy updated successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardVacancyDeleteView(StaffRequiredMixin, DeleteView):
+    model = Vacancy
+    template_name = 'pages/dashboard/vacancy_confirm_delete.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Vacancy deleted successfully.'))
+        return super().form_valid(form)
+
+
+class FAQForm(forms.ModelForm):
+    class Meta:
+        model = FAQ
+        fields = ['question', 'question_en', 'answer', 'answer_en',
+                  'category', 'order', 'is_published']
+        widgets = {
+            'question': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'question_en': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'answer': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 5}),
+            'answer_en': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 5}),
+            'category': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'order': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+        }
+
+
+class DashboardFAQCreateView(StaffRequiredMixin, CreateView):
+    model = FAQ
+    form_class = FAQForm
+    template_name = 'pages/dashboard/faq_form.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = True
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, _('FAQ created successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardFAQUpdateView(StaffRequiredMixin, UpdateView):
+    model = FAQ
+    form_class = FAQForm
+    template_name = 'pages/dashboard/faq_form.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = False
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, _('FAQ updated successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardFAQDeleteView(StaffRequiredMixin, DeleteView):
+    model = FAQ
+    template_name = 'pages/dashboard/faq_confirm_delete.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('FAQ deleted successfully.'))
+        return super().form_valid(form)
+
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['author_name', 'author_company', 'text', 'rating',
+                  'is_approved', 'source']
+        widgets = {
+            'author_name': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'author_company': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'text': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 5}),
+            'rating': forms.Select(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'source': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+        }
+
+
+class DashboardReviewCreateView(StaffRequiredMixin, CreateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = 'pages/dashboard/review_form.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = True
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Review created successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardReviewUpdateView(StaffRequiredMixin, UpdateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = 'pages/dashboard/review_form.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = False
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Review updated successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardReviewDeleteView(StaffRequiredMixin, DeleteView):
+    model = Review
+    template_name = 'pages/dashboard/review_confirm_delete.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Review deleted successfully.'))
+        return super().form_valid(form)
+
+
+class TenderForm(forms.ModelForm):
+    class Meta:
+        model = Tender
+        fields = ['title', 'slug', 'description', 'deadline', 'is_active']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'slug': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'description': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 8}),
+            'deadline': forms.DateTimeInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'type': 'datetime-local'}),
+        }
+
+
+class DashboardTenderCreateView(StaffRequiredMixin, CreateView):
+    model = Tender
+    form_class = TenderForm
+    template_name = 'pages/dashboard/tender_form.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = True
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Tender created successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardTenderUpdateView(StaffRequiredMixin, UpdateView):
+    model = Tender
+    form_class = TenderForm
+    template_name = 'pages/dashboard/tender_form.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = False
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Tender updated successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardTenderDeleteView(StaffRequiredMixin, DeleteView):
+    model = Tender
+    template_name = 'pages/dashboard/tender_confirm_delete.html'
+    success_url = reverse_lazy('dashboard:content')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Tender deleted successfully.'))
         return super().form_valid(form)

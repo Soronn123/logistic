@@ -32,11 +32,16 @@ class CustomUser(AbstractUser):
 
 
 class ContactTemplate(models.Model):
+    class TemplateType(models.TextChoices):
+        SENDER = 'sender', _('Sender')
+        RECIPIENT = 'recipient', _('Recipient')
+
     user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='contact_templates', verbose_name=_('User'))
     name = models.CharField(max_length=255, verbose_name=_('Template name'))
-    recipient_name = models.CharField(max_length=255, verbose_name=_('Recipient name'))
-    recipient_phone = models.CharField(max_length=20, verbose_name=_('Recipient phone'))
-    recipient_email = models.EmailField(blank=True, verbose_name=_('Recipient email'))
+    template_type = models.CharField(max_length=20, choices=TemplateType.choices, default=TemplateType.RECIPIENT, verbose_name=_('Template type'))
+    recipient_name = models.CharField(max_length=255, verbose_name=_('Contact name'))
+    recipient_phone = models.CharField(max_length=20, verbose_name=_('Contact phone'))
+    recipient_email = models.EmailField(blank=True, verbose_name=_('Contact email'))
     city = models.ForeignKey('geo.City', on_delete=models.SET_NULL, null=True, verbose_name=_('City'))
     address_detail = models.CharField(max_length=500, blank=True, verbose_name=_('Address detail'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
@@ -59,6 +64,10 @@ class DeliveryTemplate(models.Model):
     cargo_description = models.TextField(blank=True, verbose_name=_('Cargo description'))
     service = models.ForeignKey('services.Service', on_delete=models.SET_NULL, null=True, verbose_name=_('Service'))
     declared_value = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True, verbose_name=_('Declared value'))
+    sender_address_detail = models.CharField(max_length=500, blank=True, verbose_name=_('Sender address detail'))
+    recipient_address_detail = models.CharField(max_length=500, blank=True, verbose_name=_('Recipient address detail'))
+    additional_services = models.ManyToManyField('services.AdditionalService', blank=True, verbose_name=_('Additional services'))
+    total_price = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True, verbose_name=_('Total price'))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
 
     class Meta:
@@ -68,6 +77,26 @@ class DeliveryTemplate(models.Model):
 
     def __str__(self):
         return f'{self.name} - {self.from_city} → {self.to_city}'
+
+
+class CargoTemplate(models.Model):
+    user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='cargo_templates', verbose_name=_('User'))
+    name = models.CharField(max_length=255, verbose_name=_('Template name'))
+    cargo_description = models.TextField(blank=True, verbose_name=_('Cargo description'))
+    weight = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_('Weight (kg)'))
+    length = models.DecimalField(max_digits=10, decimal_places=1, null=True, blank=True, verbose_name=_('Length (cm)'))
+    width = models.DecimalField(max_digits=10, decimal_places=1, null=True, blank=True, verbose_name=_('Width (cm)'))
+    height = models.DecimalField(max_digits=10, decimal_places=1, null=True, blank=True, verbose_name=_('Height (cm)'))
+    declared_value = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True, verbose_name=_('Declared value'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+
+    class Meta:
+        verbose_name = _('Cargo template')
+        verbose_name_plural = _('Cargo templates')
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.name} - {self.cargo_description[:30]}'
 
 
 class Ticket(models.Model):

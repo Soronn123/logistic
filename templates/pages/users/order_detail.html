@@ -1,0 +1,161 @@
+{% extends 'base.html' %}{% load i18n static i18n_extras %}
+{% block title %}{% translate 'Order' %} {{ order.tracking_number }} — Baikal-Service{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<style>
+#detail-map { height: 280px; border-radius: 0.75rem; }
+.dark #detail-map .maplibregl-canvas { filter: brightness(0.85) invert(0.1); }
+</style>
+{% endblock %}
+{% block content %}
+{% include 'partials/_profile_nav.html' %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+  <div class="animate-fade-in">
+    {% if messages %}
+    <div class="mb-6 space-y-2">
+      {% for message in messages %}
+      <div class="p-4 rounded-xl {% if message.tags == 'success' %}bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800{% else %}bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800{% endif %}" role="alert">
+        <div class="flex">
+          {% if message.tags == 'success' %}
+          <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          {% else %}
+          <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          {% endif %}
+          <div class="ml-3 text-sm {% if message.tags == 'success' %}text-green-700 dark:text-green-400{% else %}text-red-700 dark:text-red-400{% endif %}">{{ message }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+      <div>
+        <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-100">{% translate 'Order Details' %}</h1>
+        <p class="mt-1 font-mono text-sm text-baikal-600 dark:text-baikal-400">{{ order.tracking_number }}</p>
+      </div>
+      <div class="mt-4 sm:mt-0 flex items-center gap-3">
+        <span class="px-3 py-1.5 text-xs font-semibold rounded-full
+          {% if order.status == 'delivered' %}bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400
+          {% elif order.status == 'in_transit' or order.status == 'out_for_delivery' %}bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400
+          {% elif order.status == 'cancelled' %}bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400
+          {% else %}bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400{% endif %}">
+          {{ order.get_status_display }}
+        </span>
+        <a href="{% url 'orders:track' order.tracking_number %}" class="px-4 py-1.5 text-xs font-medium bg-baikal-600 hover:bg-baikal-700 text-white rounded-xl transition-colors">{% translate 'Full Track Page' %} &rarr;</a>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
+        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">{% translate 'Sender' %}</h3>
+        <p class="font-medium text-gray-900 dark:text-white">{{ order.sender_name }}</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400">{{ order.sender_phone }}</p>
+        {% if order.sender_email %}<p class="text-sm text-gray-600 dark:text-gray-400">{{ order.sender_email }}</p>{% endif %}
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ order.sender_address|default:'—' }}{% if order.sender_address_detail %}, {{ order.sender_address_detail }}{% endif %}</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
+        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">{% translate 'Recipient' %}</h3>
+        <p class="font-medium text-gray-900 dark:text-white">{{ order.recipient_name }}</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400">{{ order.recipient_phone }}</p>
+        {% if order.recipient_email %}<p class="text-sm text-gray-600 dark:text-gray-400">{{ order.recipient_email }}</p>{% endif %}
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ order.recipient_address|default:'—' }}{% if order.recipient_address_detail %}, {{ order.recipient_address_detail }}{% endif %}</p>
+      </div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 mb-6">
+      <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">{% translate 'Cargo & Delivery' %}</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div><p class="text-xs text-gray-400">{% translate 'Weight' %}</p><p class="font-medium text-gray-900 dark:text-white">{{ order.weight }} kg</p></div>
+        <div><p class="text-xs text-gray-400">{% translate 'Dimensions' %}</p><p class="font-medium text-gray-900 dark:text-white">{% if order.length or order.width or order.height %}{{ order.length|default:'?' }}×{{ order.width|default:'?' }}×{{ order.height|default:'?' }} cm{% else %}—{% endif %}</p></div>
+        <div><p class="text-xs text-gray-400">{% translate 'Declared value' %}</p><p class="font-medium text-gray-900 dark:text-white">{{ order.declared_value|default:'0' }} ₽</p></div>
+        <div><p class="text-xs text-gray-400">{% translate 'Est. delivery' %}</p><p class="font-medium text-gray-900 dark:text-white">{{ order.estimated_delivery_date|default:'—' }}</p></div>
+      </div>
+      {% if order.cargo_description %}<p class="mt-3 text-sm text-gray-600 dark:text-gray-400">{{ order.cargo_description }}</p>{% endif %}
+      {% if order.total_price %}<p class="mt-3 text-lg font-bold text-baikal-600 dark:text-baikal-400">{{ order.total_price }} ₽</p>{% endif %}
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
+      <div class="p-5">
+        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">{% translate 'Status History' %}</h3>
+        <div class="space-y-3">
+          {% for entry in status_history %}
+          <div class="flex items-start gap-3">
+            <div class="flex flex-col items-center">
+              <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold
+                {% if forloop.first %}bg-baikal-600 text-white{% else %}bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400{% endif %}">
+                {% if forloop.first %}<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>{% else %}{{ forloop.counter }}{% endif %}
+              </div>
+              {% if not forloop.last %}<div class="w-0.5 h-6 bg-gray-200 dark:bg-gray-700"></div>{% endif %}
+            </div>
+            <div class="pb-2">
+              <p class="text-sm font-medium text-gray-900 dark:text-white">{{ entry.get_status_display }}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">{{ entry.timestamp|date:'d M Y H:i' }}</p>
+              {% if entry.comment %}<p class="text-xs text-gray-600 dark:text-gray-400 mt-0.5">{{ entry.comment }}</p>{% endif %}
+            </div>
+          </div>
+          {% empty %}
+          <p class="text-sm text-gray-500 dark:text-gray-400">{% translate 'No status history yet.' %}</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div id="detail-map" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
+      <div class="flex items-center justify-center h-full text-gray-400">
+        <svg class="w-10 h-10 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+      </div>
+    </div>
+
+    {% if user.is_authenticated and user == order.user %}
+    <div class="flex flex-wrap gap-3">
+      {% if order.status == 'out_for_delivery' or order.status == 'delivered' %}
+      <form method="post" action="{% url 'orders:api_deliver' order.tracking_number %}">
+        {% csrf_token %}
+        <button type="submit" class="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white font-medium rounded-xl transition-colors">{% translate 'Confirm Delivery' %}</button>
+      </form>
+      {% endif %}
+      {% if order.status == 'awaiting_delivery_to_branch' or order.status == 'available_in_warehouse' or order.status == 'awaiting_courier' or order.status == 'confirmed' %}
+      <form method="post" action="{% url 'orders:api_pickup' order.tracking_number %}">
+        {% csrf_token %}
+        <button type="submit" class="px-6 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl transition-colors">{% translate 'Cargo Picked Up' %}</button>
+      </form>
+      {% endif %}
+      <a href="{% url 'orders:request_changes' order.tracking_number %}" class="px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">{% translate 'Request Changes' %}</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var mapEl = document.getElementById('detail-map');
+  var senderLat = {{ order.sender_address.latitude|default:0 }};
+  var senderLng = {{ order.sender_address.longitude|default:0 }};
+  var recipientLat = {{ order.recipient_address.latitude|default:0 }};
+  var recipientLng = {{ order.recipient_address.longitude|default:0 }};
+  if (mapEl && senderLat && recipientLat) {
+    var map = new maplibregl.Map({
+      container: 'detail-map',
+      style: {
+        version: 8,
+        sources: { osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, attribution: '&copy; OpenStreetMap contributors' } },
+        layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
+      },
+      center: [{{ order.sender_address.longitude|default:37.6173 }}, {{ order.sender_address.latitude|default:55.7558 }}],
+      zoom: 5
+    });
+    map.addControl(new maplibregl.NavigationControl(), 'top-right');
+    map.on('load', function() {
+      new maplibregl.Marker({ color: '#3b82f6' }).setLngLat([senderLng, senderLat]).setPopup(new maplibregl.Popup({ offset: 25 }).setHTML('{% translate "From" %}: {{ order.sender_address|escapejs }}')).addTo(map);
+      new maplibregl.Marker({ color: '#10b981' }).setLngLat([recipientLng, recipientLat]).setPopup(new maplibregl.Popup({ offset: 25 }).setHTML('{% translate "To" %}: {{ order.recipient_address|escapejs }}')).addTo(map);
+      var bounds = new maplibregl.LngLatBounds().extend([senderLng, senderLat]).extend([recipientLng, recipientLat]);
+      map.fitBounds(bounds, { padding: 50 });
+    });
+  } else if (mapEl) {
+    mapEl.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><p class="text-sm">{% translate "Map unavailable" %}</p></div>';
+  }
+});
+</script>
+{% endblock %}

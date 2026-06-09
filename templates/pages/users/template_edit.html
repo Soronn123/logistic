@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load i18n static i18n_extras %}
+
+{% block title %}{% translate 'Edit Template' %} — Baikal-Service{% endblock %}
+
+{% block content %}
+{% include 'partials/_profile_nav.html' %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+  <div class="animate-fade-in">
+    <div class="mb-8">
+      <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-100">{% translate 'Edit Delivery Route Template' %}</h1>
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{% translate 'Update your saved delivery route template' %}</p>
+    </div>
+
+    <form method="post" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-colors duration-300">
+      {% csrf_token %}
+      <div class="px-6 py-6 space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Template name' %} *</label>
+          <input type="text" name="name" value="{{ deliverytemplate.name }}" required class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all" placeholder="{% translate 'e.g. Moscow to SPb regular' %}">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'From city' %} *</label>
+            <select name="from_city" required class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all">
+              <option value="">{% translate 'Select city' %}</option>
+              {% for city in cities %}
+              <option value="{{ city.id }}" {% if deliverytemplate.from_city_id == city.id %}selected{% endif %}>{{ city }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'To city' %} *</label>
+            <select name="to_city" required class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all">
+              <option value="">{% translate 'Select city' %}</option>
+              {% for city in cities %}
+              <option value="{{ city.id }}" {% if deliverytemplate.to_city_id == city.id %}selected{% endif %}>{{ city }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Weight (kg)' %} *</label>
+          <input type="number" name="weight" value="{{ deliverytemplate.weight }}" required step="0.1" min="0.1" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all" placeholder="0">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Service' %} *</label>
+          <select name="service" required class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all">
+            <option value="">{% translate 'Select service' %}</option>
+            {% for service in services %}
+            <option value="{{ service.id }}" {% if deliverytemplate.service_id == service.id %}selected{% endif %}>{{ service }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Cargo description' %}</label>
+          <textarea name="cargo_description" rows="3" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all" placeholder="{% translate 'Describe the cargo...' %}">{{ deliverytemplate.cargo_description }}</textarea>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Declared value (₽)' %}</label>
+          <input type="number" name="declared_value" value="{{ deliverytemplate.declared_value|default:'' }}" step="100" min="0" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all" placeholder="0">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Sender address detail' %}</label>
+          <input type="text" name="sender_address_detail" value="{{ deliverytemplate.sender_address_detail }}" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all" placeholder="{% translate 'Street, building, apartment' %}">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Recipient address detail' %}</label>
+          <input type="text" name="recipient_address_detail" value="{{ deliverytemplate.recipient_address_detail }}" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all" placeholder="{% translate 'Street, building, apartment' %}">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Total price (₽)' %}</label>
+          <input type="text" value="{{ deliverytemplate.total_price|default:'' }}" readonly class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed" placeholder="{% translate 'Calculated on save' %}">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{% translate 'Additional services' %}</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {% for addon in additional_services %}
+            <label class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors has-[:checked]:border-baikal-400 has-[:checked]:bg-baikal-50 dark:has-[:checked]:bg-baikal-900/20">
+              <input type="checkbox" name="additional_services" value="{{ addon.id }}" {% if addon.id in template_addon_ids %}checked{% endif %} class="rounded border-gray-300 dark:border-gray-600 text-baikal-600 focus:ring-baikal-500">
+              <span class="text-sm text-gray-900 dark:text-gray-100">{{ addon|localized }}</span>
+              <span class="text-xs text-baikal-600 dark:text-baikal-400 ml-auto">{{ addon.price }} ₽</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3">
+        <a href="{% url 'users:templates' %}" class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+          {% translate 'Cancel' %}
+        </a>
+        <button type="submit" class="px-4 py-2 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl transition-colors">
+          {% translate 'Save' %}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

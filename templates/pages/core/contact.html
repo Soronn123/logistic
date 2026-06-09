@@ -4,8 +4,8 @@
 {% block title %}{% translate 'Contact Us — Baikal-Service' %}{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -179,14 +179,21 @@
 document.addEventListener('DOMContentLoaded', function() {
   const mapEl = document.getElementById('contact-map');
   if (mapEl) {
-    const map = L.map('contact-map').setView([55.7558, 37.6173], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap',
-      maxZoom: 18,
-    }).addTo(map);
-    L.marker([55.7558, 37.6173]).addTo(map)
-      .bindPopup('Baikal-Service<br>{% translate "Moscow, st. Transportnaya, 1" %}');
-    setTimeout(() => map.invalidateSize(), 300);
+    const map = new maplibregl.Map({
+      container: 'contact-map',
+      style: {
+        version: 8,
+        sources: { osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, attribution: '&copy; OpenStreetMap contributors' } },
+        layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
+      },
+      center: [37.6173, 55.7558],
+      zoom: 13
+    });
+    map.addControl(new maplibregl.NavigationControl(), 'top-right');
+    map.on('load', function() {
+      const popup = new maplibregl.Popup({ offset: 25 }).setHTML('Baikal-Service<br>{% translate "Moscow, st. Transportnaya, 1" %}');
+      new maplibregl.Marker().setLngLat([37.6173, 55.7558]).setPopup(popup).addTo(map);
+    });
   }
 });
 </script>

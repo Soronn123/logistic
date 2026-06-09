@@ -50,7 +50,7 @@
       </thead>
       <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
         {% for u in users %}
-        <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors user-row">
+        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors user-row">
           <td class="px-6 py-3">
             <div class="flex items-center gap-3">
               <div class="w-8 h-8 rounded-full bg-baikal-100 dark:bg-baikal-900/30 flex items-center justify-center text-baikal-600 dark:text-baikal-400 text-sm font-semibold">
@@ -62,17 +62,27 @@
               </div>
             </div>
           </td>
+          <td class="px-6 py-3 text-gray-600 dark:text-gray-400">{{ u.email }}</td>
+          <td class="px-6 py-3 text-gray-600 dark:text-gray-400 font-mono text-xs">{{ u.phone|default:'—' }}</td>
           <td class="px-6 py-3">
-            <div class="flex items-center gap-2">
-              <a href="{% url 'dashboard:user_edit' u.pk %}" class="text-baikal-600 dark:text-baikal-400 hover:underline text-sm">{% translate 'Edit' %}</a>
-              <span class="text-gray-300 dark:text-gray-600">|</span>
-              <a href="{% url 'dashboard:user_delete' u.pk %}" class="text-red-600 dark:text-red-400 hover:underline text-sm">{% translate 'Delete' %}</a>
-            </div>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+              {% if u.role == 'admin' %}bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400
+              {% elif u.role == 'manager' %}bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400
+              {% else %}bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300{% endif %}">
+              {{ u.get_role_display }}
+            </span>
           </td>
           <td class="px-6 py-3 text-gray-900 dark:text-white font-medium">{{ u.balance|floatformat:0 }} ₽</td>
           <td class="px-6 py-3 text-gray-500 dark:text-gray-400">{{ u.date_joined|date:'d M Y' }}</td>
           <td class="px-6 py-3">
-            <a href="#" class="text-baikal-600 dark:text-baikal-400 hover:underline text-sm">{% translate 'View' %}</a>
+            <div class="flex items-center gap-2">
+              <a href="{% url 'dashboard:user_edit' u.pk %}" class="p-1.5 rounded-lg text-gray-400 hover:text-baikal-600 dark:hover:text-baikal-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" title="{% translate 'Edit' %}">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+              </a>
+              <a href="{% url 'dashboard:user_delete' u.pk %}" class="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors" title="{% translate 'Delete' %}">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </a>
+            </div>
           </td>
         </tr>
         {% empty %}

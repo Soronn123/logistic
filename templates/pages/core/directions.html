@@ -2,8 +2,8 @@
 {% block title %}{% translate 'Shipping Directions' %} — Baikal-Service{% endblock %}
 {% block meta_description %}{% translate 'Cargo transportation directions across Russia, Kazakhstan, Belarus, Kyrgyzstan, and China' %}{% endblock %}
 {% block extra_head %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 {% endblock %}
 {% block content %}
 <div class="bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800">
@@ -80,11 +80,17 @@
 document.addEventListener('DOMContentLoaded', function() {
   const mapEl = document.getElementById('directions-map');
   if (mapEl) {
-    const map = L.map('directions-map').setView([55.7558, 37.6173], 4);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap',
-      maxZoom: 18,
-    }).addTo(map);
+    const map = new maplibregl.Map({
+      container: 'directions-map',
+      style: {
+        version: 8,
+        sources: { osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, attribution: '&copy; OpenStreetMap contributors' } },
+        layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
+      },
+      center: [37.6173, 55.7558],
+      zoom: 4
+    });
+    map.addControl(new maplibregl.NavigationControl(), 'top-right');
 
     const locations = [
       { name: '{% translate "Moscow" %}', lat: 55.7558, lng: 37.6173 },
@@ -96,13 +102,19 @@ document.addEventListener('DOMContentLoaded', function() {
       { name: '{% translate "Beijing" %}', lat: 39.9042, lng: 116.4074 },
     ];
 
-    locations.forEach(function(loc) {
-      L.circleMarker([loc.lat, loc.lng], {
-        radius: 8, fillColor: '#1d4ed8', color: '#fff', weight: 2, opacity: 1, fillOpacity: 0.8
-      }).addTo(map).bindPopup(loc.name);
+    map.on('load', function() {
+      locations.forEach(function(loc) {
+        const el = document.createElement('div');
+        el.style.width = '16px';
+        el.style.height = '16px';
+        el.style.borderRadius = '50%';
+        el.style.backgroundColor = '#1d4ed8';
+        el.style.border = '2px solid #fff';
+        el.style.cursor = 'pointer';
+        const popup = new maplibregl.Popup({ offset: 25 }).setHTML(loc.name);
+        new maplibregl.Marker({ element: el }).setLngLat([loc.lng, loc.lat]).setPopup(popup).addTo(map);
+      });
     });
-
-    setTimeout(function() { map.invalidateSize(); }, 300);
   }
 });
 </script>

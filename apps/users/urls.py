@@ -19,4 +19,6 @@ urlpatterns = [
     path('profile/orders/', views.OrderListView.as_view(), name='orders'),
     path('profile/orders/<slug:tracking_number>/', views.OrderDetailView.as_view(), name='order_detail'),
     path('profile/documents/', views.AccountingDocumentsView.as_view(), name='accounting_docs'),
+    path('profile/templates/', views.TemplatesView.as_view(), name='templates'),
+    path('profile/templates/<int:pk>/edit/', views.DeliveryTemplateEditView.as_view(), name='template_edit'),
 ]

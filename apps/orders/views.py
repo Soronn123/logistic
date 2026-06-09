@@ -1,3 +1,6 @@
+import json
+
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.urls import reverse_lazy
@@ -25,9 +28,21 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         from apps.geo.models import City
         from apps.services.models import AdditionalService, Service
-        context['cities'] = City.objects.filter(is_active=True).distinct()
-        context['services'] = Service.objects.filter(is_active=True).distinct()
-        context['additional_services'] = AdditionalService.objects.all().distinct()
+        cities_qs = City.objects.filter(is_active=True)
+        context['cities'] = cities_qs
+        context['services'] = Service.objects.filter(is_active=True)
+        context['additional_services'] = AdditionalService.objects.all()
+        context['cities_json'] = json.dumps([
+            {
+                'id': c.id,
+                'name': str(c),
+                'latitude': c.latitude,
+                'longitude': c.longitude,
+            }
+            for c in cities_qs
+        ])
+        context['default_lat'] = 55.7558
+        context['default_lng'] = 37.6173
         return context
 
     def form_valid(self, form):
@@ -50,6 +65,13 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
             status=self.object.status,
             changed_by=self.request.user,
             comment=_('Order created'),
+        )
+
+        messages.success(
+            self.request,
+            _('Order %(tracking)s created successfully! You can track it in your orders.') % {
+                'tracking': self.object.tracking_number,
+            },
         )
 
         return response

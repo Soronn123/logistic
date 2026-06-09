@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class City(models.Model):
-    name = models.CharField(max_length=255, verbose_name=_('Name'))
+    name = models.CharField(max_length=255, unique=True, verbose_name=_('Name'))
     name_en = models.CharField(max_length=255, blank=True, verbose_name=_('Name (EN)'))
     region = models.CharField(max_length=255, blank=True, verbose_name=_('Region'))
     region_en = models.CharField(max_length=255, blank=True, verbose_name=_('Region (EN)'))

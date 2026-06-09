@@ -1,9 +1,15 @@
 import re
 
 from django import forms
+from django.core.validators import validate_email
 from django.utils.translation import gettext_lazy as _
 
 from .models import Order
+
+from apps.geo.services import validate_address
+
+
+PHONE_PATTERN = re.compile(r'^(\+7|8)?[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$')
 
 
 class OrderForm(forms.ModelForm):
@@ -91,8 +97,8 @@ class OrderForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         from apps.geo.models import City
         from apps.services.models import AdditionalService, Service
-        self.fields['sender_address'].queryset = City.objects.filter(is_active=True).distinct()
-        self.fields['recipient_address'].queryset = City.objects.filter(is_active=True).distinct()
+        self.fields['sender_address'].queryset = City.objects.filter(is_active=True)
+        self.fields['recipient_address'].queryset = City.objects.filter(is_active=True)
         self.fields['service'].queryset = Service.objects.filter(is_active=True).distinct()
         self.fields['additional_services'].queryset = AdditionalService.objects.all().distinct()
         self.fields['sender_address'].empty_label = _('Select city')
@@ -152,10 +158,34 @@ class OrderForm(forms.ModelForm):
                         _('Door-to-door services are not available for pickup point delivery')
                     )
 
-        phone_pattern = re.compile(r'^(\+7|8)?[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}$')
+        phone_pattern = PHONE_PATTERN
         if sender_phone and not phone_pattern.match(sender_phone):
             self.add_error('sender_phone', _('Invalid phone format. Use +7 (999) 123-45-67'))
         if recipient_phone and not phone_pattern.match(recipient_phone):
             self.add_error('recipient_phone', _('Invalid phone format. Use +7 (999) 123-45-67'))
+
+        sender_email = cleaned_data.get('sender_email', '').strip()
+        recipient_email = cleaned_data.get('recipient_email', '').strip()
+        if sender_email:
+            try:
+                validate_email(sender_email)
+            except forms.ValidationError:
+                self.add_error('sender_email', _('Invalid email format'))
+        if recipient_email:
+            try:
+                validate_email(recipient_email)
+            except forms.ValidationError:
+                self.add_error('recipient_email', _('Invalid email format'))
+
+        sender_address_detail = cleaned_data.get('sender_address_detail', '').strip()
+        recipient_address_detail = cleaned_data.get('recipient_address_detail', '').strip()
+        if sender_address_detail:
+            valid, error_msg = validate_address(sender_address_detail)
+            if not valid:
+                self.add_error('sender_address_detail', error_msg)
+        if recipient_address_detail:
+            valid, error_msg = validate_address(recipient_address_detail)
+            if not valid:
+                self.add_error('recipient_address_detail', error_msg)
 
         return cleaned_data

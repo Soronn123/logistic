@@ -2,8 +2,8 @@
 {% load static i18n i18n_extras %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 {% endblock %}
 
 {% block title %}{% translate 'Baikal-Service — Cargo Transportation Across Russia and CIS' %}{% endblock %}
@@ -372,11 +372,11 @@
           <div class="flex flex-wrap gap-3">
             <a href="#" class="inline-flex items-center px-4 py-2 bg-black text-white text-sm font-medium rounded-xl hover:bg-gray-800 transition-all border border-gray-700">
               <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
-              App Store
+              {% translate 'App Store' %}
             </a>
             <a href="#" class="inline-flex items-center px-4 py-2 bg-black text-white text-sm font-medium rounded-xl hover:bg-gray-800 transition-all border border-gray-700">
               <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199l2.807 1.626a1 1 0 010 1.732l-2.807 1.626L15.206 12l2.492-2.492zM5.864 2.658L16.8 8.99l-2.302 2.302-8.634-8.634z"/></svg>
-              Google Play
+              {% translate 'Google Play' %}
             </a>
           </div>
         </div>
@@ -405,18 +405,26 @@ document.addEventListener('DOMContentLoaded', function() {
   ];
   
   if (branches.length > 0) {
-    const map = L.map('home-map').setView([branches[0].lat, branches[0].lng], 4);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap'
-    }).addTo(map);
-    
-    branches.forEach(b => {
-      const marker = L.marker([b.lat, b.lng]).addTo(map);
-      marker.bindPopup('<b>' + b.city + '</b><br>' + b.address + '<br>' + b.phone);
+    const map = new maplibregl.Map({
+      container: 'home-map',
+      style: {
+        version: 8,
+        sources: { osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, attribution: '&copy; OpenStreetMap contributors' } },
+        layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
+      },
+      center: [branches[0].lng, branches[0].lat],
+      zoom: 4
     });
-    
-    const group = L.featureGroup(branches.map(b => L.marker([b.lat, b.lng])));
-    map.fitBounds(group.getBounds().pad(0.1));
+    map.addControl(new maplibregl.NavigationControl(), 'top-right');
+    map.on('load', function() {
+      const bounds = new maplibregl.LngLatBounds();
+      branches.forEach(function(b) {
+        const popup = new maplibregl.Popup({ offset: 25 }).setHTML('<b>' + b.city + '</b><br>' + b.address + '<br>' + b.phone);
+        new maplibregl.Marker().setLngLat([b.lng, b.lat]).setPopup(popup).addTo(map);
+        bounds.extend([b.lng, b.lat]);
+      });
+      if (branches.length > 1) map.fitBounds(bounds, { padding: 50 });
+    });
   }
 });
 </script>
