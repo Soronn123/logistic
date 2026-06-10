@@ -15,8 +15,10 @@ input[type="number"] { -moz-appearance: textfield; }
 .dark #order-map .maplibregl-ctrl-zoom-in,
 .dark #order-map .maplibregl-ctrl-zoom-out { background: #374151; color: #d1d5db; }
 .dark #order-map .maplibregl-canvas { filter: brightness(0.85) invert(0.1); }
-.template-badge { transition: all 0.2s; }
-.template-badge:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,130,246,0.15); }
+.tpl-card { transition: box-shadow 0.2s; }
+.tpl-card:hover { box-shadow: 0 4px 16px rgba(99,102,241,0.1); }
+.tpl-badge { transition: all 0.15s ease; }
+.tpl-badge:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(99,102,241,0.15); }
 </style>
 {% endblock %}
 {% block content %}
@@ -51,7 +53,7 @@ input[type="number"] { -moz-appearance: textfield; }
       </div>
 
       <!-- Delivery Templates Quick Access (collapsible card) -->
-      <div x-show="deliveryTemplates.length > 0" class="mx-6 sm:mx-8 mt-4 rounded-xl bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/15 dark:to-indigo-900/15 border border-purple-200 dark:border-purple-800 shadow-sm">
+      <div x-show="deliveryTemplates.length > 0" class="mx-6 sm:mx-8 mt-4 rounded-xl bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/15 dark:to-indigo-900/15 border border-purple-200 dark:border-purple-800 shadow-sm tpl-card">
         <button type="button" @click="showQuickAccess = !showQuickAccess" class="w-full flex items-center justify-between px-4 py-3 text-left">
           <div class="flex items-center gap-2.5">
             <div class="w-7 h-7 rounded-lg bg-purple-100 dark:bg-purple-800/50 flex items-center justify-center flex-shrink-0">
@@ -59,15 +61,15 @@ input[type="number"] { -moz-appearance: textfield; }
             </div>
             <div>
               <p class="text-sm font-semibold text-purple-700 dark:text-purple-200">{% translate 'Quick fill from delivery template' %}</p>
-              <p class="text-xs text-purple-500 dark:text-purple-400" x-text="deliveryTemplates.length + ' template' + (deliveryTemplates.length !== 1 ? 's' : '') + ' available'"></p>
+              <p class="text-xs text-purple-500/70 dark:text-purple-400/70" x-text="deliveryTemplates.length + ' template' + (deliveryTemplates.length !== 1 ? 's' : '') + ' available'"></p>
             </div>
           </div>
           <svg x-show="showQuickAccess" class="w-4 h-4 text-purple-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
           <svg x-show="!showQuickAccess" class="w-4 h-4 text-purple-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </button>
-        <div x-show="showQuickAccess" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" class="px-4 pb-3 pt-0 flex flex-wrap gap-2 border-t border-purple-200/50 dark:border-purple-700/50">
+        <div x-show="showQuickAccess" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" class="px-4 pb-3 pt-3 flex flex-wrap gap-2 border-t border-purple-200/50 dark:border-purple-700/50">
           <template x-for="tpl in deliveryTemplates" :key="tpl.id">
-            <button type="button" @click="loadDeliveryTemplate(tpl)" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-purple-200 dark:border-purple-700 text-purple-700 dark:text-purple-300 hover:bg-white dark:hover:bg-gray-700 hover:border-purple-400 dark:hover:border-purple-500 hover:shadow-sm bg-white/60 dark:bg-gray-800/40 transition-all duration-150" x-text="tpl.name"></button>
+            <button type="button" @click="loadDeliveryTemplate(tpl)" class="tpl-badge inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-purple-200 dark:border-purple-700 text-purple-700 dark:text-purple-300 hover:bg-white dark:hover:bg-gray-700 hover:border-purple-400 dark:hover:border-purple-500 hover:shadow-sm bg-white/60 dark:bg-gray-800/40" x-text="tpl.name"></button>
           </template>
         </div>
       </div>
@@ -123,6 +125,27 @@ input[type="number"] { -moz-appearance: textfield; }
               {% translate 'Save as template' %}
             </button>
           </div>
+          <!-- Sender templates -->
+          <div x-show="senderTemplates.length > 0" class="mb-4 rounded-xl bg-gradient-to-r from-baikal-50 to-blue-50 dark:from-baikal-900/15 dark:to-blue-900/15 border border-baikal-200 dark:border-baikal-800 shadow-sm tpl-card">
+            <button type="button" @click="showSenderTemplates = !showSenderTemplates" class="w-full flex items-center justify-between px-4 py-3 text-left">
+              <div class="flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-lg bg-baikal-100 dark:bg-baikal-800/50 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-4 h-4 text-baikal-600 dark:text-baikal-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2h2m3-4h4a2 2 0 012 2v2m-4 0h-2a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2z"/></svg>
+                </div>
+                <div>
+                  <p class="text-sm font-semibold text-baikal-700 dark:text-baikal-200">{% translate 'Saved sender templates' %}</p>
+                  <p class="text-xs text-baikal-500/70 dark:text-baikal-400/70" x-text="senderTemplates.length + ' template' + (senderTemplates.length !== 1 ? 's' : '')"></p>
+                </div>
+              </div>
+              <svg x-show="showSenderTemplates" class="w-4 h-4 text-baikal-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+              <svg x-show="!showSenderTemplates" class="w-4 h-4 text-baikal-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div x-show="showSenderTemplates" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" class="px-4 pb-3 pt-3 flex flex-wrap gap-2 border-t border-baikal-200/50 dark:border-baikal-700/50">
+              <template x-for="tpl in senderTemplates" :key="tpl.id">
+                <button type="button" @click="loadSenderTemplate(tpl)" class="tpl-badge inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-baikal-200 dark:border-baikal-700 text-baikal-700 dark:text-baikal-300 hover:bg-white dark:hover:bg-gray-700 hover:border-baikal-400 dark:hover:border-baikal-500 hover:shadow-sm bg-white/60 dark:bg-gray-800/40" x-text="tpl.name"></button>
+              </template>
+            </div>
+          </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="sm:col-span-2">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Sender name' %} *</label>
@@ -152,15 +175,6 @@ input[type="number"] { -moz-appearance: textfield; }
                 class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'Street, building, apartment' %}">
             </div>
           </div>
-          <!-- Sender templates -->
-          <div x-show="senderTemplates.length > 0" class="mt-4">
-            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">{% translate 'Saved templates' %}</p>
-            <div class="flex flex-wrap gap-2">
-              <template x-for="tpl in senderTemplates" :key="tpl.id">
-                <button type="button" @click="loadSenderTemplate(tpl)" class="template-badge px-3 py-1.5 text-xs rounded-xl border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-baikal-400 dark:hover:border-baikal-500 hover:text-baikal-600 dark:hover:text-baikal-400 bg-gray-50 dark:bg-gray-700/50" x-text="tpl.name"></button>
-              </template>
-            </div>
-          </div>
         </div>
 
          <!-- Step 2: Recipient Info -->
@@ -171,6 +185,27 @@ input[type="number"] { -moz-appearance: textfield; }
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2h2m3-4h4a2 2 0 012 2v2m-4 0h-2a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2z"/></svg>
               {% translate 'Save as template' %}
             </button>
+          </div>
+          <!-- Recipient templates -->
+          <div x-show="recipientTemplates.length > 0" class="mb-4 rounded-xl bg-gradient-to-r from-baikal-50 to-blue-50 dark:from-baikal-900/15 dark:to-blue-900/15 border border-baikal-200 dark:border-baikal-800 shadow-sm tpl-card">
+            <button type="button" @click="showRecipientTemplates = !showRecipientTemplates" class="w-full flex items-center justify-between px-4 py-3 text-left">
+              <div class="flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-lg bg-baikal-100 dark:bg-baikal-800/50 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-4 h-4 text-baikal-600 dark:text-baikal-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2h2m3-4h4a2 2 0 012 2v2m-4 0h-2a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2z"/></svg>
+                </div>
+                <div>
+                  <p class="text-sm font-semibold text-baikal-700 dark:text-baikal-200">{% translate 'Saved recipient templates' %}</p>
+                  <p class="text-xs text-baikal-500/70 dark:text-baikal-400/70" x-text="recipientTemplates.length + ' template' + (recipientTemplates.length !== 1 ? 's' : '')"></p>
+                </div>
+              </div>
+              <svg x-show="showRecipientTemplates" class="w-4 h-4 text-baikal-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+              <svg x-show="!showRecipientTemplates" class="w-4 h-4 text-baikal-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div x-show="showRecipientTemplates" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" class="px-4 pb-3 pt-3 flex flex-wrap gap-2 border-t border-baikal-200/50 dark:border-baikal-700/50">
+              <template x-for="tpl in recipientTemplates" :key="tpl.id">
+                <button type="button" @click="loadRecipientTemplate(tpl)" class="tpl-badge inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-baikal-200 dark:border-baikal-700 text-baikal-700 dark:text-baikal-300 hover:bg-white dark:hover:bg-gray-700 hover:border-baikal-400 dark:hover:border-baikal-500 hover:shadow-sm bg-white/60 dark:bg-gray-800/40" x-text="tpl.name"></button>
+              </template>
+            </div>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="sm:col-span-2">
@@ -201,15 +236,6 @@ input[type="number"] { -moz-appearance: textfield; }
                   class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="{% translate 'Street, building, apartment' %}">
               </div>
             </div>
-          <!-- Recipient templates -->
-          <div x-show="recipientTemplates.length > 0" class="mt-4">
-            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">{% translate 'Saved templates' %}</p>
-            <div class="flex flex-wrap gap-2">
-              <template x-for="tpl in recipientTemplates" :key="tpl.id">
-                <button type="button" @click="loadRecipientTemplate(tpl)" class="template-badge px-3 py-1.5 text-xs rounded-xl border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-baikal-400 dark:hover:border-baikal-500 hover:text-baikal-600 dark:hover:text-baikal-400 bg-gray-50 dark:bg-gray-700/50" x-text="tpl.name"></button>
-              </template>
-            </div>
-          </div>
           </div>
 
         <!-- Step 3: Cargo Details -->
@@ -217,18 +243,30 @@ input[type="number"] { -moz-appearance: textfield; }
           <div class="flex items-center justify-between mb-6">
             <h2 class="text-xl font-semibold text-gray-900 dark:text-white">{% translate 'Cargo Details' %}</h2>
             <div class="flex items-center gap-2">
-              <button type="button" @click="saveCargoTemplate()" class="px-3 py-1.5 text-xs font-medium text-amber-600 dark:text-amber-400 border border-amber-300 dark:border-amber-600 rounded-xl hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors flex items-center gap-1">
+              <button type="button" @click="saveCargoTemplate()" class="px-3 py-1.5 text-xs font-medium text-baikal-600 dark:text-baikal-400 border border-baikal-300 dark:border-baikal-600 rounded-xl hover:bg-baikal-50 dark:hover:bg-baikal-900/20 transition-colors flex items-center gap-1">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2h2m3-4h4a2 2 0 012 2v2m-4 0h-2a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2z"/></svg>
                 {% translate 'Save as cargo template' %}
               </button>
             </div>
           </div>
           <div class="space-y-4">
-            <div x-show="cargoTemplates.length > 0" class="pb-2">
-              <p class="text-xs font-medium text-amber-600 dark:text-amber-400 mb-2">{% translate 'Cargo templates' %}</p>
-              <div class="flex flex-wrap gap-2">
+            <div x-show="cargoTemplates.length > 0" class="rounded-xl bg-gradient-to-r from-baikal-50 to-blue-50 dark:from-baikal-900/15 dark:to-blue-900/15 border border-baikal-200 dark:border-baikal-800 shadow-sm tpl-card">
+              <button type="button" @click="showCargoTemplates = !showCargoTemplates" class="w-full flex items-center justify-between px-4 py-3 text-left">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-7 h-7 rounded-lg bg-baikal-100 dark:bg-baikal-800/50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-baikal-600 dark:text-baikal-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                  </div>
+                  <div>
+                    <p class="text-sm font-semibold text-baikal-700 dark:text-baikal-200">{% translate 'Saved cargo templates' %}</p>
+                    <p class="text-xs text-baikal-500/70 dark:text-baikal-400/70" x-text="cargoTemplates.length + ' template' + (cargoTemplates.length !== 1 ? 's' : '')"></p>
+                  </div>
+                </div>
+                <svg x-show="showCargoTemplates" class="w-4 h-4 text-baikal-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+                <svg x-show="!showCargoTemplates" class="w-4 h-4 text-baikal-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div x-show="showCargoTemplates" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" class="px-4 pb-3 pt-3 flex flex-wrap gap-2 border-t border-baikal-200/50 dark:border-baikal-700/50">
                 <template x-for="tpl in cargoTemplates" :key="tpl.id">
-                  <button type="button" @click="loadCargoTemplate(tpl)" class="px-3 py-1.5 text-xs rounded-xl border border-amber-200 dark:border-amber-700 text-amber-600 dark:text-amber-300 hover:border-amber-400 dark:hover:border-amber-500 bg-white dark:bg-gray-700/50" x-text="tpl.name"></button>
+                  <button type="button" @click="loadCargoTemplate(tpl)" class="tpl-badge inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-baikal-200 dark:border-baikal-700 text-baikal-700 dark:text-baikal-300 hover:bg-white dark:hover:bg-gray-700 hover:border-baikal-400 dark:hover:border-baikal-500 hover:shadow-sm bg-white/60 dark:bg-gray-800/40" x-text="tpl.name"></button>
                 </template>
               </div>
             </div>
@@ -243,15 +281,15 @@ input[type="number"] { -moz-appearance: textfield; }
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Length (cm)' %}</label>
-                <input type="number" name="length" step="1" min="0" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="0">
+                <input type="number" name="length" step="1" min="0" x-model="fields.length" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="0">
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Width (cm)' %}</label>
-                <input type="number" name="width" step="1" min="0" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="0">
+                <input type="number" name="width" step="1" min="0" x-model="fields.width" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="0">
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Height (cm)' %}</label>
-                <input type="number" name="height" step="1" min="0" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="0">
+                <input type="number" name="height" step="1" min="0" x-model="fields.height" class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors" placeholder="0">
               </div>
             </div>
             <div>
@@ -427,6 +465,9 @@ function orderForm() {
     step: 1,
     maxStep: 5,
     showQuickAccess: true,
+    showSenderTemplates: false,
+    showRecipientTemplates: false,
+    showCargoTemplates: false,
     validationError: '',
     emailErrors: { sender_email: '', recipient_email: '' },
     fields: {
@@ -789,7 +830,6 @@ function orderForm() {
       this.fields.width = tpl.width || '';
       this.fields.height = tpl.height || '';
       this.fields.declared_value = tpl.declared_value || '';
-      this.step = 4;
     },
 
     formatPhone(field) {
