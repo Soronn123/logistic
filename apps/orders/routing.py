@@ -25,28 +25,33 @@ def get_nearest_warehouse(city):
     ).select_related('city').first()
 
 
+def haversine_distance(lat1, lng1, lat2, lng2):
+    R = 6371
+    lat1_r = math.radians(lat1)
+    lat2_r = math.radians(lat2)
+    dlat = math.radians(lat2 - lat1)
+    dlng = math.radians(lng2 - lng1)
+    a = math.sin(dlat / 2) ** 2 + math.cos(lat1_r) * math.cos(lat2_r) * math.sin(dlng / 2) ** 2
+    return R * 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+
 def calculate_route(from_city, to_city):
     if not from_city or not to_city:
         return {'type': 'unknown', 'warehouse_stop': None, 'delivery_days': 3}
 
-    from_lat, from_lng = from_city.latitude, from_city.longitude
-    to_lat, to_lng = to_city.latitude, to_city.longitude
+    distance = haversine_distance(from_city.latitude, from_city.longitude, to_city.latitude, to_city.longitude)
 
-    distance = math.sqrt((to_lat - from_lat) ** 2 + (to_lng - from_lng) ** 2)
-
-    nearby_threshold = 5.0
+    nearby_threshold = 500.0
     is_nearby = distance < nearby_threshold
 
     warehouse = get_nearest_warehouse(from_city)
     if warehouse:
-        warehouse_dist = math.sqrt(
-            (warehouse.latitude - to_lat) ** 2 + (warehouse.longitude - to_lng) ** 2
-        )
+        warehouse_dist = haversine_distance(warehouse.latitude, warehouse.longitude, to_city.latitude, to_city.longitude)
     else:
         warehouse_dist = float('inf')
 
     if is_nearby and warehouse_dist > distance:
-        base_days = max(1, int(distance * 2))
+        base_days = max(1, int(distance / 200))
         return {
             'type': 'direct',
             'warehouse_stop': None,
@@ -54,14 +59,14 @@ def calculate_route(from_city, to_city):
         }
 
     if warehouse:
-        warehouse_days = max(1, int(distance * 1.5)) + 1
+        warehouse_days = max(1, int(distance / 300)) + 1
         return {
             'type': 'via_warehouse',
             'warehouse_stop': warehouse,
             'delivery_days': warehouse_days,
         }
 
-    base_days = max(1, int(distance * 2))
+    base_days = max(1, int(distance / 200))
     return {
         'type': 'direct',
         'warehouse_stop': None,
@@ -69,7 +74,7 @@ def calculate_route(from_city, to_city):
     }
 
 
-def calculate_price(from_city, to_city, weight, service=None):
+def calculate_price(from_city, to_city, weight, service=None, additional_services=None, declared_value=None):
     from apps.services.models import Tariff
 
     route = calculate_route(from_city, to_city)
@@ -86,7 +91,7 @@ def calculate_price(from_city, to_city, weight, service=None):
     tariff_used = None
     for tariff in tariffs:
         price = Decimal(str(tariff.price_per_kg)) * Decimal(str(weight))
-        if price > base_price:
+        if base_price == 0 or price < base_price:
             base_price = price
             tariff_used = tariff
 
@@ -96,20 +101,38 @@ def calculate_price(from_city, to_city, weight, service=None):
     if base_price == 0:
         base_price = Decimal(str(weight)) * Decimal('50')
 
-    if not has_branch_in_city(from_city):
+    branch_in_city = has_branch_in_city(from_city)
+    if not branch_in_city:
         base_price = (base_price * SURCHARGE_MULTIPLIER).quantize(Decimal('0.01'))
 
     if route.get('warehouse_stop'):
         handling_fee = Decimal('500')
         base_price += handling_fee
 
+    additional_total = Decimal('0')
+    if additional_services:
+        for add_svc in additional_services.all():
+            if add_svc.price_type == 'fixed':
+                additional_total += add_svc.price
+            elif add_svc.price_type == 'per_unit':
+                additional_total += add_svc.price * Decimal(str(weight))
+            elif add_svc.price_type == 'percentage' and declared_value:
+                additional_total += (add_svc.price / Decimal('100')) * Decimal(str(declared_value))
+
+    total_price = base_price + additional_total
+
+    delivery_days = route['delivery_days']
+    if tariff_used:
+        delivery_days = random.randint(tariff_used.delivery_days_min, tariff_used.delivery_days_max)
+
     return {
         'base_price': base_price.quantize(Decimal('0.01')),
-        'total_price': base_price.quantize(Decimal('0.01')),
+        'additional_services_price': additional_total.quantize(Decimal('0.01')),
+        'total_price': total_price.quantize(Decimal('0.01')),
         'route': route,
         'tariff': tariff_used,
-        'surcharge_applied': not has_branch_in_city(from_city),
-        'delivery_days': route['delivery_days'],
+        'surcharge_applied': not branch_in_city,
+        'delivery_days': delivery_days,
     }
 
 
@@ -117,6 +140,9 @@ def get_next_statuses(current_status):
     status_flow = {
         'draft': ['confirmed'],
         'confirmed': ['picked_up'],
+        'awaiting_delivery_to_branch': ['picked_up'],
+        'available_in_warehouse': ['picked_up'],
+        'awaiting_courier': ['picked_up'],
         'picked_up': ['in_transit'],
         'in_transit': ['at_warehouse', 'out_for_delivery'],
         'at_warehouse': ['out_for_delivery'],
@@ -128,6 +154,8 @@ def get_next_statuses(current_status):
 
 
 def get_initial_status(from_city):
+    if from_city is None:
+        return 'draft'
     if has_warehouse_in_city(from_city):
         return 'awaiting_delivery_to_branch'
     elif has_branch_in_city(from_city):
@@ -135,11 +163,14 @@ def get_initial_status(from_city):
     return 'awaiting_courier'
 
 
-def compute_eta(from_city, to_city):
-    route = calculate_route(from_city, to_city)
-    days = route['delivery_days']
-    if route.get('warehouse_stop'):
-        days += 1
+def compute_eta(from_city, to_city, delivery_days=None):
+    if delivery_days is None:
+        route = calculate_route(from_city, to_city)
+        days = route['delivery_days']
+        if route.get('warehouse_stop'):
+            days += 1
+    else:
+        days = delivery_days
     return timezone.now().date() + timedelta(days=days)
 
 

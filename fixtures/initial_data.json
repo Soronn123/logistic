@@ -1,0 +1,896 @@
+[
+  {
+    "model": "geo.city",
+    "pk": 1,
+    "fields": {
+      "name": "Москва",
+      "name_en": "Moscow",
+      "region": "Москва",
+      "region_en": "Moscow",
+      "latitude": 55.7558,
+      "longitude": 37.6173,
+      "is_active": true,
+      "timezone": "Europe/Moscow"
+    }
+  },
+  {
+    "model": "geo.city",
+    "pk": 2,
+    "fields": {
+      "name": "Санкт-Петербург",
+      "name_en": "Saint Petersburg",
+      "region": "Ленинградская область",
+      "region_en": "Leningrad Oblast",
+      "latitude": 59.9343,
+      "longitude": 30.3351,
+      "is_active": true,
+      "timezone": "Europe/Moscow"
+    }
+  },
+  {
+    "model": "geo.city",
+    "pk": 3,
+    "fields": {
+      "name": "Новосибирск",
+      "name_en": "Novosibirsk",
+      "region": "Новосибирская область",
+      "region_en": "Novosibirsk Oblast",
+      "latitude": 55.0084,
+      "longitude": 82.9357,
+      "is_active": true,
+      "timezone": "Asia/Novosibirsk"
+    }
+  },
+  {
+    "model": "geo.city",
+    "pk": 4,
+    "fields": {
+      "name": "Екатеринбург",
+      "name_en": "Yekaterinburg",
+      "region": "Свердловская область",
+      "region_en": "Sverdlovsk Oblast",
+      "latitude": 56.8389,
+      "longitude": 60.6057,
+      "is_active": true,
+      "timezone": "Asia/Yekaterinburg"
+    }
+  },
+  {
+    "model": "geo.city",
+    "pk": 5,
+    "fields": {
+      "name": "Казань",
+      "name_en": "Kazan",
+      "region": "Республика Татарстан",
+      "region_en": "Republic of Tatarstan",
+      "latitude": 55.8304,
+      "longitude": 49.0661,
+      "is_active": true,
+      "timezone": "Europe/Moscow"
+    }
+  },
+  {
+    "model": "geo.branch",
+    "pk": 1,
+    "fields": {
+      "city": 1,
+      "branch_type": "warehouse",
+      "address": "ул. Складочная, д. 1, стр. 6",
+      "address_en": "1, bld. 6, Skladochnaya st.",
+      "phone": "+7(495)123-45-67",
+      "email": "moscow-warehouse@baikal-service.ru",
+      "working_hours": {"mon-fri": "08:00-20:00", "sat": "09:00-18:00"},
+      "latitude": 55.8050,
+      "longitude": 37.5850,
+      "is_active": true,
+      "has_pickup": true,
+      "has_delivery": true,
+      "has_loading_equipment": true
+    }
+  },
+  {
+    "model": "geo.branch",
+    "pk": 2,
+    "fields": {
+      "city": 1,
+      "branch_type": "pickup_point",
+      "address": "ул. Тверская, д. 12",
+      "address_en": "12, Tverskaya st.",
+      "phone": "+7(495)234-56-78",
+      "email": "moscow-tverskaya@baikal-service.ru",
+      "working_hours": {"mon-fri": "09:00-21:00", "sat-sun": "10:00-20:00"},
+      "latitude": 55.7640,
+      "longitude": 37.6060,
+      "is_active": true,
+      "has_pickup": true,
+      "has_delivery": false,
+      "has_loading_equipment": false
+    }
+  },
+  {
+    "model": "geo.branch",
+    "pk": 3,
+    "fields": {
+      "city": 2,
+      "branch_type": "warehouse",
+      "address": "Невский пр-т, д. 100",
+      "address_en": "100, Nevsky Prospect",
+      "phone": "+7(812)345-67-89",
+      "email": "spb-warehouse@baikal-service.ru",
+      "working_hours": {"mon-fri": "08:00-19:00"},
+      "latitude": 59.9320,
+      "longitude": 30.3500,
+      "is_active": true,
+      "has_pickup": true,
+      "has_delivery": true,
+      "has_loading_equipment": true
+    }
+  },
+  {
+    "model": "geo.branch",
+    "pk": 4,
+    "fields": {
+      "city": 3,
+      "branch_type": "office",
+      "address": "Красный пр-т, д. 55",
+      "address_en": "55, Krasny Prospect",
+      "phone": "+7(383)456-78-90",
+      "email": "nsk-office@baikal-service.ru",
+      "working_hours": {"mon-fri": "09:00-18:00"},
+      "latitude": 55.0350,
+      "longitude": 82.9200,
+      "is_active": true,
+      "has_pickup": false,
+      "has_delivery": true,
+      "has_loading_equipment": false
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 1,
+    "fields": {
+      "name": "Доставка грузов",
+      "name_en": "Cargo delivery",
+      "slug": "cargo-delivery",
+      "icon": "truck",
+      "description": "Услуги доставки грузов по России",
+      "description_en": "Cargo delivery services across Russia",
+      "order": 1,
+      "parent": null
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 2,
+    "fields": {
+      "name": "Складские услуги",
+      "name_en": "Warehouse services",
+      "slug": "warehouse-services",
+      "icon": "warehouse",
+      "description": "Хранение и обработка грузов на складах",
+      "description_en": "Storage and handling of goods in warehouses",
+      "order": 2,
+      "parent": null
+    }
+  },
+  {
+    "model": "services.servicecategory",
+    "pk": 3,
+    "fields": {
+      "name": "Таможенные услуги",
+      "name_en": "Customs services",
+      "slug": "customs-services",
+      "icon": "stamp",
+      "description": "Оформление таможенных документов",
+      "description_en": "Customs documentation",
+      "order": 3,
+      "parent": null
+    }
+  },
+  {
+    "model": "services.service",
+    "pk": 1,
+    "fields": {
+      "category": 1,
+      "name": "Стандартная доставка",
+      "name_en": "Standard delivery",
+      "slug": "standard-delivery",
+      "description": "Доставка грузов в течение 3-5 рабочих дней",
+      "description_en": "Delivery within 3-5 business days",
+      "short_description": "Доставка за 3-5 дней по всей России",
+      "short_description_en": "Delivery in 3-5 days across Russia",
+      "icon": "truck-fast",
+      "base_price": 350.00,
+      "price_unit": "за кг",
+      "is_active": true,
+      "sort_order": 1
+    }
+  },
+  {
+    "model": "services.service",
+    "pk": 2,
+    "fields": {
+      "category": 1,
+      "name": "Экспресс доставка",
+      "name_en": "Express delivery",
+      "slug": "express-delivery",
+      "description": "Срочная доставка в течение 1-2 рабочих дней",
+      "description_en": "Urgent delivery within 1-2 business days",
+      "short_description": "Доставка за 1-2 дня",
+      "short_description_en": "Delivery in 1-2 days",
+      "icon": "bolt",
+      "base_price": 650.00,
+      "price_unit": "за кг",
+      "is_active": true,
+      "sort_order": 2
+    }
+  },
+  {
+    "model": "services.service",
+    "pk": 3,
+    "fields": {
+      "category": 2,
+      "name": "Краткосрочное хранение",
+      "name_en": "Short-term storage",
+      "slug": "short-term-storage",
+      "description": "Хранение грузов до 30 дней",
+      "description_en": "Storage of goods up to 30 days",
+      "short_description": "Хранение до 30 дней",
+      "short_description_en": "Storage up to 30 days",
+      "icon": "box",
+      "base_price": 50.00,
+      "price_unit": "за м³/день",
+      "is_active": true,
+      "sort_order": 3
+    }
+  },
+  {
+    "model": "services.service",
+    "pk": 4,
+    "fields": {
+      "category": 1,
+      "name": "Доставка до двери",
+      "name_en": "Door-to-door delivery",
+      "slug": "door-delivery",
+      "description": "Доставка грузов непосредственно получателю",
+      "description_en": "Direct delivery to the recipient",
+      "short_description": "Доставка до двери получателя",
+      "short_description_en": "Delivery to recipient's door",
+      "icon": "house",
+      "base_price": 500.00,
+      "price_unit": "за кг",
+      "is_active": true,
+      "sort_order": 4
+    }
+  },
+  {
+    "model": "services.additionalservice",
+    "pk": 1,
+    "fields": {
+      "name": "Страховка груза",
+      "name_en": "Cargo insurance",
+      "slug": "cargo-insurance",
+      "description": "Страхование груза на полную стоимость",
+      "description_en": "Full value cargo insurance",
+      "price": 500.00,
+      "price_type": "fixed",
+      "is_door_service": false
+    }
+  },
+  {
+    "model": "services.additionalservice",
+    "pk": 2,
+    "fields": {
+      "name": "Упаковка",
+      "name_en": "Packaging",
+      "slug": "packaging",
+      "description": "Профессиональная упаковка груза",
+      "description_en": "Professional cargo packaging",
+      "price": 300.00,
+      "price_type": "fixed",
+      "is_door_service": false
+    }
+  },
+  {
+    "model": "services.additionalservice",
+    "pk": 3,
+    "fields": {
+      "name": "Погрузка/выгрузка",
+      "name_en": "Loading/unloading",
+      "slug": "loading-unloading",
+      "description": "Ручная погрузка и выгрузка груза",
+      "description_en": "Manual loading and unloading",
+      "price": 200.00,
+      "price_type": "per_unit",
+      "is_door_service": true
+    }
+  },
+  {
+    "model": "services.tariff",
+    "pk": 1,
+    "fields": {
+      "name": "Стандартный тариф",
+      "name_en": "Standard tariff",
+      "description": "Для грузов до 100 кг",
+      "description_en": "For cargo up to 100 kg",
+      "min_weight": 0.00,
+      "max_weight": 100.00,
+      "price_per_kg": 35.00,
+      "delivery_days_min": 3,
+      "delivery_days_max": 5
+    }
+  },
+  {
+    "model": "services.tariff",
+    "pk": 2,
+    "fields": {
+      "name": "Оптовый тариф",
+      "name_en": "Wholesale tariff",
+      "description": "Для грузов от 100 кг",
+      "description_en": "For cargo from 100 kg",
+      "min_weight": 100.00,
+      "max_weight": null,
+      "price_per_kg": 25.00,
+      "delivery_days_min": 4,
+      "delivery_days_max": 7
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$test$test",
+      "last_login": "2026-01-15T10:00:00Z",
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "Администратор",
+      "last_name": "Системы",
+      "email": "admin@baikal-service.ru",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2026-01-01T00:00:00Z",
+      "phone": "+7(495)000-00-01",
+      "balance": "0.00",
+      "role": "admin",
+      "language": "ru",
+      "theme": "light",
+      "company_name": "Байкал-Сервис",
+      "inn": "7701234567",
+      "is_company": true
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$test$test",
+      "last_login": "2026-01-20T09:00:00Z",
+      "is_superuser": false,
+      "username": "manager1",
+      "first_name": "Иван",
+      "last_name": "Петров",
+      "email": "manager@baikal-service.ru",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2026-01-01T00:00:00Z",
+      "phone": "+7(495)000-00-02",
+      "balance": "0.00",
+      "role": "manager",
+      "language": "ru",
+      "theme": "light",
+      "company_name": "Байкал-Сервис",
+      "inn": "7701234567",
+      "is_company": true
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$test$test",
+      "last_login": "2026-02-01T08:30:00Z",
+      "is_superuser": false,
+      "username": "client1",
+      "first_name": "Алексей",
+      "last_name": "Сидоров",
+      "email": "client1@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-10T00:00:00Z",
+      "phone": "+7(903)111-22-33",
+      "balance": "15000.00",
+      "role": "client",
+      "language": "ru",
+      "theme": "dark",
+      "company_name": "ООО Логистик Плюс",
+      "inn": "7702345678",
+      "is_company": true
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$test$test",
+      "last_login": "2026-02-10T14:00:00Z",
+      "is_superuser": false,
+      "username": "client2",
+      "first_name": "Мария",
+      "last_name": "Козлова",
+      "email": "client2@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-15T00:00:00Z",
+      "phone": "+7(916)444-55-66",
+      "balance": "8500.00",
+      "role": "client",
+      "language": "en",
+      "theme": "light",
+      "company_name": "",
+      "inn": "",
+      "is_company": false
+    }
+  },
+  {
+    "model": "users.contacttemplate",
+    "pk": 1,
+    "fields": {
+      "user": 3,
+      "name": "Основной склад",
+      "template_type": "sender",
+      "recipient_name": "Алексей Сидоров",
+      "recipient_phone": "+7(903)111-22-33",
+      "recipient_email": "client1@example.com",
+      "city": 1,
+      "address_detail": "ул. Складочная, д. 1",
+      "created_at": "2026-01-20T10:00:00Z"
+    }
+  },
+  {
+    "model": "users.deliverytemplate",
+    "pk": 1,
+    "fields": {
+      "user": 3,
+      "name": "Москва - СПб",
+      "from_city": 1,
+      "to_city": 2,
+      "weight": "25.00",
+      "length": "60.00",
+      "width": "40.00",
+      "height": "30.00",
+      "cargo_description": "Электроника",
+      "service": 1,
+      "declared_value": "50000.00",
+      "sender_address_detail": "ул. Складочная, д. 1",
+      "recipient_address_detail": "Невский пр-т, д. 50",
+      "additional_services": [1],
+      "total_price": "2500.00",
+      "created_at": "2026-01-25T12:00:00Z"
+    }
+  },
+  {
+    "model": "users.cargotemplate",
+    "pk": 1,
+    "fields": {
+      "user": 3,
+      "name": "Стандартная коробка",
+      "cargo_description": "Картонные коробки с товарами",
+      "weight": "15.00",
+      "length": "50.00",
+      "width": "40.00",
+      "height": "30.00",
+      "declared_value": "25000.00",
+      "created_at": "2026-01-25T14:00:00Z"
+    }
+  },
+  {
+    "model": "users.ticket",
+    "pk": 1,
+    "fields": {
+      "subject": "Вопрос по срокам доставки",
+      "status": "open",
+      "priority": "medium",
+      "created_by": 3,
+      "assigned_to": 2,
+      "created_at": "2026-02-01T10:00:00Z",
+      "updated_at": "2026-02-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "users.ticketmessage",
+    "pk": 1,
+    "fields": {
+      "ticket": 1,
+      "sender": 3,
+      "message": "Здравствуйте! Подскажите, когда ожидается доставка заказа BK-1234567890?",
+      "created_at": "2026-02-01T10:00:00Z",
+      "is_internal_note": false
+    }
+  },
+  {
+    "model": "users.ticketmessage",
+    "pk": 2,
+    "fields": {
+      "ticket": 1,
+      "sender": 2,
+      "message": "Добрый день! Ваш заказ находится в пути. Ожидаемая дата доставки — 5 февраля.",
+      "created_at": "2026-02-01T11:30:00Z",
+      "is_internal_note": false
+    }
+  },
+  {
+    "model": "users.transaction",
+    "pk": 1,
+    "fields": {
+      "user": 3,
+      "amount": "20000.00",
+      "transaction_type": "deposit",
+      "description": "Пополнение баланса",
+      "created_at": "2026-01-10T12:00:00Z",
+      "balance_after": "20000.00"
+    }
+  },
+  {
+    "model": "users.transaction",
+    "pk": 2,
+    "fields": {
+      "user": 3,
+      "amount": "-5000.00",
+      "transaction_type": "withdrawal",
+      "description": "Оплата доставки BK-ABC123DEF4",
+      "created_at": "2026-01-20T15:00:00Z",
+      "balance_after": "15000.00"
+    }
+  },
+  {
+    "model": "orders.order",
+    "pk": 1,
+    "fields": {
+      "tracking_number": "BK-ABC123DEF4",
+      "user": 3,
+      "sender_name": "Алексей Сидоров",
+      "sender_phone": "+7(903)111-22-33",
+      "sender_email": "client1@example.com",
+      "sender_address": 1,
+      "sender_address_detail": "ул. Складочная, д. 1",
+      "recipient_name": "Иван Козлов",
+      "recipient_phone": "+7(812)999-88-77",
+      "recipient_email": "ivan@example.com",
+      "recipient_address": 2,
+      "recipient_address_detail": "Невский пр-т, д. 50",
+      "cargo_description": "Электроника, бытовая техника",
+      "weight": "25.00",
+      "volume": "0.0720",
+      "length": "60.00",
+      "width": "40.00",
+      "height": "30.00",
+      "declared_value": "50000.00",
+      "service": 1,
+      "additional_services": [1],
+      "status": "in_transit",
+      "total_price": "2500.00",
+      "created_at": "2026-01-20T10:00:00Z",
+      "updated_at": "2026-01-22T14:00:00Z",
+      "estimated_delivery_date": "2026-01-25",
+      "actual_delivery_date": null
+    }
+  },
+  {
+    "model": "orders.order",
+    "pk": 2,
+    "fields": {
+      "tracking_number": "BK-XYZ789GHIJ",
+      "user": 4,
+      "sender_name": "Мария Козлова",
+      "sender_phone": "+7(916)444-55-66",
+      "sender_email": "client2@example.com",
+      "sender_address": 1,
+      "sender_address_detail": "ул. Тверская, д. 12",
+      "recipient_name": "Пётр Новиков",
+      "recipient_phone": "+7(383)111-22-33",
+      "recipient_email": "petr@example.com",
+      "recipient_address": 3,
+      "recipient_address_detail": "Красный пр-т, д. 10",
+      "cargo_description": "Документы и мелкие товары",
+      "weight": "5.00",
+      "volume": "0.0120",
+      "length": "30.00",
+      "width": "20.00",
+      "height": "20.00",
+      "declared_value": "10000.00",
+      "service": 2,
+      "additional_services": [2],
+      "status": "delivered",
+      "total_price": "1200.00",
+      "created_at": "2026-02-01T09:00:00Z",
+      "updated_at": "2026-02-03T16:00:00Z",
+      "estimated_delivery_date": "2026-02-03",
+      "actual_delivery_date": "2026-02-03"
+    }
+  },
+  {
+    "model": "orders.order",
+    "pk": 3,
+    "fields": {
+      "tracking_number": "BK-ORD5678MNOP",
+      "user": 3,
+      "sender_name": "Алексей Сидоров",
+      "sender_phone": "+7(903)111-22-33",
+      "sender_email": "client1@example.com",
+      "sender_address": 4,
+      "sender_address_detail": "ул. Мира, д. 25",
+      "recipient_name": "Ольга Смирнова",
+      "recipient_phone": "+7(843)555-66-77",
+      "recipient_email": "olga@example.com",
+      "recipient_address": 5,
+      "recipient_address_detail": "ул. Баумана, д. 30",
+      "cargo_description": "Промышленные запчасти",
+      "weight": "150.00",
+      "volume": "0.5000",
+      "length": "100.00",
+      "width": "80.00",
+      "height": "60.00",
+      "declared_value": "200000.00",
+      "service": 1,
+      "additional_services": [1, 3],
+      "status": "draft",
+      "total_price": "6750.00",
+      "created_at": "2026-02-10T08:00:00Z",
+      "updated_at": "2026-02-10T08:00:00Z",
+      "estimated_delivery_date": null,
+      "actual_delivery_date": null
+    }
+  },
+  {
+    "model": "orders.orderstatushistory",
+    "pk": 1,
+    "fields": {
+      "order": 1,
+      "status": "draft",
+      "changed_by": 3,
+      "timestamp": "2026-01-20T10:00:00Z",
+      "comment": "Заказ создан"
+    }
+  },
+  {
+    "model": "orders.orderstatushistory",
+    "pk": 2,
+    "fields": {
+      "order": 1,
+      "status": "confirmed",
+      "changed_by": 2,
+      "timestamp": "2026-01-20T12:00:00Z",
+      "comment": "Заказ подтверждён менеджером"
+    }
+  },
+  {
+    "model": "orders.orderstatushistory",
+    "pk": 3,
+    "fields": {
+      "order": 1,
+      "status": "in_transit",
+      "changed_by": null,
+      "timestamp": "2026-01-22T14:00:00Z",
+      "comment": "Груз принят к перевозке"
+    }
+  },
+  {
+    "model": "orders.orderstatushistory",
+    "pk": 4,
+    "fields": {
+      "order": 2,
+      "status": "draft",
+      "changed_by": 4,
+      "timestamp": "2026-02-01T09:00:00Z",
+      "comment": "Заказ создан"
+    }
+  },
+  {
+    "model": "orders.orderstatushistory",
+    "pk": 5,
+    "fields": {
+      "order": 2,
+      "status": "delivered",
+      "changed_by": null,
+      "timestamp": "2026-02-03T16:00:00Z",
+      "comment": "Груз доставлен получателю"
+    }
+  },
+  {
+    "model": "core.contentpage",
+    "pk": 1,
+    "fields": {
+      "slug": "about",
+      "title": "О компании",
+      "title_en": "About us",
+      "content": "Байкал-Сервис — ведущая логистическая компания, предоставляющая услуги доставки грузов по всей России с 2010 года.",
+      "content_en": "Baikal-Service is a leading logistics company providing cargo delivery services across Russia since 2010.",
+      "meta_description": "О компании Байкал-Сервис — логистика и доставка",
+      "is_published": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z",
+      "page_type": "about"
+    }
+  },
+  {
+    "model": "core.faq",
+    "pk": 1,
+    "fields": {
+      "question": "Как отследить свой заказ?",
+      "question_en": "How to track my order?",
+      "answer": "Вы можете отследить заказ по номеру трекинга на странице Отслеживание на нашем сайте.",
+      "answer_en": "You can track your order by tracking number on the Tracking page of our website.",
+      "category": "Доставка",
+      "order": 1,
+      "is_published": true
+    }
+  },
+  {
+    "model": "core.faq",
+    "pk": 2,
+    "fields": {
+      "question": "Какие способы оплаты доступны?",
+      "question_en": "What payment methods are available?",
+      "answer": "Мы принимаем банковские карты, безналичный расчёт и оплату наличными при получении.",
+      "answer_en": "We accept bank cards, bank transfer, and cash on delivery.",
+      "category": "Оплата",
+      "order": 2,
+      "is_published": true
+    }
+  },
+  {
+    "model": "core.review",
+    "pk": 1,
+    "fields": {
+      "author_name": "Игорь Васильев",
+      "author_company": "ООО СтройМастер",
+      "text": "Отличная компания! Доставляют быстро и без повреждений. Рекомендую!",
+      "rating": 5,
+      "is_approved": true,
+      "created_at": "2026-01-20T12:00:00Z",
+      "source": "сайт"
+    }
+  },
+  {
+    "model": "core.review",
+    "pk": 2,
+    "fields": {
+      "author_name": "Наталья Смирнова",
+      "author_company": "",
+      "text": "Пользуюсь услугами полтора года, всегда доволна качеством сервиса.",
+      "rating": 4,
+      "is_approved": true,
+      "created_at": "2026-02-05T09:00:00Z",
+      "source": "отзовик"
+    }
+  },
+  {
+    "model": "core.newsitem",
+    "pk": 1,
+    "fields": {
+      "title": "Байкал-Сервис расширяет сеть филиалов",
+      "title_en": "Baikal-Service expands branch network",
+      "slug": "expansion-2026",
+      "short_text": "Компания открывает 5 новых филиалов в городах Сибири.",
+      "short_text_en": "The company opens 5 new branches in Siberian cities.",
+      "full_text": "В рамках стратегии расширения, Байкал-Сервис открывает новые филиалы в Новосибирске, Омске, Красноярске, Иркутске и Владивостоке.",
+      "full_text_en": "As part of the expansion strategy, Baikal-Service is opening new branches in Novosibirsk, Omsk, Krasnoyarsk, Irkutsk, and Vladivostok.",
+      "image": "",
+      "published_at": "2026-01-15T10:00:00Z",
+      "is_published": true,
+      "is_pinned": true
+    }
+  },
+  {
+    "model": "core.vacancy",
+    "pk": 1,
+    "fields": {
+      "title": "Менеджер по работе с клиентами",
+      "title_en": "Client Relationship Manager",
+      "slug": "client-manager",
+      "department": "Отдел продаж",
+      "city": 1,
+      "short_description": "Поиск и обслуживание клиентов, обработка заказов",
+      "full_description": "Ищем активного менеджера для работы с клиентами в офисе в Москве.",
+      "requirements": "Опыт работы от 2 лет, знание MS Office, коммуникабельность",
+      "salary_from": "80000.00",
+      "salary_to": "120000.00",
+      "is_active": true,
+      "published_at": "2026-01-10T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.contactmessage",
+    "pk": 1,
+    "fields": {
+      "name": "Павел Морозов",
+      "email": "pavel@example.com",
+      "phone": "+7(926)123-45-67",
+      "subject": "Запрос на сотрудничество",
+      "message": "Здравствуйте! Хотели бы обсудить партнёрство по доставке товаров.",
+      "is_read": false,
+      "created_at": "2026-02-08T14:00:00Z"
+    }
+  },
+  {
+    "model": "core.tender",
+    "pk": 1,
+    "fields": {
+      "title": "Поставка упаковочных материалов",
+      "slug": "packaging-tender-2026",
+      "description": "Приглашаем поставщиков упаковочных материалов для ежемесячных закупок.",
+      "deadline": "2026-03-01T23:59:00Z",
+      "is_active": true,
+      "published_at": "2026-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.promotion",
+    "pk": 1,
+    "fields": {
+      "title": "Скидка 20% на экспресс-доставку",
+      "title_en": "20% off express delivery",
+      "slug": "express-discount-2026",
+      "short_description": "Только в феврале — скидка 20% на экспресс-доставку!",
+      "full_description": "Воспользуйтесь нашими услугами экспресс-доставки со скидкой 20% в течение февраля 2026 года. Промокод: EXPRESS20",
+      "image": "",
+      "start_date": "2026-02-01T00:00:00Z",
+      "end_date": "2026-02-28T23:59:00Z",
+      "is_active": true,
+      "created_at": "2026-01-25T00:00:00Z"
+    }
+  },
+  {
+    "model": "documents.document",
+    "pk": 1,
+    "fields": {
+      "title": "Договор об оказании услуг",
+      "title_en": "Service Agreement",
+      "category": "contracts",
+      "file": "documents/service_agreement.pdf",
+      "description": "Стандартный договор на оказание логистических услуг",
+      "uploaded_at": "2026-01-01T00:00:00Z",
+      "is_active": true
+    }
+  },
+  {
+    "model": "documents.accountingrequest",
+    "pk": 1,
+    "fields": {
+      "user": 3,
+      "document_type": "invoice",
+      "period_start": "2026-01-01",
+      "period_end": "2026-01-31",
+      "status": "fulfilled",
+      "created_at": "2026-02-05T10:00:00Z",
+      "fulfilled_at": "2026-02-06T14:00:00Z"
+    }
+  },
+  {
+    "model": "partners.partnerapplication",
+    "pk": 1,
+    "fields": {
+      "company_name": "ООО ГрузоПеревозки",
+      "contact_person": "Дмитрий Волков",
+      "email": "dvolkov@gruzoperevozki.ru",
+      "phone": "+7(495)888-99-00",
+      "website": "https://gruzoperevozki.ru",
+      "status": "reviewing",
+      "created_at": "2026-02-01T09:00:00Z"
+    }
+  },
+  {
+    "model": "partners.banner",
+    "pk": 1,
+    "fields": {
+      "title": "Весенняя акция",
+      "image": "banners/spring_sale.jpg",
+      "link": "/promotions/spring-2026/",
+      "placement": "header",
+      "start_date": "2026-03-01T00:00:00Z",
+      "end_date": "2026-04-30T23:59:00Z",
+      "is_active": true,
+      "clicks_count": 0
+    }
+  }
+]

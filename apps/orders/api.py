@@ -3,6 +3,7 @@ import json
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
@@ -83,7 +84,7 @@ class OrderDeliveryConfirmView(LoginRequiredMixin, View):
         if order.status == 'out_for_delivery':
             old_status = order.status
             order.status = 'delivered'
-            order.actual_delivery_date = __import__('django').utils.timezone.now().date()
+            order.actual_delivery_date = timezone.now().date()
             order.save()
 
             OrderStatusHistory.objects.create(
@@ -180,14 +181,26 @@ class AddressSuggestView(View):
 @method_decorator(csrf_exempt, name='dispatch')
 class DeliveryTemplateListView(LoginRequiredMixin, View):
     def get(self, request):
-        templates = DeliveryTemplate.objects.filter(user=request.user).values(
-            'id', 'name', 'from_city', 'to_city', 'weight', 'length', 'width', 'height', 'cargo_description', 'service',
-            'declared_value', 'sender_address_detail', 'recipient_address_detail', 'total_price'
-        )
-        templates_list = list(templates)
-        for tpl in templates_list:
-            dt = DeliveryTemplate.objects.get(id=tpl['id'])
-            tpl['additional_services'] = list(dt.additional_services.values_list('id', flat=True))
+        templates_qs = DeliveryTemplate.objects.filter(user=request.user).prefetch_related('additional_services')
+        templates_list = []
+        for dt in templates_qs:
+            templates_list.append({
+                'id': dt.id,
+                'name': dt.name,
+                'from_city': dt.from_city_id,
+                'to_city': dt.to_city_id,
+                'weight': str(dt.weight),
+                'length': str(dt.length or ''),
+                'width': str(dt.width or ''),
+                'height': str(dt.height or ''),
+                'cargo_description': dt.cargo_description,
+                'service': dt.service_id,
+                'declared_value': str(dt.declared_value or ''),
+                'sender_address_detail': dt.sender_address_detail,
+                'recipient_address_detail': dt.recipient_address_detail,
+                'additional_services': list(dt.additional_services.values_list('id', flat=True)),
+                'total_price': str(dt.total_price or ''),
+            })
         return JsonResponse(templates_list, safe=False)
 
     def post(self, request):

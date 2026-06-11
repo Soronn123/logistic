@@ -10,3 +10,16 @@ wheels/
 .venv
 AGENTS.md
 AGENTS2.md
+
+# Environment
+.env
+
+# Database
+db.sqlite3
+
+# Static & media
+staticfiles/
+
+# IDE
+.idea/
+.vscode/
