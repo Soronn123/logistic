@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load i18n static i18n_extras %}
+{% extends 'base.html' %}{% load i18n static i18n_extras l10n %}
 {% block title %}{% translate 'Track Order' %} — {{ order.tracking_number }}{% endblock %}
 {% block meta_description %}{% translate 'Track your cargo shipment' %}{% endblock %}
 {% block extra_head %}
@@ -17,7 +17,7 @@
           <h2 class="text-xl font-bold text-gray-900 dark:text-white">{% translate 'Shipment Progress' %}</h2>
           <span class="px-3 py-1.5 text-xs font-semibold rounded-full
             {% if order.status == 'delivered' %}bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400
-            {% elif order.status == 'in_transit' or order.status == 'out_for_delivery' %}bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400
+            {% elif order.status == 'in_transit' or order.status == 'out_for_delivery' or order.status == 'customs_clearance' %}bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400
             {% elif order.status == 'cancelled' %}bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400
             {% else %}bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400{% endif %}">
             {{ order.get_status_display }}
@@ -132,10 +132,10 @@ document.addEventListener('DOMContentLoaded', function() {
     return;
   }
 
-  var senderLat = Number({{ order.sender_address.latitude }});
-  var senderLng = Number({{ order.sender_address.longitude }});
-  var recipientLat = Number({{ order.recipient_address.latitude }});
-  var recipientLng = Number({{ order.recipient_address.longitude }});
+  var senderLat = Number({{ order.sender_address.latitude|unlocalize }});
+  var senderLng = Number({{ order.sender_address.longitude|unlocalize }});
+  var recipientLat = Number({{ order.recipient_address.latitude|unlocalize }});
+  var recipientLng = Number({{ order.recipient_address.longitude|unlocalize }});
 
   if (!isFinite(senderLat) || !isFinite(senderLng) || !isFinite(recipientLat) || !isFinite(recipientLng)) {
     mapEl.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><p class="text-sm">{% translate "Map unavailable" %}</p></div>';

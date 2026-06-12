@@ -18,6 +18,7 @@ class Order(models.Model):
         AWAITING_COURIER = 'awaiting_courier', _('Awaiting courier')
         PICKED_UP = 'picked_up', _('Picked up')
         IN_TRANSIT = 'in_transit', _('In transit')
+        CUSTOMS_CLEARANCE = 'customs_clearance', _('Customs clearance')
         AT_WAREHOUSE = 'at_warehouse', _('At warehouse')
         OUT_FOR_DELIVERY = 'out_for_delivery', _('Out for delivery')
         DELIVERED = 'delivered', _('Delivered')
@@ -50,6 +51,9 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
     estimated_delivery_date = models.DateField(null=True, blank=True, verbose_name=_('Estimated delivery'))
     actual_delivery_date = models.DateField(null=True, blank=True, verbose_name=_('Actual delivery'))
+    is_fragile = models.BooleanField(default=False, verbose_name=_('Fragile cargo'))
+    is_dangerous = models.BooleanField(default=False, verbose_name=_('Dangerous goods'))
+    is_temperature_sensitive = models.BooleanField(default=False, verbose_name=_('Temperature-sensitive cargo'))
 
     class Meta:
         verbose_name = _('Order')

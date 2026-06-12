@@ -108,15 +108,15 @@ class Command(BaseCommand):
             {'name': 'Владивосток', 'name_en': 'Vladivostok', 'region': 'Приморский край', 'region_en': 'Primorsky Krai', 'lat': 43.1198, 'lng': 131.8869, 'tz': 'Asia/Vladivostok'},
             {'name': 'Калининград', 'name_en': 'Kaliningrad', 'region': 'Калининградская область', 'region_en': 'Kaliningrad Oblast', 'lat': 54.7104, 'lng': 20.4522, 'tz': 'Europe/Kaliningrad'},
             # Belarus
-            {'name': 'Минск', 'name_en': 'Minsk', 'region': 'Минская область', 'region_en': 'Minsk Region', 'lat': 53.9045, 'lng': 27.5615, 'tz': 'Europe/Minsk'},
+            {'name': 'Минск', 'name_en': 'Minsk', 'region': 'Минская область', 'region_en': 'Minsk Region', 'lat': 53.9045, 'lng': 27.5615, 'tz': 'Europe/Minsk', 'country': 'BY'},
             # Kazakhstan
-            {'name': 'Алматы', 'name_en': 'Almaty', 'region': 'Алматинская область', 'region_en': 'Almaty Region', 'lat': 43.2220, 'lng': 76.8512, 'tz': 'Asia/Almaty'},
-            {'name': 'Нур-Султан', 'name_en': 'Nur-Sultan', 'region': 'Акмолинская область', 'region_en': 'Akmola Region', 'lat': 51.1694, 'lng': 71.4491, 'tz': 'Asia/Almaty'},
+            {'name': 'Алматы', 'name_en': 'Almaty', 'region': 'Алматинская область', 'region_en': 'Almaty Region', 'lat': 43.2220, 'lng': 76.8512, 'tz': 'Asia/Almaty', 'country': 'KZ'},
+            {'name': 'Нур-Султан', 'name_en': 'Nur-Sultan', 'region': 'Акмолинская область', 'region_en': 'Akmola Region', 'lat': 51.1694, 'lng': 71.4491, 'tz': 'Asia/Almaty', 'country': 'KZ'},
             # Kyrgyzstan
-            {'name': 'Бишкек', 'name_en': 'Bishkek', 'region': 'Чуйская область', 'region_en': 'Chuy Region', 'lat': 42.8746, 'lng': 74.5698, 'tz': 'Asia/Bishkek'},
+            {'name': 'Бишкек', 'name_en': 'Bishkek', 'region': 'Чуйская область', 'region_en': 'Chuy Region', 'lat': 42.8746, 'lng': 74.5698, 'tz': 'Asia/Bishkek', 'country': 'KG'},
             # China
-            {'name': 'Пекин', 'name_en': 'Beijing', 'region': 'Пекин', 'region_en': 'Beijing', 'lat': 39.9042, 'lng': 116.4074, 'tz': 'Asia/Shanghai'},
-            {'name': 'Шанхай', 'name_en': 'Shanghai', 'region': 'Шанхай', 'region_en': 'Shanghai', 'lat': 31.2304, 'lng': 121.4737, 'tz': 'Asia/Shanghai'},
+            {'name': 'Пекин', 'name_en': 'Beijing', 'region': 'Пекин', 'region_en': 'Beijing', 'lat': 39.9042, 'lng': 116.4074, 'tz': 'Asia/Shanghai', 'country': 'CN'},
+            {'name': 'Шанхай', 'name_en': 'Shanghai', 'region': 'Шанхай', 'region_en': 'Shanghai', 'lat': 31.2304, 'lng': 121.4737, 'tz': 'Asia/Shanghai', 'country': 'CN'},
         ]
 
         cities = []
@@ -130,6 +130,7 @@ class Command(BaseCommand):
                 longitude=c['lng'],
                 timezone=c['tz'],
                 is_active=True,
+                country=c.get('country', 'RU'),
             )
             cities.append(city)
 

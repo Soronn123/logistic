@@ -1,9 +1,10 @@
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import TemplateView, UpdateView, DeleteView, CreateView
+from django.views.generic import TemplateView, UpdateView, DeleteView, CreateView, View
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model, authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
+from django.http import JsonResponse
 from django.shortcuts import redirect, get_object_or_404
 from django import forms
 
@@ -998,7 +999,8 @@ class DashboardOrderForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ['status', 'sender_name', 'sender_phone', 'recipient_name', 'recipient_phone',
-                  'cargo_description', 'weight', 'length', 'width', 'height', 'declared_value', 'total_price']
+                  'cargo_description', 'weight', 'length', 'width', 'height', 'declared_value', 'total_price',
+                  'is_fragile', 'is_dangerous', 'is_temperature_sensitive']
         widgets = {
             'status': forms.Select(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
             'sender_name': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
@@ -1023,6 +1025,8 @@ class DashboardOrderDetailView(StaffRequiredMixin, TemplateView):
         order = get_object_or_404(Order, pk=self.kwargs['pk'])
         context['order'] = order
         context['status_history'] = order.status_history.all().order_by('-timestamp')
+        from apps.orders.routing import get_simulation_flow
+        context['simulation_flow'] = get_simulation_flow(order)
         return context
 
 
@@ -1055,3 +1059,32 @@ class DashboardOrderDeleteView(StaffRequiredMixin, DeleteView):
     def form_valid(self, form):
         messages.success(self.request, _('Order deleted successfully.'))
         return super().form_valid(form)
+
+
+from apps.orders.routing import simulate_next_status
+
+
+class DashboardOrderSimulateView(StaffRequiredMixin, View):
+    http_method_names = ['post']
+
+    def post(self, request, pk):
+        order = get_object_or_404(Order, pk=pk)
+        next_status = simulate_next_status(order)
+        if next_status is None:
+            return JsonResponse({'status': order.status, 'complete': True})
+
+        order.status = next_status
+        order.save()
+
+        OrderStatusHistory.objects.create(
+            order=order,
+            status=next_status,
+            changed_by=request.user,
+            comment=_('Simulation: auto-advanced to %(status)s') % {'status': next_status},
+        )
+
+        return JsonResponse({
+            'status': next_status,
+            'status_label': dict(Order.Status.choices).get(next_status, next_status),
+            'complete': next_status == 'delivered',
+        })

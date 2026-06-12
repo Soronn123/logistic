@@ -15,6 +15,7 @@ urlpatterns = [
     path('orders/<int:pk>/', views.DashboardOrderDetailView.as_view(), name='order_detail'),
     path('orders/<int:pk>/edit/', views.DashboardOrderUpdateView.as_view(), name='order_edit'),
     path('orders/<int:pk>/delete/', views.DashboardOrderDeleteView.as_view(), name='order_delete'),
+    path('orders/<int:pk>/simulate/', views.DashboardOrderSimulateView.as_view(), name='order_simulate'),
     path('tickets/', views.DashboardTicketsView.as_view(), name='tickets'),
     path('services/', views.DashboardServicesView.as_view(), name='services'),
     path('services/create/', views.DashboardServiceCreateView.as_view(), name='service_create'),

@@ -20,6 +20,7 @@ class OrderForm(forms.ModelForm):
             'recipient_name', 'recipient_phone', 'recipient_email', 'recipient_address', 'recipient_address_detail',
             'cargo_description', 'weight', 'volume', 'length', 'width', 'height',
             'declared_value', 'service', 'additional_services',
+            'is_fragile', 'is_dangerous', 'is_temperature_sensitive',
         ]
         widgets = {
             'sender_name': forms.TextInput(attrs={

@@ -1,6 +1,9 @@
 {% extends 'pages/dashboard/base_dashboard.html' %}{% load i18n %}
 {% block dash_title %}{% translate 'Order Details' %} — {{ order.tracking_number }}{% endblock %}
 {% block dash_page_title %}{% translate 'Order Details' %}{% endblock %}
+{% block dash_extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+{% endblock %}
 {% block dash_content %}
 <div class="max-w-4xl mx-auto">
   <div class="flex items-center justify-between mb-6">
@@ -21,6 +24,75 @@
     </div>
   </div>
 
+  <div x-data="simulator({
+    simulateUrl: '{% url "dashboard:order_simulate" order.pk %}',
+    currentStatus: '{{ order.status }}',
+    flow: {{ simulation_flow|safe }},
+    csrfToken: '{{ csrf_token }}'
+  })" class="mb-6">
+
+    <!-- Fast Simulation Controls -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 mb-6">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <h2 class="text-sm font-semibold text-gray-900 dark:text-white">{% translate 'Simulation' %}</h2>
+          <template x-if="fastMode">
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 animate-pulse">
+              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M11.3 3.3l-6 6A1 1 0 006 11h4v6a1 1 0 001.7.7l6-6A1 1 0 0016 9h-4V3a1 1 0 00-1.7-.7z"/></svg>
+              FAST MODE
+            </span>
+          </template>
+          <template x-if="status === 'delivered'">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
+              {% translate 'Delivered' %}
+            </span>
+          </template>
+        </div>
+        <div class="flex items-center gap-3">
+          <button @click="toggleFastMode()"
+                  class="px-4 py-2 text-sm font-medium rounded-xl transition-colors"
+                  :class="fastMode ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-baikal-600 hover:bg-baikal-700 text-white'">
+            <span x-text="fastMode ? '{% translate "Stop Simulation" %}' : '{% translate "Fast Simulation" %}'"></span>
+          </button>
+          <template x-if="status !== 'delivered' && status !== 'cancelled'">
+            <button @click="simulateOneStep()"
+                    class="px-4 py-2 text-sm font-medium rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+              {% translate 'Advance One Step' %}
+            </button>
+          </template>
+        </div>
+      </div>
+
+      <!-- Progress indicator -->
+      <template x-if="fastMode">
+        <div class="mt-4">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-gray-500 dark:text-gray-400" x-text="progressText"></span>
+          </div>
+          <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+            <div class="h-full rounded-full transition-all duration-500 ease-linear"
+                 :style="'width: ' + progressPercent + '%'"
+                 :class="status === 'delivered' ? 'bg-green-500' : 'bg-baikal-500'">
+            </div>
+          </div>
+          <div class="flex justify-between mt-2 text-xs text-gray-500 dark:text-gray-400">
+            <template x-for="(stage, idx) in flow" :key="stage">
+              <div class="flex flex-col items-center" style="min-width: 0">
+                <div class="w-2 h-2 rounded-full mb-1"
+                     :class="flow.indexOf(status) >= idx ? 'bg-baikal-500' : 'bg-gray-300 dark:bg-gray-600'">
+                </div>
+                <span class="text-[10px] leading-tight text-center"
+                      :class="flow.indexOf(status) === idx ? 'font-semibold text-baikal-600 dark:text-baikal-400' : ''"
+                      x-text="stage.replace(/_/g, ' ')">
+                </span>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <!-- Order Info -->
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
@@ -36,9 +108,10 @@
             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
               {% if order.status == 'delivered' %}bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400
               {% elif order.status == 'cancelled' %}bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400
-              {% elif order.status == 'in_transit' %}bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400
+              {% elif order.status == 'in_transit' or order.status == 'customs_clearance' %}bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400
               {% elif order.status == 'draft' %}bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300
-              {% else %}bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400{% endif %}">
+              {% else %}bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400{% endif %}"
+              id="order-status-badge">
               {{ order.get_status_display }}
             </span>
           </dd>
@@ -49,7 +122,7 @@
         </div>
         <div class="flex justify-between">
           <dt class="text-sm text-gray-500 dark:text-gray-400">{% translate 'Updated' %}</dt>
-          <dd class="text-sm text-gray-900 dark:text-white">{{ order.updated_at|date:'d M Y H:i' }}</dd>
+          <dd class="text-sm text-gray-900 dark:text-white" id="order-updated-at">{{ order.updated_at|date:'d M Y H:i' }}</dd>
         </div>
         {% if order.estimated_delivery_date %}
         <div class="flex justify-between">
@@ -132,16 +205,16 @@
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
       <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{% translate 'Status History' %}</h2>
       {% if status_history %}
-      <div class="space-y-4">
+      <div class="space-y-4" id="status-history-list">
         {% for entry in status_history reversed %}
-        <div class="flex gap-3">
+        <div class="flex gap-3 status-history-item">
           <div class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-baikal-500"></div>
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2">
               <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
                 {% if entry.status == 'delivered' %}bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400
                 {% elif entry.status == 'cancelled' %}bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400
-                {% elif entry.status == 'in_transit' %}bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400
+                {% elif entry.status == 'in_transit' or entry.status == 'customs_clearance' %}bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400
                 {% elif entry.status == 'draft' %}bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300
                 {% else %}bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400{% endif %}">
                 {{ entry.get_status_display }}
@@ -164,4 +237,101 @@
     </div>
   </div>
 </div>
+{% endblock %}
+{% block dash_extra_scripts %}
+<script>
+document.addEventListener('alpine:init', function() {
+  Alpine.data('simulator', function(config) {
+    return {
+      simulateUrl: config.simulateUrl,
+      currentStatus: config.currentStatus,
+      flow: config.flow || [],
+      csrfToken: config.csrfToken,
+      fastMode: localStorage.getItem('sim_fast_mode') === 'true',
+      status: this.currentStatus,
+      timer: null,
+
+      get progressPercent() {
+        var idx = this.flow.indexOf(this.status);
+        if (idx === -1) return 0;
+        return Math.round((idx / (this.flow.length - 1)) * 100);
+      },
+
+      get progressText() {
+        var idx = this.flow.indexOf(this.status);
+        var total = this.flow.length;
+        return 'Stage ' + (idx + 1) + ' of ' + total;
+      },
+
+      toggleFastMode() {
+        this.fastMode = !this.fastMode;
+        localStorage.setItem('sim_fast_mode', this.fastMode);
+        if (this.fastMode) {
+          this.startFastSimulation();
+        } else {
+          this.stopFastSimulation();
+        }
+      },
+
+      startFastSimulation() {
+        if (this.status === 'delivered' || this.status === 'cancelled') return;
+        this.timer = setInterval(() => {
+          this.simulateOneStep();
+        }, 4000);
+      },
+
+      stopFastSimulation() {
+        if (this.timer) {
+          clearInterval(this.timer);
+          this.timer = null;
+        }
+      },
+
+      simulateOneStep() {
+        var self = this;
+        fetch(self.simulateUrl, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': self.csrfToken,
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          self.status = data.status;
+          self.currentStatus = data.status;
+          if (data.complete) {
+            self.stopFastSimulation();
+            localStorage.removeItem('sim_fast_mode');
+            self.fastMode = false;
+          }
+          self.updateUI(data);
+        })
+        .catch(function() {});
+      },
+
+      updateUI(data) {
+        var badge = document.getElementById('order-status-badge');
+        if (badge) {
+          badge.textContent = data.status_label || data.status.replace(/_/g, ' ');
+        }
+        var updated = document.getElementById('order-updated-at');
+        if (updated) {
+          updated.textContent = new Date().toLocaleString();
+        }
+      },
+
+      init() {
+        if (this.fastMode && this.status !== 'delivered' && this.status !== 'cancelled') {
+          this.startFastSimulation();
+        }
+      },
+
+      destroy() {
+        this.stopFastSimulation();
+      }
+    };
+  });
+});
+</script>
 {% endblock %}

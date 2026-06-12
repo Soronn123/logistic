@@ -11,6 +11,7 @@ class City(models.Model):
     longitude = models.FloatField(verbose_name=_('Longitude'))
     is_active = models.BooleanField(default=True, verbose_name=_('Active'))
     timezone = models.CharField(max_length=50, blank=True, verbose_name=_('Timezone'))
+    country = models.CharField(max_length=100, default='RU', verbose_name=_('Country'))
 
     class Meta:
         verbose_name = _('City')

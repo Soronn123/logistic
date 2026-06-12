@@ -7,6 +7,135 @@ from django.utils import timezone
 
 SURCHARGE_MULTIPLIER = Decimal('1.3')
 
+# Slugs for auto-assignment — matching seed data in services app
+CUSTOMS_DUTY_SLUG = 'customs-duty'
+CUSTOMS_CLEARANCE_SLUG = 'customs-clearance'
+WAREHOUSE_TRANSIT_SLUG = 'warehouse-transit'
+LAST_MILE_DELIVERY_SLUG = 'last-mile-delivery'
+EMAIL_ORDER_CREATED_SLUG = 'email-order-created'
+EMAIL_CUSTOMS_CLEARED_SLUG = 'email-customs-cleared'
+EMAIL_DELIVERED_SLUG = 'email-delivered'
+EXTENDED_INSURANCE_SLUG = 'extended-insurance'
+HAND_CARRY_SLUG = 'hand-carry'
+ADR_TRANSPORT_SLUG = 'adr-transport'
+REFRIGERATED_TRANSPORT_SLUG = 'refrigerated-transport'
+TRUCK_TRANSPORT_SLUG = 'truck-transport'
+RAIL_TRANSPORT_SLUG = 'rail-transport'
+
+
+def auto_assign_services(from_city, to_city, weight, length, width, height,
+                         declared_value, is_fragile=False, is_dangerous=False,
+                         is_temperature_sensitive=False):
+    """
+    Auto-assign main service and additional services based on cargo and route.
+
+    Returns dict with keys:
+      - service: Service instance or None
+      - additional_services: list of AdditionalService instances
+    """
+    from apps.services.models import AdditionalService, Service
+
+    assigned_additional = []
+
+    # Determine if international
+    is_international = (
+        from_city and to_city
+        and getattr(from_city, 'country', 'RU') != getattr(to_city, 'country', 'RU')
+    )
+
+    # Check if direct route exists
+    route = calculate_route(from_city, to_city)
+    has_direct_route = route['type'] == 'direct'
+
+    # Check warehouse/PVZ in destination city
+    has_warehouse_dest = has_warehouse_in_city(to_city) if to_city else False
+
+    # Check dimensions for air transport restriction
+    weight_ok = float(weight) <= 80
+    dims = [d for d in [length, width, height] if d]
+    dims_ok = all(float(d) <= 120 for d in dims) if dims else True
+    can_use_air = weight_ok and dims_ok
+
+    def _get_addon(slug):
+        try:
+            return AdditionalService.objects.get(slug=slug)
+        except AdditionalService.DoesNotExist:
+            return None
+
+    def _get_service(slug):
+        try:
+            return Service.objects.get(slug=slug, is_active=True)
+        except Service.DoesNotExist:
+            return None
+
+    # --- Rule 1: International → customs duty + customs clearance ---
+    if is_international:
+        for slug in (CUSTOMS_DUTY_SLUG, CUSTOMS_CLEARANCE_SLUG):
+            svc = _get_addon(slug)
+            if svc:
+                assigned_additional.append(svc)
+
+    # --- Rule 2: No direct route → warehouse transit ---
+    if not has_direct_route:
+        svc = _get_addon(WAREHOUSE_TRANSIT_SLUG)
+        if svc:
+            assigned_additional.append(svc)
+
+    # --- Rule 3: No warehouse/PVZ in destination → last-mile delivery ---
+    if to_city and not has_warehouse_dest:
+        svc = _get_addon(LAST_MILE_DELIVERY_SLUG)
+        if svc:
+            assigned_additional.append(svc)
+
+    # --- Rules 4 & 5: Email notifications ---
+    if is_international:
+        for slug in (EMAIL_ORDER_CREATED_SLUG, EMAIL_CUSTOMS_CLEARED_SLUG, EMAIL_DELIVERED_SLUG):
+            svc = _get_addon(slug)
+            if svc:
+                assigned_additional.append(svc)
+    else:
+        for slug in (EMAIL_ORDER_CREATED_SLUG, EMAIL_DELIVERED_SLUG):
+            svc = _get_addon(slug)
+            if svc:
+                assigned_additional.append(svc)
+
+    # --- Rule 6: Oversize/overweight → no air, use truck or rail ---
+    auto_service = None
+    if not can_use_air:
+        auto_service = _get_service(TRUCK_TRANSPORT_SLUG) or _get_service(RAIL_TRANSPORT_SLUG)
+    else:
+        # Default: try to get air transport or first available service
+        auto_service = _get_service('air-transport') or _get_service(TRUCK_TRANSPORT_SLUG)
+
+    # --- Rule 7: Declared value > 50 000 ₽ → extended insurance ---
+    if declared_value and float(declared_value) > 50000:
+        svc = _get_addon(EXTENDED_INSURANCE_SLUG)
+        if svc:
+            assigned_additional.append(svc)
+
+    # --- Rule 8: Fragile → careful handling (Hand Carry) ---
+    if is_fragile:
+        svc = _get_addon(HAND_CARRY_SLUG)
+        if svc:
+            assigned_additional.append(svc)
+
+    # --- Rule 9: Dangerous goods → ADR transport ---
+    if is_dangerous:
+        svc = _get_addon(ADR_TRANSPORT_SLUG)
+        if svc:
+            assigned_additional.append(svc)
+
+    # --- Rule 10: Temperature-sensitive → refrigerated transport ---
+    if is_temperature_sensitive:
+        svc = _get_addon(REFRIGERATED_TRANSPORT_SLUG)
+        if svc:
+            assigned_additional.append(svc)
+
+    return {
+        'service': auto_service,
+        'additional_services': assigned_additional,
+    }
+
 
 def has_branch_in_city(city):
     from apps.geo.models import Branch
@@ -136,7 +265,7 @@ def calculate_price(from_city, to_city, weight, service=None, additional_service
     }
 
 
-def get_next_statuses(current_status):
+def get_next_statuses(current_status, is_international=False):
     status_flow = {
         'draft': ['confirmed'],
         'confirmed': ['picked_up'],
@@ -144,13 +273,41 @@ def get_next_statuses(current_status):
         'available_in_warehouse': ['picked_up'],
         'awaiting_courier': ['picked_up'],
         'picked_up': ['in_transit'],
-        'in_transit': ['at_warehouse', 'out_for_delivery'],
+        'in_transit': ['customs_clearance', 'at_warehouse', 'out_for_delivery'] if is_international else ['at_warehouse', 'out_for_delivery'],
+        'customs_clearance': ['at_warehouse', 'out_for_delivery'],
         'at_warehouse': ['out_for_delivery'],
         'out_for_delivery': ['delivered'],
         'delivered': [],
         'cancelled': [],
     }
     return status_flow.get(current_status, [])
+
+
+def get_simulation_flow(order):
+    """Return the full ordered list of statuses for simulation, given an order."""
+    from_city = order.sender_address
+    to_city = order.recipient_address
+    is_international = (
+        from_city and to_city
+        and getattr(from_city, 'country', 'RU') != getattr(to_city, 'country', 'RU')
+    )
+    flow = ['draft', 'confirmed', 'picked_up', 'in_transit']
+    if is_international:
+        flow.append('customs_clearance')
+    flow.extend(['at_warehouse', 'out_for_delivery', 'delivered'])
+    return flow
+
+
+def simulate_next_status(order):
+    """Return the next status to advance to in simulation, or None if complete."""
+    flow = get_simulation_flow(order)
+    try:
+        idx = flow.index(order.status)
+        if idx + 1 < len(flow):
+            return flow[idx + 1]
+    except ValueError:
+        pass
+    return None
 
 
 def get_initial_status(from_city):

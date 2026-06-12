@@ -1,4 +1,4 @@
-.PHONY: help prod dev stop restart logs test migrate makemigrations shell collectstatic clean build
+.PHONY: help prod dev stop restart logs test migrate makemigrations shell collectstatic clean build loadfixtures
 
 COMPOSE_PROD  = docker compose
 COMPOSE_DEBUG = docker compose -f docker-compose.yml -f docker-compose.debug.yml
@@ -20,6 +20,7 @@ help:
 	@echo "  make makemigrations  Generate new migrations"
 	@echo "  make shell        Open Django shell"
 	@echo "  make collectstatic   Collect static files"
+	@echo "  make loadfixtures Load fixture data from fixtures/ into the database"
 	@echo "  make clean        Remove Python cache files (local)"
 
 prod:
@@ -71,7 +72,17 @@ shell:
 collectstatic:
 	$(COMPOSE_PROD) exec web python manage.py collectstatic --noinput
 
+loadfixtures:
+	$(COMPOSE_PROD) exec web python manage.py seed_data --force
+
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
 	find . -type f -name "*.pyc" -delete
 	find . -type f -name "*.pyo" -delete
+
+# Local (non-Docker) targets — useful for quick development
+venv:
+	python3 -m venv venv && . venv/bin/activate && pip install -r requirements.txt
+
+test-local:
+	. venv/bin/activate && DJANGO_DB_ENGINE=django.db.backends.sqlite3 DJANGO_DB_NAME=:memory: python -m django test tests/ --verbosity=2 --settings=baikal.settings

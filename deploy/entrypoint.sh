@@ -13,10 +13,10 @@ python manage.py migrate --noinput
 echo "Checking fixture data..."
 CITY_COUNT=$(python manage.py shell -c "from apps.geo.models import City; print(City.objects.count())" 2>/dev/null | tail -1)
 if [ "$CITY_COUNT" -eq 0 ] 2>/dev/null; then
-  echo "Loading fixture data..."
-  python manage.py loaddata initial_data
+  echo "Seeding data..."
+  python manage.py seed_data
 else
-  echo "Fixtures already loaded ($CITY_COUNT cities), skipping."
+  echo "Data already seeded ($CITY_COUNT cities), skipping."
 fi
 
 echo "Collecting static files..."

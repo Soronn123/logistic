@@ -19,7 +19,11 @@ class OrderStatusUpdateView(LoginRequiredMixin, View):
         order = get_object_or_404(Order, tracking_number=tracking_number, user=request.user)
         new_status = request.POST.get('status')
 
-        allowed = get_next_statuses(order.status)
+        is_international = (
+            order.sender_address and order.recipient_address
+            and order.sender_address.country != order.recipient_address.country
+        )
+        allowed = get_next_statuses(order.status, is_international=is_international)
         if new_status not in allowed:
             return JsonResponse({'error': _('Invalid status transition')}, status=400)
 
