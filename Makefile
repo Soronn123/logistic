@@ -34,10 +34,10 @@ prod:
 
 dev:
 	@echo "=========================================="
-	@echo "  Starting DEBUG stack..."
+	@echo "  Starting DEBUG stack (bind-mounted)..."
 	@echo "  Access via http://localhost:8000"
 	@echo "=========================================="
-	$(COMPOSE_DEBUG) up --build
+	$(COMPOSE_DEBUG) up
 	@echo ""
 	@echo "  Debug server is up."
 	@echo "  Run 'make logs' to follow output."

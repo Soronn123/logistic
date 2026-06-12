@@ -79,7 +79,10 @@
       "address_en": "1, bld. 6, Skladochnaya st.",
       "phone": "+7(495)123-45-67",
       "email": "moscow-warehouse@baikal-service.ru",
-      "working_hours": {"mon-fri": "08:00-20:00", "sat": "09:00-18:00"},
+      "working_hours": {
+        "mon-fri": "08:00-20:00",
+        "sat": "09:00-18:00"
+      },
       "latitude": 55.8050,
       "longitude": 37.5850,
       "is_active": true,
@@ -98,7 +101,10 @@
       "address_en": "12, Tverskaya st.",
       "phone": "+7(495)234-56-78",
       "email": "moscow-tverskaya@baikal-service.ru",
-      "working_hours": {"mon-fri": "09:00-21:00", "sat-sun": "10:00-20:00"},
+      "working_hours": {
+        "mon-fri": "09:00-21:00",
+        "sat-sun": "10:00-20:00"
+      },
       "latitude": 55.7640,
       "longitude": 37.6060,
       "is_active": true,
@@ -117,7 +123,9 @@
       "address_en": "100, Nevsky Prospect",
       "phone": "+7(812)345-67-89",
       "email": "spb-warehouse@baikal-service.ru",
-      "working_hours": {"mon-fri": "08:00-19:00"},
+      "working_hours": {
+        "mon-fri": "08:00-19:00"
+      },
       "latitude": 59.9320,
       "longitude": 30.3500,
       "is_active": true,
@@ -136,7 +144,9 @@
       "address_en": "55, Krasny Prospect",
       "phone": "+7(383)456-78-90",
       "email": "nsk-office@baikal-service.ru",
-      "working_hours": {"mon-fri": "09:00-18:00"},
+      "working_hours": {
+        "mon-fri": "09:00-18:00"
+      },
       "latitude": 55.0350,
       "longitude": 82.9200,
       "is_active": true,
@@ -339,7 +349,7 @@
     "model": "users.customuser",
     "pk": 1,
     "fields": {
-      "password": "pbkdf2_sha256$600000$test$test",
+      "password": "admin123",
       "last_login": "2026-01-15T10:00:00Z",
       "is_superuser": true,
       "username": "admin",
@@ -363,7 +373,7 @@
     "model": "users.customuser",
     "pk": 2,
     "fields": {
-      "password": "pbkdf2_sha256$600000$test$test",
+      "password": "manager123",
       "last_login": "2026-01-20T09:00:00Z",
       "is_superuser": false,
       "username": "manager1",
@@ -387,7 +397,7 @@
     "model": "users.customuser",
     "pk": 3,
     "fields": {
-      "password": "pbkdf2_sha256$600000$test$test",
+      "password": "client123",
       "last_login": "2026-02-01T08:30:00Z",
       "is_superuser": false,
       "username": "client1",
@@ -411,7 +421,7 @@
     "model": "users.customuser",
     "pk": 4,
     "fields": {
-      "password": "pbkdf2_sha256$600000$test$test",
+      "password": "client123",
       "last_login": "2026-02-10T14:00:00Z",
       "is_superuser": false,
       "username": "client2",
@@ -463,7 +473,9 @@
       "declared_value": "50000.00",
       "sender_address_detail": "ул. Складочная, д. 1",
       "recipient_address_detail": "Невский пр-т, д. 50",
-      "additional_services": [1],
+      "additional_services": [
+        1
+      ],
       "total_price": "2500.00",
       "created_at": "2026-01-25T12:00:00Z"
     }
@@ -566,7 +578,9 @@
       "height": "30.00",
       "declared_value": "50000.00",
       "service": 1,
-      "additional_services": [1],
+      "additional_services": [
+        1
+      ],
       "status": "in_transit",
       "total_price": "2500.00",
       "created_at": "2026-01-20T10:00:00Z",
@@ -599,7 +613,9 @@
       "height": "20.00",
       "declared_value": "10000.00",
       "service": 2,
-      "additional_services": [2],
+      "additional_services": [
+        2
+      ],
       "status": "delivered",
       "total_price": "1200.00",
       "created_at": "2026-02-01T09:00:00Z",
@@ -632,7 +648,10 @@
       "height": "60.00",
       "declared_value": "200000.00",
       "service": 1,
-      "additional_services": [1, 3],
+      "additional_services": [
+        1,
+        3
+      ],
       "status": "draft",
       "total_price": "6750.00",
       "created_at": "2026-02-10T08:00:00Z",

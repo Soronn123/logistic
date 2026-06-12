@@ -1,0 +1,341 @@
+================================================================================
+               SERVICE & ADDITIONAL SERVICE IMPLEMENTATION PLAN
+================================================================================
+
+PROBLEM: Services and additional services currently increase the order price
+but have zero operational/fulfillment logic behind them. This plan defines
+10 main service categories with concrete operational impacts, plus 10
+subcategories per category.
+
+================================================================================
+MAIN CATEGORIES
+================================================================================
+
+1. DELIVERY SPEED
+   Impact: Determines courier priority, routing logic, and estimated delivery.
+   - Express: Priority courier dispatch, same/next-day delivery, fastest route.
+   - Standard: Regular queue, 3-5 day delivery, normal routing.
+   - Economy: Batched shipping, 5-7 day delivery, consolidated loads.
+
+2. CARGO HANDLING
+   Impact: Determines how cargo is processed at warehouses and during transit.
+   - Standard handling: Normal loading/unloading, no special care.
+   - Careful handling: Labeled "FRAGILE", separate storage, manual loading.
+   - Heavy handling: Requires forklift/crane, special loading team.
+
+3. INSURANCE & PROTECTION
+   Impact: Creates insurance records and determines compensation on damage/loss.
+   - Basic insurance: Covers up to declared_value * 50%, no additional docs.
+   - Full insurance: Covers 100% declared_value, requires photo documentation.
+   - Premium insurance: Covers declared_value + 20%, includes inspection report.
+
+4. DOOR-TO-DOOR DELIVERY
+   Impact: Triggers courier dispatch to recipient address instead of branch pickup.
+   - Standard door delivery: Courier delivers during business hours (9-18).
+   - Express door delivery: Priority courier, delivery within 2-hour window.
+   - Scheduled door delivery: Courier dispatches on user-selected date/time.
+
+5. PACKAGING SERVICES
+   Impact: Determines what packaging materials and labor are applied at warehouse.
+   - Basic packaging: Standard cardboard box, bubble wrap.
+   - Reinforced packaging: Double-wall box, foam inserts, corner protectors.
+   - Custom packaging: Tailored packaging for odd-shaped or oversized cargo.
+
+6. TEMPERATURE CONTROL
+   Impact: Routes cargo through cold-chain logistics, temperature monitoring.
+   - Refrigerated (2-8C): Perishable goods, medical supplies, food.
+   - Frozen (-18C and below): Frozen food, biological samples.
+   - Climate controlled (15-25C): Electronics, pharmaceuticals, cosmetics.
+
+7. DOCUMENTATION & CUSTOMS
+   Impact: Generates required documents, customs declarations, and export permits.
+   - Commercial invoice: Generates commercial invoice for B2B shipments.
+   - Customs declaration: Prepares and files customs paperwork for cross-border.
+   - Export permit: Coordinates with authorities for restricted goods export.
+
+8. TRACKING & NOTIFICATIONS
+   Impact: Controls what tracking features and notification channels are active.
+   - Basic tracking: Status updates visible in user dashboard only.
+   - SMS tracking: Real-time SMS notifications on status changes.
+   - GPS tracking: Live map location for in-transit cargo, API integration.
+
+9. STORAGE & WAREHOUSING
+   Impact: Determines if cargo is stored at warehouse and for how long.
+   - Standard storage: Up to 48h free at origin warehouse before dispatch.
+   - Extended storage: Up to 7 days at origin, daily fee after 48h.
+   - Climate storage: Temperature-controlled storage until dispatch.
+
+10. SPECIAL CARGO
+    Impact: Triggers special handling protocols, restrictions, and compliance.
+    - Hazardous materials: DG classification, special labeling, restricted routes.
+    - High-value cargo: Secure transport, armed escort, sealed container.
+    - Live animals: IATA compliance, ventilation, feeding schedule, vet check.
+
+================================================================================
+SUBCATEGORIES
+================================================================================
+
+1. DELIVERY SPEED — Subcategories
+
+   1.1 Night delivery
+       Impact: Courier dispatches between 18:00-06:00, requires night-shift team.
+   1.2 Weekend delivery
+       Impact: Delivery on Saturday/Sunday, requires weekend on-call courier pool.
+   1.3 Holiday delivery
+       Impact: Delivery on public holidays, premium courier assignment.
+   1.4 Same-day delivery
+       Impact: Order must be placed before 12:00, immediate courier dispatch.
+   1.5 Next-day delivery
+       Impact: Guaranteed next calendar day, priority queue at all warehouses.
+   1.6 Delivery time window
+       Impact: User selects 2-hour window (e.g., 10:00-12:00), schedule locked.
+   1.7 Multi-stop delivery
+       Impact: One cargo delivered to multiple addresses, route optimization.
+   1.8 Return delivery
+       Impact: Reverse logistics, courier picks up return from recipient.
+   1.9 Liftgate delivery
+       Impact: Heavy cargo requires truck with hydraulic lift, special vehicle.
+   1.10 White glove delivery
+        Impact: Inside-delivery, unpacking, assembly, debris removal.
+
+2. CARGO HANDLING — Subcategories
+
+   2.1 Stack protection
+       Impact: "DO NOT STACK" labels, top-load storage only.
+   2.2 Moisture protection
+       Impact: Wrapped in plastic/foil, stored in dry area, humidity monitor.
+   2.3 Anti-static handling
+       Impact: ESD-safe packaging for electronics, grounded containers.
+   2.4 Vibration protection
+       Impact: Shock-absorbing inserts for sensitive instruments/equipment.
+   2.5 Unpacking and inspection
+       Impact: Warehouse opens cargo, inspects contents, logs condition.
+   2.6 Palletization
+       Impact: Cargo consolidated on pallets, stretch-wrapped, forklift-ready.
+   2.7 Crating
+       Impact: Custom wooden crate built for fragile or high-value items.
+   2.8 Labeling and marking
+       Impact: Custom labels, barcodes, QR codes applied per user request.
+   2.9 Weight verification
+       Impact: Re-weigh cargo at origin and destination, discrepancy report.
+   2.10 Photo documentation
+        Impact: Photos taken at pickup, each checkpoint, and delivery.
+
+3. INSURANCE & PROTECTION — Subcategories
+
+   3.1 Damage-only coverage
+       Impact: Insurance pays only on confirmed physical damage to cargo.
+   3.2 Loss coverage
+       Impact: Insurance pays on confirmed loss (cargo not delivered at all).
+   3.3 Theft coverage
+       Impact: Insurance pays on confirmed theft during transit or storage.
+   3.4 Water damage coverage
+       Impact: Separate policy for water/rain damage during transport.
+   3.5 Natural disaster coverage
+       Impact: Coverage for force majeure events (flood, earthquake, fire).
+   3.6 Delay compensation
+       Impact: Penalty paid to recipient if delivery exceeds promised ETA.
+   3.7 Proof of condition
+       Impact: Mandatory pre-shipment photo report for insurance claim validity.
+   3.8 Deductible waiver
+       Impact: Higher premium removes customer deductible on claims.
+   3.9 Third-party claim handling
+       Impact: Insurance company handles claims directly, reduces admin burden.
+   3.10 Real-time valuation
+        Impact: Cargo value tracked live, premium adjusts if value changes.
+
+4. DOOR-TO-DOOR DELIVERY — Subcategories
+
+   4.1 Floor delivery
+       Impact: Courier delivers to specific floor, not just building entrance.
+   4.2 Room-of-choice delivery
+       Impact: Courier carries cargo to user-specified room inside building.
+   4.3 Assembly service
+       Impact: Courier assembles furniture/equipment after delivery.
+   4.4 Old item removal
+       Impact: Courier removes old item when delivering replacement.
+   4.5 Scheduled re-delivery
+       Impact: If recipient not home, auto-reschedule for next available slot.
+   4.6 Neighbor delivery
+       Impact: If recipient absent, deliver to specified neighbor with consent.
+   4.7 Photo proof of delivery
+       Impact: Courier photographs delivered cargo at doorstep as proof.
+   4.8 Signature capture
+       Impact: Digital signature collected from recipient on delivery.
+   4.9 Delivery to rural/remote area
+       Impact: Extended delivery zone, additional fee for remote routing.
+   4.10 Cross-dock delivery
+        Impact: Cargo transferred between vehicles at hub, no warehouse storage.
+
+5. PACKAGING SERVICES — Subcategories
+
+   5.1 Vacuum sealing
+       Impact: Air removed from packaging, reduces volume for cost savings.
+   5.2 Waterproof wrapping
+       Impact: Cargo wrapped in waterproof membrane, sealed seams.
+   5.3 Shock-absorbing foam
+       Impact: Custom-cut foam inserts shaped to cargo contour.
+   5.4 Corner and edge protectors
+       Impact: Cardboard/foam protectors on all corners and edges.
+   5.5 Pallet wrapping
+       Impact: Cargo secured to pallet with shrink-wrap and strapping.
+   5.6 Crating service
+       Impact: Wooden crate custom-built to cargo dimensions.
+   5.7 Labeling service
+       Impact: Shipping labels, handling labels, and barcode stickers applied.
+   5.8 Unpacking at destination
+       Impact: Courier unpacks cargo and removes packaging materials.
+   5.9 Fragile item handling
+       Impact: "FRAGILE" stickers, separate compartment, manual handling.
+   5.10 Oversized cargo packaging
+        Impact: Cargo exceeding 150cm requires special crating and handling.
+
+6. TEMPERATURE CONTROL — Subcategories
+
+   6.1 Temperature logger
+       Impact: Digital thermometer placed inside, logs every 15 min, report generated.
+   6.2 Ice pack provisioning
+       Impact: Frozen gel packs added to maintain temperature during transit.
+   6.3 Dry ice handling
+       Impact: Dry ice added for ultra-cold items, ventilation requirements.
+   6.4 Temperature alarm
+       Impact: Alert triggered if temperature deviates ±2C from target range.
+   6.5 Pre-cooling
+       Impact: Cargo refrigerated to target temp before dispatch.
+   6.6 insulated container
+       Impact: Cargo placed in thermal-lined container for transit.
+   6.7 Cold chain handoff
+       Impact: Temperature-controlled transfer between vehicles, no ambient exposure.
+   6.8 Real-time temp monitoring
+       Impact: Dashboard shows live temperature, historical data available.
+   6.9 Temperature certificate
+       Impact: Official certificate issued at delivery confirming chain was maintained.
+   6.10 Frozen cargo unloading
+        Impact: Specialized team handles frozen cargo at destination warehouse.
+
+7. DOCUMENTATION & CUSTOMS — Subcategories
+
+   7.1 Packing list
+       Impact: Detailed packing list generated from order cargo description.
+   7.2 Certificate of origin
+       Impact: Official document certifying country where cargo was manufactured.
+   7.3 Phytosanitary certificate
+       Impact: Required for plant/food products, confirms pest-free status.
+   7.4 Dangerous goods declaration
+       Impact: DG declaration form generated for hazardous materials.
+   7.5 Letter of credit documents
+       Impact: Banking documents prepared for international trade payment.
+   7.6 ATA Carnet
+       Impact: Temporary import/export document for trade shows, samples.
+   7.7 Customs bond
+       Impact: Financial guarantee filed with customs for cargo release.
+   7.8 Import license coordination
+       Impact: System checks if import license required, notifies user.
+   7.9 HS code classification
+       Impact: Correct tariff code assigned to cargo for customs duty calculation.
+   7.10 Diplomatic/courier pouch
+        Impact: Special handling for embassy/government shipments, expedited customs.
+
+8. TRACKING & NOTIFICATIONS — Subcategories
+
+   8.1 Email notifications
+       Impact: Automated emails on each status change (confirmed, in_transit, etc.).
+   8.2 Push notifications
+       Impact: Mobile/web push notifications for real-time status updates.
+   8.3 WhatsApp/Viber integration
+       Impact: Status messages sent via messaging apps for wider reach.
+   8.4 Estimated time updates
+       Impact: ETA recalculated and pushed to user when conditions change.
+   8.5 Delivery photo feed
+       Impact: User sees live photo updates from warehouse and delivery.
+   8.6 Driver contact info
+       Impact: Courier phone number visible to recipient during last-mile.
+   8.7 Delivery instructions relay
+       Impact: User-submitted instructions relayed to courier via system.
+   8.8 Delivery confirmation with photo
+       Impact: Photo of delivered cargo automatically sent to sender.
+   8.9 Analytics dashboard
+       Impact: Historical delivery data, on-time rate, avg transit time shown.
+   8.10 API webhook
+        Impact: External system receives webhook on each status change.
+
+9. STORAGE & WAREHOUSING — Subcategories
+
+   9.1 Pre-dispatch holding
+       Impact: Cargo held at origin warehouse until dispatch date.
+   9.2 Post-delivery hold
+       Impact: Cargo held at destination warehouse for recipient pickup.
+   9.3 Consolidation
+       Impact: Multiple orders from same sender consolidated into single shipment.
+   9.4 Deconsolidation
+       Impact: Combined shipment split into individual orders at destination hub.
+   9.5 Cross-docking
+       Impact: Cargo transferred directly between inbound/outbound vehicles.
+   9.6 Inventory management
+       Impact: Warehouse tracks cargo quantity and location in real-time.
+   9.7 Order picking
+       Impact: Warehouse staff picks cargo from shelves for dispatch.
+   9.8 Staging area
+       Impact: Cargo grouped in staging zone by route before loading.
+   9.9 Returns processing
+       Impact: Warehouse receives, inspects, and restocks returned cargo.
+   9.10 Overflow storage
+        Impact: Temporary storage at partner facility when main warehouse full.
+
+10. SPECIAL CARGO — Subcategories
+
+    10.1 Live animal transport
+         Impact: Ventilated crate, feeding schedule, vet inspection, IATA LAR compliance.
+    10.2 Pharmaceutical transport
+         Impact: GDP compliance, temperature log, chain of custody documentation.
+    10.3 Art and antiques
+         Impact: Custom crating, white-glove handling, climate-controlled transit.
+    10.4 Jewelry and precious metals
+         Impact: Sealed container, armed escort option, GPS tracking, vault storage.
+    10.5 Firearms and ammunition
+         Impact: Legal documentation, locked container, restricted route, age verification.
+    10.6 Electronics and semiconductors
+         Impact: Anti-static packaging, humidity control, shock monitoring.
+    10.7 Chemical and industrial
+         Impact: Hazmat labeling, SDS documentation, spill kit on vehicle.
+    10.8 Food and beverages
+         Impact: Cold chain, expiration date tracking, FIFO dispatch, food safety cert.
+    10.9 Automotive parts
+         Impact: Oil/fluid leak protection, heavy-item handling, crane loading.
+    10.10 Construction materials
+         Impact: Flatbed vehicle, oversized load permits, route clearance.
+
+================================================================================
+IMPLEMENTATION NOTES
+================================================================================
+
+To make these categories functional (not just pricing), the system needs:
+
+A. SERVICE ACTION MODELS
+   - Create a ServiceAction model that maps each service/subcategory to a
+     concrete action type and parameters (e.g., dispatch_courier, create_insurance_record,
+     notify_warehouse, generate_document).
+
+B. ORDER LIFECYCLE HOOKS
+   - On order creation: create all ServiceAction records from selected services.
+   - On status change: check ServiceAction records, execute pending actions.
+   - On delivery: mark ServiceAction records as completed.
+
+C. OPERATIONAL INTEGRATIONS
+   - Warehouse staff dashboard: shows pending actions per order (packaging, storage).
+   - Courier dispatch: door-to-door services trigger courier assignment.
+   - Document generation: documentation services trigger report creation.
+   - Insurance system: insurance services create policy records.
+
+D. PRIORITY QUEUE
+   - Delivery speed determines order priority in warehouse and courier dispatch.
+   - Express orders processed first, Economy orders batched.
+
+E. NOTIFICATION SYSTEM
+   - Each service subcategory can trigger notifications (email, SMS, push).
+   - Warehouse staff notified of handling requirements.
+   - Recipient notified of delivery type and ETA.
+
+================================================================================
+END OF PLAN
+================================================================================
