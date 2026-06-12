@@ -1,4 +1,4 @@
-.PHONY: help prod dev stop restart logs test migrate makemigrations shell collectstatic clean build loadfixtures
+.PHONY: help prod dev stop restart logs test migrate makemigrations shell collectstatic clean build loadfixtures loadfixtures-local
 
 COMPOSE_PROD  = docker compose
 COMPOSE_DEBUG = docker compose -f docker-compose.yml -f docker-compose.debug.yml
@@ -21,6 +21,7 @@ help:
 	@echo "  make shell        Open Django shell"
 	@echo "  make collectstatic   Collect static files"
 	@echo "  make loadfixtures Load fixture data from fixtures/ into the database"
+	@echo "  make loadfixtures-local  Load seed data into local SQLite (with hashed passwords)"
 	@echo "  make clean        Remove Python cache files (local)"
 
 prod:
@@ -84,5 +85,34 @@ clean:
 venv:
 	python3 -m venv venv && . venv/bin/activate && pip install -r requirements.txt
 
+local: venv
+	@echo "=========================================="
+	@echo "  Starting LOCAL dev server with SQLite..."
+	@echo "=========================================="
+	@echo ""
+	@LAN_IP=$$(ip route get 1.1.1.1 2>/dev/null | grep -oP 'src \K[\d.]+'); \
+	LAN_IP="$${LAN_IP:-127.0.0.1}"; \
+	echo "  Server running at:"; \
+	echo "  - Local:   http://localhost:8000"; \
+	echo "  - Network: http://$${LAN_IP}:8000"; \
+	echo ""; \
+	echo "  Connect from your phone using the Network address above."; \
+	echo "=========================================="; \
+	. venv/bin/activate && \
+	export DJANGO_DEBUG=True \
+	    DJANGO_ALLOWED_HOSTS='*' \
+	    DJANGO_DB_ENGINE=django.db.backends.sqlite3 \
+	    DJANGO_DB_NAME=db.sqlite3 && \
+	python manage.py migrate --noinput && \
+	exec python manage.py runserver 0.0.0.0:8000
+
 test-local:
 	. venv/bin/activate && DJANGO_DB_ENGINE=django.db.backends.sqlite3 DJANGO_DB_NAME=:memory: python -m django test tests/ --verbosity=2 --settings=baikal.settings
+
+loadfixtures-local:
+	. venv/bin/activate && \
+	export DJANGO_DEBUG=True \
+	    DJANGO_ALLOWED_HOSTS='*' \
+	    DJANGO_DB_ENGINE=django.db.backends.sqlite3 \
+	    DJANGO_DB_NAME=db.sqlite3 && \
+	python manage.py seed_data --force
