@@ -9,8 +9,8 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, FormView, ListView, TemplateView, UpdateView, View
 
-from .forms import CargoTemplateForm, ContactTemplateForm, DeliveryTemplateForm, LoginForm, PasswordChangeForm, ProfileForm, RegisterForm, TicketForm, TicketMessageForm
-from .models import CargoTemplate, ContactTemplate, CustomUser, DeliveryTemplate, Ticket, TicketMessage, Transaction
+from .forms import CargoTemplateForm, CompanyApplicationForm, ContactTemplateForm, DeliveryTemplateForm, LoginForm, PasswordChangeForm, ProfileForm, RegisterForm, TicketForm, TicketMessageForm
+from .models import CargoTemplate, CompanyApplication, ContactTemplate, CustomUser, DeliveryTemplate, Ticket, TicketMessage, Transaction
 
 
 class LoginView(AuthLoginView):
@@ -51,7 +51,10 @@ class ProfileSettingsView(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         profile_form = ProfileForm(instance=request.user)
         password_form = PasswordChangeForm(user=request.user)
-        return self.render_to_response(self.get_context_data(profile_form=profile_form, password_form=password_form))
+        return self.render_to_response(self.get_context_data(
+            profile_form=profile_form, password_form=password_form,
+            company_form=CompanyApplicationForm(),
+        ))
 
     def post(self, request, *args, **kwargs):
         action = request.POST.get('action')
@@ -70,10 +73,34 @@ class ProfileSettingsView(LoginRequiredMixin, TemplateView):
                 update_session_auth_hash(request, request.user)
                 messages.success(request, _('Password changed successfully.'))
                 return redirect('users:settings')
+        elif action == 'company':
+            company_form = CompanyApplicationForm(request.POST)
+            if company_form.is_valid():
+                app = company_form.save(commit=False)
+                app.user = request.user
+                app.save()
+                return redirect('users:company_apply_success')
+            profile_form = ProfileForm(instance=request.user)
+            password_form = PasswordChangeForm(user=request.user)
+            return self.render_to_response(self.get_context_data(
+                profile_form=profile_form, password_form=password_form,
+                company_form=company_form,
+            ))
         else:
             profile_form = ProfileForm(instance=request.user)
             password_form = PasswordChangeForm(user=request.user)
-        return self.render_to_response(self.get_context_data(profile_form=profile_form, password_form=password_form))
+        return self.render_to_response(self.get_context_data(
+            profile_form=profile_form, password_form=password_form,
+            company_form=CompanyApplicationForm(),
+        ))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if not self.request.user.is_company:
+            context['company_application'] = CompanyApplication.objects.filter(
+                user=self.request.user
+            ).first()
+        return context
 
 
 class BalanceView(LoginRequiredMixin, ListView):
@@ -96,20 +123,25 @@ class BalanceTopUpView(LoginRequiredMixin, TemplateView):
         amount = request.POST.get('amount', '0')
         try:
             amount = Decimal(amount)
-            if amount > Decimal('0'):
-                user = request.user
-                user.balance += amount
-                user.save()
-                Transaction.objects.create(
-                    user=user,
-                    amount=amount,
-                    transaction_type='deposit',
-                    description=_('Balance top-up'),
-                    balance_after=user.balance,
-                )
+            if amount <= 0 or amount > Decimal('1000000'):
+                return redirect('users:balance')
+            user = request.user
+            user.balance += amount
+            user.save()
+            Transaction.objects.create(
+                user=user,
+                amount=amount,
+                transaction_type='deposit',
+                description=_('Balance top-up'),
+                balance_after=user.balance,
+            )
             return redirect('users:balance_success')
         except (InvalidOperation, ValueError, TypeError):
             return redirect('users:balance')
+
+
+class CompanyApplySuccessView(LoginRequiredMixin, TemplateView):
+    template_name = 'pages/users/company_apply_success.html'
 
 
 class BalanceSuccessView(LoginRequiredMixin, TemplateView):
@@ -171,7 +203,10 @@ class TicketDetailView(LoginRequiredMixin, DetailView):
                 sender=request.user,
                 message=form.cleaned_data['message'],
             )
-        return self.get(request, *args, **kwargs)
+            return redirect('users:ticket_detail', pk=self.object.pk)
+        context = self.get_context_data(**kwargs)
+        context['form'] = form
+        return self.render_to_response(context)
 
 
 class OrderListView(LoginRequiredMixin, ListView):
@@ -199,6 +234,11 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
     def get_queryset(self):
         from apps.orders.models import Order
         return Order.objects.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['attached_documents'] = self.object.get_attached_documents()
+        return context
 
 
 class AccountingDocumentsView(LoginRequiredMixin, TemplateView):

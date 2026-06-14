@@ -117,6 +117,98 @@
           </div>
         </div>
       </div>
+      {% elif company_application %}
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 lg:p-8 transition-colors duration-300">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{% translate 'Company registration' %}</h2>
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{% translate 'Your company registration is being processed.' %}</p>
+            <div class="mt-4 flex items-center gap-3">
+              {% if company_application.status == 'pending' %}
+              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400">
+                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                {% translate 'Pending review' %}
+              </span>
+              {% elif company_application.status == 'reviewing' %}
+              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400">
+                <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                {% translate 'Under review' %}
+              </span>
+              {% elif company_application.status == 'rejected' %}
+              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                {% translate 'Rejected' %}
+              </span>
+              {% elif company_application.status == 'approved' %}
+              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                {% translate 'Approved' %}
+              </span>
+              {% endif %}
+              <span class="text-xs text-gray-500 dark:text-gray-400">{% blocktranslate with date=company_application.created_at|date:"d M Y" %}Submitted {{ date }}{% endblocktranslate %}</span>
+            </div>
+            {% if company_application.admin_comment %}
+            <div class="mt-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
+              <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{% translate 'Admin comment:' %}</p>
+              <p class="text-sm text-gray-700 dark:text-gray-300">{{ company_application.admin_comment }}</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 lg:p-8 transition-colors duration-300">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-full bg-baikal-100 dark:bg-baikal-900/30 flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-baikal-600 dark:text-baikal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          </div>
+          <div class="flex-1">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{% translate 'Company registration' %}</h2>
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{% translate 'Register as a legal entity to access corporate rates and features.' %}</p>
+            <button type="button" id="company-show-btn" onclick="document.getElementById('company-form').classList.remove('hidden'); this.classList.add('hidden')" class="mt-4 inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-baikal-600 hover:bg-baikal-700 rounded-xl transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              {% translate 'Register as company' %}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="company-form" class="hidden">
+        <form method="post" class="space-y-6">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="company">
+          <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 lg:p-8 transition-colors duration-300">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">{% translate 'Company details' %}</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label for="{{ company_form.company_name.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Company name' %}</label>
+                {{ company_form.company_name }}
+                {% if company_form.company_name.errors %}
+                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ company_form.company_name.errors.0 }}</p>
+                {% endif %}
+              </div>
+              <div>
+                <label for="{{ company_form.inn.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'INN' %}</label>
+                {{ company_form.inn }}
+                {% if company_form.inn.errors %}
+                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ company_form.inn.errors.0 }}</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <button type="button" onclick="document.getElementById('company-form').classList.add('hidden'); document.getElementById('company-show-btn').classList.remove('hidden')" class="px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl transition-colors">
+              {% translate 'Cancel' %}
+            </button>
+            <button type="submit" class="px-8 py-3 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl shadow-lg shadow-baikal-600/25 hover:shadow-baikal-600/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-baikal-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+              {% translate 'Submit for review' %}
+            </button>
+          </div>
+        </form>
+      </div>
       {% endif %}
 
       <div class="flex items-center justify-between">

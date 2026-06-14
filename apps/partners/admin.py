@@ -1,7 +1,21 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from .models import PartnerApplication, Banner, IframeModule
+from .models import Partner, PartnerApplication, Banner, IframeModule
+
+
+@admin.register(Partner)
+class PartnerAdmin(admin.ModelAdmin):
+    list_display = ['name', 'is_active', 'sort_order', 'created_at']
+    list_filter = ['is_active']
+    search_fields = ['name', 'description']
+    list_editable = ['is_active', 'sort_order']
+    prepopulated_fields = {}
+    fieldsets = [
+        (None, {'fields': ['name', 'description', 'website']}),
+        (_('Media'), {'fields': ['logo']}),
+        (_('Settings'), {'fields': ['is_active', 'sort_order']}),
+    ]
 
 
 @admin.register(PartnerApplication)

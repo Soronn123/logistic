@@ -1,3 +1,4 @@
+from django.db.models import Prefetch, Q
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.utils.translation import gettext_lazy as _
@@ -9,9 +10,22 @@ class ServiceCategoryListView(ListView):
     model = ServiceCategory
     template_name = 'pages/services/category_list.html'
     context_object_name = 'categories'
+    paginate_by = 12
 
     def get_queryset(self):
-        return ServiceCategory.objects.filter(parent__isnull=True).prefetch_related('children', 'services')
+        active_services = Service.objects.filter(is_active=True)
+        qs = ServiceCategory.objects.filter(parent__isnull=True).prefetch_related(
+            Prefetch('services', queryset=active_services),
+            Prefetch('children', queryset=ServiceCategory.objects.all()),
+        )
+        q = self.request.GET.get('q', '').strip()
+        if q:
+            qs = qs.filter(
+                Q(name__icontains=q) | Q(name_en__icontains=q) | Q(description__icontains=q)
+            )
+        else:
+            qs = qs.filter(services__is_active=True).distinct()
+        return qs
 
 
 class ServiceCategoryDetailView(DetailView):
@@ -48,6 +62,9 @@ class AdditionalServiceListView(ListView):
     model = AdditionalService
     template_name = 'pages/services/additionalservice_list.html'
     context_object_name = 'services'
+
+    def get_queryset(self):
+        return AdditionalService.objects.filter(is_active=True)
 
 
 class TariffListView(ListView):

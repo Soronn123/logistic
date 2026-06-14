@@ -5,6 +5,7 @@ from django.views.generic import CreateView, DetailView, FormView, ListView, Tem
 
 from .forms import CalculatorForm, ContactForm, TrackingForm
 from .models import ContactMessage, ContentPage, FAQ, NewsItem, Promotion, Review, Vacancy, Tender
+from apps.partners.models import Partner
 
 
 class HomeView(TemplateView):
@@ -22,6 +23,8 @@ class HomeView(TemplateView):
         context['cities'] = City.objects.filter(is_active=True)[:50]
         context['services'] = Service.objects.filter(is_active=True)[:10]
         context['branches'] = Branch.objects.filter(is_active=True).select_related('city')[:100]
+        context['partners'] = Partner.objects.filter(is_active=True)[:6]
+        context['partners_total'] = Partner.objects.filter(is_active=True).count()
         return context
 
 
@@ -154,7 +157,7 @@ class CalculatorView(FormView):
         return context
 
     def form_valid(self, form):
-        from apps.services.models import Tariff
+        from apps.services.models import Tariff, Service
         weight = form.cleaned_data['weight']
         from_city = form.cleaned_data['from_city']
         to_city = form.cleaned_data['to_city']
@@ -165,11 +168,20 @@ class CalculatorView(FormView):
         ) | Tariff.objects.filter(
             min_weight__lte=weight, max_weight__isnull=True
         )
+        service_name = None
+        service_id = self.request.POST.get('service')
+        if service_id:
+            try:
+                service = Service.objects.get(id=service_id)
+                service_name = str(service)
+            except (Service.DoesNotExist, ValueError):
+                pass
         context = {
             'estimates': tariffs,
             'weight': weight,
             'from_city_name': str(from_city),
             'to_city_name': str(to_city),
+            'service_name': service_name,
         }
         if self.request.headers.get('HX-Request'):
             from django.shortcuts import render

@@ -7,8 +7,9 @@ from .models import Document, AccountingRequest
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
     list_display = ['title', 'category', 'is_active', 'uploaded_at']
-    list_filter = ['category', 'is_active']
+    list_filter = ['category', 'is_active', 'services', 'additional_services']
     search_fields = ['title', 'title_en', 'description']
+    filter_horizontal = ['services', 'additional_services']
 
 
 @admin.register(AccountingRequest)

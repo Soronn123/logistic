@@ -1,4 +1,81 @@
-{% extends 'base.html' %}
-{% load i18n %}
-{% block title %}{% translate 'Request Changes' %}{% endblock %}
-{% block content %}<div class="container mx-auto px-4 py-8"><h1 class="text-2xl font-bold mb-4">{% translate 'Request Changes' %}</h1></div>{% endblock %}
+{% extends 'base.html' %}{% load i18n %}
+{% block title %}{% translate 'Request Changes' %} — {{ order.tracking_number }}{% endblock %}
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-baikal-50 to-white dark:from-gray-900 dark:to-gray-800">
+  <div class="max-w-2xl mx-auto px-4 py-12 lg:py-20">
+    <a href="{% url 'orders:track' order.tracking_number %}" class="inline-flex items-center gap-1.5 text-sm text-baikal-600 dark:text-baikal-400 hover:text-baikal-700 dark:hover:text-baikal-300 mb-6 transition-colors">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+      {% translate 'Back to tracking' %}
+    </a>
+
+    <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-2">{% translate 'Request Changes' %}</h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-8">{% blocktranslate with tracking=order.tracking_number %}Order <strong>{{ tracking }}</strong>{% endblocktranslate %}</p>
+
+    {% if messages %}
+    <div class="mb-6 space-y-2">
+      {% for message in messages %}
+      <div class="px-4 py-3 rounded-xl text-sm font-medium {% if message.tags == 'success' %}bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800{% else %}bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800{% endif %}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Order Summary -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 mb-6">
+      <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-3">{% translate 'Order Summary' %}</h2>
+      <div class="grid grid-cols-2 gap-3 text-sm">
+        <div>
+          <span class="text-gray-500 dark:text-gray-400">{% translate 'Status' %}:</span>
+          <span class="ml-1.5 font-medium text-gray-900 dark:text-white">{{ order.get_status_display }}</span>
+        </div>
+        <div>
+          <span class="text-gray-500 dark:text-gray-400">{% translate 'Route' %}:</span>
+          <span class="ml-1.5 font-medium text-gray-900 dark:text-white">{{ order.sender_address|default:'—' }} → {{ order.recipient_address|default:'—' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Change Request Form -->
+    <form method="post" class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+      {% csrf_token %}
+      <div class="p-5">
+        <label for="id_message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          {% translate 'Describe the changes you need' %} *
+        </label>
+        <textarea name="message" id="id_message" rows="5" required
+          class="w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors"
+          placeholder="{% translate 'e.g. Please update the delivery address to...' %}"></textarea>
+      </div>
+      <div class="px-5 py-4 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3">
+        <a href="{% url 'orders:track' order.tracking_number %}" class="px-5 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm">
+          {% translate 'Cancel' %}
+        </a>
+        <button type="submit" class="px-5 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl transition-colors text-sm">
+          {% translate 'Submit Request' %}
+        </button>
+      </div>
+    </form>
+
+    <!-- Previous Change Requests -->
+    {% if change_requests %}
+    <div class="mt-8">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{% translate 'Previous Change Requests' %}</h2>
+      <div class="space-y-3">
+        {% for req in change_requests %}
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs text-gray-500 dark:text-gray-400">{{ req.timestamp|date:"d M Y H:i" }}</span>
+            {% if req.changed_by %}
+            <span class="text-xs text-gray-500 dark:text-gray-400">{{ req.changed_by.get_full_name|default:req.changed_by.email }}</span>
+            {% endif %}
+          </div>
+          <p class="text-sm text-gray-700 dark:text-gray-300">{{ req.comment|cut:"[Change Request] " }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

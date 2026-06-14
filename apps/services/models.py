@@ -85,6 +85,7 @@ class AdditionalService(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_('Price'))
     price_type = models.CharField(max_length=20, choices=PriceType.choices, default=PriceType.FIXED, verbose_name=_('Price type'))
     is_door_service = models.BooleanField(default=False, verbose_name=_('Door-to-door service'))
+    is_active = models.BooleanField(default=True, verbose_name=_('Active'))
 
     class Meta:
         verbose_name = _('Additional service')
@@ -114,6 +115,7 @@ class Tariff(models.Model):
     price_per_kg = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_('Price per kg'))
     delivery_days_min = models.IntegerField(verbose_name=_('Min delivery days'))
     delivery_days_max = models.IntegerField(verbose_name=_('Max delivery days'))
+    is_active = models.BooleanField(default=True, verbose_name=_('Active'))
 
     class Meta:
         verbose_name = _('Tariff')

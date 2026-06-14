@@ -101,14 +101,14 @@ class OrderForm(forms.ModelForm):
         self.fields['sender_address'].queryset = City.objects.filter(is_active=True)
         self.fields['recipient_address'].queryset = City.objects.filter(is_active=True)
         self.fields['service'].queryset = Service.objects.filter(is_active=True).distinct()
-        self.fields['additional_services'].queryset = AdditionalService.objects.all().distinct()
+        self.fields['additional_services'].queryset = AdditionalService.objects.filter(is_active=True).distinct()
         self.fields['sender_address'].empty_label = _('Select city')
         self.fields['recipient_address'].empty_label = _('Select city')
         self.fields['volume'].required = False
         self.fields['length'].required = False
         self.fields['width'].required = False
         self.fields['height'].required = False
-        self.fields['declared_value'].required = False
+        self.fields['declared_value'].required = True
         self.fields['sender_address_detail'].required = False
         self.fields['recipient_address_detail'].required = False
         self.fields['sender_email'].required = False
@@ -123,33 +123,24 @@ class OrderForm(forms.ModelForm):
             self.fields['sender_phone'].initial = user.phone or ''
             self.fields['sender_email'].initial = user.email or ''
 
+    def clean_weight(self):
+        weight = self.cleaned_data.get('weight')
+        if weight is not None and weight <= 0:
+            raise forms.ValidationError(_('Weight must be greater than zero.'))
+        return weight
+
     def clean(self):
         cleaned_data = super().clean()
-        sender_name = cleaned_data.get('sender_name', '').strip()
         sender_phone = cleaned_data.get('sender_phone', '').strip()
-        sender_address = cleaned_data.get('sender_address')
-        recipient_name = cleaned_data.get('recipient_name', '').strip()
         recipient_phone = cleaned_data.get('recipient_phone', '').strip()
         recipient_address = cleaned_data.get('recipient_address')
         additional_services = cleaned_data.get('additional_services')
-
-        if not sender_name:
-            self.add_error('sender_name', _('Sender name is required'))
-        if not sender_phone:
-            self.add_error('sender_phone', _('Sender phone is required'))
-        if not sender_address:
-            self.add_error('sender_address', _('Sender city is required'))
-        if not recipient_name:
-            self.add_error('recipient_name', _('Recipient name is required'))
-        if not recipient_phone:
-            self.add_error('recipient_phone', _('Recipient phone is required'))
-        if not recipient_address:
-            self.add_error('recipient_address', _('Recipient city is required'))
+        declared_value = cleaned_data.get('declared_value')
 
         if additional_services and recipient_address:
             from apps.geo.models import Branch
             is_branch_delivery = Branch.objects.filter(
-                city=recipient_address, is_active=True
+                city=recipient_address, branch_type='pickup_point', is_active=True
             ).exists()
             if is_branch_delivery:
                 door_services = additional_services.filter(is_door_service=True)
@@ -158,6 +149,12 @@ class OrderForm(forms.ModelForm):
                         'additional_services',
                         _('Door-to-door services are not available for pickup point delivery')
                     )
+
+        if not declared_value and additional_services:
+            from apps.services.models import AdditionalService
+            has_percentage = additional_services.filter(price_type='percentage').exists()
+            if has_percentage:
+                self.add_error('declared_value', _('Declared value is required when percentage-based services are selected.'))
 
         phone_pattern = PHONE_PATTERN
         if sender_phone and not phone_pattern.match(sender_phone):

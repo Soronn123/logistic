@@ -75,6 +75,21 @@
       {% if order.total_price %}<p class="mt-3 text-lg font-bold text-baikal-600 dark:text-baikal-400">{{ order.total_price }} ₽</p>{% endif %}
     </div>
 
+    {% if attached_documents %}
+    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 mb-6">
+      <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">{% translate 'Documents' %}</h3>
+      <div class="space-y-2">
+        {% for doc in attached_documents %}
+        <a href="{% if doc.file %}{{ doc.file.url }}{% else %}#{% endif %}" target="_blank" class="flex items-center gap-2 text-sm text-baikal-600 dark:text-baikal-400 hover:underline">
+          <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+          <span>{{ doc.title }}</span>
+          <span class="text-xs text-gray-400">({{ doc.get_category_display }})</span>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
     <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
       <div class="p-5">
         <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">{% translate 'Status History' %}</h3>

@@ -2,7 +2,7 @@ import json
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, TemplateView, View
@@ -32,11 +32,13 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        from apps.documents.models import Document
         from apps.services.models import AdditionalService, Service
         cities_qs = City.objects.filter(is_active=True)
         context['cities'] = cities_qs
-        context['services'] = Service.objects.filter(is_active=True)
-        context['additional_services'] = AdditionalService.objects.all()
+        services = Service.objects.filter(is_active=True).prefetch_related('documents')
+        context['services'] = services
+        context['additional_services'] = AdditionalService.objects.filter(is_active=True).prefetch_related('documents')
         context['cities_json'] = json.dumps([
             {
                 'id': c.id,
@@ -49,6 +51,8 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
         ])
         context['default_lat'] = 55.7558
         context['default_lng'] = 37.6173
+
+        context['user_balance'] = float(self.request.user.balance or 0)
 
         # Compute auto-assignment rules for display on the services step
         context['auto_service_slugs'] = {
@@ -66,6 +70,29 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
             'truck_transport': 'truck-transport',
             'rail_transport': 'rail-transport',
         }
+
+        # Build document mappings for template
+        docs_qs = Document.objects.filter(is_active=True).prefetch_related('services', 'additional_services')
+        service_docs = {}
+        addon_docs = {}
+        for doc in docs_qs:
+            for svc in doc.services.all():
+                service_docs.setdefault(svc.id, []).append({
+                    'id': doc.id,
+                    'title': doc.title,
+                    'category': doc.get_category_display(),
+                    'url': doc.file.url if doc.file else None,
+                })
+            for addon in doc.additional_services.all():
+                addon_docs.setdefault(addon.id, []).append({
+                    'id': doc.id,
+                    'title': doc.title,
+                    'category': doc.get_category_display(),
+                    'url': doc.file.url if doc.file else None,
+                })
+        context['service_documents_json'] = json.dumps(service_docs)
+        context['addon_documents_json'] = json.dumps(addon_docs)
+
         return context
 
     def form_valid(self, form):
@@ -106,7 +133,7 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
 
         pricing = calculate_price(
             from_city, to_city, float(weight), form.instance.service or service,
-            additional_services=None,
+            additional_services=all_addons,
             declared_value=declared_value,
         )
         form.instance.total_price = pricing['total_price']
@@ -115,7 +142,29 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
             from_city, to_city, delivery_days=pricing['delivery_days']
         )
 
+        user = self.request.user
+        total = pricing['total_price']
+
+        if user.balance < total:
+            form.add_error(None, _('Insufficient balance. Your balance is %(balance)s ₽, but the order total is %(total)s ₽. Please top up your balance.') % {
+                'balance': user.balance,
+                'total': total,
+            })
+            return self.form_invalid(form)
+
         response = super().form_valid(form)
+
+        # Deduct balance
+        user.balance -= total
+        user.save(update_fields=['balance'])
+        from apps.users.models import Transaction
+        Transaction.objects.create(
+            user=user,
+            amount=-total,
+            transaction_type=Transaction.TransactionType.WITHDRAWAL,
+            description=_('Payment for order %(tracking)s') % {'tracking': self.object.tracking_number},
+            balance_after=user.balance,
+        )
 
         # Set additional services after save (m2m)
         if all_addons:
@@ -127,6 +176,9 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
             changed_by=self.request.user,
             comment=_('Order created'),
         )
+
+        from .routing import send_status_notification
+        send_status_notification(self.object)
 
         messages.success(
             self.request,
@@ -148,6 +200,7 @@ class OrderTrackView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['status_history'] = self.object.status_history.select_related('changed_by').order_by('timestamp')
+        context['attached_documents'] = self.object.get_attached_documents()
         return context
 
 
@@ -161,6 +214,7 @@ class TrackingLookupView(TemplateView):
             return render(request, 'pages/orders/track.html', {
                 'order': order,
                 'status_history': order.status_history.select_related('changed_by').order_by('timestamp'),
+                'attached_documents': order.get_attached_documents(),
             })
         return super().get(request, *args, **kwargs)
 
@@ -175,6 +229,7 @@ class TrackingPublicDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['status_history'] = self.object.status_history.select_related('changed_by').order_by('timestamp')
+        context['attached_documents'] = self.object.get_attached_documents()
         return context
 
 
@@ -187,10 +242,39 @@ class DoorDeliveryRequestView(TemplateView):
         return context
 
 
-class RequestChangesView(TemplateView):
+class RequestChangesView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/orders/request_changes.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tracking_number'] = self.kwargs.get('tracking_number', '')
+        order = get_object_or_404(Order, tracking_number=self.kwargs.get('tracking_number'))
+        if order.user != self.request.user:
+            messages.error(self.request, _('You can only request changes for your own orders.'))
+            return redirect('orders:track', tracking_number=self.kwargs.get('tracking_number'))
+        context['order'] = order
+        context['change_requests'] = order.status_history.filter(
+            comment__startswith='[Change Request]'
+        ).order_by('-timestamp')
         return context
+
+    def post(self, request, tracking_number):
+        order = get_object_or_404(Order, tracking_number=tracking_number)
+        if order.user != request.user:
+            messages.error(request, _('You can only request changes for your own orders.'))
+            return redirect('orders:track', tracking_number=tracking_number)
+
+        message = request.POST.get('message', '').strip()
+
+        if not message:
+            messages.error(request, _('Please describe the changes you need.'))
+            return redirect('orders:request_changes', tracking_number=tracking_number)
+
+        OrderStatusHistory.objects.create(
+            order=order,
+            status=order.status,
+            changed_by=request.user,
+            comment=_('[Change Request] %(message)s') % {'message': message},
+        )
+
+        messages.success(request, _('Your change request has been submitted.'))
+        return redirect('orders:track', tracking_number=tracking_number)

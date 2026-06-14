@@ -81,6 +81,21 @@ input[type="number"] { -moz-appearance: textfield; }
         <p class="text-sm text-red-700 dark:text-red-300" x-text="validationError"></p>
       </div>
 
+      {% if user_balance <= 0 %}
+      <div class="mx-6 sm:mx-8 mt-4">
+        <div class="px-4 py-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 flex items-center gap-3">
+          <svg class="w-6 h-6 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+          <div class="flex-1">
+            <p class="text-sm font-semibold text-amber-800 dark:text-amber-200">{% translate 'Insufficient balance' %}</p>
+            <p class="text-sm text-amber-700 dark:text-amber-300 mt-0.5">{% translate 'Your account balance is zero. Please top up your balance to proceed with the order.' %}</p>
+          </div>
+          <a href="{% url 'users:balance_topup' %}" class="flex-shrink-0 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-sm font-medium rounded-xl transition-colors whitespace-nowrap">
+            {% translate 'Top up balance' %}
+          </a>
+        </div>
+      </div>
+      {% endif %}
+
       <!-- Map -->
       <div class="mx-6 sm:mx-8 mt-4" x-show="step >= 1">
         <div class="relative" x-data="{ citySearch: '', showResults: false }">
@@ -432,6 +447,24 @@ input[type="number"] { -moz-appearance: textfield; }
               </div>
             </div>
           </div>
+
+          <!-- Documents section -->
+          <div x-show="getAllAttachedDocuments().length > 0" class="mt-6 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800">
+            <div class="flex items-center gap-2 mb-3">
+              <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{% translate 'Attached documents' %}</h3>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">{% translate 'The following documents are required for the selected services:' %}</p>
+            <div class="flex flex-wrap gap-2">
+              <template x-for="doc in getAllAttachedDocuments()" :key="doc.id">
+                <a :href="doc.url || '#'" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                  <svg class="w-3.5 h-3.5 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                  <span x-text="doc.title"></span>
+                  <span class="text-gray-400 dark:text-gray-500" x-text="'(' + doc.category + ')'"></span>
+                </a>
+              </template>
+            </div>
+          </div>
         </div>
 
         <!-- Step 5: Confirmation -->
@@ -486,6 +519,23 @@ input[type="number"] { -moz-appearance: textfield; }
               </div>
             </div>
             <p x-show="getAddonNames().length === 0" class="text-xs text-gray-400 dark:text-gray-500 italic">{% translate 'No additional services selected' %}</p>
+          </div>
+
+          <!-- Attached documents -->
+          <div x-show="getAllAttachedDocuments().length > 0" class="bg-white dark:bg-gray-800/60 rounded-xl p-4 sm:p-5 border border-gray-200 dark:border-gray-700 mb-4">
+            <div class="flex items-center gap-2 mb-3">
+              <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">{% translate 'Attached documents' %}</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <template x-for="doc in getAllAttachedDocuments()" :key="doc.id">
+                <a :href="doc.url || '#'" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+                  <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                  <span x-text="doc.title"></span>
+                  <span class="text-gray-400 dark:text-gray-500" x-text="'(' + doc.category + ')'"></span>
+                </a>
+              </template>
+            </div>
           </div>
 
           <!-- Auto-assigned services alert -->
@@ -582,7 +632,9 @@ function orderForm() {
     showRecipientTemplates: false,
     showCargoTemplates: false,
     validationError: '',
+    fieldErrors: {},
     emailErrors: { sender_email: '', recipient_email: '' },
+    touched: {},
     fields: {
       sender_name: '',
       sender_phone: '',
@@ -608,6 +660,8 @@ function orderForm() {
       is_temperature_sensitive: false,
     },
     cities: {{ cities_json|safe }},
+    serviceDocuments: {{ service_documents_json|safe }},
+    addonDocuments: {{ addon_documents_json|safe }},
     map: null,
     senderMarker: null,
     recipientMarker: null,
@@ -764,7 +818,7 @@ function orderForm() {
           return;
         }
         const bounds = new maplibregl.LngLatBounds(pts[0], pts[1]);
-        this.map.fitBounds(bounds, { padding: 50 });
+        this.map.fitBounds(bounds, { padding: 50, maxZoom: 8 });
 
         try { this.map.removeLayer('route-line'); this.map.removeSource('route-line'); } catch (e) {}
         this.map.addSource('route-line', {
@@ -868,7 +922,6 @@ function orderForm() {
         this.updateMapMarker('sender', tpl.from_city);
         this.updateMapMarker('recipient', tpl.to_city);
       });
-      this.step = 5;
     },
 
     saveDeliveryTemplate() {
@@ -960,71 +1013,96 @@ function orderForm() {
       this.fields[field] = formatted;
     },
 
+    markTouched(field) {
+      this.touched[field] = true;
+    },
+
     validateEmailField(field) {
+      this.markTouched(field);
       const val = this.fields[field] || '';
       if (!val) { this.emailErrors[field] = ''; return; }
       const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       this.emailErrors[field] = re.test(val) ? '' : '{% translate "Invalid email format" %}';
     },
 
+    fieldClass(field) {
+      if (!this.touched[field]) return '';
+      const err = this.fieldErrors[field];
+      return err ? 'border-red-400 dark:border-red-500 focus:ring-red-400' : 'border-green-400 dark:border-green-500 focus:ring-green-400';
+    },
+
     validateStep(step) {
       this.validationError = '';
+      this.fieldErrors = {};
       try {
         if (step === 1) {
           if (!(this.fields.sender_name || '').trim()) {
-            this.validationError = '{% translate "Sender name is required" %}';
+            this.fieldErrors.sender_name = '{% translate "Sender name is required" %}';
+            this.validationError = this.fieldErrors.sender_name;
             return false;
           }
           if (!(this.fields.sender_phone || '').trim()) {
-            this.validationError = '{% translate "Sender phone is required" %}';
+            this.fieldErrors.sender_phone = '{% translate "Sender phone is required" %}';
+            this.validationError = this.fieldErrors.sender_phone;
             return false;
           }
           if (!this.fields.sender_address) {
-            this.validationError = '{% translate "Please select sender city" %}';
+            this.fieldErrors.sender_address = '{% translate "Please select sender city" %}';
+            this.validationError = this.fieldErrors.sender_address;
             return false;
           }
           if ((this.fields.sender_email || '').trim() && this.emailErrors.sender_email) {
+            this.fieldErrors.sender_email = this.emailErrors.sender_email;
             this.validationError = this.emailErrors.sender_email;
             return false;
           }
         } else if (step === 2) {
           if (!(this.fields.recipient_name || '').trim()) {
-            this.validationError = '{% translate "Recipient name is required" %}';
+            this.fieldErrors.recipient_name = '{% translate "Recipient name is required" %}';
+            this.validationError = this.fieldErrors.recipient_name;
             return false;
           }
           if (!(this.fields.recipient_phone || '').trim()) {
-            this.validationError = '{% translate "Recipient phone is required" %}';
+            this.fieldErrors.recipient_phone = '{% translate "Recipient phone is required" %}';
+            this.validationError = this.fieldErrors.recipient_phone;
             return false;
           }
           if (!this.fields.recipient_address) {
-            this.validationError = '{% translate "Please select recipient city" %}';
+            this.fieldErrors.recipient_address = '{% translate "Please select recipient city" %}';
+            this.validationError = this.fieldErrors.recipient_address;
             return false;
           }
           if ((this.fields.recipient_email || '').trim() && this.emailErrors.recipient_email) {
+            this.fieldErrors.recipient_email = this.emailErrors.recipient_email;
             this.validationError = this.emailErrors.recipient_email;
             return false;
           }
         } else if (step === 3) {
           if (!(this.fields.cargo_description || '').trim()) {
-            this.validationError = '{% translate "Cargo description is required" %}';
+            this.fieldErrors.cargo_description = '{% translate "Cargo description is required" %}';
+            this.validationError = this.fieldErrors.cargo_description;
             return false;
           }
           if (!this.fields.weight || parseFloat(this.fields.weight) <= 0) {
-            this.validationError = '{% translate "Weight must be greater than 0" %}';
+            this.fieldErrors.weight = '{% translate "Weight must be greater than 0" %}';
+            this.validationError = this.fieldErrors.weight;
             return false;
           }
           if (this.fields.declared_value === '' || this.fields.declared_value === null || parseFloat(this.fields.declared_value) < 0) {
-            this.validationError = '{% translate "Declared value is required" %}';
+            this.fieldErrors.declared_value = '{% translate "Declared value is required" %}';
+            this.validationError = this.fieldErrors.declared_value;
             return false;
           }
         } else if (step === 4) {
           if (!this.fields.service) {
-            this.validationError = '{% translate "Please select a service type" %}';
+            this.fieldErrors.service = '{% translate "Please select a service type" %}';
+            this.validationError = this.fieldErrors.service;
             return false;
           }
         } else if (step === 5) {
           if (!this.fields.terms) {
-            this.validationError = '{% translate "You must accept the terms and conditions" %}';
+            this.fieldErrors.terms = '{% translate "You must accept the terms and conditions" %}';
+            this.validationError = this.fieldErrors.terms;
             return false;
           }
         }
@@ -1096,6 +1174,26 @@ function orderForm() {
       if (!this.fields.service) return '\u2014';
       const checked = document.querySelector('[name="service"]:checked');
       return checked?.closest('label')?.querySelector('.font-medium')?.textContent || '\u2014';
+    },
+
+    getServiceDocuments() {
+      if (!this.fields.service) return [];
+      return this.serviceDocuments[this.fields.service] || [];
+    },
+
+    getSelectedAddonDocuments() {
+      const docs = [];
+      this.fields.additional_services.forEach(id => {
+        const addonDocs = this.addonDocuments[id] || [];
+        addonDocs.forEach(d => {
+          if (!docs.find(x => x.id === d.id)) docs.push(d);
+        });
+      });
+      return docs;
+    },
+
+    getAllAttachedDocuments() {
+      return [...this.getServiceDocuments(), ...this.getSelectedAddonDocuments()];
     },
 
     getAddonNames() {
@@ -1181,7 +1279,7 @@ function orderForm() {
             const weight = parseFloat(this.fields.weight) || 0;
             total += price * weight;
           } else if (priceType === 'percentage') {
-            total += this.calculateBasePrice() * price / 100;
+            total += (parseFloat(this.fields.declared_value) || 0) * price / 100;
           }
         }
       });

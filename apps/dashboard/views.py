@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView, UpdateView, DeleteView, CreateView, View
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth import get_user_model, authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
@@ -45,6 +45,40 @@ class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
             return self.handle_no_permission()
         if not (request.user.is_staff or request.user.role in ['admin', 'manager']):
             return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_blocked_directories(self):
+        if self.is_admin or not self.is_manager:
+            return set()
+        from apps.users.models import ManagerDirectoryPermission
+        blocked = ManagerDirectoryPermission.objects.filter(
+            manager=self.request.user,
+            can_access=False
+        ).values_list('directory', flat=True)
+        return set(blocked)
+
+    def has_directory_access(self, keys):
+        if self.is_admin or not self.is_manager:
+            return True
+        if isinstance(keys, str):
+            keys = [keys]
+        blocked = self.get_blocked_directories()
+        return not any(k in blocked for k in keys)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['blocked_directories'] = self.get_blocked_directories()
+        context['is_admin'] = self.is_admin
+        return context
+
+
+class DirectoryAccessMixin:
+    directory_keys = []
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.has_directory_access(self.directory_keys):
+            messages.error(request, _('You do not have access to this section.'))
+            return redirect('dashboard:home')
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -93,8 +127,9 @@ class DashboardHomeView(StaffRequiredMixin, TemplateView):
         return context
 
 
-class DashboardUsersView(StaffRequiredMixin, TemplateView):
+class DashboardUsersView(DirectoryAccessMixin, StaffRequiredMixin, TemplateView):
     template_name = 'pages/dashboard/users.html'
+    directory_keys = ['users']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -134,11 +169,12 @@ class DashboardUserForm(forms.ModelForm):
         return user
 
 
-class DashboardUserCreateView(StaffRequiredMixin, CreateView):
+class DashboardUserCreateView(DirectoryAccessMixin, StaffRequiredMixin, CreateView):
     model = User
     form_class = DashboardUserForm
     template_name = 'pages/dashboard/user_form.html'
     success_url = reverse_lazy('dashboard:users')
+    directory_keys = ['users']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -150,11 +186,12 @@ class DashboardUserCreateView(StaffRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class DashboardUserUpdateView(StaffRequiredMixin, UpdateView):
+class DashboardUserUpdateView(DirectoryAccessMixin, StaffRequiredMixin, UpdateView):
     model = User
     form_class = DashboardUserForm
     template_name = 'pages/dashboard/user_form.html'
     success_url = reverse_lazy('dashboard:users')
+    directory_keys = ['users']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -179,8 +216,9 @@ class DashboardUserDeleteView(StaffRequiredMixin, DeleteView):
         return super().form_valid(form)
 
 
-class DashboardOrdersView(StaffRequiredMixin, TemplateView):
+class DashboardOrdersView(DirectoryAccessMixin, StaffRequiredMixin, TemplateView):
     template_name = 'pages/dashboard/orders.html'
+    directory_keys = ['orders']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -192,8 +230,9 @@ class DashboardOrdersView(StaffRequiredMixin, TemplateView):
         return context
 
 
-class DashboardTicketsView(StaffRequiredMixin, TemplateView):
+class DashboardTicketsView(DirectoryAccessMixin, StaffRequiredMixin, TemplateView):
     template_name = 'pages/dashboard/tickets.html'
+    directory_keys = ['tickets']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -212,8 +251,9 @@ class DashboardTicketsView(StaffRequiredMixin, TemplateView):
         return context
 
 
-class DashboardServicesView(StaffRequiredMixin, TemplateView):
+class DashboardServicesView(DirectoryAccessMixin, StaffRequiredMixin, TemplateView):
     template_name = 'pages/dashboard/services.html'
+    directory_keys = ['services']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -226,8 +266,9 @@ class DashboardServicesView(StaffRequiredMixin, TemplateView):
         return context
 
 
-class DashboardContentListView(StaffRequiredMixin, TemplateView):
+class DashboardContentListView(DirectoryAccessMixin, StaffRequiredMixin, TemplateView):
     template_name = 'pages/dashboard/content.html'
+    directory_keys = ['content_pages']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -240,8 +281,8 @@ class DashboardContentListView(StaffRequiredMixin, TemplateView):
             context['reviews'] = Review.objects.all()[:50]
             context['tenders'] = Tender.objects.all()[:20]
         except ImportError:
-            context['pages'] = []
-            context['news'] = []
+            context['content_pages'] = []
+            context['news_items'] = []
             context['vacancies'] = []
             context['faqs'] = []
             context['reviews'] = []
@@ -249,8 +290,9 @@ class DashboardContentListView(StaffRequiredMixin, TemplateView):
         return context
 
 
-class DashboardBranchesView(StaffRequiredMixin, TemplateView):
+class DashboardBranchesView(DirectoryAccessMixin, StaffRequiredMixin, TemplateView):
     template_name = 'pages/dashboard/branches.html'
+    directory_keys = ['branches']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -264,8 +306,9 @@ class DashboardBranchesView(StaffRequiredMixin, TemplateView):
         return context
 
 
-class DashboardDocumentsView(StaffRequiredMixin, TemplateView):
+class DashboardDocumentsView(DirectoryAccessMixin, StaffRequiredMixin, TemplateView):
     template_name = 'pages/dashboard/documents.html'
+    directory_keys = ['documents']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -279,8 +322,9 @@ class DashboardDocumentsView(StaffRequiredMixin, TemplateView):
         return context
 
 
-class DashboardPartnersView(StaffRequiredMixin, TemplateView):
+class DashboardPartnersView(DirectoryAccessMixin, StaffRequiredMixin, TemplateView):
     template_name = 'pages/dashboard/partners.html'
+    directory_keys = ['partner_applications', 'banners']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -364,22 +408,24 @@ class BranchForm(forms.ModelForm):
         }
 
 
-class DashboardServiceCreateView(StaffRequiredMixin, CreateView):
+class DashboardServiceCreateView(DirectoryAccessMixin, StaffRequiredMixin, CreateView):
     model = Service
     form_class = ServiceForm
     template_name = 'pages/dashboard/service_form.html'
     success_url = reverse_lazy('dashboard:services')
+    directory_keys = ['services']
 
     def form_valid(self, form):
         messages.success(self.request, _('Service created successfully.'))
         return super().form_valid(form)
 
 
-class DashboardServiceUpdateView(StaffRequiredMixin, UpdateView):
+class DashboardServiceUpdateView(DirectoryAccessMixin, StaffRequiredMixin, UpdateView):
     model = Service
     form_class = ServiceForm
     template_name = 'pages/dashboard/service_form.html'
     success_url = reverse_lazy('dashboard:services')
+    directory_keys = ['services']
 
     def form_valid(self, form):
         messages.success(self.request, _('Service updated successfully.'))
@@ -399,11 +445,12 @@ class DashboardServiceDeleteView(StaffRequiredMixin, DeleteView):
         return super().form_valid(form)
 
 
-class DashboardBranchCreateView(StaffRequiredMixin, CreateView):
+class DashboardBranchCreateView(DirectoryAccessMixin, StaffRequiredMixin, CreateView):
     model = Branch
     form_class = BranchForm
     template_name = 'pages/dashboard/branch_form.html'
     success_url = reverse_lazy('dashboard:branches')
+    directory_keys = ['branches']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -415,11 +462,12 @@ class DashboardBranchCreateView(StaffRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class DashboardBranchUpdateView(StaffRequiredMixin, UpdateView):
+class DashboardBranchUpdateView(DirectoryAccessMixin, StaffRequiredMixin, UpdateView):
     model = Branch
     form_class = BranchForm
     template_name = 'pages/dashboard/branch_form.html'
     success_url = reverse_lazy('dashboard:branches')
+    directory_keys = ['branches']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -431,10 +479,11 @@ class DashboardBranchUpdateView(StaffRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class DashboardBranchDeleteView(StaffRequiredMixin, DeleteView):
+class DashboardBranchDeleteView(DirectoryAccessMixin, StaffRequiredMixin, DeleteView):
     model = Branch
     template_name = 'pages/dashboard/branch_confirm_delete.html'
     success_url = reverse_lazy('dashboard:branches')
+    directory_keys = ['branches']
 
     def form_valid(self, form):
         messages.success(self.request, _('Branch deleted successfully.'))
@@ -462,22 +511,24 @@ class ServiceCategoryForm(forms.ModelForm):
         self.fields['parent'].required = False
 
 
-class DashboardServiceCategoryCreateView(StaffRequiredMixin, CreateView):
+class DashboardServiceCategoryCreateView(DirectoryAccessMixin, StaffRequiredMixin, CreateView):
     model = ServiceCategory
     form_class = ServiceCategoryForm
     template_name = 'pages/dashboard/category_form.html'
     success_url = reverse_lazy('dashboard:services')
+    directory_keys = ['service_categories']
 
     def form_valid(self, form):
         messages.success(self.request, _('Category created successfully.'))
         return super().form_valid(form)
 
 
-class DashboardServiceCategoryUpdateView(StaffRequiredMixin, UpdateView):
+class DashboardServiceCategoryUpdateView(DirectoryAccessMixin, StaffRequiredMixin, UpdateView):
     model = ServiceCategory
     form_class = ServiceCategoryForm
     template_name = 'pages/dashboard/category_form.html'
     success_url = reverse_lazy('dashboard:services')
+    directory_keys = ['service_categories']
 
     def form_valid(self, form):
         messages.success(self.request, _('Category updated successfully.'))
@@ -514,22 +565,24 @@ class TariffForm(forms.ModelForm):
         }
 
 
-class DashboardTariffCreateView(StaffRequiredMixin, CreateView):
+class DashboardTariffCreateView(DirectoryAccessMixin, StaffRequiredMixin, CreateView):
     model = Tariff
     form_class = TariffForm
     template_name = 'pages/dashboard/tariff_form.html'
     success_url = reverse_lazy('dashboard:services')
+    directory_keys = ['tariffs']
 
     def form_valid(self, form):
         messages.success(self.request, _('Tariff created successfully.'))
         return super().form_valid(form)
 
 
-class DashboardTariffUpdateView(StaffRequiredMixin, UpdateView):
+class DashboardTariffUpdateView(DirectoryAccessMixin, StaffRequiredMixin, UpdateView):
     model = Tariff
     form_class = TariffForm
     template_name = 'pages/dashboard/tariff_form.html'
     success_url = reverse_lazy('dashboard:services')
+    directory_keys = ['tariffs']
 
     def form_valid(self, form):
         messages.success(self.request, _('Tariff updated successfully.'))
@@ -563,21 +616,23 @@ class PartnerApplicationForm(forms.ModelForm):
         }
 
 
-class DashboardPartnerApplicationUpdateView(StaffRequiredMixin, UpdateView):
+class DashboardPartnerApplicationUpdateView(DirectoryAccessMixin, StaffRequiredMixin, UpdateView):
     model = PartnerApplication
     form_class = PartnerApplicationForm
     template_name = 'pages/dashboard/partner_application_form.html'
     success_url = reverse_lazy('dashboard:partners')
+    directory_keys = ['partner_applications']
 
     def form_valid(self, form):
         messages.success(self.request, _('Partner application updated successfully.'))
         return super().form_valid(form)
 
 
-class DashboardPartnerApplicationDeleteView(StaffRequiredMixin, DeleteView):
+class DashboardPartnerApplicationDeleteView(DirectoryAccessMixin, StaffRequiredMixin, DeleteView):
     model = PartnerApplication
     template_name = 'pages/dashboard/partner_application_confirm_delete.html'
     success_url = reverse_lazy('dashboard:partners')
+    directory_keys = ['partner_applications']
 
     def form_valid(self, form):
         messages.success(self.request, _('Partner application deleted successfully.'))
@@ -598,22 +653,24 @@ class BannerForm(forms.ModelForm):
         }
 
 
-class DashboardBannerCreateView(StaffRequiredMixin, CreateView):
+class DashboardBannerCreateView(DirectoryAccessMixin, StaffRequiredMixin, CreateView):
     model = Banner
     form_class = BannerForm
     template_name = 'pages/dashboard/banner_form.html'
     success_url = reverse_lazy('dashboard:partners')
+    directory_keys = ['banners']
 
     def form_valid(self, form):
         messages.success(self.request, _('Banner created successfully.'))
         return super().form_valid(form)
 
 
-class DashboardBannerUpdateView(StaffRequiredMixin, UpdateView):
+class DashboardBannerUpdateView(DirectoryAccessMixin, StaffRequiredMixin, UpdateView):
     model = Banner
     form_class = BannerForm
     template_name = 'pages/dashboard/banner_form.html'
     success_url = reverse_lazy('dashboard:partners')
+    directory_keys = ['banners']
 
     def form_valid(self, form):
         messages.success(self.request, _('Banner updated successfully.'))
@@ -651,11 +708,12 @@ class ContentPageForm(forms.ModelForm):
         }
 
 
-class DashboardContentPageCreateView(StaffRequiredMixin, CreateView):
+class DashboardContentPageCreateView(DirectoryAccessMixin, StaffRequiredMixin, CreateView):
     model = ContentPage
     form_class = ContentPageForm
     template_name = 'pages/dashboard/content_page_form.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['content_pages']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -667,11 +725,12 @@ class DashboardContentPageCreateView(StaffRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class DashboardContentPageUpdateView(StaffRequiredMixin, UpdateView):
+class DashboardContentPageUpdateView(DirectoryAccessMixin, StaffRequiredMixin, UpdateView):
     model = ContentPage
     form_class = ContentPageForm
     template_name = 'pages/dashboard/content_page_form.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['content_pages']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -683,10 +742,11 @@ class DashboardContentPageUpdateView(StaffRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class DashboardContentPageDeleteView(StaffRequiredMixin, DeleteView):
+class DashboardContentPageDeleteView(DirectoryAccessMixin, StaffRequiredMixin, DeleteView):
     model = ContentPage
     template_name = 'pages/dashboard/content_page_confirm_delete.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['content_pages']
 
     def form_valid(self, form):
         messages.success(self.request, _('Content page deleted successfully.'))
@@ -712,11 +772,12 @@ class NewsItemForm(forms.ModelForm):
         }
 
 
-class DashboardNewsCreateView(StaffRequiredMixin, CreateView):
+class DashboardNewsCreateView(DirectoryAccessMixin, StaffRequiredMixin, CreateView):
     model = NewsItem
     form_class = NewsItemForm
     template_name = 'pages/dashboard/news_form.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['news']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -728,11 +789,12 @@ class DashboardNewsCreateView(StaffRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class DashboardNewsUpdateView(StaffRequiredMixin, UpdateView):
+class DashboardNewsUpdateView(DirectoryAccessMixin, StaffRequiredMixin, UpdateView):
     model = NewsItem
     form_class = NewsItemForm
     template_name = 'pages/dashboard/news_form.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['news']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -744,10 +806,11 @@ class DashboardNewsUpdateView(StaffRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class DashboardNewsDeleteView(StaffRequiredMixin, DeleteView):
+class DashboardNewsDeleteView(DirectoryAccessMixin, StaffRequiredMixin, DeleteView):
     model = NewsItem
     template_name = 'pages/dashboard/news_confirm_delete.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['news']
 
     def form_valid(self, form):
         messages.success(self.request, _('News item deleted successfully.'))
@@ -779,11 +842,12 @@ class VacancyForm(forms.ModelForm):
         self.fields['city'].required = False
 
 
-class DashboardVacancyCreateView(StaffRequiredMixin, CreateView):
+class DashboardVacancyCreateView(DirectoryAccessMixin, StaffRequiredMixin, CreateView):
     model = Vacancy
     form_class = VacancyForm
     template_name = 'pages/dashboard/vacancy_form.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['vacancies']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -795,11 +859,12 @@ class DashboardVacancyCreateView(StaffRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class DashboardVacancyUpdateView(StaffRequiredMixin, UpdateView):
+class DashboardVacancyUpdateView(DirectoryAccessMixin, StaffRequiredMixin, UpdateView):
     model = Vacancy
     form_class = VacancyForm
     template_name = 'pages/dashboard/vacancy_form.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['vacancies']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -811,10 +876,11 @@ class DashboardVacancyUpdateView(StaffRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class DashboardVacancyDeleteView(StaffRequiredMixin, DeleteView):
+class DashboardVacancyDeleteView(DirectoryAccessMixin, StaffRequiredMixin, DeleteView):
     model = Vacancy
     template_name = 'pages/dashboard/vacancy_confirm_delete.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['vacancies']
 
     def form_valid(self, form):
         messages.success(self.request, _('Vacancy deleted successfully.'))
@@ -836,11 +902,12 @@ class FAQForm(forms.ModelForm):
         }
 
 
-class DashboardFAQCreateView(StaffRequiredMixin, CreateView):
+class DashboardFAQCreateView(DirectoryAccessMixin, StaffRequiredMixin, CreateView):
     model = FAQ
     form_class = FAQForm
     template_name = 'pages/dashboard/faq_form.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['faq']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -852,11 +919,12 @@ class DashboardFAQCreateView(StaffRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class DashboardFAQUpdateView(StaffRequiredMixin, UpdateView):
+class DashboardFAQUpdateView(DirectoryAccessMixin, StaffRequiredMixin, UpdateView):
     model = FAQ
     form_class = FAQForm
     template_name = 'pages/dashboard/faq_form.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['faq']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -868,10 +936,11 @@ class DashboardFAQUpdateView(StaffRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class DashboardFAQDeleteView(StaffRequiredMixin, DeleteView):
+class DashboardFAQDeleteView(DirectoryAccessMixin, StaffRequiredMixin, DeleteView):
     model = FAQ
     template_name = 'pages/dashboard/faq_confirm_delete.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['faq']
 
     def form_valid(self, form):
         messages.success(self.request, _('FAQ deleted successfully.'))
@@ -892,11 +961,12 @@ class ReviewForm(forms.ModelForm):
         }
 
 
-class DashboardReviewCreateView(StaffRequiredMixin, CreateView):
+class DashboardReviewCreateView(DirectoryAccessMixin, StaffRequiredMixin, CreateView):
     model = Review
     form_class = ReviewForm
     template_name = 'pages/dashboard/review_form.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['reviews']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -908,11 +978,12 @@ class DashboardReviewCreateView(StaffRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class DashboardReviewUpdateView(StaffRequiredMixin, UpdateView):
+class DashboardReviewUpdateView(DirectoryAccessMixin, StaffRequiredMixin, UpdateView):
     model = Review
     form_class = ReviewForm
     template_name = 'pages/dashboard/review_form.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['reviews']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -924,10 +995,11 @@ class DashboardReviewUpdateView(StaffRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class DashboardReviewDeleteView(StaffRequiredMixin, DeleteView):
+class DashboardReviewDeleteView(DirectoryAccessMixin, StaffRequiredMixin, DeleteView):
     model = Review
     template_name = 'pages/dashboard/review_confirm_delete.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['reviews']
 
     def form_valid(self, form):
         messages.success(self.request, _('Review deleted successfully.'))
@@ -946,11 +1018,12 @@ class TenderForm(forms.ModelForm):
         }
 
 
-class DashboardTenderCreateView(StaffRequiredMixin, CreateView):
+class DashboardTenderCreateView(DirectoryAccessMixin, StaffRequiredMixin, CreateView):
     model = Tender
     form_class = TenderForm
     template_name = 'pages/dashboard/tender_form.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['content_pages']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -962,11 +1035,12 @@ class DashboardTenderCreateView(StaffRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class DashboardTenderUpdateView(StaffRequiredMixin, UpdateView):
+class DashboardTenderUpdateView(DirectoryAccessMixin, StaffRequiredMixin, UpdateView):
     model = Tender
     form_class = TenderForm
     template_name = 'pages/dashboard/tender_form.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['content_pages']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -978,10 +1052,11 @@ class DashboardTenderUpdateView(StaffRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class DashboardTenderDeleteView(StaffRequiredMixin, DeleteView):
+class DashboardTenderDeleteView(DirectoryAccessMixin, StaffRequiredMixin, DeleteView):
     model = Tender
     template_name = 'pages/dashboard/tender_confirm_delete.html'
     success_url = reverse_lazy('dashboard:content')
+    directory_keys = ['content_pages']
 
     def form_valid(self, form):
         messages.success(self.request, _('Tender deleted successfully.'))
@@ -998,27 +1073,45 @@ from apps.orders.models import Order, OrderStatusHistory
 class DashboardOrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ['status', 'sender_name', 'sender_phone', 'recipient_name', 'recipient_phone',
-                  'cargo_description', 'weight', 'length', 'width', 'height', 'declared_value', 'total_price',
+        fields = ['status', 'sender_name', 'sender_phone', 'sender_email', 'recipient_name', 'recipient_phone',
+                  'recipient_email', 'sender_address', 'recipient_address', 'cargo_description', 'weight', 'volume',
+                  'length', 'width', 'height', 'declared_value', 'service', 'total_price',
                   'is_fragile', 'is_dangerous', 'is_temperature_sensitive']
         widgets = {
             'status': forms.Select(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
             'sender_name': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
             'sender_phone': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'sender_email': forms.EmailInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
             'recipient_name': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
             'recipient_phone': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'recipient_email': forms.EmailInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'sender_address': forms.Select(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'recipient_address': forms.Select(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
             'cargo_description': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 3}),
             'weight': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'step': '0.01'}),
             'length': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'step': '0.01'}),
             'width': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'step': '0.01'}),
             'height': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'step': '0.01'}),
             'declared_value': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'step': '0.01'}),
+            'service': forms.Select(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
             'total_price': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'step': '0.01'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from apps.geo.models import City
+        from apps.services.models import Service
+        self.fields['sender_address'].queryset = City.objects.filter(is_active=True)
+        self.fields['recipient_address'].queryset = City.objects.filter(is_active=True)
+        self.fields['service'].queryset = Service.objects.filter(is_active=True)
+        self.fields['sender_address'].empty_label = _('Select city')
+        self.fields['recipient_address'].empty_label = _('Select city')
+        self.fields['volume'].required = False
 
-class DashboardOrderDetailView(StaffRequiredMixin, TemplateView):
+
+class DashboardOrderDetailView(DirectoryAccessMixin, StaffRequiredMixin, TemplateView):
     template_name = 'pages/dashboard/order_detail.html'
+    directory_keys = ['orders']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -1030,11 +1123,12 @@ class DashboardOrderDetailView(StaffRequiredMixin, TemplateView):
         return context
 
 
-class DashboardOrderUpdateView(StaffRequiredMixin, UpdateView):
+class DashboardOrderUpdateView(DirectoryAccessMixin, StaffRequiredMixin, UpdateView):
     model = Order
     form_class = DashboardOrderForm
     template_name = 'pages/dashboard/order_form.html'
     success_url = reverse_lazy('dashboard:orders')
+    directory_keys = ['orders']
 
     def form_valid(self, form):
         old_status = self.object.status
@@ -1051,28 +1145,47 @@ class DashboardOrderUpdateView(StaffRequiredMixin, UpdateView):
         return response
 
 
-class DashboardOrderDeleteView(StaffRequiredMixin, DeleteView):
+class DashboardOrderDeleteView(DirectoryAccessMixin, StaffRequiredMixin, DeleteView):
     model = Order
     template_name = 'pages/dashboard/order_confirm_delete.html'
     success_url = reverse_lazy('dashboard:orders')
+    directory_keys = ['orders']
 
     def form_valid(self, form):
         messages.success(self.request, _('Order deleted successfully.'))
         return super().form_valid(form)
 
 
-from apps.orders.routing import simulate_next_status
-
-
-class DashboardOrderSimulateView(StaffRequiredMixin, View):
+class DashboardOrderSimulateView(DirectoryAccessMixin, StaffRequiredMixin, View):
     http_method_names = ['post']
+    directory_keys = ['orders']
 
     def post(self, request, pk):
-        order = get_object_or_404(Order, pk=pk)
+        from django.utils import timezone
+        from apps.orders.routing import get_simulation_interval, simulate_next_status
+
+        order = get_object_or_404(Order.objects.select_for_update(), pk=pk)
         next_status = simulate_next_status(order)
         if next_status is None:
-            return JsonResponse({'status': order.status, 'complete': True})
+            return JsonResponse({
+                'status': order.status,
+                'status_label': dict(Order.Status.choices).get(order.status, order.status),
+                'complete': True,
+            })
 
+        interval = get_simulation_interval(order.status, next_status)
+        elapsed = (timezone.now() - order.updated_at).total_seconds()
+        if elapsed < interval:
+            remaining = int(interval - elapsed)
+            return JsonResponse({
+                'status': order.status,
+                'status_label': dict(Order.Status.choices).get(order.status, order.status),
+                'error': _('Please wait %(seconds)s seconds before the next simulation step.') % {'seconds': remaining},
+                'remaining_seconds': remaining,
+                'complete': False,
+            }, status=429)
+
+        old_status = order.status
         order.status = next_status
         order.save()
 
@@ -1083,8 +1196,53 @@ class DashboardOrderSimulateView(StaffRequiredMixin, View):
             comment=_('Simulation: auto-advanced to %(status)s') % {'status': next_status},
         )
 
+        from apps.orders.routing import send_status_notification
+        send_status_notification(order, old_status=old_status)
+
         return JsonResponse({
             'status': next_status,
             'status_label': dict(Order.Status.choices).get(next_status, next_status),
             'complete': next_status == 'delivered',
         })
+
+
+class DashboardDirectoryPermissionsView(StaffRequiredMixin, TemplateView):
+    template_name = 'pages/dashboard/directory_permissions.html'
+
+    def test_func(self):
+        return self.is_admin
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from apps.users.models import ManagerDirectoryPermission
+        context['managers'] = User.objects.filter(role='manager')
+        manager_id = self.request.GET.get('manager')
+        if manager_id:
+            manager = get_object_or_404(User, pk=manager_id, role='manager')
+            context['selected_manager'] = manager
+            perms = ManagerDirectoryPermission.objects.filter(manager=manager)
+            perm_dict = {p.directory: p.can_access for p in perms}
+            dirs = []
+            for key, label in ManagerDirectoryPermission.Directory.choices:
+                if key in perm_dict:
+                    dirs.append({'key': key, 'label': label, 'allowed': perm_dict[key], 'explicit': True})
+                else:
+                    dirs.append({'key': key, 'label': label, 'allowed': True, 'explicit': False})
+            context['directories'] = dirs
+        else:
+            context['directories'] = []
+        return context
+
+    def post(self, request, *args, **kwargs):
+        from apps.users.models import ManagerDirectoryPermission
+        manager_id = request.POST.get('manager_id')
+        manager = get_object_or_404(User, pk=manager_id, role='manager')
+        for dir_key, _ in ManagerDirectoryPermission.Directory.choices:
+            can_access = request.POST.get(f'perm_{dir_key}') == 'on'
+            ManagerDirectoryPermission.objects.update_or_create(
+                manager=manager,
+                directory=dir_key,
+                defaults={'can_access': can_access}
+            )
+        messages.success(request, _('Permissions updated successfully.'))
+        return redirect(reverse('dashboard:directory_permissions') + f'?manager={manager_id}')

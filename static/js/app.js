@@ -25,45 +25,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Mobile menu toggle
-  const menuToggle = document.getElementById('mobile-menu-toggle');
-  const mobileMenu = document.getElementById('mobile-menu');
-
-  if (menuToggle && mobileMenu) {
-    menuToggle.addEventListener('click', function() {
-      const isOpen = mobileMenu.classList.contains('translate-x-0');
-      if (isOpen) {
-        mobileMenu.classList.remove('translate-x-0');
-        mobileMenu.classList.add('-translate-x-full');
-        document.body.classList.remove('mobile-menu-open');
-      } else {
-        mobileMenu.classList.remove('-translate-x-full');
-        mobileMenu.classList.add('translate-x-0');
-        document.body.classList.add('mobile-menu-open');
-      }
-    });
-
-    // Close mobile menu on link click
-    mobileMenu.querySelectorAll('a').forEach(function(link) {
-      link.addEventListener('click', function() {
-        mobileMenu.classList.remove('translate-x-0');
-        mobileMenu.classList.add('-translate-x-full');
-        document.body.classList.remove('mobile-menu-open');
-      });
-    });
-  }
-
-  // Mobile submenu toggles
-  document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      const submenu = this.nextElementSibling;
-      if (submenu) {
-        submenu.classList.toggle('hidden');
-        this.querySelector('svg').classList.toggle('rotate-180');
-      }
-    });
-  });
-
   // Counter animation on scroll
   const counters = document.querySelectorAll('.counter-number');
   if (counters.length > 0) {
@@ -108,17 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }, { threshold: 0.1 });
     observer.observe(el);
-  });
-
-  // Language switcher
-  document.querySelectorAll('.lang-switcher a').forEach(function(link) {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      const lang = this.dataset.lang;
-      const currentPath = window.location.pathname;
-      const newPath = currentPath.replace(/^\/(ru|en)\//, '/' + lang + '/');
-      window.location.href = newPath;
-    });
   });
 });
 

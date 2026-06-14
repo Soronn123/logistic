@@ -248,7 +248,7 @@ document.addEventListener('alpine:init', function() {
       flow: config.flow || [],
       csrfToken: config.csrfToken,
       fastMode: localStorage.getItem('sim_fast_mode') === 'true',
-      status: this.currentStatus,
+      status: config.currentStatus,
       timer: null,
 
       get progressPercent() {

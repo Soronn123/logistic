@@ -49,6 +49,24 @@ class Banner(models.Model):
         return self.title
 
 
+class Partner(models.Model):
+    name = models.CharField(max_length=255, verbose_name=_('Name'))
+    logo = models.ImageField(upload_to='partners/', blank=True, verbose_name=_('Logo'))
+    description = models.TextField(blank=True, verbose_name=_('Description'))
+    website = models.URLField(blank=True, verbose_name=_('Website'))
+    is_active = models.BooleanField(default=True, verbose_name=_('Active'))
+    sort_order = models.IntegerField(default=0, verbose_name=_('Sort order'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+
+    class Meta:
+        verbose_name = _('Partner')
+        verbose_name_plural = _('Partners')
+        ordering = ['sort_order', 'name']
+
+    def __str__(self):
+        return self.name
+
+
 class IframeModule(models.Model):
     name = models.CharField(max_length=255, verbose_name=_('Name'))
     description = models.TextField(blank=True, verbose_name=_('Description'))

@@ -30,14 +30,14 @@
 
     <!-- Search -->
     <div class="max-w-xl mx-auto mb-10">
-      <form method="get" class="relative">
+      <div class="relative">
         <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="{% translate 'Search services...' %}" class="w-full pl-12 pr-4 py-3 rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors shadow-sm">
-      </form>
+        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="{% translate 'Search services...' %}" hx-get="{% url 'services:list' %}" hx-trigger="keyup changed delay:300ms" hx-target="#categories-grid" hx-select="#categories-grid" hx-swap="outerHTML" hx-push-url="true" class="w-full pl-12 pr-4 py-3 rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors shadow-sm">
+      </div>
     </div>
 
     <!-- Categories Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div id="categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {% for category in categories %}
       <a href="{% url 'services:category' slug=category.slug %}" class="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-700 transition-all duration-300">
         <div class="w-14 h-14 rounded-2xl bg-baikal-50 dark:bg-baikal-900/30 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-baikal-100 dark:group-hover:bg-baikal-900/50 transition-all duration-300">
@@ -49,9 +49,9 @@
         </div>
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-baikal-600 dark:group-hover:text-baikal-400 transition-colors">{{ category|localized }}</h3>
         <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">{{ category|localized_field:'description' }}</p>
-        {% if category.service_set.active.count %}
+        {% if category.services.all|length %}
         <div class="mt-3 flex items-center gap-1 text-xs text-baikal-600 dark:text-baikal-400 font-medium">
-          <span>{{ category.service_set.active.count }} {% translate 'services' %}</span>
+          <span>{{ category.services.all|length }} {% translate 'services' %}</span>
           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </div>
         {% endif %}

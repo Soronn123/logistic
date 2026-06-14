@@ -59,4 +59,5 @@ urlpatterns = [
     path('partners/banners/<int:pk>/delete/', views.DashboardBannerDeleteView.as_view(), name='banner_delete'),
     path('contacts/', views.DashboardContactsView.as_view(), name='contacts'),
     path('settings/', views.DashboardSettingsView.as_view(), name='settings'),
+    path('directory-permissions/', views.DashboardDirectoryPermissionsView.as_view(), name='directory_permissions'),
 ]

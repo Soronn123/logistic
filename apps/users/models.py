@@ -166,3 +166,71 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f'{self.transaction_type} {self.amount} - {self.user.email}'
+
+
+class CompanyApplication(models.Model):
+    class Status(models.TextChoices):
+        PENDING = 'pending', _('Pending')
+        REVIEWING = 'reviewing', _('Under review')
+        APPROVED = 'approved', _('Approved')
+        REJECTED = 'rejected', _('Rejected')
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='company_applications', verbose_name=_('User'))
+    company_name = models.CharField(max_length=255, verbose_name=_('Company name'))
+    inn = models.CharField(max_length=12, verbose_name=_('INN'))
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING, verbose_name=_('Status'))
+    admin_comment = models.TextField(blank=True, verbose_name=_('Admin comment'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
+
+    class Meta:
+        verbose_name = _('Company application')
+        verbose_name_plural = _('Company applications')
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.company_name} ({self.user.email}) - {self.get_status_display()}'
+
+
+class ManagerDirectoryPermission(models.Model):
+    class Directory(models.TextChoices):
+        CITIES = 'cities', _('Cities')
+        BRANCHES = 'branches', _('Branches')
+        SERVICES = 'services', _('Services')
+        SERVICE_CATEGORIES = 'service_categories', _('Service categories')
+        ADDITIONAL_SERVICES = 'additional_services', _('Additional services')
+        TARIFFS = 'tariffs', _('Tariffs')
+        DOCUMENTS = 'documents', _('Documents')
+        FAQ = 'faq', _('FAQ')
+        NEWS = 'news', _('News')
+        VACANCIES = 'vacancies', _('Vacancies')
+        PROMOTIONS = 'promotions', _('Promotions')
+        BANNERS = 'banners', _('Banners')
+        REVIEWS = 'reviews', _('Reviews')
+        CONTENT_PAGES = 'content_pages', _('Content pages')
+        ORDERS = 'orders', _('Orders')
+        TICKETS = 'tickets', _('Tickets')
+        PARTNER_APPLICATIONS = 'partner_applications', _('Partner applications')
+
+    manager = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE,
+        limit_choices_to={'role': 'manager'},
+        related_name='directory_permissions',
+        verbose_name=_('Manager')
+    )
+    directory = models.CharField(
+        max_length=50, choices=Directory.choices,
+        verbose_name=_('Directory')
+    )
+    can_access = models.BooleanField(default=False, verbose_name=_('Can access'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated at'))
+
+    class Meta:
+        verbose_name = _('Manager directory permission')
+        verbose_name_plural = _('Manager directory permissions')
+        unique_together = ['manager', 'directory']
+        ordering = ['manager', 'directory']
+
+    def __str__(self):
+        return f'{self.manager.email} - {self.get_directory_display()}: {"Allowed" if self.can_access else "Denied"}'

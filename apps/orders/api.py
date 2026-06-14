@@ -1,13 +1,12 @@
 import json
 
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views import View
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
 
 from .models import Order, OrderStatusHistory
 from .routing import compute_virtual_location, get_next_statuses
@@ -16,7 +15,9 @@ from apps.users.models import ContactTemplate, CargoTemplate, DeliveryTemplate
 
 class OrderStatusUpdateView(LoginRequiredMixin, View):
     def post(self, request, tracking_number):
-        order = get_object_or_404(Order, tracking_number=tracking_number, user=request.user)
+        if not (request.user.is_staff or request.user.role in ('admin', 'manager')):
+            return JsonResponse({'error': _('Only staff can update order status')}, status=403)
+        order = get_object_or_404(Order, tracking_number=tracking_number)
         new_status = request.POST.get('status')
 
         is_international = (
@@ -38,6 +39,9 @@ class OrderStatusUpdateView(LoginRequiredMixin, View):
             comment=request.POST.get('comment', ''),
         )
 
+        from .routing import send_status_notification
+        send_status_notification(order, old_status=old_status)
+
         return JsonResponse({
             'status': new_status,
             'old_status': old_status,
@@ -50,6 +54,9 @@ class OrderPickupConfirmView(LoginRequiredMixin, View):
         order = get_object_or_404(Order, tracking_number=tracking_number, user=request.user)
 
         if order.status not in ('awaiting_delivery_to_branch', 'available_in_warehouse', 'awaiting_courier', 'confirmed'):
+            if request.accepts('text/html'):
+                messages.error(request, _('Cannot confirm pickup in current status.'))
+                return redirect('orders:track', tracking_number=tracking_number)
             return JsonResponse({'error': _('Cannot confirm pickup in current status')}, status=400)
 
         old_status = order.status
@@ -62,6 +69,13 @@ class OrderPickupConfirmView(LoginRequiredMixin, View):
             changed_by=request.user,
             comment=_('Cargo picked up by carrier'),
         )
+
+        from .routing import send_status_notification
+        send_status_notification(order, old_status=old_status)
+
+        if request.accepts('text/html'):
+            messages.success(request, _('Cargo pickup confirmed.'))
+            return redirect('orders:track', tracking_number=tracking_number)
 
         return JsonResponse({
             'status': 'picked_up',
@@ -80,9 +94,15 @@ class OrderDeliveryConfirmView(LoginRequiredMixin, View):
         )
 
         if order.status != 'out_for_delivery' and order.status != 'delivered':
+            if request.accepts('text/html'):
+                messages.error(request, _('Cannot confirm delivery in current status.'))
+                return redirect('orders:track', tracking_number=tracking_number)
             return JsonResponse({'error': _('Cannot confirm delivery in current status')}, status=400)
 
         if not is_recipient and order.user != request.user:
+            if request.accepts('text/html'):
+                messages.error(request, _('Only the recipient can confirm delivery.'))
+                return redirect('orders:track', tracking_number=tracking_number)
             return JsonResponse({'error': _('Only the recipient can confirm delivery')}, status=400)
 
         if order.status == 'out_for_delivery':
@@ -97,6 +117,13 @@ class OrderDeliveryConfirmView(LoginRequiredMixin, View):
                 changed_by=request.user,
                 comment=_('Delivery confirmed by recipient'),
             )
+
+            from .routing import send_status_notification
+            send_status_notification(order, old_status=old_status)
+
+        if request.accepts('text/html'):
+            messages.success(request, _('Delivery confirmed successfully.'))
+            return redirect('orders:track', tracking_number=tracking_number)
 
         return JsonResponse({
             'status': 'delivered',
@@ -117,8 +144,8 @@ class OrderTrackingAPIView(View):
             'tracking_number': order.tracking_number,
             'status': order.status,
             'status_label': order.get_status_display(),
-            'sender_city': str(order.sender_address),
-            'recipient_city': str(order.recipient_address),
+            'sender_city': str(order.sender_address) if order.sender_address else '',
+            'recipient_city': str(order.recipient_address) if order.recipient_address else '',
             'estimated_delivery': str(order.estimated_delivery_date or ''),
             'actual_delivery': str(order.actual_delivery_date or ''),
             'current_location': location,
@@ -128,7 +155,6 @@ class OrderTrackingAPIView(View):
         return JsonResponse(data)
 
 
-@method_decorator(csrf_exempt, name='dispatch')
 class ContactTemplateListView(LoginRequiredMixin, View):
     def get(self, request):
         template_type = request.GET.get('type', 'recipient')
@@ -182,7 +208,6 @@ class AddressSuggestView(View):
         return JsonResponse({'suggestions': []})
 
 
-@method_decorator(csrf_exempt, name='dispatch')
 class DeliveryTemplateListView(LoginRequiredMixin, View):
     def get(self, request):
         templates_qs = DeliveryTemplate.objects.filter(user=request.user).prefetch_related('additional_services')
@@ -231,7 +256,6 @@ class DeliveryTemplateListView(LoginRequiredMixin, View):
             declared_value=data.get('declared_value'),
             sender_address_detail=data.get('sender_address_detail', ''),
             recipient_address_detail=data.get('recipient_address_detail', ''),
-            total_price=data.get('total_price'),
         )
         addon_ids = data.get('additional_services', [])
         if addon_ids:
@@ -279,7 +303,6 @@ class DeliveryTemplateDetailView(LoginRequiredMixin, View):
         template.declared_value = data.get('declared_value', template.declared_value)
         template.sender_address_detail = data.get('sender_address_detail', template.sender_address_detail)
         template.recipient_address_detail = data.get('recipient_address_detail', template.recipient_address_detail)
-        template.total_price = data.get('total_price', template.total_price)
         template.save()
         addon_ids = data.get('additional_services')
         if addon_ids is not None:
@@ -309,7 +332,6 @@ class DeliveryTemplateDetailView(LoginRequiredMixin, View):
         return JsonResponse({'deleted': True})
 
 
-@method_decorator(csrf_exempt, name='dispatch')
 class CargoTemplateListView(LoginRequiredMixin, View):
     def get(self, request):
         templates = CargoTemplate.objects.filter(user=request.user).values(

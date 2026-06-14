@@ -13,6 +13,7 @@ urlpatterns = [
     path('profile/balance/', views.BalanceView.as_view(), name='balance'),
     path('profile/balance/topup/', views.BalanceTopUpView.as_view(), name='balance_topup'),
     path('profile/balance/success/', views.BalanceSuccessView.as_view(), name='balance_success'),
+    path('profile/company/apply/success/', views.CompanyApplySuccessView.as_view(), name='company_apply_success'),
     path('profile/tickets/', views.TicketListView.as_view(), name='tickets'),
     path('profile/tickets/create/', views.TicketCreateView.as_view(), name='ticket_create'),
     path('profile/tickets/<int:pk>/', views.TicketDetailView.as_view(), name='ticket_detail'),

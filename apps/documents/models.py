@@ -20,6 +20,14 @@ class Document(models.Model):
     description = models.TextField(blank=True, verbose_name=_('Description'))
     uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Uploaded at'))
     is_active = models.BooleanField(default=True, verbose_name=_('Active'))
+    services = models.ManyToManyField(
+        'services.Service', blank=True, related_name='documents',
+        verbose_name=_('Services'),
+    )
+    additional_services = models.ManyToManyField(
+        'services.AdditionalService', blank=True, related_name='documents',
+        verbose_name=_('Additional services'),
+    )
 
     class Meta:
         verbose_name = _('Document')

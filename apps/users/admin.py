@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from .models import CargoTemplate, ContactTemplate, CustomUser, DeliveryTemplate, Ticket, TicketMessage, Transaction
+from .models import CargoTemplate, CompanyApplication, ContactTemplate, CustomUser, DeliveryTemplate, ManagerDirectoryPermission, Ticket, TicketMessage, Transaction
 
 
 @admin.register(CustomUser)
@@ -76,3 +76,59 @@ class CargoTemplateAdmin(admin.ModelAdmin):
     list_filter = ['created_at']
     search_fields = ['name', 'user__email', 'cargo_description']
     date_hierarchy = 'created_at'
+
+
+@admin.register(ManagerDirectoryPermission)
+class ManagerDirectoryPermissionAdmin(admin.ModelAdmin):
+    list_display = ['manager', 'directory_display', 'can_access', 'updated_at']
+    list_filter = ['directory', 'can_access', 'manager']
+    search_fields = ['manager__email', 'manager__username']
+    list_editable = ['can_access']
+    autocomplete_fields = ['manager']
+    date_hierarchy = 'updated_at'
+
+    def directory_display(self, obj):
+        return obj.get_directory_display()
+    directory_display.short_description = _('Directory')
+    directory_display.admin_order_field = 'directory'
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('manager')
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'manager':
+            kwargs['queryset'] = CustomUser.objects.filter(role='manager')
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+@admin.register(CompanyApplication)
+class CompanyApplicationAdmin(admin.ModelAdmin):
+    list_display = ['company_name', 'user', 'inn', 'status', 'created_at']
+    list_filter = ['status']
+    search_fields = ['company_name', 'inn', 'user__email']
+    readonly_fields = ['user', 'company_name', 'inn', 'created_at', 'updated_at']
+    date_hierarchy = 'created_at'
+
+    def has_add_permission(self, request):
+        return False
+
+    @admin.action(description=_('Approve selected applications'))
+    def approve_applications(self, request, queryset):
+        for app in queryset:
+            user = app.user
+            user.company_name = app.company_name
+            user.inn = app.inn
+            user.is_company = True
+            user.save()
+            app.status = 'approved'
+            app.save()
+
+    @admin.action(description=_('Mark selected as under review'))
+    def start_reviewing(self, request, queryset):
+        queryset.update(status='reviewing')
+
+    @admin.action(description=_('Reject selected applications'))
+    def reject_applications(self, request, queryset):
+        queryset.update(status='rejected')
+
+    actions = [approve_applications, start_reviewing, reject_applications]

@@ -83,7 +83,7 @@ clean:
 
 # Local (non-Docker) targets — useful for quick development
 venv:
-	python3 -m venv venv && . venv/bin/activate && pip install -r requirements.txt
+	uv venv .venv --python 3.13 && . .venv/bin/activate && uv pip install -r requirements.txt
 
 local: venv
 	@echo "=========================================="
@@ -96,9 +96,8 @@ local: venv
 	echo "  - Local:   http://localhost:8000"; \
 	echo "  - Network: http://$${LAN_IP}:8000"; \
 	echo ""; \
-	echo "  Connect from your phone using the Network address above."; \
 	echo "=========================================="; \
-	. venv/bin/activate && \
+	. .venv/bin/activate && \
 	export DJANGO_DEBUG=True \
 	    DJANGO_ALLOWED_HOSTS='*' \
 	    DJANGO_DB_ENGINE=django.db.backends.sqlite3 \
@@ -107,10 +106,10 @@ local: venv
 	exec python manage.py runserver 0.0.0.0:8000
 
 test-local:
-	. venv/bin/activate && DJANGO_DB_ENGINE=django.db.backends.sqlite3 DJANGO_DB_NAME=:memory: python -m django test tests/ --verbosity=2 --settings=baikal.settings
+	. .venv/bin/activate && DJANGO_DB_ENGINE=django.db.backends.sqlite3 DJANGO_DB_NAME=:memory: python -m django test tests/ --verbosity=2 --settings=baikal.settings
 
 loadfixtures-local:
-	. venv/bin/activate && \
+	. .venv/bin/activate && \
 	export DJANGO_DEBUG=True \
 	    DJANGO_ALLOWED_HOSTS='*' \
 	    DJANGO_DB_ENGINE=django.db.backends.sqlite3 \

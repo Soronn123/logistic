@@ -43,6 +43,20 @@
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Weight (kg)' %} *</label>
           <input type="number" name="weight" value="{{ deliverytemplate.weight }}" required step="0.1" min="0.1" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all" placeholder="0">
         </div>
+        <div class="grid grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Length (cm)' %}</label>
+            <input type="number" name="length" value="{{ deliverytemplate.length|default:'' }}" step="1" min="0" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all" placeholder="0">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Width (cm)' %}</label>
+            <input type="number" name="width" value="{{ deliverytemplate.width|default:'' }}" step="1" min="0" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all" placeholder="0">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Height (cm)' %}</label>
+            <input type="number" name="height" value="{{ deliverytemplate.height|default:'' }}" step="1" min="0" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all" placeholder="0">
+          </div>
+        </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{% translate 'Service' %} *</label>
           <select name="service" required class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all">

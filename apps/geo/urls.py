@@ -6,5 +6,5 @@ app_name = 'geo'
 
 urlpatterns = [
     path('', views.BranchMapView.as_view(), name='branches'),
-    path('<slug:slug>/', views.CityBranchListView.as_view(), name='city_branches'),
+    path('<int:pk>/', views.CityBranchListView.as_view(), name='city_branches'),
 ]

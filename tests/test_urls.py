@@ -390,6 +390,7 @@ class OrdersURLTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_request_changes_returns_200(self):
+        self.client.force_login(self.user)
         response = self.client.get(
             reverse('orders:request_changes', args=[self.order.tracking_number])
         )

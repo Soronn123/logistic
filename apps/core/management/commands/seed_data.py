@@ -366,8 +366,10 @@ class Command(BaseCommand):
             {'cat': 'document-delivery', 'name': 'Экспресс-доставка документов', 'name_en': 'Express Document Delivery', 'slug': 'express-docs', 'desc': 'Срочная доставка документов по городу и между городами', 'short': 'от 500 ₽', 'icon': 'fa-envelope', 'price': Decimal('500.00'), 'unit': '₽', 'order': 1},
             # Transport Types
             {'cat': 'transport-types', 'name': 'Автомобильные перевозки', 'name_en': 'Road Transport', 'slug': 'road-transport', 'desc': 'Перевозки автотранспортом', 'short': 'от 25 ₽/кг', 'icon': 'fa-truck', 'price': None, 'unit': '', 'order': 1},
-            {'cat': 'transport-types', 'name': 'Железнодорожные перевозки', 'name_en': 'Rail Transport', 'slug': 'rail-transport', 'desc': 'Перевозки по железной дороге', 'short': 'от 10 ₽/кг', 'icon': 'fa-train', 'price': Decimal('10.00'), 'unit': '₽/кг', 'order': 2},
-            {'cat': 'transport-types', 'name': 'Мультимодальные перевозки', 'name_en': 'Multimodal Transport', 'slug': 'multimodal', 'desc': 'Комбинированные перевозки разными видами транспорта', 'short': 'от 30 ₽/кг', 'icon': 'fa-route', 'price': Decimal('30.00'), 'unit': '₽/кг', 'order': 3},
+            {'cat': 'transport-types', 'name': 'Грузовой автотранспорт', 'name_en': 'Truck Transport', 'slug': 'truck-transport', 'desc': 'Перевозки грузовым автотранспортом', 'short': 'от 25 ₽/кг', 'icon': 'fa-truck', 'price': Decimal('100.00'), 'unit': '₽/кг', 'order': 2},
+            {'cat': 'transport-types', 'name': 'Железнодорожные перевозки', 'name_en': 'Rail Transport', 'slug': 'rail-transport', 'desc': 'Перевозки по железной дороге', 'short': 'от 10 ₽/кг', 'icon': 'fa-train', 'price': Decimal('10.00'), 'unit': '₽/кг', 'order': 3},
+            {'cat': 'transport-types', 'name': 'Авиаперевозки', 'name_en': 'Air Transport', 'slug': 'air-transport', 'desc': 'Перевозки авиатранспортом', 'short': 'от 150 ₽/кг', 'icon': 'fa-plane', 'price': Decimal('200.00'), 'unit': '₽/кг', 'order': 4},
+            {'cat': 'transport-types', 'name': 'Мультимодальные перевозки', 'name_en': 'Multimodal Transport', 'slug': 'multimodal', 'desc': 'Комбинированные перевозки разными видами транспорта', 'short': 'от 30 ₽/кг', 'icon': 'fa-route', 'price': Decimal('30.00'), 'unit': '₽/кг', 'order': 5},
         ]
 
         services = []
@@ -401,6 +403,18 @@ class Command(BaseCommand):
             {'name': 'SMS-код при получении', 'name_en': 'SMS Code Delivery', 'slug': 'sms-code', 'description': 'Получатель вводит SMS-код для получения груза', 'description_en': 'Recipient enters SMS code to receive cargo', 'price': Decimal('100.00'), 'price_type': 'fixed'},
             {'name': 'Экспресс-обработка', 'name_en': 'Express Processing', 'slug': 'express-delivery', 'description': 'Приоритетная обработка на складе', 'description_en': 'Priority warehouse processing', 'price': Decimal('1200.00'), 'price_type': 'fixed'},
             {'name': 'Технология «Имплант»', 'name_en': 'Implant Technology', 'slug': 'implant-technology', 'description': 'Проприетарная технология бесшовной логистической интеграции', 'description_en': 'Proprietary seamless logistics integration technology', 'price': Decimal('5000.00'), 'price_type': 'fixed'},
+            # Auto-assignment services referenced by routing.py
+            {'name': 'Таможенная пошлина', 'name_en': 'Customs Duty', 'slug': 'customs-duty', 'description': 'Оплата таможенных пошлин', 'description_en': 'Customs duty payment', 'price': Decimal('1000.00'), 'price_type': 'fixed', 'is_door_service': False},
+            {'name': 'Таможенное оформление', 'name_en': 'Customs Clearance', 'slug': 'customs-clearance', 'description': 'Оформление таможенных документов', 'description_en': 'Customs documentation clearance', 'price': Decimal('1500.00'), 'price_type': 'fixed'},
+            {'name': 'Транзит через склад', 'name_en': 'Warehouse Transit', 'slug': 'warehouse-transit', 'description': 'Промежуточное хранение на складе', 'description_en': 'Intermediate warehouse storage', 'price': Decimal('800.00'), 'price_type': 'fixed'},
+            {'name': 'Последняя миля', 'name_en': 'Last Mile Delivery', 'slug': 'last-mile-delivery', 'description': 'Доставка до двери получателя', 'description_en': 'Final delivery to recipient door', 'price': Decimal('1200.00'), 'price_type': 'fixed', 'is_door_service': True},
+            {'name': 'Email: заказ создан', 'name_en': 'Email: Order Created', 'slug': 'email-order-created', 'description': 'Уведомление о создании заказа', 'description_en': 'Order creation notification', 'price': Decimal('0.00'), 'price_type': 'fixed'},
+            {'name': 'Email: таможня пройдена', 'name_en': 'Email: Customs Cleared', 'slug': 'email-customs-cleared', 'description': 'Уведомление о прохождении таможни', 'description_en': 'Customs clearance notification', 'price': Decimal('0.00'), 'price_type': 'fixed'},
+            {'name': 'Email: доставлено', 'name_en': 'Email: Delivered', 'slug': 'email-delivered', 'description': 'Уведомление о доставке', 'description_en': 'Delivery notification', 'price': Decimal('0.00'), 'price_type': 'fixed'},
+            {'name': 'Расширенная страховка', 'name_en': 'Extended Insurance', 'slug': 'extended-insurance', 'description': 'Расширенное страхование груза', 'description_en': 'Extended cargo insurance', 'price': Decimal('5.00'), 'price_type': 'percentage'},
+            {'name': 'Hand Carry (сопровождение)', 'name_en': 'Hand Carry', 'slug': 'hand-carry', 'description': 'Сопровождение груза курьером', 'description_en': 'Hand carry courier service', 'price': Decimal('1500.00'), 'price_type': 'fixed'},
+            {'name': 'ADR-транспорт', 'name_en': 'ADR Transport', 'slug': 'adr-transport', 'description': 'Перевозка опасных грузов ADR', 'description_en': 'Dangerous goods ADR transport', 'price': Decimal('3000.00'), 'price_type': 'fixed'},
+            {'name': 'Рефрижераторные перевозки', 'name_en': 'Refrigerated Transport', 'slug': 'refrigerated-transport', 'description': 'Перевозка с температурным контролем', 'description_en': 'Temperature-controlled transport', 'price': Decimal('2500.00'), 'price_type': 'fixed'},
         ]
         objs = [AdditionalService(**a) for a in addons]
         AdditionalService.objects.bulk_create(objs)
@@ -408,12 +422,12 @@ class Command(BaseCommand):
 
     def _seed_tariffs(self):
         tariffs = [
-            {'name': 'Эконом', 'name_en': 'Economy', 'description': 'Базовый тариф для небольших грузов до 10 кг', 'description_en': 'Basic tariff for small cargo up to 10 kg', 'min_weight': 0, 'max_weight': 10, 'price_per_kg': Decimal('35.00'), 'delivery_days_min': 3, 'delivery_days_max': 7},
-            {'name': 'Стандарт', 'name_en': 'Standard', 'description': 'Оптимальный тариф для грузов до 50 кг', 'description_en': 'Optimal tariff for cargo up to 50 kg', 'min_weight': 10, 'max_weight': 50, 'price_per_kg': Decimal('28.00'), 'delivery_days_min': 2, 'delivery_days_max': 5},
-            {'name': 'Бизнес', 'name_en': 'Business', 'description': 'Тариф для коммерческих грузов до 200 кг', 'description_en': 'Tariff for commercial cargo up to 200 kg', 'min_weight': 50, 'max_weight': 200, 'price_per_kg': Decimal('22.00'), 'delivery_days_min': 2, 'delivery_days_max': 4},
-            {'name': 'Оптовый', 'name_en': 'Wholesale', 'description': 'Специальный тариф для крупных партий грузов до 1000 кг', 'description_en': 'Special tariff for bulk shipments up to 1000 kg', 'min_weight': 200, 'max_weight': 1000, 'price_per_kg': Decimal('18.00'), 'delivery_days_min': 1, 'delivery_days_max': 3},
+            {'name': 'Эконом', 'name_en': 'Economy', 'description': 'Базовый тариф для небольших грузов до 10 кг', 'description_en': 'Basic tariff for small cargo up to 10 kg', 'min_weight': 0, 'max_weight': Decimal('9.99'), 'price_per_kg': Decimal('35.00'), 'delivery_days_min': 3, 'delivery_days_max': 7},
+            {'name': 'Стандарт', 'name_en': 'Standard', 'description': 'Оптимальный тариф для грузов до 50 кг', 'description_en': 'Optimal tariff for cargo up to 50 kg', 'min_weight': 10, 'max_weight': Decimal('49.99'), 'price_per_kg': Decimal('28.00'), 'delivery_days_min': 2, 'delivery_days_max': 5},
+            {'name': 'Бизнес', 'name_en': 'Business', 'description': 'Тариф для коммерческих грузов до 200 кг', 'description_en': 'Tariff for commercial cargo up to 200 kg', 'min_weight': 50, 'max_weight': Decimal('199.99'), 'price_per_kg': Decimal('22.00'), 'delivery_days_min': 2, 'delivery_days_max': 4},
+            {'name': 'Оптовый', 'name_en': 'Wholesale', 'description': 'Специальный тариф для крупных партий грузов до 1000 кг', 'description_en': 'Special tariff for bulk shipments up to 1000 kg', 'min_weight': 200, 'max_weight': Decimal('999.99'), 'price_per_kg': Decimal('18.00'), 'delivery_days_min': 1, 'delivery_days_max': 3},
             {'name': 'Корпоративный', 'name_en': 'Corporate', 'description': 'Индивидуальный тариф для корпоративных клиентов от 1000 кг', 'description_en': 'Custom tariff for corporate clients from 1000 kg', 'min_weight': 1000, 'max_weight': None, 'price_per_kg': Decimal('12.00'), 'delivery_days_min': 1, 'delivery_days_max': 3},
-            {'name': 'Экспресс', 'name_en': 'Express', 'description': 'Срочная доставка грузов до 30 кг', 'description_en': 'Express delivery for cargo up to 30 kg', 'min_weight': 0, 'max_weight': 30, 'price_per_kg': Decimal('55.00'), 'delivery_days_min': 1, 'delivery_days_max': 2},
+            {'name': 'Экспресс', 'name_en': 'Express', 'description': 'Срочная доставка грузов до 30 кг', 'description_en': 'Express delivery for cargo up to 30 kg', 'min_weight': 0, 'max_weight': Decimal('29.99'), 'price_per_kg': Decimal('55.00'), 'delivery_days_min': 1, 'delivery_days_max': 2},
         ]
         objs = [Tariff(**t) for t in tariffs]
         Tariff.objects.bulk_create(objs)
@@ -829,9 +843,36 @@ class Command(BaseCommand):
             {'title': 'Претензия о повреждении груза', 'cat': 'claims', 'desc': 'Форма претензии при повреждении груза'},
             {'title': 'Заявление на возврат', 'cat': 'refunds', 'desc': 'Форма заявления на возврат денежных средств'},
         ]
-        objs = [Document(title=d['title'], title_en=d['title'], category=d['cat'], description=d['desc'], is_active=True) for d in docs]
-        Document.objects.bulk_create(objs)
-        self.stdout.write(f'  Created {len(objs)} documents')
+        created = []
+        for d in docs:
+            doc = Document.objects.create(
+                title=d['title'], title_en=d['title'],
+                category=d['cat'], description=d['desc'],
+                is_active=True,
+            )
+            created.append(doc)
+
+        # Link documents to services
+        all_services = Service.objects.all()
+        all_addons = AdditionalService.objects.all()
+        for doc in created:
+            if doc.category in ('contracts', 'shipping_docs'):
+                doc.services.set(all_services)
+                doc.additional_services.set(all_addons)
+            elif doc.category == 'receipt_docs':
+                doc.services.set(all_services.filter(slug__in=[
+                    'intercity', 'international', 'standard-delivery', 'express-delivery',
+                    'truck-transport', 'rail-transport', 'air-transport',
+                ]))
+            elif doc.category in ('claims', 'refunds'):
+                doc.services.set(all_services.filter(slug__in=[
+                    'intercity', 'international', 'oversized',
+                    'truck-transport', 'rail-transport', 'air-transport',
+                ]))
+            elif doc.category == 'power_of_attorney':
+                doc.services.set(all_services)
+
+        self.stdout.write(f'  Created {len(created)} documents with service links')
 
     def _seed_superuser(self):
         if not CustomUser.objects.filter(email='admin@baikal-service.ru').exists():

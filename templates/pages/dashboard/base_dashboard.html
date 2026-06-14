@@ -70,41 +70,63 @@
           <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
           {% translate 'Dashboard' %}
         </a>
+        {% if 'users' not in blocked_directories %}
         <a href="{% url 'dashboard:users' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-300 {% if request.resolver_match.url_name == 'users' or request.resolver_match.url_name == 'user_edit' or request.resolver_match.url_name == 'user_create' %}active{% endif %}">
           <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
           {% translate 'Users' %}
         </a>
+        {% endif %}
+        {% if 'orders' not in blocked_directories %}
         <a href="{% url 'dashboard:orders' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-300 {% if request.resolver_match.url_name == 'orders' %}active{% endif %}">
           <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
           {% translate 'Orders' %}
         </a>
+        {% endif %}
+        {% if 'tickets' not in blocked_directories %}
         <a href="{% url 'dashboard:tickets' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-300 {% if request.resolver_match.url_name == 'tickets' %}active{% endif %}">
           <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
           {% translate 'Tickets' %}
         </a>
+        {% endif %}
         <div class="pt-3 pb-1 px-3">
           <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">{% translate 'Management' %}</p>
         </div>
+        {% if 'services' not in blocked_directories %}
         <a href="{% url 'dashboard:services' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-300 {% if request.resolver_match.url_name == 'services' %}active{% endif %}">
           <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
           {% translate 'Services' %}
         </a>
+        {% endif %}
+        {% if 'content_pages' not in blocked_directories %}
         <a href="{% url 'dashboard:content' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-300 {% if request.resolver_match.url_name == 'content' %}active{% endif %}">
           <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
           {% translate 'Content' %}
         </a>
+        {% endif %}
+        {% if 'branches' not in blocked_directories %}
         <a href="{% url 'dashboard:branches' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-300 {% if request.resolver_match.url_name == 'branches' %}active{% endif %}">
           <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
           {% translate 'Branches' %}
         </a>
+        {% endif %}
+        {% if 'documents' not in blocked_directories %}
         <a href="{% url 'dashboard:documents' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-300 {% if request.resolver_match.url_name == 'documents' %}active{% endif %}">
           <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
           {% translate 'Documents' %}
         </a>
+        {% endif %}
+        {% if 'partner_applications' not in blocked_directories or 'banners' not in blocked_directories %}
         <a href="{% url 'dashboard:partners' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-300 {% if request.resolver_match.url_name == 'partners' %}active{% endif %}">
           <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
           {% translate 'Partners' %}
         </a>
+        {% endif %}
+        {% if is_admin %}
+        <a href="{% url 'dashboard:directory_permissions' %}" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-300 {% if request.resolver_match.url_name == 'directory_permissions' %}active{% endif %}">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          {% translate 'Directory Permissions' %}
+        </a>
+        {% endif %}
         <div class="pt-3 pb-1 px-3">
           <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">{% translate 'Communication' %}</p>
         </div>

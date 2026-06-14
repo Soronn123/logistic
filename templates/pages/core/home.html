@@ -43,7 +43,8 @@
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
             {% translate 'Track your cargo' %}
           </h2>
-          <form hx-get="{% url 'core:track' %}" hx-target="#track-result" hx-swap="innerHTML" class="flex flex-col sm:flex-row gap-3">
+          <form hx-post="{% url 'core:track' %}" hx-target="#track-result" hx-swap="innerHTML" class="flex flex-col sm:flex-row gap-3">
+            {% csrf_token %}
             <input type="text" name="tracking_number" placeholder="{% translate 'Enter tracking number' %}" class="flex-1 px-4 py-3 rounded-xl bg-white/90 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-baikal-400 outline-none transition-all">
             <button type="submit" class="px-6 py-3 bg-baikal-500 hover:bg-baikal-400 text-white font-semibold rounded-xl transition-all whitespace-nowrap">
               {% translate 'Track' %}
@@ -341,6 +342,57 @@
       </a>
     </div>
     {% endif %}
+  </div>
+</section>
+
+<!-- Partners Section -->
+<section class="py-16 sm:py-20 bg-white dark:bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">{% translate 'Our Partners' %}</h2>
+      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{% translate 'Trusted by leading companies' %}</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="home-partner-grid">
+      {% for partner in partners %}
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col items-center text-center">
+        <div class="w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mb-4 overflow-hidden">
+          {% if partner.logo %}
+          <img src="{{ partner.logo.url }}" alt="{{ partner.name }}" class="w-full h-full object-cover">
+          {% else %}
+          <span class="text-2xl font-bold text-baikal-600 dark:text-baikal-400">{{ partner.name|first }}</span>
+          {% endif %}
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{{ partner.name }}</h3>
+        {% if partner.description %}
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-3">{{ partner.description }}</p>
+        {% endif %}
+        {% if partner.website %}
+        <a href="{{ partner.website }}" target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex items-center gap-1 text-sm font-medium text-baikal-600 dark:text-baikal-400 hover:underline pt-4">
+          {% translate 'Visit website' %}
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+        </a>
+        {% endif %}
+      </div>
+      {% endfor %}
+      {% if partners_total > 6 %}
+      <div hx-get="{% url 'partners:cards' %}?page=2"
+           hx-trigger="revealed"
+           hx-target="#home-partner-grid"
+           hx-swap="beforeend"
+           class="col-span-full text-center py-4 text-gray-500 dark:text-gray-400">
+        <svg class="animate-spin h-6 w-6 mx-auto text-baikal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </div>
+      {% endif %}
+    </div>
+    <div class="text-center mt-10">
+      <a href="{% url 'partners:list' %}" class="inline-flex items-center px-6 py-3 text-baikal-600 dark:text-baikal-400 font-semibold border-2 border-baikal-600 dark:border-baikal-400 rounded-xl hover:bg-baikal-50 dark:hover:bg-baikal-900/20 transition-all">
+        {% translate 'All partners' %}
+        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+    </div>
   </div>
 </section>
 

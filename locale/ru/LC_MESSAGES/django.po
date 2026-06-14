@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-10 02:39+0800\n"
+"POT-Creation-Date: 2026-06-14 17:07+0300\n"
 "PO-Revision-Date: 2026-06-10 12:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,12 +20,12 @@ msgstr ""
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: apps/core/admin.py:15 apps/core/admin.py:50 apps/core/admin.py:64
-#: apps/core/admin.py:98 baikal/settings.py:92
+#: apps/core/admin.py:98 baikal/settings.py:104
 msgid "Russian"
 msgstr "Русский"
 
 #: apps/core/admin.py:16 apps/core/admin.py:51 apps/core/admin.py:65
-#: apps/core/admin.py:99 baikal/settings.py:93
+#: apps/core/admin.py:99 baikal/settings.py:105
 msgid "English"
 msgstr "Английский"
 
@@ -77,40 +77,40 @@ msgstr "Тема"
 msgid "Your message"
 msgstr "Ваше сообщение"
 
-#: apps/core/forms.py:23 apps/orders/models.py:26
+#: apps/core/forms.py:23 apps/orders/models.py:27
 #: templates/pages/core/track.html:19
-#: templates/pages/dashboard/order_detail.html:30
+#: templates/pages/dashboard/order_detail.html:102
 #: templates/pages/orders/track.html:12
 #: templates/pages/orders/tracking_lookup.html:21
 msgid "Tracking number"
 msgstr "Трек-номер"
 
-#: apps/core/forms.py:26 templates/pages/core/home.html:47
+#: apps/core/forms.py:26 templates/pages/core/home.html:48
 #: templates/pages/orders/tracking_lookup.html:39
 msgid "Enter tracking number"
 msgstr "Введите трек-номер"
 
 #: apps/core/forms.py:34 apps/users/models.py:61
-#: templates/pages/core/calculator.html:22 templates/pages/core/home.html:64
-#: templates/pages/orders/create.html:141
+#: templates/pages/core/calculator.html:22 templates/pages/core/home.html:65
+#: templates/pages/orders/create.html:180
 #: templates/pages/users/template_edit.html:24
 #: templates/pages/users/templates.html:334
 msgid "From city"
 msgstr "Откуда"
 
 #: apps/core/forms.py:39 apps/users/models.py:62
-#: templates/pages/core/calculator.html:31 templates/pages/core/home.html:70
-#: templates/pages/orders/create.html:190
+#: templates/pages/core/calculator.html:31 templates/pages/core/home.html:71
+#: templates/pages/orders/create.html:241
 #: templates/pages/users/template_edit.html:33
 #: templates/pages/users/templates.html:343
 msgid "To city"
 msgstr "Куда"
 
-#: apps/core/forms.py:44 apps/orders/models.py:39 apps/users/forms.py:163
-#: apps/users/forms.py:212 apps/users/models.py:63 apps/users/models.py:89
+#: apps/core/forms.py:44 apps/orders/models.py:40 apps/users/forms.py:163
+#: apps/users/forms.py:222 apps/users/models.py:63 apps/users/models.py:89
 #: templates/pages/core/calculator.html:50 templates/pages/core/tariffs.html:70
 #: templates/pages/dashboard/order_form.html:51
-#: templates/pages/orders/create.html:241
+#: templates/pages/orders/create.html:295
 #: templates/pages/users/template_edit.html:43
 #: templates/pages/users/templates.html:353
 #: templates/pages/users/templates.html:433
@@ -127,8 +127,8 @@ msgstr "напр. 10"
 msgid "About"
 msgstr "О компании"
 
-#: apps/core/models.py:8 templates/base.html:792 templates/base.html:1074
-#: templates/pages/core/news_detail.html:15
+#: apps/core/models.py:8 apps/users/models.py:205 templates/base.html:792
+#: templates/base.html:1074 templates/pages/core/news_detail.html:15
 #: templates/pages/core/news_list.html:13
 #: templates/pages/core/news_list.html:15
 #: templates/pages/dashboard/content.html:85
@@ -151,9 +151,9 @@ msgstr "Пресса"
 msgid "Tender"
 msgstr "Тендер"
 
-#: apps/core/models.py:13 apps/core/models.py:44 templates/base.html:807
-#: templates/base.html:1095 templates/pages/core/faq.html:13
-#: templates/pages/dashboard/content.html:225
+#: apps/core/models.py:13 apps/core/models.py:44 apps/users/models.py:204
+#: templates/base.html:807 templates/base.html:1095
+#: templates/pages/core/faq.html:13 templates/pages/dashboard/content.html:225
 msgid "FAQ"
 msgstr "Вопросы и ответы"
 
@@ -180,7 +180,7 @@ msgstr "Название"
 msgid "Title (EN)"
 msgstr "Название (EN)"
 
-#: apps/core/models.py:18 templates/pages/dashboard/base_dashboard.html:94
+#: apps/core/models.py:18 templates/pages/dashboard/base_dashboard.html:103
 msgid "Content"
 msgstr "Содержание"
 
@@ -202,14 +202,15 @@ msgid "Published"
 msgstr "Опубликован"
 
 #: apps/core/models.py:22 apps/core/models.py:58 apps/core/models.py:122
-#: apps/documents/models.py:51 apps/orders/models.py:49
+#: apps/documents/models.py:51 apps/orders/models.py:50
 #: apps/partners/models.py:18 apps/users/models.py:47 apps/users/models.py:74
 #: apps/users/models.py:94 apps/users/models.py:121 apps/users/models.py:137
-#: apps/users/models.py:159
+#: apps/users/models.py:159 apps/users/models.py:183 apps/users/models.py:226
 msgid "Created at"
 msgstr "Дата создания"
 
-#: apps/core/models.py:23 apps/orders/models.py:50 apps/users/models.py:122
+#: apps/core/models.py:23 apps/orders/models.py:51 apps/users/models.py:122
+#: apps/users/models.py:184 apps/users/models.py:227
 msgid "Updated at"
 msgstr "Дата обновления"
 
@@ -221,7 +222,7 @@ msgstr "Тип страницы"
 msgid "Content page"
 msgstr "Страница контента"
 
-#: apps/core/models.py:28
+#: apps/core/models.py:28 apps/users/models.py:210
 msgid "Content pages"
 msgstr "Страницы контента"
 
@@ -248,13 +249,15 @@ msgstr "Ответ (EN)"
 msgid "Category"
 msgstr "Категория"
 
-#: apps/core/models.py:40 apps/geo/models.py:61 apps/orders/models.py:55
-#: apps/orders/models.py:64 apps/orders/models.py:80 apps/services/models.py:12
+#: apps/core/models.py:40 apps/geo/models.py:62 apps/orders/models.py:59
+#: apps/orders/models.py:68 apps/orders/models.py:84 apps/services/models.py:12
 #: templates/pages/dashboard/content.html:243
-#: templates/pages/dashboard/order_detail.html:8
+#: templates/pages/dashboard/order_detail.html:11
 #: templates/pages/dashboard/services.html:35
 #: templates/pages/dashboard/services.html:94
 #: templates/pages/users/order_detail.html:2
+#: venv/lib/python3.14/site-packages/django/forms/formsets.py:484
+#: venv/lib/python3.14/site-packages/django/forms/formsets.py:491
 msgid "Order"
 msgstr "Порядок"
 
@@ -271,6 +274,7 @@ msgid "Author company"
 msgstr "Компания автора"
 
 #: apps/core/models.py:55
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2446
 msgid "Text"
 msgstr "Текст"
 
@@ -278,9 +282,10 @@ msgstr "Текст"
 msgid "Rating"
 msgstr "Рейтинг"
 
-#: apps/core/models.py:57 apps/partners/models.py:9
+#: apps/core/models.py:57 apps/partners/models.py:9 apps/users/models.py:175
 #: templates/pages/dashboard/content.html:302
 #: templates/pages/dashboard/partners.html:47
+#: templates/pages/users/settings.html:148
 msgid "Approved"
 msgstr "Одобрен"
 
@@ -288,8 +293,8 @@ msgstr "Одобрен"
 msgid "Source"
 msgstr "Источник"
 
-#: apps/core/models.py:63 templates/base.html:797 templates/base.html:1088
-#: templates/pages/core/reviews.html:2
+#: apps/core/models.py:63 apps/users/models.py:209 templates/base.html:797
+#: templates/base.html:1088 templates/pages/core/reviews.html:2
 #: templates/pages/dashboard/content.html:284
 msgid "Reviews"
 msgstr "Отзывы"
@@ -310,8 +315,9 @@ msgstr "Полный текст"
 msgid "Full text (EN)"
 msgstr "Полный текст (EN)"
 
-#: apps/core/models.py:78 apps/core/models.py:156 apps/geo/models.py:59
+#: apps/core/models.py:78 apps/core/models.py:156 apps/geo/models.py:60
 #: apps/partners/models.py:36
+#: venv/lib/python3.14/site-packages/django/db/models/fields/files.py:420
 msgid "Image"
 msgstr "Изображение"
 
@@ -336,7 +342,7 @@ msgstr "Новости"
 msgid "Department"
 msgstr "Отдел"
 
-#: apps/core/models.py:97 apps/geo/models.py:16 apps/geo/models.py:35
+#: apps/core/models.py:97 apps/geo/models.py:17 apps/geo/models.py:36
 #: apps/users/models.py:45 templates/pages/core/vacancies.html:23
 #: templates/pages/dashboard/branches.html:27
 #: templates/pages/dashboard/content.html:172
@@ -365,8 +371,9 @@ msgid "Salary to"
 msgstr "Зарплата до"
 
 #: apps/core/models.py:103 apps/core/models.py:138 apps/core/models.py:159
-#: apps/documents/models.py:22 apps/geo/models.py:12 apps/geo/models.py:44
+#: apps/documents/models.py:22 apps/geo/models.py:12 apps/geo/models.py:45
 #: apps/partners/models.py:41 apps/services/models.py:46
+#: apps/services/models.py:88 apps/services/models.py:118
 #: templates/pages/core/tender_detail.html:18
 #: templates/pages/core/tenders.html:24
 #: templates/pages/dashboard/branches.html:88
@@ -380,13 +387,14 @@ msgstr "Зарплата до"
 msgid "Active"
 msgstr "Активно"
 
-#: apps/core/models.py:108 templates/pages/dashboard/content.html:154
+#: apps/core/models.py:108 apps/users/models.py:206
+#: templates/pages/dashboard/content.html:154
 msgid "Vacancies"
 msgstr "Вакансии"
 
 #: apps/core/models.py:116 apps/geo/models.py:6 apps/partners/models.py:53
 #: apps/services/models.py:6 apps/services/models.py:36
-#: apps/services/models.py:80 apps/services/models.py:108
+#: apps/services/models.py:80 apps/services/models.py:109
 #: templates/pages/core/contact.html:54
 #: templates/pages/dashboard/contacts.html:38
 #: templates/pages/dashboard/services.html:32
@@ -395,7 +403,7 @@ msgstr "Вакансии"
 msgid "Name"
 msgstr "Имя"
 
-#: apps/core/models.py:117 apps/geo/models.py:40 apps/partners/models.py:14
+#: apps/core/models.py:117 apps/geo/models.py:41 apps/partners/models.py:14
 #: apps/users/forms.py:12 apps/users/forms.py:30 apps/users/forms.py:55
 #: apps/users/models.py:15 templates/pages/core/contact.html:60
 #: templates/pages/core/contact.html:109
@@ -406,15 +414,15 @@ msgstr "Имя"
 #: templates/pages/dashboard/settings.html:47
 #: templates/pages/dashboard/user_form.html:31
 #: templates/pages/dashboard/users.html:43
-#: templates/pages/orders/create.html:136
-#: templates/pages/orders/create.html:185
+#: templates/pages/orders/create.html:175
+#: templates/pages/orders/create.html:236
 #: templates/pages/partners/apply.html:37 templates/pages/users/login.html:42
 #: templates/pages/users/register.html:90
 #: templates/pages/users/settings.html:83
 msgid "Email"
 msgstr "Эл. почта"
 
-#: apps/core/models.py:118 apps/geo/models.py:39 apps/partners/models.py:15
+#: apps/core/models.py:118 apps/geo/models.py:40 apps/partners/models.py:15
 #: apps/users/forms.py:34 apps/users/models.py:16
 #: templates/pages/core/contact.html:65 templates/pages/core/contact.html:99
 #: templates/pages/core/vacancy_detail.html:89
@@ -422,8 +430,8 @@ msgstr "Эл. почта"
 #: templates/pages/dashboard/settings.html:43
 #: templates/pages/dashboard/user_form.html:36
 #: templates/pages/dashboard/users.html:44
-#: templates/pages/orders/create.html:132
-#: templates/pages/orders/create.html:181
+#: templates/pages/orders/create.html:171
+#: templates/pages/orders/create.html:232
 #: templates/pages/partners/apply.html:31
 #: templates/pages/users/register.html:106
 #: templates/pages/users/settings.html:76
@@ -453,8 +461,8 @@ msgstr "Обращения"
 #: apps/core/models.py:136 apps/documents/models.py:20
 #: apps/partners/models.py:54 apps/services/models.py:10
 #: apps/services/models.py:39 apps/services/models.py:83
-#: apps/services/models.py:110 apps/users/models.py:158
-#: templates/pages/dashboard/order_detail.html:97
+#: apps/services/models.py:111 apps/users/models.py:158
+#: templates/pages/dashboard/order_detail.html:170
 #: templates/pages/users/balance.html:66 templates/pages/users/profile.html:83
 #: templates/pages/users/templates.html:606
 msgid "Description"
@@ -484,201 +492,239 @@ msgstr "Дата окончания"
 msgid "Promotion"
 msgstr "Акция"
 
-#: apps/core/models.py:164 templates/pages/core/promotion_detail.html:8
+#: apps/core/models.py:164 apps/users/models.py:207
+#: templates/pages/core/promotion_detail.html:8
 #: templates/pages/core/promotions.html:2
 msgid "Promotions"
 msgstr "Акции"
 
-#: apps/core/views.py:194
+#: apps/core/views.py:203
 msgid "Order not found"
 msgstr "Заказ не найден"
 
 #: apps/dashboard/apps.py:9 templates/pages/dashboard/base_dashboard.html:7
 #: templates/pages/dashboard/base_dashboard.html:71
-#: templates/pages/dashboard/base_dashboard.html:150
+#: templates/pages/dashboard/base_dashboard.html:172
 #: templates/pages/dashboard/home.html:2
 #: templates/pages/dashboard/login.html:15
 #: templates/partials/_profile_nav.html:15
 msgid "Dashboard"
 msgstr "Панель управления"
 
-#: apps/dashboard/views.py:105 apps/users/forms.py:19 apps/users/forms.py:44
+#: apps/dashboard/views.py:80
+msgid "You do not have access to this section."
+msgstr ""
+
+#: apps/dashboard/views.py:141 apps/users/forms.py:19 apps/users/forms.py:44
 #: templates/pages/dashboard/login.html:28 templates/pages/users/login.html:50
 #: templates/pages/users/register.html:115
 msgid "Password"
 msgstr "Пароль"
 
-#: apps/dashboard/views.py:148
+#: apps/dashboard/views.py:185
 msgid "User created successfully."
 msgstr "Пользователь успешно создан."
 
-#: apps/dashboard/views.py:164
+#: apps/dashboard/views.py:202
 msgid "User updated successfully."
 msgstr "Пользователь успешно обновлён."
 
-#: apps/dashboard/views.py:177
+#: apps/dashboard/views.py:215
 msgid "User deleted successfully."
 msgstr "Пользователь успешно удалён."
 
-#: apps/dashboard/views.py:317
+#: apps/dashboard/views.py:362
 msgid "Settings saved successfully."
 msgstr "Настройки успешно сохранены."
 
-#: apps/dashboard/views.py:373
+#: apps/dashboard/views.py:419
 msgid "Service created successfully."
 msgstr "Услуга успешно создана."
 
-#: apps/dashboard/views.py:384
+#: apps/dashboard/views.py:431
 msgid "Service updated successfully."
 msgstr "Услуга успешно обновлена."
 
-#: apps/dashboard/views.py:397
+#: apps/dashboard/views.py:444
 msgid "Service deleted successfully."
 msgstr "Услуга успешно удалена."
 
-#: apps/dashboard/views.py:413
+#: apps/dashboard/views.py:461
 msgid "Branch created successfully."
 msgstr "Отделение успешно создано."
 
-#: apps/dashboard/views.py:429
+#: apps/dashboard/views.py:478
 msgid "Branch updated successfully."
 msgstr "Отделение успешно обновлено."
 
-#: apps/dashboard/views.py:439
+#: apps/dashboard/views.py:489
 msgid "Branch deleted successfully."
 msgstr "Отделение успешно удалено."
 
-#: apps/dashboard/views.py:471
+#: apps/dashboard/views.py:522
 msgid "Category created successfully."
 msgstr "Категория успешно создана."
 
-#: apps/dashboard/views.py:482
+#: apps/dashboard/views.py:534
 msgid "Category updated successfully."
 msgstr "Категория успешно обновлена."
 
-#: apps/dashboard/views.py:495
+#: apps/dashboard/views.py:547
 msgid "Category deleted successfully."
 msgstr "Категория успешно удалена."
 
-#: apps/dashboard/views.py:523
+#: apps/dashboard/views.py:576
 msgid "Tariff created successfully."
 msgstr "Тариф успешно создан."
 
-#: apps/dashboard/views.py:534
+#: apps/dashboard/views.py:588
 msgid "Tariff updated successfully."
 msgstr "Тариф успешно обновлён."
 
-#: apps/dashboard/views.py:547
+#: apps/dashboard/views.py:601
 msgid "Tariff deleted successfully."
 msgstr "Тариф успешно удалён."
 
-#: apps/dashboard/views.py:572
+#: apps/dashboard/views.py:627
 msgid "Partner application updated successfully."
 msgstr "Заявка партнёра успешно обновлена."
 
-#: apps/dashboard/views.py:582
+#: apps/dashboard/views.py:638
 msgid "Partner application deleted successfully."
 msgstr "Заявка партнёра успешно удалена."
 
-#: apps/dashboard/views.py:607
+#: apps/dashboard/views.py:664
 msgid "Banner created successfully."
 msgstr "Баннер успешно создан."
 
-#: apps/dashboard/views.py:618
+#: apps/dashboard/views.py:676
 msgid "Banner updated successfully."
 msgstr "Баннер успешно обновлён."
 
-#: apps/dashboard/views.py:628
+#: apps/dashboard/views.py:686
 msgid "Banner deleted successfully."
 msgstr "Баннер успешно удалён."
 
-#: apps/dashboard/views.py:665
+#: apps/dashboard/views.py:724
 msgid "Content page created successfully."
 msgstr "Страница контента успешно создана."
 
-#: apps/dashboard/views.py:681
+#: apps/dashboard/views.py:741
 msgid "Content page updated successfully."
 msgstr "Страница контента успешно обновлена."
 
-#: apps/dashboard/views.py:691
+#: apps/dashboard/views.py:752
 msgid "Content page deleted successfully."
 msgstr "Страница контента успешно удалена."
 
-#: apps/dashboard/views.py:726
+#: apps/dashboard/views.py:788
 msgid "News item created successfully."
 msgstr "Новость успешно создана."
 
-#: apps/dashboard/views.py:742
+#: apps/dashboard/views.py:805
 msgid "News item updated successfully."
 msgstr "Новость успешно обновлена."
 
-#: apps/dashboard/views.py:752
+#: apps/dashboard/views.py:816
 msgid "News item deleted successfully."
 msgstr "Новость успешно удалена."
 
-#: apps/dashboard/views.py:793
+#: apps/dashboard/views.py:858
 msgid "Vacancy created successfully."
 msgstr "Вакансия успешно создана."
 
-#: apps/dashboard/views.py:809
+#: apps/dashboard/views.py:875
 msgid "Vacancy updated successfully."
 msgstr "Вакансия успешно обновлена."
 
-#: apps/dashboard/views.py:819
+#: apps/dashboard/views.py:886
 msgid "Vacancy deleted successfully."
 msgstr "Вакансия успешно удалена."
 
-#: apps/dashboard/views.py:850
+#: apps/dashboard/views.py:918
 msgid "FAQ created successfully."
 msgstr "Вопрос успешно создан."
 
-#: apps/dashboard/views.py:866
+#: apps/dashboard/views.py:935
 msgid "FAQ updated successfully."
 msgstr "Вопрос успешно обновлён."
 
-#: apps/dashboard/views.py:876
+#: apps/dashboard/views.py:946
 msgid "FAQ deleted successfully."
 msgstr "Вопрос успешно удалён."
 
-#: apps/dashboard/views.py:906
+#: apps/dashboard/views.py:977
 msgid "Review created successfully."
 msgstr "Отзыв успешно создан."
 
-#: apps/dashboard/views.py:922
+#: apps/dashboard/views.py:994
 msgid "Review updated successfully."
 msgstr "Отзыв успешно обновлён."
 
-#: apps/dashboard/views.py:932
+#: apps/dashboard/views.py:1005
 msgid "Review deleted successfully."
 msgstr "Отзыв успешно удалён."
 
-#: apps/dashboard/views.py:960
+#: apps/dashboard/views.py:1034
 msgid "Tender created successfully."
 msgstr "Тендер успешно создан."
 
-#: apps/dashboard/views.py:976
+#: apps/dashboard/views.py:1051
 msgid "Tender updated successfully."
 msgstr "Тендер успешно обновлён."
 
-#: apps/dashboard/views.py:986
+#: apps/dashboard/views.py:1062
 msgid "Tender deleted successfully."
 msgstr "Тендер успешно удалён."
 
-#: apps/dashboard/views.py:1038
+#: apps/dashboard/views.py:1107 apps/dashboard/views.py:1108
+#: apps/orders/forms.py:105 apps/orders/forms.py:106 apps/users/forms.py:179
+#: apps/users/forms.py:180 apps/users/forms.py:201
+#: templates/pages/core/calculator.html:24
+#: templates/pages/core/calculator.html:33
+#: templates/pages/core/delivery_times.html:16
+#: templates/pages/core/delivery_times.html:25
+#: templates/pages/orders/create.html:182
+#: templates/pages/orders/create.html:243
+#: templates/pages/users/template_edit.html:26
+#: templates/pages/users/template_edit.html:35
+#: templates/pages/users/templates.html:336
+#: templates/pages/users/templates.html:345
+#: templates/pages/users/templates.html:566
+msgid "Select city"
+msgstr "Выберите город"
+
+#: apps/dashboard/views.py:1136
 msgid "Order updated successfully."
 msgstr "Заказ успешно обновлён."
 
-#: apps/dashboard/views.py:1045
+#: apps/dashboard/views.py:1143
 #, python-format
 msgid "Status changed from %(old)s to %(new)s"
 msgstr "Статус изменён с %(old)s на %(new)s"
 
-#: apps/dashboard/views.py:1056
+#: apps/dashboard/views.py:1155
 msgid "Order deleted successfully."
 msgstr "Заказ успешно удалён."
 
+#: apps/dashboard/views.py:1183
+#, python-format
+msgid "Please wait %(seconds)s seconds before the next simulation step."
+msgstr ""
+
+#: apps/dashboard/views.py:1196
+#, python-format
+msgid "Simulation: auto-advanced to %(status)s"
+msgstr ""
+
+#: apps/dashboard/views.py:1247
+#, fuzzy
+#| msgid "User updated successfully."
+msgid "Permissions updated successfully."
+msgstr "Пользователь успешно обновлён."
+
 #: apps/documents/apps.py:9 apps/documents/models.py:26
-#: templates/pages/dashboard/base_dashboard.html:102
+#: apps/users/models.py:203 templates/pages/dashboard/base_dashboard.html:115
 #: templates/pages/dashboard/documents.html:17
 #: templates/pages/documents/category.html:3
 #: templates/pages/documents/category.html:4
@@ -719,12 +765,13 @@ msgstr "Возвраты"
 msgid "TUE replacement"
 msgstr "Замена ТУЭ"
 
-#: apps/documents/models.py:19 apps/orders/models.py:82
+#: apps/documents/models.py:19 apps/orders/models.py:86
 #: templates/pages/dashboard/documents.html:30
+#: venv/lib/python3.14/site-packages/django/db/models/fields/files.py:244
 msgid "File"
 msgstr "Файл"
 
-#: apps/documents/models.py:21 apps/orders/models.py:83
+#: apps/documents/models.py:21 apps/orders/models.py:87
 msgid "Uploaded at"
 msgstr "Дата загрузки"
 
@@ -732,7 +779,8 @@ msgstr "Дата загрузки"
 msgid "Document"
 msgstr "Документ"
 
-#: apps/documents/models.py:35 templates/pages/dashboard/documents.html:123
+#: apps/documents/models.py:35 apps/users/models.py:173
+#: templates/pages/dashboard/documents.html:123
 msgid "Pending"
 msgstr "В ожидании"
 
@@ -745,7 +793,8 @@ msgid "Fulfilled"
 msgstr "Выполнен"
 
 #: apps/documents/models.py:38 apps/partners/models.py:10
-#: templates/pages/dashboard/partners.html:49
+#: apps/users/models.py:176 templates/pages/dashboard/partners.html:49
+#: templates/pages/users/settings.html:143
 msgid "Rejected"
 msgstr "Отклонен"
 
@@ -765,14 +814,15 @@ msgstr "Квитанция"
 msgid "Other"
 msgstr "Другое"
 
-#: apps/documents/models.py:46 apps/orders/models.py:27 apps/users/models.py:27
+#: apps/documents/models.py:46 apps/orders/models.py:28 apps/users/models.py:27
 #: apps/users/models.py:39 apps/users/models.py:59 apps/users/models.py:86
-#: apps/users/models.py:155 templates/pages/dashboard/documents.html:98
+#: apps/users/models.py:155 apps/users/models.py:178
+#: templates/pages/dashboard/documents.html:98
 #: templates/pages/dashboard/users.html:42
 msgid "User"
 msgstr "Пользователь"
 
-#: apps/documents/models.py:47 apps/orders/models.py:81
+#: apps/documents/models.py:47 apps/orders/models.py:85
 #: templates/pages/users/accounting_docs.html:22
 msgid "Document type"
 msgstr "Тип документа"
@@ -785,21 +835,22 @@ msgstr "Начало периода"
 msgid "Period end"
 msgstr "Конец периода"
 
-#: apps/documents/models.py:50 apps/orders/models.py:47
-#: apps/orders/models.py:65 apps/partners/models.py:17 apps/users/models.py:117
-#: templates/pages/dashboard/branches.html:33
+#: apps/documents/models.py:50 apps/orders/models.py:48
+#: apps/orders/models.py:69 apps/partners/models.py:17 apps/users/models.py:117
+#: apps/users/models.py:181 templates/pages/dashboard/branches.html:33
 #: templates/pages/dashboard/content.html:103
 #: templates/pages/dashboard/content.html:173
 #: templates/pages/dashboard/content.html:386
 #: templates/pages/dashboard/documents.html:32
 #: templates/pages/dashboard/documents.html:101
 #: templates/pages/dashboard/home.html:81
-#: templates/pages/dashboard/order_detail.html:34
+#: templates/pages/dashboard/order_detail.html:106
 #: templates/pages/dashboard/order_form.html:21
 #: templates/pages/dashboard/orders.html:28
 #: templates/pages/dashboard/partners.html:28
 #: templates/pages/dashboard/services.html:93
 #: templates/pages/dashboard/tickets.html:57
+#: templates/pages/orders/request_changes.html:29
 #: templates/pages/users/orders.html:23
 #: templates/partials/_tracking_results.html:37
 msgid "Status"
@@ -822,7 +873,7 @@ msgid "Geography"
 msgstr "География"
 
 #: apps/geo/models.py:7 apps/services/models.py:7 apps/services/models.py:37
-#: apps/services/models.py:81 apps/services/models.py:109
+#: apps/services/models.py:81 apps/services/models.py:110
 msgid "Name (EN)"
 msgstr "Название (EN)"
 
@@ -834,11 +885,11 @@ msgstr "Регион"
 msgid "Region (EN)"
 msgstr "Регион (EN)"
 
-#: apps/geo/models.py:10 apps/geo/models.py:42
+#: apps/geo/models.py:10 apps/geo/models.py:43
 msgid "Latitude"
 msgstr "Широта"
 
-#: apps/geo/models.py:11 apps/geo/models.py:43
+#: apps/geo/models.py:11 apps/geo/models.py:44
 msgid "Longitude"
 msgstr "Долгота"
 
@@ -846,99 +897,106 @@ msgstr "Долгота"
 msgid "Timezone"
 msgstr "Часовой пояс"
 
-#: apps/geo/models.py:17
+#: apps/geo/models.py:14
+#, fuzzy
+#| msgid "Amount"
+msgid "Country"
+msgstr "Сумма"
+
+#: apps/geo/models.py:18 apps/users/models.py:197
 msgid "Cities"
 msgstr "Города"
 
-#: apps/geo/models.py:31 templates/pages/dashboard/branches.html:45
+#: apps/geo/models.py:32 templates/pages/dashboard/branches.html:45
 msgid "Warehouse"
 msgstr "Склад"
 
-#: apps/geo/models.py:32
+#: apps/geo/models.py:33
 msgid "Pickup point"
 msgstr "Пункт выдачи"
 
-#: apps/geo/models.py:33 templates/pages/dashboard/branches.html:53
+#: apps/geo/models.py:34 templates/pages/dashboard/branches.html:53
 msgid "Office"
 msgstr "Офис"
 
-#: apps/geo/models.py:36
+#: apps/geo/models.py:37
 msgid "Branch type"
 msgstr "Тип отделения"
 
-#: apps/geo/models.py:37 templates/pages/core/contact.html:119
+#: apps/geo/models.py:38 templates/pages/core/contact.html:119
 #: templates/pages/dashboard/branches.html:28
 #: templates/pages/dashboard/settings.html:51
 msgid "Address"
 msgstr "Адрес"
 
-#: apps/geo/models.py:38
+#: apps/geo/models.py:39
 msgid "Address (EN)"
 msgstr "Адрес (EN)"
 
-#: apps/geo/models.py:41
+#: apps/geo/models.py:42
 msgid "Working hours"
 msgstr "Часы работы"
 
-#: apps/geo/models.py:45
+#: apps/geo/models.py:46
 msgid "Pickup available"
 msgstr "Самовывоз"
 
-#: apps/geo/models.py:46
+#: apps/geo/models.py:47
 msgid "Delivery available"
 msgstr "Доставка"
 
-#: apps/geo/models.py:47
+#: apps/geo/models.py:48
 msgid "Loading equipment"
 msgstr "Погрузочная техника"
 
-#: apps/geo/models.py:50 apps/geo/models.py:58
+#: apps/geo/models.py:51 apps/geo/models.py:59
 msgid "Branch"
 msgstr "Отделение"
 
-#: apps/geo/models.py:51 templates/base.html:259 templates/base.html:675
-#: templates/base.html:774 templates/pages/dashboard/base_dashboard.html:98
+#: apps/geo/models.py:52 apps/users/models.py:198 templates/base.html:259
+#: templates/base.html:675 templates/base.html:774
+#: templates/pages/dashboard/base_dashboard.html:109
 #: templates/pages/geo/city_branches.html:3
 msgid "Branches"
 msgstr "Отделения"
 
-#: apps/geo/models.py:60
+#: apps/geo/models.py:61
 msgid "Caption"
 msgstr "Подпись"
 
-#: apps/geo/models.py:64
+#: apps/geo/models.py:65
 msgid "Branch image"
 msgstr "Изображение отделения"
 
-#: apps/geo/models.py:65
+#: apps/geo/models.py:66
 msgid "Branch images"
 msgstr "Изображения отделения"
 
 #: apps/orders/admin.py:33 apps/users/models.py:36 apps/users/models.py:135
-#: templates/pages/dashboard/order_detail.html:74
-#: templates/pages/orders/create.html:45
+#: templates/pages/dashboard/order_detail.html:147
+#: templates/pages/orders/create.html:48
 #: templates/pages/users/order_detail.html:51
 #: templates/pages/users/templates.html:547
 msgid "Sender"
 msgstr "Отправитель"
 
 #: apps/orders/admin.py:34 apps/users/models.py:37
-#: templates/pages/dashboard/order_detail.html:82
-#: templates/pages/orders/create.html:46
+#: templates/pages/dashboard/order_detail.html:155
+#: templates/pages/orders/create.html:49
 #: templates/pages/users/order_detail.html:58
 #: templates/pages/users/templates.html:548
 msgid "Recipient"
 msgstr "Получатель"
 
-#: apps/orders/admin.py:35 templates/pages/orders/create.html:47
-#: templates/pages/orders/create.html:375
+#: apps/orders/admin.py:35 templates/pages/orders/create.html:50
+#: templates/pages/orders/create.html:527
 msgid "Cargo"
 msgstr "Груз"
 
-#: apps/orders/admin.py:36 apps/orders/models.py:45 apps/services/models.py:50
-#: apps/users/models.py:68 templates/pages/dashboard/order_detail.html:124
-#: templates/pages/orders/create.html:354
-#: templates/pages/users/template_edit.html:47
+#: apps/orders/admin.py:36 apps/orders/models.py:46 apps/services/models.py:50
+#: apps/users/models.py:68 templates/pages/dashboard/order_detail.html:197
+#: templates/pages/orders/create.html:489
+#: templates/pages/users/template_edit.html:61
 #: templates/pages/users/templates.html:357
 #: templates/partials/_calculator_results.html:26
 #: templates/partials/_tracking_results.html:47
@@ -949,121 +1007,125 @@ msgstr "Услуга"
 msgid "Dates"
 msgstr "Даты"
 
-#: apps/orders/api.py:23
+#: apps/orders/api.py:19
+msgid "Only staff can update order status"
+msgstr ""
+
+#: apps/orders/api.py:29
 msgid "Invalid status transition"
 msgstr "Неверный переход статуса"
 
-#: apps/orders/api.py:48
+#: apps/orders/api.py:58
+#, fuzzy
+#| msgid "Cannot confirm pickup in current status"
+msgid "Cannot confirm pickup in current status."
+msgstr "Невозможно подтвердить получение в текущем статусе"
+
+#: apps/orders/api.py:60
 msgid "Cannot confirm pickup in current status"
 msgstr "Невозможно подтвердить получение в текущем статусе"
 
-#: apps/orders/api.py:58
+#: apps/orders/api.py:70
 msgid "Cargo picked up by carrier"
 msgstr "Груз забран перевозчиком"
 
-#: apps/orders/api.py:78
+#: apps/orders/api.py:77
+#, fuzzy
+#| msgid "Cargo picked up from sender"
+msgid "Cargo pickup confirmed."
+msgstr "Груз забран у отправителя"
+
+#: apps/orders/api.py:98
+#, fuzzy
+#| msgid "Cannot confirm delivery in current status"
+msgid "Cannot confirm delivery in current status."
+msgstr "Невозможно подтвердить доставку в текущем статусе"
+
+#: apps/orders/api.py:100
 msgid "Cannot confirm delivery in current status"
 msgstr "Невозможно подтвердить доставку в текущем статусе"
 
-#: apps/orders/api.py:81
+#: apps/orders/api.py:104
+#, fuzzy
+#| msgid "Only the recipient can confirm delivery"
+msgid "Only the recipient can confirm delivery."
+msgstr "Только получатель может подтвердить доставку"
+
+#: apps/orders/api.py:106
 msgid "Only the recipient can confirm delivery"
 msgstr "Только получатель может подтвердить доставку"
 
-#: apps/orders/api.py:93
+#: apps/orders/api.py:118
 msgid "Delivery confirmed by recipient"
 msgstr "Доставка подтверждена получателем"
 
-#: apps/orders/api.py:139 apps/orders/api.py:197 apps/orders/api.py:248
-#: apps/orders/api.py:307
+#: apps/orders/api.py:125
+#, fuzzy
+#| msgid "Delivery template created successfully."
+msgid "Delivery confirmed successfully."
+msgstr "Шаблон доставки успешно создан."
+
+#: apps/orders/api.py:170 apps/orders/api.py:239 apps/orders/api.py:289
+#: apps/orders/api.py:346
 msgid "Invalid JSON"
 msgstr "Неверный JSON"
 
-#: apps/orders/api.py:144 apps/orders/api.py:201 apps/orders/api.py:311
+#: apps/orders/api.py:175 apps/orders/api.py:243 apps/orders/api.py:350
 msgid "Template name is required"
 msgstr "Название шаблона обязательно"
 
-#: apps/orders/apps.py:9 apps/orders/models.py:56
-#: templates/pages/dashboard/base_dashboard.html:79
+#: apps/orders/apps.py:9 apps/orders/models.py:60 apps/users/models.py:211
+#: templates/pages/dashboard/base_dashboard.html:82
 #: templates/partials/_profile_nav.html:19
 msgid "Orders"
 msgstr "Заказы"
 
-#: apps/orders/forms.py:27 apps/orders/forms.py:46
-#: templates/pages/orders/create.html:129
-#: templates/pages/orders/create.html:178
+#: apps/orders/forms.py:28 apps/orders/forms.py:47
+#: templates/pages/orders/create.html:168
+#: templates/pages/orders/create.html:229
 msgid "Full name or company name"
 msgstr "Полное имя или название компании"
 
-#: apps/orders/forms.py:42 apps/orders/forms.py:61
-#: templates/pages/orders/create.html:152
-#: templates/pages/orders/create.html:201
-#: templates/pages/users/template_edit.html:65
-#: templates/pages/users/template_edit.html:69
+#: apps/orders/forms.py:43 apps/orders/forms.py:62
+#: templates/pages/orders/create.html:191
+#: templates/pages/orders/create.html:252
+#: templates/pages/users/template_edit.html:79
+#: templates/pages/users/template_edit.html:83
 #: templates/pages/users/templates.html:375
 #: templates/pages/users/templates.html:379
 msgid "Street, building, apartment"
 msgstr "Улица, дом, квартира"
 
-#: apps/orders/forms.py:66 templates/pages/orders/create.html:237
+#: apps/orders/forms.py:67 templates/pages/orders/create.html:291
 msgid "Describe the cargo, contents, and special handling requirements..."
 msgstr "Опишите груз, содержимое и особые требования к обращению..."
 
-#: apps/orders/forms.py:91 templates/pages/orders/create.html:259
+#: apps/orders/forms.py:92 templates/pages/orders/create.html:313
 #: templates/pages/users/templates.html:452
 #: templates/pages/users/templates.html:510
 msgid "Cargo value for insurance"
 msgstr "Стоимость груза для страхования"
 
-#: apps/orders/forms.py:104 apps/orders/forms.py:105 apps/users/forms.py:179
-#: apps/users/forms.py:180 apps/users/forms.py:201
-#: templates/pages/core/calculator.html:24
-#: templates/pages/core/calculator.html:33
-#: templates/pages/core/delivery_times.html:16
-#: templates/pages/core/delivery_times.html:25
-#: templates/pages/orders/create.html:143
-#: templates/pages/orders/create.html:192
-#: templates/pages/users/template_edit.html:26
-#: templates/pages/users/template_edit.html:35
-#: templates/pages/users/templates.html:336
-#: templates/pages/users/templates.html:345
-#: templates/pages/users/templates.html:566
-msgid "Select city"
-msgstr "Выберите город"
+#: apps/orders/forms.py:129
+#, fuzzy
+#| msgid "Weight must be greater than 0"
+msgid "Weight must be greater than zero."
+msgstr "Вес должен быть больше 0"
 
-#: apps/orders/forms.py:136 templates/pages/orders/create.html:819
-msgid "Sender name is required"
-msgstr "Имя отправителя обязательно"
-
-#: apps/orders/forms.py:138 templates/pages/orders/create.html:823
-msgid "Sender phone is required"
-msgstr "Телефон отправителя обязателен"
-
-#: apps/orders/forms.py:140
-msgid "Sender city is required"
-msgstr "Город отправителя обязателен"
-
-#: apps/orders/forms.py:142 templates/pages/orders/create.html:836
-msgid "Recipient name is required"
-msgstr "Имя получателя обязательно"
-
-#: apps/orders/forms.py:144 templates/pages/orders/create.html:840
-msgid "Recipient phone is required"
-msgstr "Телефон получателя обязателен"
-
-#: apps/orders/forms.py:146
-msgid "Recipient city is required"
-msgstr "Город получателя обязателен"
-
-#: apps/orders/forms.py:158
+#: apps/orders/forms.py:150
 msgid "Door-to-door services are not available for pickup point delivery"
 msgstr "Услуги «от двери до двери» недоступны для доставки до пункта выдачи"
 
-#: apps/orders/forms.py:163 apps/orders/forms.py:165
+#: apps/orders/forms.py:157
+msgid "Declared value is required when percentage-based services are selected."
+msgstr ""
+
+#: apps/orders/forms.py:161 apps/orders/forms.py:163
 msgid "Invalid phone format. Use +7 (999) 123-45-67"
 msgstr "Неверный формат телефона. Используйте +7 (999) 123-45-67"
 
-#: apps/orders/forms.py:173 apps/orders/forms.py:178
-#: templates/pages/orders/create.html:811
+#: apps/orders/forms.py:171 apps/orders/forms.py:176
+#: templates/pages/orders/create.html:989
 msgid "Invalid email format"
 msgstr "Неверный формат email"
 
@@ -1078,7 +1140,7 @@ msgstr "Черновик"
 msgid "Confirmed"
 msgstr "Подтвержден"
 
-#: apps/orders/models.py:16 apps/orders/views.py:146
+#: apps/orders/models.py:16
 msgid "Awaiting delivery to branch"
 msgstr "Ожидает доставки в отделение"
 
@@ -1099,223 +1161,258 @@ msgstr "Забран"
 msgid "In transit"
 msgstr "В пути"
 
-#: apps/orders/models.py:21
+#: apps/orders/models.py:21 templates/pages/orders/create.html:1172
+#, fuzzy
+#| msgid "Customs clearance assistance"
+msgid "Customs clearance"
+msgstr "Помощь в таможенном оформлении"
+
+#: apps/orders/models.py:22
 msgid "At warehouse"
 msgstr "На складе"
 
-#: apps/orders/models.py:22 templates/pages/users/order_detail.html:183
+#: apps/orders/models.py:23 templates/pages/users/order_detail.html:183
 msgid "Out for delivery"
 msgstr "Доставляется"
 
-#: apps/orders/models.py:23 templates/pages/dashboard/orders.html:17
+#: apps/orders/models.py:24 templates/pages/dashboard/order_detail.html:47
+#: templates/pages/dashboard/orders.html:17
 #: templates/pages/users/orders.html:67
 msgid "Delivered"
 msgstr "Доставлен"
 
-#: apps/orders/models.py:24 templates/pages/dashboard/documents.html:138
+#: apps/orders/models.py:25 templates/pages/dashboard/documents.html:138
 #: templates/pages/users/orders.html:71
 msgid "Cancelled"
 msgstr "Отменен"
 
-#: apps/orders/models.py:28 templates/pages/dashboard/order_form.html:26
-#: templates/pages/orders/create.html:128
+#: apps/orders/models.py:29 templates/pages/dashboard/order_form.html:26
+#: templates/pages/orders/create.html:167
 msgid "Sender name"
 msgstr "Имя отправителя"
 
-#: apps/orders/models.py:29 templates/pages/dashboard/order_form.html:31
+#: apps/orders/models.py:30 templates/pages/dashboard/order_form.html:31
 msgid "Sender phone"
 msgstr "Телефон отправителя"
 
-#: apps/orders/models.py:30
+#: apps/orders/models.py:31
 msgid "Sender email"
 msgstr "Email отправителя"
 
-#: apps/orders/models.py:31
+#: apps/orders/models.py:32
 msgid "Sender city"
 msgstr "Город отправителя"
 
-#: apps/orders/models.py:32 apps/users/models.py:70
-#: templates/pages/users/template_edit.html:64
+#: apps/orders/models.py:33 apps/users/models.py:70
+#: templates/pages/users/template_edit.html:78
 #: templates/pages/users/templates.html:374
 msgid "Sender address detail"
 msgstr "Адрес отправителя"
 
-#: apps/orders/models.py:33 templates/pages/dashboard/order_form.html:36
-#: templates/pages/orders/create.html:177
+#: apps/orders/models.py:34 templates/pages/dashboard/order_form.html:36
+#: templates/pages/orders/create.html:228
 msgid "Recipient name"
 msgstr "Имя получателя"
 
-#: apps/orders/models.py:34 templates/pages/dashboard/order_form.html:41
+#: apps/orders/models.py:35 templates/pages/dashboard/order_form.html:41
 msgid "Recipient phone"
 msgstr "Телефон получателя"
 
-#: apps/orders/models.py:35
+#: apps/orders/models.py:36
 msgid "Recipient email"
 msgstr "Email получателя"
 
-#: apps/orders/models.py:36
+#: apps/orders/models.py:37
 msgid "Recipient city"
 msgstr "Город получателя"
 
-#: apps/orders/models.py:37 apps/users/models.py:71
-#: templates/pages/users/template_edit.html:68
+#: apps/orders/models.py:38 apps/users/models.py:71
+#: templates/pages/users/template_edit.html:82
 #: templates/pages/users/templates.html:378
 msgid "Recipient address detail"
 msgstr "Адрес получателя"
 
-#: apps/orders/models.py:38 apps/users/forms.py:167 apps/users/forms.py:211
+#: apps/orders/models.py:39 apps/users/forms.py:167 apps/users/forms.py:221
 #: apps/users/models.py:67 apps/users/models.py:88
 #: templates/pages/dashboard/order_form.html:46
-#: templates/pages/orders/create.html:236
-#: templates/pages/users/template_edit.html:56
+#: templates/pages/orders/create.html:290
+#: templates/pages/users/template_edit.html:70
 #: templates/pages/users/templates.html:366
 #: templates/pages/users/templates.html:429
 #: templates/pages/users/templates.html:487
 msgid "Cargo description"
 msgstr "Описание груза"
 
-#: apps/orders/models.py:40
+#: apps/orders/models.py:41
 msgid "Volume (m³)"
 msgstr "Объем (м³)"
 
-#: apps/orders/models.py:41 apps/users/forms.py:164 apps/users/forms.py:213
+#: apps/orders/models.py:42 apps/users/forms.py:164 apps/users/forms.py:223
 #: apps/users/models.py:64 apps/users/models.py:90
 #: templates/pages/core/calculator.html:54
 #: templates/pages/dashboard/order_form.html:56
-#: templates/pages/orders/create.html:245
+#: templates/pages/orders/create.html:299
+#: templates/pages/users/template_edit.html:48
 #: templates/pages/users/templates.html:438
 #: templates/pages/users/templates.html:496
 #: templates/pages/users/templates.html:622
 msgid "Length (cm)"
 msgstr "Длина (см)"
 
-#: apps/orders/models.py:42 apps/users/forms.py:165 apps/users/forms.py:214
+#: apps/orders/models.py:43 apps/users/forms.py:165 apps/users/forms.py:224
 #: apps/users/models.py:65 apps/users/models.py:91
 #: templates/pages/core/calculator.html:58
 #: templates/pages/dashboard/order_form.html:61
-#: templates/pages/orders/create.html:249
+#: templates/pages/orders/create.html:303
+#: templates/pages/users/template_edit.html:52
 #: templates/pages/users/templates.html:442
 #: templates/pages/users/templates.html:500
 #: templates/pages/users/templates.html:626
 msgid "Width (cm)"
 msgstr "Ширина (см)"
 
-#: apps/orders/models.py:43 apps/users/forms.py:166 apps/users/forms.py:215
+#: apps/orders/models.py:44 apps/users/forms.py:166 apps/users/forms.py:225
 #: apps/users/models.py:66 apps/users/models.py:92
 #: templates/pages/core/calculator.html:62
 #: templates/pages/dashboard/order_form.html:66
-#: templates/pages/orders/create.html:253
+#: templates/pages/orders/create.html:307
+#: templates/pages/users/template_edit.html:56
 #: templates/pages/users/templates.html:446
 #: templates/pages/users/templates.html:504
 #: templates/pages/users/templates.html:630
 msgid "Height (cm)"
 msgstr "Высота (см)"
 
-#: apps/orders/models.py:44 apps/users/forms.py:169 apps/users/models.py:69
-#: apps/users/models.py:93 templates/pages/dashboard/order_detail.html:112
+#: apps/orders/models.py:45 apps/users/forms.py:169 apps/users/models.py:69
+#: apps/users/models.py:93 templates/pages/dashboard/order_detail.html:185
 #: templates/pages/dashboard/order_form.html:71
-#: templates/pages/orders/create.html:381
+#: templates/pages/orders/create.html:533
 #: templates/pages/users/order_detail.html:71
 #: templates/pages/users/templates.html:616
 msgid "Declared value"
 msgstr "Объявленная ценность"
 
-#: apps/orders/models.py:46 apps/services/models.py:91 apps/users/models.py:72
-#: templates/pages/orders/create.html:289
-#: templates/pages/orders/create.html:358
-#: templates/pages/users/template_edit.html:76
+#: apps/orders/models.py:47 apps/services/models.py:92 apps/users/models.py:72
+#: apps/users/models.py:201 templates/pages/orders/create.html:424
+#: templates/pages/orders/create.html:493
+#: templates/pages/users/template_edit.html:90
 #: templates/pages/users/templates.html:386
 msgid "Additional services"
 msgstr "Дополнительные услуги"
 
-#: apps/orders/models.py:48 apps/users/models.py:73
-#: templates/pages/dashboard/order_detail.html:118
+#: apps/orders/models.py:49 apps/users/models.py:73
+#: templates/pages/dashboard/order_detail.html:191
 #: templates/pages/dashboard/order_form.html:76
-#: templates/pages/orders/create.html:390
+#: templates/pages/orders/create.html:556
 msgid "Total price"
 msgstr "Итоговая цена"
 
-#: apps/orders/models.py:51 templates/pages/dashboard/order_detail.html:56
+#: apps/orders/models.py:52 templates/pages/dashboard/order_detail.html:129
 #: templates/pages/orders/tracking_lookup.html:51
 msgid "Estimated delivery"
 msgstr "Ожидаемая доставка"
 
-#: apps/orders/models.py:52 templates/pages/dashboard/order_detail.html:62
+#: apps/orders/models.py:53 templates/pages/dashboard/order_detail.html:135
 msgid "Actual delivery"
 msgstr "Фактическая доставка"
 
-#: apps/orders/models.py:66
+#: apps/orders/models.py:54
+#, fuzzy
+#| msgid "Track cargo"
+msgid "Fragile cargo"
+msgstr "Отследить груз"
+
+#: apps/orders/models.py:55 templates/pages/orders/create.html:341
+msgid "Dangerous goods"
+msgstr ""
+
+#: apps/orders/models.py:56
+#, fuzzy
+#| msgid "Temperature-controlled zones"
+msgid "Temperature-sensitive cargo"
+msgstr "Зоны с контролем температуры"
+
+#: apps/orders/models.py:70
 msgid "Changed by"
 msgstr "Кто изменил"
 
-#: apps/orders/models.py:67
+#: apps/orders/models.py:71
 msgid "Timestamp"
 msgstr "Время"
 
-#: apps/orders/models.py:68
+#: apps/orders/models.py:72
 msgid "Comment"
 msgstr "Комментарий"
 
-#: apps/orders/models.py:71
+#: apps/orders/models.py:75
 msgid "Order status history"
 msgstr "История статусов заказа"
 
-#: apps/orders/models.py:72
+#: apps/orders/models.py:76
 msgid "Order status histories"
 msgstr "Истории статусов заказа"
 
-#: apps/orders/models.py:86
+#: apps/orders/models.py:90
 msgid "Order document"
 msgstr "Документ заказа"
 
-#: apps/orders/models.py:87
+#: apps/orders/models.py:91
 msgid "Order documents"
 msgstr "Документы заказа"
 
-#: apps/orders/views.py:77
+#: apps/orders/routing.py:429
+#, python-format
+msgid "Order %(tracking)s — %(status)s"
+msgstr ""
+
+#: apps/orders/routing.py:443
+#, python-format
+msgid "Status of order %(tracking)s changed to: %(status)s"
+msgstr ""
+
+#: apps/orders/views.py:124
+#, python-format
+msgid ""
+"Insufficient balance. Your balance is %(balance)s ₽, but the order total is "
+"%(total)s ₽. Please top up your balance."
+msgstr ""
+
+#: apps/orders/views.py:140
+#, python-format
+msgid "Payment for order %(tracking)s"
+msgstr ""
+
+#: apps/orders/views.py:152
 msgid "Order created"
 msgstr "Заказ создан"
 
-#: apps/orders/views.py:85
+#: apps/orders/views.py:160
 #, python-format
 msgid ""
 "Order %(tracking)s created successfully! You can track it in your orders."
 msgstr ""
 "Заказ %(tracking)s успешно создан! Вы можете отслеживать его в своих заказах."
 
-#: apps/orders/views.py:140
-msgid "Order confirmed and registered"
-msgstr "Заказ подтверждён и зарегистрирован"
+#: apps/orders/views.py:224 apps/orders/views.py:235
+msgid "You can only request changes for your own orders."
+msgstr ""
 
-#: apps/orders/views.py:141
-msgid "Cargo picked up from sender"
-msgstr "Груз забран у отправителя"
+#: apps/orders/views.py:241
+msgid "Please describe the changes you need."
+msgstr ""
 
-#: apps/orders/views.py:142
-msgid "Cargo in transit to destination"
-msgstr "Груз в пути к месту назначения"
+#: apps/orders/views.py:248
+#, python-format
+msgid "[Change Request] %(message)s"
+msgstr ""
 
-#: apps/orders/views.py:143
-msgid "Cargo arrived at sorting warehouse"
-msgstr "Груз прибыл на сортировочный склад"
+#: apps/orders/views.py:251
+#, fuzzy
+#| msgid "Your order has been confirmed."
+msgid "Your change request has been submitted."
+msgstr "Ваш заказ подтвержден."
 
-#: apps/orders/views.py:144
-msgid "Cargo out for delivery to recipient"
-msgstr "Груз передан на доставку получателю"
-
-#: apps/orders/views.py:145
-msgid "Cargo delivered successfully"
-msgstr "Груз успешно доставлен"
-
-#: apps/orders/views.py:147
-msgid "Cargo available at warehouse"
-msgstr "Груз доступен на складе"
-
-#: apps/orders/views.py:148
-msgid "Awaiting courier pickup"
-msgstr "Ожидает забора курьером"
-
-#: apps/partners/admin.py:18
+#: apps/partners/admin.py:18 apps/users/admin.py:115
 msgid "Approve selected applications"
 msgstr "Одобрить выбранные заявки"
 
@@ -1323,7 +1420,7 @@ msgstr "Одобрить выбранные заявки"
 msgid "Mark selected as reviewing"
 msgstr "Отметить выбранные как на рассмотрении"
 
-#: apps/partners/apps.py:9 templates/pages/dashboard/base_dashboard.html:106
+#: apps/partners/apps.py:9 templates/pages/dashboard/base_dashboard.html:121
 #: templates/pages/partners/banners.html:11
 #: templates/pages/partners/iframe.html:11
 msgid "Partners"
@@ -1337,11 +1434,13 @@ msgstr "Новый"
 msgid "Reviewing"
 msgstr "На рассмотрении"
 
-#: apps/partners/models.py:12 apps/users/forms.py:35 apps/users/models.py:21
+#: apps/partners/models.py:12 apps/users/forms.py:35 apps/users/forms.py:210
+#: apps/users/models.py:21 apps/users/models.py:179
 #: templates/pages/dashboard/user_form.html:57
 #: templates/pages/partners/apply.html:16
 #: templates/pages/users/register.html:57
 #: templates/pages/users/settings.html:111
+#: templates/pages/users/settings.html:187
 msgid "Company name"
 msgstr "Название компании"
 
@@ -1357,7 +1456,7 @@ msgstr "Веб-сайт"
 msgid "Partner application"
 msgstr "Заявка партнера"
 
-#: apps/partners/models.py:22
+#: apps/partners/models.py:22 apps/users/models.py:213
 msgid "Partner applications"
 msgstr "Заявки партнеров"
 
@@ -1389,7 +1488,8 @@ msgstr "Кол-во кликов"
 msgid "Banner"
 msgstr "Баннер"
 
-#: apps/partners/models.py:46 templates/pages/dashboard/partners.html:12
+#: apps/partners/models.py:46 apps/users/models.py:208
+#: templates/pages/dashboard/partners.html:12
 #: templates/pages/dashboard/partners.html:79
 msgid "Banners"
 msgstr "Баннеры"
@@ -1410,12 +1510,12 @@ msgstr "iFrame модуль"
 msgid "iFrame modules"
 msgstr "iFrame модули"
 
-#: apps/services/apps.py:9 apps/services/models.py:51 templates/base.html:126
-#: templates/base.html:627 templates/base.html:1007
-#: templates/pages/dashboard/base_dashboard.html:90
+#: apps/services/apps.py:9 apps/services/models.py:51 apps/users/models.py:199
+#: templates/base.html:126 templates/base.html:627 templates/base.html:1007
+#: templates/pages/dashboard/base_dashboard.html:97
 #: templates/pages/dashboard/services.html:14
 #: templates/pages/dashboard/services.html:80
-#: templates/pages/orders/create.html:48
+#: templates/pages/orders/create.html:51
 #: templates/pages/services/additionalservice_list.html:11
 #: templates/pages/services/category_detail.html:9
 #: templates/pages/services/category_list.html:2
@@ -1430,7 +1530,7 @@ msgid "Icon"
 msgstr "Иконка"
 
 #: apps/services/models.py:11 apps/services/models.py:40
-#: apps/services/models.py:84 apps/services/models.py:111
+#: apps/services/models.py:84 apps/services/models.py:112
 msgid "Description (EN)"
 msgstr "Описание (EN)"
 
@@ -1442,7 +1542,7 @@ msgstr "Родительская категория"
 msgid "Service category"
 msgstr "Категория услуг"
 
-#: apps/services/models.py:17
+#: apps/services/models.py:17 apps/users/models.py:200
 msgid "Service categories"
 msgstr "Категории услуг"
 
@@ -1487,35 +1587,35 @@ msgstr "Тип цены"
 msgid "Door-to-door service"
 msgstr "Услуга «от двери до двери»"
 
-#: apps/services/models.py:90 templates/base.html:175 templates/base.html:662
+#: apps/services/models.py:91 templates/base.html:175 templates/base.html:662
 msgid "Additional service"
 msgstr "Дополнительная услуга"
 
-#: apps/services/models.py:112
+#: apps/services/models.py:113
 msgid "Min weight (kg)"
 msgstr "Мин. вес (кг)"
 
-#: apps/services/models.py:113
+#: apps/services/models.py:114
 msgid "Max weight (kg)"
 msgstr "Макс. вес (кг)"
 
-#: apps/services/models.py:114 templates/pages/services/tariff_list.html:26
+#: apps/services/models.py:115 templates/pages/services/tariff_list.html:26
 msgid "Price per kg"
 msgstr "Цена за кг"
 
-#: apps/services/models.py:115
+#: apps/services/models.py:116
 msgid "Min delivery days"
 msgstr "Мин. дней доставки"
 
-#: apps/services/models.py:116
+#: apps/services/models.py:117
 msgid "Max delivery days"
 msgstr "Макс. дней доставки"
 
-#: apps/services/models.py:119
+#: apps/services/models.py:121
 msgid "Tariff"
 msgstr "Тариф"
 
-#: apps/services/models.py:120 templates/base.html:745
+#: apps/services/models.py:122 apps/users/models.py:202 templates/base.html:745
 #: templates/pages/dashboard/services.html:15
 #: templates/pages/dashboard/services.html:146
 #: templates/pages/services/service_detail.html:59
@@ -1547,8 +1647,26 @@ msgstr "Права"
 msgid "Important dates"
 msgstr "Важные даты"
 
+#: apps/users/admin.py:92 apps/users/models.py:223
+#, fuzzy
+#| msgid "Direction"
+msgid "Directory"
+msgstr "Направление"
+
+#: apps/users/admin.py:126
+#, fuzzy
+#| msgid "Mark selected as reviewing"
+msgid "Mark selected as under review"
+msgstr "Отметить выбранные как на рассмотрении"
+
+#: apps/users/admin.py:130
+#, fuzzy
+#| msgid "Approve selected applications"
+msgid "Reject selected applications"
+msgstr "Одобрить выбранные заявки"
+
 #: apps/users/apps.py:9 apps/users/models.py:28
-#: templates/pages/dashboard/base_dashboard.html:75
+#: templates/pages/dashboard/base_dashboard.html:76
 msgid "Users"
 msgstr "Пользователи"
 
@@ -1568,16 +1686,17 @@ msgstr "Имя"
 msgid "Last name"
 msgstr "Фамилия"
 
-#: apps/users/forms.py:36 apps/users/models.py:22
-#: templates/pages/dashboard/user_form.html:62
+#: apps/users/forms.py:36 apps/users/forms.py:211 apps/users/models.py:22
+#: apps/users/models.py:180 templates/pages/dashboard/user_form.html:62
 #: templates/pages/users/register.html:64
 #: templates/pages/users/settings.html:115
+#: templates/pages/users/settings.html:194
 msgid "INN"
 msgstr "ИНН"
 
 #: apps/users/forms.py:48 apps/users/forms.py:94 apps/users/forms.py:95
 #: templates/pages/users/register.html:134
-#: templates/pages/users/settings.html:152
+#: templates/pages/users/settings.html:244
 msgid "Confirm password"
 msgstr "Подтвердите пароль"
 
@@ -1586,12 +1705,12 @@ msgid "This email is already in use."
 msgstr "Этот email уже используется."
 
 #: apps/users/forms.py:86 apps/users/forms.py:87
-#: templates/pages/users/settings.html:138
+#: templates/pages/users/settings.html:230
 msgid "Current password"
 msgstr "Текущий пароль"
 
 #: apps/users/forms.py:90 apps/users/forms.py:91
-#: templates/pages/users/settings.html:145
+#: templates/pages/users/settings.html:237
 msgid "New password"
 msgstr "Новый пароль"
 
@@ -1619,7 +1738,7 @@ msgstr "Опишите вашу проблему подробно..."
 msgid "Write your message..."
 msgstr "Напишите сообщение..."
 
-#: apps/users/forms.py:160 apps/users/forms.py:189 apps/users/forms.py:210
+#: apps/users/forms.py:160 apps/users/forms.py:189 apps/users/forms.py:220
 #: apps/users/models.py:40 apps/users/models.py:60 apps/users/models.py:87
 #: templates/pages/users/template_edit.html:19
 #: templates/pages/users/templates.html:329
@@ -1654,9 +1773,9 @@ msgstr "Email контакта"
 msgid "Address detail"
 msgstr "Детали адреса"
 
-#: apps/users/forms.py:216 templates/pages/core/calculator.html:66
-#: templates/pages/orders/create.html:258
-#: templates/pages/users/template_edit.html:60
+#: apps/users/forms.py:226 templates/pages/core/calculator.html:66
+#: templates/pages/orders/create.html:312
+#: templates/pages/users/template_edit.html:74
 #: templates/pages/users/templates.html:370
 #: templates/pages/users/templates.html:451
 #: templates/pages/users/templates.html:509
@@ -1667,7 +1786,8 @@ msgstr "Объявленная ценность (₽)"
 msgid "Client"
 msgstr "Клиент"
 
-#: apps/users/models.py:12 templates/pages/dashboard/users.html:30
+#: apps/users/models.py:12 apps/users/models.py:219
+#: templates/pages/dashboard/users.html:30
 msgid "Manager"
 msgstr "Менеджер"
 
@@ -1739,8 +1859,7 @@ msgstr "Шаблоны доставки"
 msgid "Cargo template"
 msgstr "Шаблон груза"
 
-#: apps/users/models.py:98 templates/pages/orders/create.html:228
-#: templates/pages/users/templates.html:254
+#: apps/users/models.py:98 templates/pages/users/templates.html:254
 msgid "Cargo templates"
 msgstr "Шаблоны груза"
 
@@ -1792,7 +1911,8 @@ msgstr "Назначен"
 msgid "Ticket"
 msgstr "Тикет"
 
-#: apps/users/models.py:126 templates/pages/dashboard/base_dashboard.html:83
+#: apps/users/models.py:126 apps/users/models.py:212
+#: templates/pages/dashboard/base_dashboard.html:88
 #: templates/partials/_profile_nav.html:27
 msgid "Tickets"
 msgstr "Тикеты"
@@ -1846,35 +1966,71 @@ msgstr "Транзакция"
 msgid "Transactions"
 msgstr "Транзакции"
 
-#: apps/users/views.py:63
+#: apps/users/models.py:174 templates/pages/users/settings.html:138
+#, fuzzy
+#| msgid "All reviews"
+msgid "Under review"
+msgstr "Все отзывы"
+
+#: apps/users/models.py:182
+#, fuzzy
+#| msgid "Comment"
+msgid "Admin comment"
+msgstr "Комментарий"
+
+#: apps/users/models.py:187
+#, fuzzy
+#| msgid "Partner application"
+msgid "Company application"
+msgstr "Заявка партнера"
+
+#: apps/users/models.py:188
+#, fuzzy
+#| msgid "Partner applications"
+msgid "Company applications"
+msgstr "Заявки партнеров"
+
+#: apps/users/models.py:225
+msgid "Can access"
+msgstr ""
+
+#: apps/users/models.py:230
+msgid "Manager directory permission"
+msgstr ""
+
+#: apps/users/models.py:231
+msgid "Manager directory permissions"
+msgstr ""
+
+#: apps/users/views.py:66
 msgid "Profile updated successfully."
 msgstr "Профиль успешно обновлён."
 
-#: apps/users/views.py:71
+#: apps/users/views.py:74
 msgid "Password changed successfully."
 msgstr "Пароль успешно изменён."
 
-#: apps/users/views.py:107
+#: apps/users/views.py:135
 msgid "Balance top-up"
 msgstr "Пополнение баланса"
 
-#: apps/users/views.py:245
+#: apps/users/views.py:280
 msgid "Contact template updated successfully."
 msgstr "Шаблон контакта успешно обновлён."
 
-#: apps/users/views.py:259
+#: apps/users/views.py:294
 msgid "Delivery template created successfully."
 msgstr "Шаблон доставки успешно создан."
 
-#: apps/users/views.py:267
+#: apps/users/views.py:302
 msgid "Delivery template updated successfully."
 msgstr "Шаблон доставки успешно обновлён."
 
-#: apps/users/views.py:280
+#: apps/users/views.py:315
 msgid "Cargo template created successfully."
 msgstr "Шаблон груза успешно создан."
 
-#: apps/users/views.py:288
+#: apps/users/views.py:323
 msgid "Cargo template updated successfully."
 msgstr "Шаблон груза успешно обновлён."
 
@@ -1997,7 +2153,7 @@ msgid "About company"
 msgstr "О компании"
 
 #: templates/base.html:269 templates/base.html:784 templates/base.html:1102
-#: templates/base.html:1113 templates/pages/dashboard/base_dashboard.html:113
+#: templates/base.html:1113 templates/pages/dashboard/base_dashboard.html:135
 msgid "Contacts"
 msgstr "Контакты"
 
@@ -2007,7 +2163,7 @@ msgstr "Контакты"
 msgid "Create Order"
 msgstr "Создать заказ"
 
-#: templates/base.html:336 templates/pages/dashboard/base_dashboard.html:169
+#: templates/base.html:336 templates/pages/dashboard/base_dashboard.html:191
 msgid "Toggle theme"
 msgstr "Переключить тему"
 
@@ -2034,7 +2190,7 @@ msgid "Manager Panel"
 msgstr "Панель менеджера"
 
 #: templates/base.html:480 templates/base.html:880
-#: templates/pages/dashboard/base_dashboard.html:134
+#: templates/pages/dashboard/base_dashboard.html:156
 msgid "Logout"
 msgstr "Выход"
 
@@ -2093,7 +2249,7 @@ msgstr "Контейнерные перевозки"
 msgid "Air cargo"
 msgstr "Авиаперевозки"
 
-#: templates/base.html:1049 templates/pages/core/home.html:188
+#: templates/base.html:1049 templates/pages/core/home.html:189
 msgid "FTL"
 msgstr "FТЛ (автоперевозки)"
 
@@ -2116,6 +2272,70 @@ msgstr "Условия использования"
 #: templates/base.html:1208
 msgid "Transport terms"
 msgstr "Условия перевозки"
+
+#: templates/emails/status_notification.html:1
+#, fuzzy
+#| msgid "Order status histories"
+msgid "Order status updated"
+msgstr "Истории статусов заказа"
+
+#: templates/emails/status_notification.html:1
+#, fuzzy
+#| msgid "Use for order"
+msgid "Status of order"
+msgstr "Использовать для заказа"
+
+#: templates/emails/status_notification.html:1
+#, fuzzy
+#| msgid "Changed by"
+msgid "changed to"
+msgstr "Кто изменил"
+
+#: templates/emails/status_notification.html:1
+#, fuzzy
+#| msgid "Previous requests"
+msgid "Previous status"
+msgstr "Предыдущие запросы"
+
+#: templates/emails/status_notification.html:1
+#: templates/pages/core/delivery_times.html:14
+#: templates/pages/core/delivery_times.html:43
+#: templates/pages/orders/create.html:464
+#: templates/pages/orders/create.html:746 templates/pages/orders/track.html:165
+#: templates/pages/users/order_detail.html:284
+#: templates/pages/users/templates.html:146
+#: templates/partials/_calculator_results.html:14
+#: templates/partials/_tracking_results.html:118
+msgid "From"
+msgstr "Откуда"
+
+#: templates/emails/status_notification.html:1
+#: templates/pages/core/delivery_times.html:23
+#: templates/pages/core/delivery_times.html:44
+#: templates/pages/orders/create.html:472
+#: templates/pages/orders/create.html:746 templates/pages/orders/track.html:168
+#: templates/pages/users/order_detail.html:285
+#: templates/pages/users/templates.html:146
+#: templates/partials/_calculator_results.html:18
+#: templates/partials/_tracking_results.html:119
+msgid "To"
+msgstr "Куда"
+
+#: templates/emails/status_notification.html:1
+#: templates/pages/dashboard/order_detail.html:174
+#: templates/pages/dashboard/orders.html:29
+#: templates/pages/orders/create.html:531 templates/pages/orders/track.html:91
+#: templates/pages/users/order_detail.html:69
+#: templates/partials/_calculator_results.html:22
+#: templates/partials/_tracking_results.html:51
+msgid "Weight"
+msgstr "Вес, кг"
+
+#: templates/emails/status_notification.html:1
+#, fuzzy
+#| msgid "Track your cargo"
+msgid "Track your order"
+msgstr "Отследить груз"
 
 #: templates/pages/core/about.html:4
 msgid "About Company — Baikal-Service"
@@ -2454,13 +2674,14 @@ msgstr "Рассчитайте стоимость и сроки доставки
 #: templates/pages/core/calculator.html:18
 #: templates/pages/dashboard/home.html:80
 #: templates/pages/dashboard/orders.html:27
-#: templates/pages/orders/create.html:325 templates/pages/orders/track.html:84
-#: templates/pages/users/orders.html:22
+#: templates/pages/orders/create.html:460
+#: templates/pages/orders/request_changes.html:33
+#: templates/pages/orders/track.html:84 templates/pages/users/orders.html:22
 msgid "Route"
 msgstr "Маршрут"
 
 #: templates/pages/core/calculator.html:46
-#: templates/pages/orders/create.html:218
+#: templates/pages/orders/create.html:260
 msgid "Cargo Details"
 msgstr "Данные о грузе"
 
@@ -2602,28 +2823,6 @@ msgstr "Калькулятор сроков доставки"
 msgid "Check estimated delivery times between cities"
 msgstr "Проверьте ориентировочные сроки доставки между городами"
 
-#: templates/pages/core/delivery_times.html:14
-#: templates/pages/core/delivery_times.html:43
-#: templates/pages/orders/create.html:329
-#: templates/pages/orders/create.html:572 templates/pages/orders/track.html:165
-#: templates/pages/users/order_detail.html:284
-#: templates/pages/users/templates.html:146
-#: templates/partials/_calculator_results.html:14
-#: templates/partials/_tracking_results.html:118
-msgid "From"
-msgstr "Откуда"
-
-#: templates/pages/core/delivery_times.html:23
-#: templates/pages/core/delivery_times.html:44
-#: templates/pages/orders/create.html:337
-#: templates/pages/orders/create.html:572 templates/pages/orders/track.html:168
-#: templates/pages/users/order_detail.html:285
-#: templates/pages/users/templates.html:146
-#: templates/partials/_calculator_results.html:18
-#: templates/partials/_tracking_results.html:119
-msgid "To"
-msgstr "Куда"
-
 #: templates/pages/core/delivery_times.html:32
 msgid "Check"
 msgstr "Проверить"
@@ -2637,7 +2836,7 @@ msgid "Max days"
 msgstr "Макс. дней"
 
 #: templates/pages/core/delivery_times.html:47
-#: templates/pages/orders/create.html:271
+#: templates/pages/orders/create.html:406
 msgid "Service type"
 msgstr "Тип услуги"
 
@@ -2830,177 +3029,177 @@ msgstr "Оставить заявку"
 msgid "Track your cargo"
 msgstr "Отследить груз"
 
-#: templates/pages/core/home.html:49 templates/pages/core/track.html:24
+#: templates/pages/core/home.html:50 templates/pages/core/track.html:24
 #: templates/pages/orders/tracking_lookup.html:30
 #: templates/pages/users/orders.html:26 templates/pages/users/orders.html:82
 #: templates/partials/_profile_nav.html:23
 msgid "Track"
 msgstr "Отследить"
 
-#: templates/pages/core/home.html:59
+#: templates/pages/core/home.html:60
 msgid "Quick estimate"
 msgstr "Быстрый расчет"
 
-#: templates/pages/core/home.html:76
+#: templates/pages/core/home.html:77
 msgid "Weight, kg"
 msgstr "Вес, кг"
 
-#: templates/pages/core/home.html:78
+#: templates/pages/core/home.html:79
 msgid "Go"
 msgstr "Рассчитать"
 
-#: templates/pages/core/home.html:117
+#: templates/pages/core/home.html:118
 msgid "Years in business"
 msgstr "Лет на рынке"
 
-#: templates/pages/core/home.html:121
+#: templates/pages/core/home.html:122
 msgid "Cities served"
 msgstr "Городов охвата"
 
-#: templates/pages/core/home.html:125
+#: templates/pages/core/home.html:126
 msgid "Shipments delivered"
 msgstr "Отправлений доставлено"
 
-#: templates/pages/core/home.html:129
+#: templates/pages/core/home.html:130
 msgid "Happy clients"
 msgstr "Довольных клиентов"
 
-#: templates/pages/core/home.html:138
+#: templates/pages/core/home.html:139
 #: templates/pages/services/category_list.html:28
 msgid "Our Services"
 msgstr "Наши услуги"
 
-#: templates/pages/core/home.html:139
+#: templates/pages/core/home.html:140
 msgid "Comprehensive logistics solutions for any cargo"
 msgstr "Комплексные логистические решения для любого груза"
 
-#: templates/pages/core/home.html:146
+#: templates/pages/core/home.html:147
 msgid "Cargo Transportation"
 msgstr "Грузоперевозки"
 
-#: templates/pages/core/home.html:147
+#: templates/pages/core/home.html:148
 msgid "Full range of road, rail, air, and sea freight services"
 msgstr ""
 "Полный спектр услуг автомобильных, железнодорожных, авиационных и морских "
 "перевозок"
 
-#: templates/pages/core/home.html:153
+#: templates/pages/core/home.html:154
 msgid "Marketplaces Delivery"
 msgstr "Доставка на маркетплейсы"
 
-#: templates/pages/core/home.html:154
+#: templates/pages/core/home.html:155
 msgid "Delivery to Wildberries, Ozon, Yandex Market and more"
 msgstr "Доставка на Wildberries, Ozon, Yandex Market и другие площадки"
 
-#: templates/pages/core/home.html:160
+#: templates/pages/core/home.html:161
 msgid "Pallet Transportation"
 msgstr "Паллетные перевозки"
 
-#: templates/pages/core/home.html:161
+#: templates/pages/core/home.html:162
 msgid "Palletized cargo shipping with loading equipment"
 msgstr "Паллетные грузоперевозки с погрузочной техникой"
 
-#: templates/pages/core/home.html:167
+#: templates/pages/core/home.html:168
 msgid "Consolidated Cargo"
 msgstr "Сборные грузы"
 
-#: templates/pages/core/home.html:168
+#: templates/pages/core/home.html:169
 msgid "Cost-effective groupage shipping solutions"
 msgstr "Экономичные решения для сборных отправлений"
 
-#: templates/pages/core/home.html:174
+#: templates/pages/core/home.html:175
 msgid "Air Cargo"
 msgstr "Авиаперевозки"
 
-#: templates/pages/core/home.html:175
+#: templates/pages/core/home.html:176
 msgid "Express air freight to any destination"
 msgstr "Экспресс-авиаперевозки в любую точку"
 
-#: templates/pages/core/home.html:181
+#: templates/pages/core/home.html:182
 msgid "Container Shipping"
 msgstr "Контейнерные перевозки"
 
-#: templates/pages/core/home.html:182
+#: templates/pages/core/home.html:183
 msgid "20ft and 40ft container transportation"
 msgstr "Перевозки контейнерами 20 и 40 футов"
 
-#: templates/pages/core/home.html:189
+#: templates/pages/core/home.html:190
 msgid "Full truck load with dedicated transport"
 msgstr "Полная загрузка автомобиля с выделенным транспортом"
 
-#: templates/pages/core/home.html:195
+#: templates/pages/core/home.html:196
 msgid "Parcel Tariff"
 msgstr "Тариф «Посылка»"
 
-#: templates/pages/core/home.html:196
+#: templates/pages/core/home.html:197
 msgid "Affordable small parcel shipping"
 msgstr "Доступные перевозки мелких посылок"
 
-#: templates/pages/core/home.html:202
+#: templates/pages/core/home.html:203
 #: templates/pages/services/additionalservice_list.html:2
 #: templates/pages/services/additionalservice_list.html:13
 #: templates/pages/services/additionalservice_list.html:16
 msgid "Additional Services"
 msgstr "Дополнительные услуги"
 
-#: templates/pages/core/home.html:203
+#: templates/pages/core/home.html:204
 msgid "Insurance, packaging, loading, and more"
 msgstr "Страхование, упаковка, погрузка и многое другое"
 
-#: templates/pages/core/home.html:208
+#: templates/pages/core/home.html:209
 msgid "View all services"
 msgstr "Все услуги"
 
-#: templates/pages/core/home.html:219
+#: templates/pages/core/home.html:220
 msgid "Our Geography"
 msgstr "Наша география"
 
-#: templates/pages/core/home.html:220
+#: templates/pages/core/home.html:221
 msgid "200+ cities across Russia and CIS countries"
 msgstr "200+ городов по России и странам СНГ"
 
-#: templates/pages/core/home.html:232
+#: templates/pages/core/home.html:233
 msgid "What Our Clients Say"
 msgstr "Что говорят наши клиенты"
 
-#: templates/pages/core/home.html:233
+#: templates/pages/core/home.html:234
 msgid "Trusted by thousands of businesses and individuals"
 msgstr "Нам доверяют тысячи компаний и частных лиц"
 
-#: templates/pages/core/home.html:263
+#: templates/pages/core/home.html:264
 msgid "No reviews yet"
 msgstr "Отзывов пока нет"
 
-#: templates/pages/core/home.html:285
+#: templates/pages/core/home.html:286
 msgid "All reviews"
 msgstr "Все отзывы"
 
-#: templates/pages/core/home.html:297
+#: templates/pages/core/home.html:298
 msgid "Latest News"
 msgstr "Последние новости"
 
-#: templates/pages/core/home.html:298
+#: templates/pages/core/home.html:299
 msgid "Stay updated with Baikal-Service"
 msgstr "Будьте в курсе новостей Baikal-Service"
 
-#: templates/pages/core/home.html:301 templates/pages/core/home.html:339
+#: templates/pages/core/home.html:302 templates/pages/core/home.html:340
 msgid "All news"
 msgstr "Все новости"
 
-#: templates/pages/core/home.html:324 templates/pages/core/news_list.html:45
+#: templates/pages/core/home.html:325 templates/pages/core/news_list.html:45
 msgid "Read more"
 msgstr "Подробнее"
 
-#: templates/pages/core/home.html:332 templates/pages/core/news_list.html:79
+#: templates/pages/core/home.html:333 templates/pages/core/news_list.html:79
 msgid "No news yet"
 msgstr "Новостей пока нет"
 
-#: templates/pages/core/home.html:355 templates/pages/partners/apply.html:2
+#: templates/pages/core/home.html:356 templates/pages/partners/apply.html:2
 #: templates/pages/partners/overview.html:57
 msgid "Become a Partner"
 msgstr "Стать партнёром"
 
-#: templates/pages/core/home.html:356
+#: templates/pages/core/home.html:357
 msgid ""
 "Join our partner network and earn with Baikal-Service. Special conditions "
 "for agents and integrators."
@@ -3008,16 +3207,16 @@ msgstr ""
 "Присоединяйтесь к нашей партнёрской сети и зарабатывайте с Baikal-Service. "
 "Специальные условия для агентов и интеграторов."
 
-#: templates/pages/core/home.html:358
+#: templates/pages/core/home.html:359
 msgid "Apply now"
 msgstr "Подать заявку"
 
-#: templates/pages/core/home.html:369 templates/pages/core/mobile_app.html:2
+#: templates/pages/core/home.html:370 templates/pages/core/mobile_app.html:2
 #: templates/pages/core/mobile_app.html:10
 msgid "Mobile App"
 msgstr "Мобильное приложение"
 
-#: templates/pages/core/home.html:371
+#: templates/pages/core/home.html:372
 msgid ""
 "Track shipments, calculate costs, and manage deliveries from your phone. "
 "Available on iOS and Android."
@@ -3025,11 +3224,11 @@ msgstr ""
 "Отслеживайте отправления, рассчитывайте стоимость и управляйте доставкой со "
 "смартфона. Доступно на iOS и Android."
 
-#: templates/pages/core/home.html:375
+#: templates/pages/core/home.html:376
 msgid "App Store"
 msgstr "App Store"
 
-#: templates/pages/core/home.html:379
+#: templates/pages/core/home.html:380
 msgid "Google Play"
 msgstr "Google Play"
 
@@ -3264,7 +3463,8 @@ msgstr ""
 
 #: templates/pages/core/privacy_policy.html:24
 msgid "Location data: city and region based on IP address (approximate)"
-msgstr "Данные о местоположении: город и регион на основе IP-адреса (приблизительно)"
+msgstr ""
+"Данные о местоположении: город и регион на основе IP-адреса (приблизительно)"
 
 #: templates/pages/core/privacy_policy.html:25
 msgid ""
@@ -3365,7 +3565,9 @@ msgstr "SSL/TLS шифрование для всех передач данных
 #: templates/pages/core/privacy_policy.html:55
 msgid ""
 "Encrypted storage of passwords using industry-standard hashing algorithms"
-msgstr "Зашифрованное хранение паролей с использованием отраслевых стандартов хеширования"
+msgstr ""
+"Зашифрованное хранение паролей с использованием отраслевых стандартов "
+"хеширования"
 
 #: templates/pages/core/privacy_policy.html:56
 msgid "Regular security audits and vulnerability assessments"
@@ -3399,7 +3601,9 @@ msgstr "6. Передача данных третьим лицам"
 msgid ""
 "We may share your personal data with the following categories of third "
 "parties:"
-msgstr "Мы можем передавать ваши персональные данные следующим категориям третьих лиц:"
+msgstr ""
+"Мы можем передавать ваши персональные данные следующим категориям третьих "
+"лиц:"
 
 #: templates/pages/core/privacy_policy.html:65
 msgid "Payment processors for secure payment handling"
@@ -3464,7 +3668,9 @@ msgstr "Файлы cookie предпочтений: запоминают ваш�
 
 #: templates/pages/core/privacy_policy.html:79
 msgid "Marketing cookies: used for targeted advertising (with your consent)"
-msgstr "Маркетинговые файлы cookie: используются для таргетированной рекламы (с вашего согласия)"
+msgstr ""
+"Маркетинговые файлы cookie: используются для таргетированной рекламы (с "
+"вашего согласия)"
 
 #: templates/pages/core/privacy_policy.html:81
 msgid ""
@@ -3480,15 +3686,19 @@ msgstr "8. Ваши права"
 
 #: templates/pages/core/privacy_policy.html:84
 msgid "Under applicable data protection laws, you have the following rights:"
-msgstr "В соответствии с применимыми законами о защите данных, вы имеете следующие права:"
+msgstr ""
+"В соответствии с применимыми законами о защите данных, вы имеете следующие "
+"права:"
 
 #: templates/pages/core/privacy_policy.html:86
 msgid "Right to access: request a copy of the personal data we hold about you"
-msgstr "Право на доступ: запросить копию персональных данных, которые мы храним о вас"
+msgstr ""
+"Право на доступ: запросить копию персональных данных, которые мы храним о вас"
 
 #: templates/pages/core/privacy_policy.html:87
 msgid "Right to rectification: request correction of inaccurate personal data"
-msgstr "Право на исправление: запросить исправление неточных персональных данных"
+msgstr ""
+"Право на исправление: запросить исправление неточных персональных данных"
 
 #: templates/pages/core/privacy_policy.html:88
 msgid "Right to erasure: request deletion of your personal data"
@@ -3508,7 +3718,8 @@ msgstr ""
 
 #: templates/pages/core/privacy_policy.html:91
 msgid "Right to object: object to the processing of your personal data"
-msgstr "Право на возражение: возражать против обработки ваших персональных данных"
+msgstr ""
+"Право на возражение: возражать против обработки ваших персональных данных"
 
 #: templates/pages/core/privacy_policy.html:92
 msgid "Right to withdraw consent: withdraw your consent at any time"
@@ -3523,7 +3734,9 @@ msgstr ""
 "данных"
 
 #: templates/pages/core/privacy_policy.html:96
-msgid "9. Children's Privacy"
+#, fuzzy
+#| msgid "9. Children's Privacy"
+msgid "9. Children\\"
 msgstr "9. Конфиденциальность детей"
 
 #: templates/pages/core/privacy_policy.html:97
@@ -3534,9 +3747,9 @@ msgid ""
 "take steps to delete that information promptly."
 msgstr ""
 "Наши услуги не предназначены для лиц младше 18 лет. Мы сознательно не "
-"собираем персональные данные детей. Если нам станет известно, что мы "
-"собрали персональные данные ребенка без согласия родителей, мы примем меры "
-"для немедленного удаления такой информации."
+"собираем персональные данные детей. Если нам станет известно, что мы собрали "
+"персональные данные ребенка без согласия родителей, мы примем меры для "
+"немедленного удаления такой информации."
 
 #: templates/pages/core/privacy_policy.html:99
 msgid "10. Changes to This Policy"
@@ -3643,7 +3856,7 @@ msgstr "Отзывов пока нет."
 msgid "Previous"
 msgstr "Назад"
 
-#: templates/pages/core/reviews.html:57 templates/pages/orders/create.html:409
+#: templates/pages/core/reviews.html:57 templates/pages/orders/create.html:575
 msgid "Next"
 msgstr "Далее"
 
@@ -4015,8 +4228,8 @@ msgstr ""
 
 #: templates/pages/core/terms_of_use.html:56
 #: templates/pages/core/terms_of_use.html:60
-msgid "The Operator's liability for cargo loss or damage is limited"
-msgstr "Ответственность Оператора за утрату или повреждение груза ограничена"
+msgid "The Operator\\"
+msgstr ""
 
 #: templates/pages/core/terms_of_use.html:57
 msgid ""
@@ -4028,8 +4241,7 @@ msgstr ""
 #: templates/pages/core/terms_of_use.html:58
 msgid ""
 "The Operator is not liable for indirect, consequential, or incidental damages"
-msgstr ""
-"Оператор не несёт ответственности за косвенные, случайные убытки"
+msgstr "Оператор не несёт ответственности за косвенные, случайные убытки"
 
 #: templates/pages/core/terms_of_use.html:59
 msgid "Optional cargo insurance may be purchased for enhanced coverage"
@@ -4255,9 +4467,9 @@ msgid ""
 "route, timeframe, and conditions specified in the order, subject to "
 "compliance with these Transport Terms."
 msgstr ""
-"Перевозчик обязуется перевезти груз в соответствии с установленным маршрутом, "
-"сроком и условиями, указанными в заказе, при условии соблюдения настоящих "
-"Условий перевозки."
+"Перевозчик обязуется перевезти груз в соответствии с установленным "
+"маршрутом, сроком и условиями, указанными в заказе, при условии соблюдения "
+"настоящих Условий перевозки."
 
 #: templates/pages/core/transport_terms.html:15
 msgid "2. Cargo Acceptance Requirements"
@@ -4266,8 +4478,7 @@ msgstr "2. Требования к приему груза"
 #: templates/pages/core/transport_terms.html:16
 msgid ""
 "Cargo is accepted for transportation subject to the following conditions:"
-msgstr ""
-"Груз принимается к перевозке при соблюдении следующих условий:"
+msgstr "Груз принимается к перевозке при соблюдении следующих условий:"
 
 #: templates/pages/core/transport_terms.html:18
 msgid "Cargo must be properly packaged to ensure safe transportation"
@@ -4279,16 +4490,19 @@ msgstr ""
 "Каждое место должно быть маркировано информацией об отправителе и получателе"
 
 #: templates/pages/core/transport_terms.html:20
-msgid "The declared value must accurately reflect the cargo's actual value"
-msgstr "Объявленная стоимость должна точно отражать фактическую стоимость груза"
+#, fuzzy
+#| msgid "The declared value must accurately reflect the cargo's actual value"
+msgid "The declared value must accurately reflect the cargo\\"
+msgstr ""
+"Объявленная стоимость должна точно отражать фактическую стоимость груза"
 
 #: templates/pages/core/transport_terms.html:21
 msgid ""
 "Dangerous goods must be declared and properly labeled according to "
 "applicable regulations"
 msgstr ""
-"Опасные грузы должны быть задекларированы и надлежащим образом промаркированы "
-"в соответствии с действующими правилами"
+"Опасные грузы должны быть задекларированы и надлежащим образом "
+"промаркированы в соответствии с действующими правилами"
 
 #: templates/pages/core/transport_terms.html:22
 msgid "The weight and dimensions must be accurately reported"
@@ -4296,7 +4510,8 @@ msgstr "Вес и габариты должны быть указаны точн
 
 #: templates/pages/core/transport_terms.html:23
 msgid "All necessary customs and shipping documentation must be provided"
-msgstr "Должны быть предоставлены все необходимые таможенные и отгрузочные документы"
+msgstr ""
+"Должны быть предоставлены все необходимые таможенные и отгрузочные документы"
 
 #: templates/pages/core/transport_terms.html:26
 msgid "3. Packaging Requirements"
@@ -4373,9 +4588,13 @@ msgstr ""
 "стенками и по возможности уложены на паллеты"
 
 #: templates/pages/core/transport_terms.html:38
+#, fuzzy
+#| msgid ""
+#| "The Carrier reserves the right to refuse transportation of improperly "
+#| "packaged cargo or to require repackaging at the sender's expense"
 msgid ""
 "The Carrier reserves the right to refuse transportation of improperly "
-"packaged cargo or to require repackaging at the sender's expense"
+"packaged cargo or to require repackaging at the sender\\"
 msgstr ""
 "Перевозчик оставляет за собой право отказать в перевозке неправильно "
 "упакованного груза или потребовать переупаковку за счет отправителя"
@@ -4462,10 +4681,15 @@ msgstr ""
 "стоимости"
 
 #: templates/pages/core/transport_terms.html:58
+#, fuzzy
+#| msgid ""
+#| "Insurance must be selected at the time of order placement. Insurance "
+#| "cannot be added after cargo has been dispatched. The declared value used "
+#| "for insurance must accurately reflect the cargo's actual value."
 msgid ""
 "Insurance must be selected at the time of order placement. Insurance cannot "
 "be added after cargo has been dispatched. The declared value used for "
-"insurance must accurately reflect the cargo's actual value."
+"insurance must accurately reflect the cargo\\"
 msgstr ""
 "Страхование должно быть выбрано при оформлении заказа. Страхование не может "
 "быть добавлено после отправки груза. Объявленная стоимость, используемая для "
@@ -4541,8 +4765,7 @@ msgstr "7. Запрещенные предметы"
 msgid ""
 "The following items are strictly prohibited from transportation through our "
 "services:"
-msgstr ""
-"Следующие предметы строго запрещены к перевозке через наши сервисы:"
+msgstr "Следующие предметы строго запрещены к перевозке через наши сервисы:"
 
 #: templates/pages/core/transport_terms.html:74
 msgid ""
@@ -4573,8 +4796,8 @@ msgid ""
 "Perishable food products requiring temperature-controlled transportation "
 "(unless arranged separately)"
 msgstr ""
-"Скоропортящиеся пищевые продукты, требующие перевозки с контролем температуры "
-"(если не оговорено отдельно)"
+"Скоропортящиеся пищевые продукты, требующие перевозки с контролем "
+"температуры (если не оговорено отдельно)"
 
 #: templates/pages/core/transport_terms.html:80
 msgid "Live animals and plants"
@@ -4582,7 +4805,9 @@ msgstr "Живые животные и растения"
 
 #: templates/pages/core/transport_terms.html:81
 msgid "Counterfeit goods and items infringing intellectual property rights"
-msgstr "Контрафактные товары и предметы, нарушающие права интеллектуальной собственности"
+msgstr ""
+"Контрафактные товары и предметы, нарушающие права интеллектуальной "
+"собственности"
 
 #: templates/pages/core/transport_terms.html:82
 msgid "Hazardous waste and environmentally harmful substances"
@@ -4620,15 +4845,16 @@ msgstr ""
 
 #: templates/pages/core/transport_terms.html:90
 msgid "Free storage: Up to 3 business days from arrival at destination"
-msgstr "Бесплатное хранение: до 3 рабочих дней с момента прибытия в пункт назначения"
+msgstr ""
+"Бесплатное хранение: до 3 рабочих дней с момента прибытия в пункт назначения"
 
 #: templates/pages/core/transport_terms.html:91
 msgid ""
 "Extended storage: Available at a daily rate specified in the current tariff "
 "schedule"
 msgstr ""
-"Продленное хранение: доступно по дневной ставке, указанной в текущем тарифном "
-"расписании"
+"Продленное хранение: доступно по дневной ставке, указанной в текущем "
+"тарифном расписании"
 
 #: templates/pages/core/transport_terms.html:92
 msgid ""
@@ -4659,8 +4885,8 @@ msgid ""
 "Ensuring all provided information (sender, recipient, cargo details) is "
 "accurate and complete"
 msgstr ""
-"Обеспечение точности и полноты всей предоставленной информации (об отправителе, "
-"получателе, грузе)"
+"Обеспечение точности и полноты всей предоставленной информации (об "
+"отправителе, получателе, грузе)"
 
 #: templates/pages/core/transport_terms.html:100
 msgid "Packaging cargo in accordance with these Transport Terms"
@@ -4676,7 +4902,9 @@ msgstr ""
 
 #: templates/pages/core/transport_terms.html:102
 msgid "Providing necessary customs documentation for international shipments"
-msgstr "Предоставление необходимых таможенных документов для международных отправлений"
+msgstr ""
+"Предоставление необходимых таможенных документов для международных "
+"отправлений"
 
 #: templates/pages/core/transport_terms.html:103
 msgid "Paying all applicable transportation fees and charges"
@@ -4685,8 +4913,7 @@ msgstr "Оплату всех применимых сборов и платеж�
 #: templates/pages/core/transport_terms.html:104
 msgid ""
 "Inspecting cargo upon delivery and noting any damage on the delivery receipt"
-msgstr ""
-"Осмотр груза при доставке и отметку любых повреждений в накладной"
+msgstr "Осмотр груза при доставке и отметку любых повреждений в накладной"
 
 #: templates/pages/core/transport_terms.html:105
 msgid ""
@@ -4750,8 +4977,8 @@ msgid ""
 msgstr ""
 "Настоящие Условия перевозки регулируются законодательством Российской "
 "Федерации и применимыми международными транспортными конвенциями и "
-"соглашениями. Любые споры разрешаются в соответствии с применимыми "
-"правовыми процедурами."
+"соглашениями. Любые споры разрешаются в соответствии с применимыми правовыми "
+"процедурами."
 
 #: templates/pages/core/transport_terms.html:123
 msgid ""
@@ -4985,7 +5212,7 @@ msgstr "Это действие нельзя отменить."
 #: templates/pages/dashboard/faq_confirm_delete.html:13
 #: templates/pages/dashboard/news_confirm_delete.html:13
 #: templates/pages/dashboard/order_confirm_delete.html:23
-#: templates/pages/dashboard/order_detail.html:16
+#: templates/pages/dashboard/order_detail.html:19
 #: templates/pages/dashboard/partner_application_confirm_delete.html:13
 #: templates/pages/dashboard/partners.html:58
 #: templates/pages/dashboard/partners.html:132
@@ -5002,6 +5229,7 @@ msgstr "Это действие нельзя отменить."
 #: templates/pages/users/templates.html:169
 #: templates/pages/users/templates.html:229
 #: templates/pages/users/templates.html:298
+#: venv/lib/python3.14/site-packages/django/forms/formsets.py:499
 msgid "Delete"
 msgstr "Удалить"
 
@@ -5033,7 +5261,9 @@ msgstr "Удалить"
 #: templates/pages/dashboard/user_form.html:86
 #: templates/pages/dashboard/vacancy_confirm_delete.html:14
 #: templates/pages/dashboard/vacancy_form.html:18
-#: templates/pages/users/template_edit.html:90
+#: templates/pages/orders/request_changes.html:52
+#: templates/pages/users/settings.html:204
+#: templates/pages/users/template_edit.html:104
 #: templates/pages/users/templates.html:400
 #: templates/pages/users/templates.html:457
 #: templates/pages/users/templates.html:515
@@ -5064,26 +5294,34 @@ msgstr "Редактировать баннер"
 #: templates/pages/dashboard/tariff_form.html:17
 #: templates/pages/dashboard/tender_form.html:17
 #: templates/pages/dashboard/vacancy_form.html:17
-#: templates/pages/users/template_edit.html:93
+#: templates/pages/users/template_edit.html:107
 #: templates/pages/users/templates.html:518
 #: templates/pages/users/templates.html:582
 msgid "Save"
 msgstr "Сохранить"
 
-#: templates/pages/dashboard/base_dashboard.html:86
+#: templates/pages/dashboard/base_dashboard.html:92
 msgid "Management"
 msgstr "Управление"
 
-#: templates/pages/dashboard/base_dashboard.html:109
+#: templates/pages/dashboard/base_dashboard.html:127
+#: templates/pages/dashboard/directory_permissions.html:2
+#: templates/pages/dashboard/directory_permissions.html:3
+#, fuzzy
+#| msgid "Permissions"
+msgid "Directory Permissions"
+msgstr "Права"
+
+#: templates/pages/dashboard/base_dashboard.html:131
 msgid "Communication"
 msgstr "Коммуникация"
 
-#: templates/pages/dashboard/base_dashboard.html:117
+#: templates/pages/dashboard/base_dashboard.html:139
 #: templates/partials/_profile_nav.html:35
 msgid "Settings"
 msgstr "Настройки"
 
-#: templates/pages/dashboard/base_dashboard.html:176
+#: templates/pages/dashboard/base_dashboard.html:198
 msgid "View Site"
 msgstr "Перейти на сайт"
 
@@ -5173,7 +5411,7 @@ msgstr "Неактивно"
 #: templates/pages/dashboard/content.html:343
 #: templates/pages/dashboard/content.html:410
 #: templates/pages/dashboard/documents.html:67
-#: templates/pages/dashboard/order_detail.html:13
+#: templates/pages/dashboard/order_detail.html:16
 #: templates/pages/dashboard/partners.html:129
 #: templates/pages/dashboard/services.html:56
 #: templates/pages/dashboard/services.html:122
@@ -5261,7 +5499,8 @@ msgstr "Управление контентом"
 
 #: templates/pages/dashboard/content.html:6
 msgid "Manage content pages, news, vacancies, FAQ, and reviews"
-msgstr "Управляйте страницами контента, новостями, вакансиями, вопросами и отзывами"
+msgstr ""
+"Управляйте страницами контента, новостями, вакансиями, вопросами и отзывами"
 
 #: templates/pages/dashboard/content.html:14
 msgid "Content Pages"
@@ -5277,18 +5516,20 @@ msgid "Add"
 msgstr "Добавить"
 
 #: templates/pages/dashboard/content.html:33
-#: templates/pages/dashboard/order_detail.html:51
+#: templates/pages/dashboard/order_detail.html:124
 #: templates/pages/users/ticket_detail.html:27
 msgid "Updated"
 msgstr "Обновлён"
 
 #: templates/pages/dashboard/content.html:48
 #: templates/pages/dashboard/content.html:331
+#: venv/lib/python3.14/site-packages/django/forms/widgets.py:870
 msgid "Yes"
 msgstr "Да"
 
 #: templates/pages/dashboard/content.html:53
 #: templates/pages/dashboard/content.html:336
+#: venv/lib/python3.14/site-packages/django/forms/widgets.py:871
 msgid "No"
 msgstr "Нет"
 
@@ -5334,6 +5575,42 @@ msgstr "Создать страницу контента"
 #: templates/pages/dashboard/content_page_form.html:3
 msgid "Edit Content Page"
 msgstr "Редактировать страницу контента"
+
+#: templates/pages/dashboard/directory_permissions.html:6
+msgid "Grant or deny managers access to specific directories in the system"
+msgstr ""
+
+#: templates/pages/dashboard/directory_permissions.html:13
+#, fuzzy
+#| msgid "Manager"
+msgid "Select Manager"
+msgstr "Менеджер"
+
+#: templates/pages/dashboard/directory_permissions.html:15
+msgid "Choose a manager..."
+msgstr ""
+
+#: templates/pages/dashboard/directory_permissions.html:22
+msgid "Load"
+msgstr ""
+
+#: templates/pages/dashboard/directory_permissions.html:53
+msgid "Access granted"
+msgstr ""
+
+#: templates/pages/dashboard/directory_permissions.html:53
+msgid "Access granted (default)"
+msgstr ""
+
+#: templates/pages/dashboard/directory_permissions.html:55
+msgid "Access denied"
+msgstr ""
+
+#: templates/pages/dashboard/directory_permissions.html:71
+#, fuzzy
+#| msgid "Permissions"
+msgid "Save Permissions"
+msgstr "Права"
 
 #: templates/pages/dashboard/documents.html:2
 #: templates/pages/dashboard/documents.html:3
@@ -5526,21 +5803,39 @@ msgstr ""
 msgid "Order Details"
 msgstr "Детали заказа"
 
-#: templates/pages/dashboard/order_detail.html:9
+#: templates/pages/dashboard/order_detail.html:12
 msgid "Order details and status history"
 msgstr "Детали заказа и история статусов"
 
-#: templates/pages/dashboard/order_detail.html:19
+#: templates/pages/dashboard/order_detail.html:22
 #: templates/pages/dashboard/order_form.html:12
 #: templates/pages/dashboard/user_form.html:12
 msgid "Back to List"
 msgstr "Назад к списку"
 
-#: templates/pages/dashboard/order_detail.html:27
+#: templates/pages/dashboard/order_detail.html:38
+#, fuzzy
+#| msgid "Communication"
+msgid "Simulation"
+msgstr "Коммуникация"
+
+#: templates/pages/dashboard/order_detail.html:55
+msgid "Stop Simulation"
+msgstr ""
+
+#: templates/pages/dashboard/order_detail.html:55
+msgid "Fast Simulation"
+msgstr ""
+
+#: templates/pages/dashboard/order_detail.html:60
+msgid "Advance One Step"
+msgstr ""
+
+#: templates/pages/dashboard/order_detail.html:99
 msgid "Order Information"
 msgstr "Информация о заказе"
 
-#: templates/pages/dashboard/order_detail.html:47
+#: templates/pages/dashboard/order_detail.html:120
 #: templates/pages/dashboard/tickets.html:59
 #: templates/pages/users/templates.html:156
 #: templates/pages/users/templates.html:216
@@ -5550,39 +5845,30 @@ msgstr "Информация о заказе"
 msgid "Created"
 msgstr "Создан"
 
-#: templates/pages/dashboard/order_detail.html:71
+#: templates/pages/dashboard/order_detail.html:144
 msgid "Sender & Recipient"
 msgstr "Отправитель и получатель"
 
-#: templates/pages/dashboard/order_detail.html:94
+#: templates/pages/dashboard/order_detail.html:167
 msgid "Cargo Information"
 msgstr "Информация о грузе"
 
-#: templates/pages/dashboard/order_detail.html:101
-#: templates/pages/dashboard/orders.html:29
-#: templates/pages/orders/create.html:379 templates/pages/orders/track.html:91
-#: templates/pages/users/order_detail.html:69
-#: templates/partials/_calculator_results.html:22
-#: templates/partials/_tracking_results.html:51
-msgid "Weight"
-msgstr "Вес, кг"
-
-#: templates/pages/dashboard/order_detail.html:106
-#: templates/pages/orders/create.html:380
+#: templates/pages/dashboard/order_detail.html:179
+#: templates/pages/orders/create.html:532
 #: templates/pages/users/order_detail.html:70
 msgid "Dimensions"
 msgstr "Габариты"
 
-#: templates/pages/dashboard/order_detail.html:133
+#: templates/pages/dashboard/order_detail.html:206
 #: templates/pages/users/order_detail.html:80
 msgid "Status History"
 msgstr "История статусов"
 
-#: templates/pages/dashboard/order_detail.html:152
+#: templates/pages/dashboard/order_detail.html:225
 msgid "by"
 msgstr "от"
 
-#: templates/pages/dashboard/order_detail.html:162
+#: templates/pages/dashboard/order_detail.html:235
 #: templates/pages/users/order_detail.html:98
 msgid "No status history yet."
 msgstr "Истории статусов пока нет."
@@ -5771,7 +6057,8 @@ msgstr "Настройки сайта"
 
 #: templates/pages/dashboard/settings.html:6
 msgid "Configure general site settings, contact info, and social links"
-msgstr "Настройте общие параметры сайта, контактную информацию и социальные ссылки"
+msgstr ""
+"Настройте общие параметры сайта, контактную информацию и социальные ссылки"
 
 #: templates/pages/dashboard/settings.html:17
 msgid "General"
@@ -6008,78 +6295,195 @@ msgstr "Загрузка карты..."
 msgid "Submit a cargo shipping request"
 msgstr "Оставить заявку на грузоперевозку"
 
-#: templates/pages/orders/create.html:25
+#: templates/pages/orders/create.html:28
 msgid "Create Shipping Order"
 msgstr "Создать заказ на перевозку"
 
-#: templates/pages/orders/create.html:26
+#: templates/pages/orders/create.html:29
 msgid "Fill in the details to create a new cargo shipment order"
 msgstr "Заполните данные для создания нового заказа на перевозку груза"
 
-#: templates/pages/orders/create.html:49
+#: templates/pages/orders/create.html:52
 msgid "Confirm"
 msgstr "Подтвердить"
 
-#: templates/pages/orders/create.html:61
+#: templates/pages/orders/create.html:64
 msgid "Quick fill from delivery template"
 msgstr "Быстрое заполнение из шаблона доставки"
 
-#: templates/pages/orders/create.html:86
+#: templates/pages/orders/create.html:89
+#, fuzzy
+#| msgid "Current balance"
+msgid "Insufficient balance"
+msgstr "Текущий баланс"
+
+#: templates/pages/orders/create.html:90
+msgid ""
+"Your account balance is zero. Please top up your balance to proceed with the "
+"order."
+msgstr ""
+
+#: templates/pages/orders/create.html:93
+#: templates/pages/users/balance_topup.html:4
+#: templates/pages/users/balance_topup.html:10
+msgid "Top up balance"
+msgstr "Пополнить баланс"
+
+#: templates/pages/orders/create.html:104
 msgid "Search city on map..."
 msgstr "Поиск города на карте..."
 
-#: templates/pages/orders/create.html:92
+#: templates/pages/orders/create.html:110
 msgid "No cities found"
 msgstr "Города не найдены"
 
-#: templates/pages/orders/create.html:105
+#: templates/pages/orders/create.html:123
 msgid "Please fix the following errors:"
 msgstr "Пожалуйста, исправьте следующие ошибки:"
 
-#: templates/pages/orders/create.html:120
+#: templates/pages/orders/create.html:138
 msgid "Sender Information"
 msgstr "Информация об отправителе"
 
-#: templates/pages/orders/create.html:123
-#: templates/pages/orders/create.html:172
+#: templates/pages/orders/create.html:141
+#: templates/pages/orders/create.html:202
 msgid "Save as template"
 msgstr "Сохранить как шаблон"
 
-#: templates/pages/orders/create.html:150
-#: templates/pages/orders/create.html:199
+#: templates/pages/orders/create.html:152
+#, fuzzy
+#| msgid "Saved templates"
+msgid "Saved sender templates"
+msgstr "Сохраненные шаблоны"
+
+#: templates/pages/orders/create.html:189
+#: templates/pages/orders/create.html:250
 msgid "Address details"
 msgstr "Детали адреса"
 
-#: templates/pages/orders/create.html:157
-#: templates/pages/orders/create.html:206
-msgid "Saved templates"
-msgstr "Сохраненные шаблоны"
-
-#: templates/pages/orders/create.html:169
+#: templates/pages/orders/create.html:199
 msgid "Recipient Information"
 msgstr "Информация о получателе"
 
-#: templates/pages/orders/create.html:222
+#: templates/pages/orders/create.html:213
+#, fuzzy
+#| msgid "Saved templates"
+msgid "Saved recipient templates"
+msgstr "Сохраненные шаблоны"
+
+#: templates/pages/orders/create.html:264
 msgid "Save as cargo template"
 msgstr "Сохранить как шаблон груза"
 
-#: templates/pages/orders/create.html:267
+#: templates/pages/orders/create.html:276
+#, fuzzy
+#| msgid "Save as cargo template"
+msgid "Saved cargo templates"
+msgstr "Сохранить как шаблон груза"
+
+#: templates/pages/orders/create.html:327
+#: templates/pages/orders/create.html:538
+msgid "Fragile"
+msgstr ""
+
+#: templates/pages/orders/create.html:328
+msgid "Careful handling (Hand Carry)"
+msgstr ""
+
+#: templates/pages/orders/create.html:342
+msgid "ADR transport required"
+msgstr ""
+
+#: templates/pages/orders/create.html:355
+#, fuzzy
+#| msgid "Temperature-controlled zones"
+msgid "Temperature-sensitive"
+msgstr "Зоны с контролем температуры"
+
+#: templates/pages/orders/create.html:356
+#: templates/pages/orders/create.html:1188
+msgid "Refrigerated transport"
+msgstr ""
+
+#: templates/pages/orders/create.html:366
 msgid "Select Services"
 msgstr "Выберите услуги"
 
-#: templates/pages/orders/create.html:319
+#: templates/pages/orders/create.html:373
+msgid "Auto-assigned services based on your cargo"
+msgstr ""
+
+#: templates/pages/orders/create.html:378
+#, fuzzy
+#| msgid "International Routes"
+msgid "International shipment detected"
+msgstr "Международные маршруты"
+
+#: templates/pages/orders/create.html:378
+#, fuzzy
+#| msgid "Customs clearance assistance"
+msgid "Customs duty & clearance"
+msgstr "Помощь в таможенном оформлении"
+
+#: templates/pages/orders/create.html:382
+msgid "Oversize cargo — truck or rail recommended"
+msgstr ""
+
+#: templates/pages/orders/create.html:383
+msgid "Standard size — air transport available"
+msgstr ""
+
+#: templates/pages/orders/create.html:387
+msgid "High-value cargo — extended insurance recommended"
+msgstr ""
+
+#: templates/pages/orders/create.html:391
+msgid "Fragile cargo — Hand Carry service will be added"
+msgstr ""
+
+#: templates/pages/orders/create.html:395
+msgid "Dangerous goods — ADR transport will be added"
+msgstr ""
+
+#: templates/pages/orders/create.html:399
+msgid "Temperature-sensitive — Refrigerated transport will be added"
+msgstr ""
+
+#: templates/pages/orders/create.html:454
 msgid "Confirm Order"
 msgstr "Подтвердить заказ"
 
-#: templates/pages/orders/create.html:345
+#: templates/pages/orders/create.html:480
 msgid "Save as route template"
 msgstr "Сохранить как шаблон маршрута"
 
-#: templates/pages/orders/create.html:368
+#: templates/pages/orders/create.html:503
 msgid "No additional services selected"
 msgstr "Дополнительные услуги не выбраны"
 
-#: templates/pages/orders/create.html:398
+#: templates/pages/orders/create.html:510
+#, fuzzy
+#| msgid "Additional services"
+msgid "Auto-assigned services"
+msgstr "Дополнительные услуги"
+
+#: templates/pages/orders/create.html:512
+msgid ""
+"The following services will be automatically added to your order based on "
+"cargo and route:"
+msgstr ""
+
+#: templates/pages/orders/create.html:542
+msgid "Dangerous"
+msgstr ""
+
+#: templates/pages/orders/create.html:546
+#, fuzzy
+#| msgid "Temperature-controlled zones"
+msgid "Temperature controlled"
+msgstr "Зоны с контролем температуры"
+
+#: templates/pages/orders/create.html:564
 msgid ""
 "I confirm that the provided information is accurate and I agree to the terms "
 "and conditions of cargo transportation"
@@ -6087,77 +6491,156 @@ msgstr ""
 "Я подтверждаю, что предоставленная информация точна, и согласен с условиями "
 "перевозки груза"
 
-#: templates/pages/orders/create.html:405
+#: templates/pages/orders/create.html:571
 msgid "Back"
 msgstr "Назад"
 
-#: templates/pages/orders/create.html:414
+#: templates/pages/orders/create.html:580
 msgid "Submitting..."
 msgstr "Отправка..."
 
-#: templates/pages/orders/create.html:414
+#: templates/pages/orders/create.html:580
 msgid "Submit Order"
 msgstr "Отправить заказ"
 
-#: templates/pages/orders/create.html:643
+#: templates/pages/orders/create.html:817
 msgid "Enter template name:"
 msgstr "Введите название шаблона:"
 
-#: templates/pages/orders/create.html:718
+#: templates/pages/orders/create.html:892
 msgid "Enter delivery template name:"
 msgstr "Введите название шаблона доставки:"
 
-#: templates/pages/orders/create.html:759
+#: templates/pages/orders/create.html:933
 msgid "Enter cargo template name:"
 msgstr "Введите название шаблона груза:"
 
-#: templates/pages/orders/create.html:827
+#: templates/pages/orders/create.html:1004
+msgid "Sender name is required"
+msgstr "Имя отправителя обязательно"
+
+#: templates/pages/orders/create.html:1009
+msgid "Sender phone is required"
+msgstr "Телефон отправителя обязателен"
+
+#: templates/pages/orders/create.html:1014
 msgid "Please select sender city"
 msgstr "Пожалуйста, выберите город отправителя"
 
-#: templates/pages/orders/create.html:844
+#: templates/pages/orders/create.html:1025
+msgid "Recipient name is required"
+msgstr "Имя получателя обязательно"
+
+#: templates/pages/orders/create.html:1030
+msgid "Recipient phone is required"
+msgstr "Телефон получателя обязателен"
+
+#: templates/pages/orders/create.html:1035
 msgid "Please select recipient city"
 msgstr "Пожалуйста, выберите город получателя"
 
-#: templates/pages/orders/create.html:853
+#: templates/pages/orders/create.html:1046
 msgid "Cargo description is required"
 msgstr "Описание груза обязательно"
 
-#: templates/pages/orders/create.html:857
+#: templates/pages/orders/create.html:1051
 msgid "Weight must be greater than 0"
 msgstr "Вес должен быть больше 0"
 
-#: templates/pages/orders/create.html:861
+#: templates/pages/orders/create.html:1056
 msgid "Declared value is required"
 msgstr "Объявленная стоимость обязательна"
 
-#: templates/pages/orders/create.html:866
+#: templates/pages/orders/create.html:1062
 msgid "Please select a service type"
 msgstr "Пожалуйста, выберите тип услуги"
 
-#: templates/pages/orders/create.html:871
+#: templates/pages/orders/create.html:1068
 msgid "You must accept the terms and conditions"
 msgstr "Вы должны принять условия"
 
-#: templates/pages/orders/create.html:877
+#: templates/pages/orders/create.html:1075
 msgid "An unexpected error occurred. Please try again."
 msgstr "Произошла непредвиденная ошибка. Пожалуйста, попробуйте снова."
 
-#: templates/pages/orders/create.html:921
-msgid "Network error. Please try again."
-msgstr "Ошибка сети. Пожалуйста, попробуйте снова."
+#: templates/pages/orders/create.html:1171
+#, fuzzy
+#| msgid "Custom amount"
+msgid "Customs duty"
+msgstr "Произвольная сумма"
+
+#: templates/pages/orders/create.html:1173
+msgid "Email: customs cleared"
+msgstr ""
+
+#: templates/pages/orders/create.html:1176
+msgid "Truck/rail transport"
+msgstr ""
+
+#: templates/pages/orders/create.html:1179
+msgid "Extended insurance"
+msgstr ""
+
+#: templates/pages/orders/create.html:1182
+msgid "Hand Carry (careful handling)"
+msgstr ""
+
+#: templates/pages/orders/create.html:1185
+#, fuzzy
+#| msgid "In transit"
+msgid "ADR transport"
+msgstr "В пути"
 
 #: templates/pages/orders/door_delivery.html:3
 #: templates/pages/orders/door_delivery.html:4
 msgid "Door Delivery"
 msgstr "Доставка до двери"
 
-#: templates/pages/orders/request_changes.html:3
-#: templates/pages/orders/request_changes.html:4
+#: templates/pages/orders/request_changes.html:2
+#: templates/pages/orders/request_changes.html:11
 #: templates/pages/orders/track.html:116
 #: templates/pages/users/order_detail.html:239
 msgid "Request Changes"
 msgstr "Запросить изменения"
+
+#: templates/pages/orders/request_changes.html:8
+#, fuzzy
+#| msgid "Back to tickets"
+msgid "Back to tracking"
+msgstr "Назад к тикетам"
+
+#: templates/pages/orders/request_changes.html:12
+#, python-format
+msgid "Order <strong>%(tracking)s</strong>"
+msgstr ""
+
+#: templates/pages/orders/request_changes.html:26
+#, fuzzy
+#| msgid "Orders Today"
+msgid "Order Summary"
+msgstr "Заказов сегодня"
+
+#: templates/pages/orders/request_changes.html:44
+#, fuzzy
+#| msgid "Describe the cargo..."
+msgid "Describe the changes you need"
+msgstr "Опишите груз..."
+
+#: templates/pages/orders/request_changes.html:48
+msgid "e.g. Please update the delivery address to..."
+msgstr ""
+
+#: templates/pages/orders/request_changes.html:55
+#, fuzzy
+#| msgid "Submit request"
+msgid "Submit Request"
+msgstr "Оставить заявку"
+
+#: templates/pages/orders/request_changes.html:63
+#, fuzzy
+#| msgid "Previous requests"
+msgid "Previous Change Requests"
+msgstr "Предыдущие запросы"
 
 #: templates/pages/orders/track.html:2 templates/pages/orders/track.html:11
 msgid "Track Order"
@@ -6216,7 +6699,8 @@ msgid ""
 "Enter your tracking number to see the current status and location of your "
 "shipment"
 msgstr ""
-"Введите ваш трек-номер, чтобы увидеть текущий статус и местоположение отправки"
+"Введите ваш трек-номер, чтобы увидеть текущий статус и местоположение "
+"отправки"
 
 #: templates/pages/orders/tracking_lookup.html:23
 msgid "Enter tracking number (e.g. BK-XXXXXXXXXX)"
@@ -6672,11 +7156,6 @@ msgstr "Просмотр транзакций"
 msgid "Calculate Shipping"
 msgstr "Рассчитать доставку"
 
-#: templates/pages/users/balance_topup.html:4
-#: templates/pages/users/balance_topup.html:10
-msgid "Top up balance"
-msgstr "Пополнить баланс"
-
 #: templates/pages/users/balance_topup.html:11
 msgid "You will be redirected to the balance page."
 msgstr "Вы будете перенаправлены на страницу баланса."
@@ -6684,6 +7163,48 @@ msgstr "Вы будете перенаправлены на страницу б�
 #: templates/pages/users/balance_topup.html:13
 msgid "Go to Balance"
 msgstr "Перейти к балансу"
+
+#: templates/pages/users/company_apply_success.html:2
+msgid "Application Submitted"
+msgstr ""
+
+#: templates/pages/users/company_apply_success.html:18
+msgid "Application Submitted!"
+msgstr ""
+
+#: templates/pages/users/company_apply_success.html:19
+msgid ""
+"Your company registration request has been sent for review. We will notify "
+"you once it is processed."
+msgstr ""
+
+#: templates/pages/users/company_apply_success.html:25
+msgid "What happens next?"
+msgstr ""
+
+#: templates/pages/users/company_apply_success.html:27
+msgid "Our team reviews your details"
+msgstr ""
+
+#: templates/pages/users/company_apply_success.html:28
+msgid "Approval grants access to corporate rates"
+msgstr ""
+
+#: templates/pages/users/company_apply_success.html:29
+msgid "You will see the updated status in your settings"
+msgstr ""
+
+#: templates/pages/users/company_apply_success.html:37
+#, fuzzy
+#| msgid "Back to List"
+msgid "Back to Settings"
+msgstr "Назад к списку"
+
+#: templates/pages/users/company_apply_success.html:40
+#, fuzzy
+#| msgid "Profile"
+msgid "Go to Profile"
+msgstr "Профиль"
 
 #: templates/pages/users/login.html:21
 msgid "Welcome back"
@@ -6759,8 +7280,7 @@ msgstr "Отметить как забранный"
 #: templates/pages/users/order_detail.html:133
 msgid ""
 "Once the carrier has picked up the cargo, click \"Cargo Picked Up\" below."
-msgstr ""
-"Как только перевозчик заберет груз, нажмите «Груз забран» ниже."
+msgstr "Как только перевозчик заберет груз, нажмите «Груз забран» ниже."
 
 #: templates/pages/users/order_detail.html:139
 #: templates/pages/users/order_detail.html:190
@@ -6771,8 +7291,8 @@ msgstr "Подтвердить доставку"
 msgid ""
 "After the cargo reaches the recipient, confirm delivery to close the order."
 msgstr ""
-"После того как груз достигнет получателя, подтвердите доставку, чтобы закрыть "
-"заказ."
+"После того как груз достигнет получателя, подтвердите доставку, чтобы "
+"закрыть заказ."
 
 #: templates/pages/users/order_detail.html:148
 #: templates/pages/users/order_detail.html:170
@@ -6940,6 +7460,8 @@ msgid "terms and conditions"
 msgstr "условия использования"
 
 #: templates/pages/users/register.html:147
+#: venv/lib/python3.14/site-packages/django/db/models/base.py:1633
+#: venv/lib/python3.14/site-packages/django/forms/models.py:932
 msgid "and"
 msgstr "и"
 
@@ -6968,15 +7490,59 @@ msgid "Max 2 MB. JPG, PNG."
 msgstr "Макс. 2 МБ. JPG, PNG."
 
 #: templates/pages/users/settings.html:108
+#: templates/pages/users/settings.html:184
 msgid "Company details"
 msgstr "Данные компании"
 
-#: templates/pages/users/settings.html:124
+#: templates/pages/users/settings.html:127
+#: templates/pages/users/settings.html:169
+#, fuzzy
+#| msgid "Company details"
+msgid "Company registration"
+msgstr "Данные компании"
+
+#: templates/pages/users/settings.html:128
+msgid "Your company registration is being processed."
+msgstr ""
+
+#: templates/pages/users/settings.html:133
+#, fuzzy
+#| msgid "Pending"
+msgid "Pending review"
+msgstr "В ожидании"
+
+#: templates/pages/users/settings.html:151
+#, fuzzy, python-format
+#| msgid "Submit Order"
+msgid "Submitted %(date)s"
+msgstr "Отправить заказ"
+
+#: templates/pages/users/settings.html:155
+msgid "Admin comment:"
+msgstr ""
+
+#: templates/pages/users/settings.html:170
+msgid "Register as a legal entity to access corporate rates and features."
+msgstr ""
+
+#: templates/pages/users/settings.html:173
+#, fuzzy
+#| msgid "Author company"
+msgid "Register as company"
+msgstr "Компания автора"
+
+#: templates/pages/users/settings.html:207
+#, fuzzy
+#| msgid "Submit request"
+msgid "Submit for review"
+msgstr "Оставить заявку"
+
+#: templates/pages/users/settings.html:216
 msgid "Save profile"
 msgstr "Сохранить профиль"
 
-#: templates/pages/users/settings.html:135
-#: templates/pages/users/settings.html:164
+#: templates/pages/users/settings.html:227
+#: templates/pages/users/settings.html:256
 msgid "Change password"
 msgstr "Изменить пароль"
 
@@ -6997,24 +7563,24 @@ msgstr "Обновите сохраненный шаблон маршрута д
 msgid "e.g. Moscow to SPb regular"
 msgstr "например, Москва-СПб регулярно"
 
-#: templates/pages/users/template_edit.html:49
+#: templates/pages/users/template_edit.html:63
 #: templates/pages/users/templates.html:359
 msgid "Select service"
 msgstr "Выберите услугу"
 
-#: templates/pages/users/template_edit.html:57
+#: templates/pages/users/template_edit.html:71
 #: templates/pages/users/templates.html:367
 #: templates/pages/users/templates.html:430
 #: templates/pages/users/templates.html:488
 msgid "Describe the cargo..."
 msgstr "Опишите груз..."
 
-#: templates/pages/users/template_edit.html:72
+#: templates/pages/users/template_edit.html:86
 #: templates/pages/users/templates.html:382
 msgid "Total price (₽)"
 msgstr "Итоговая цена (₽)"
 
-#: templates/pages/users/template_edit.html:73
+#: templates/pages/users/template_edit.html:87
 #: templates/pages/users/templates.html:383
 msgid "Calculated on save"
 msgstr "Рассчитывается при сохранении"
@@ -7244,3 +7810,1321 @@ msgstr "Посмотреть полные детали отслеживания"
 #: templates/partials/_tracking_results.html:72
 msgid "Enter a tracking number to see your shipment status"
 msgstr "Введите трек-номер, чтобы увидеть статус отправления"
+
+#: venv/lib/python3.14/site-packages/django/contrib/messages/apps.py:16
+#, fuzzy
+#| msgid "Message"
+msgid "Messages"
+msgstr "Сообщение"
+
+#: venv/lib/python3.14/site-packages/django/contrib/sitemaps/apps.py:8
+#, fuzzy
+#| msgid "Site Name"
+msgid "Site Maps"
+msgstr "Название сайта"
+
+#: venv/lib/python3.14/site-packages/django/contrib/staticfiles/apps.py:9
+msgid "Static Files"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/contrib/syndication/apps.py:7
+#, fuzzy
+#| msgid "Send Application"
+msgid "Syndication"
+msgstr "Отправить заявку"
+
+#. Translators: String used to replace omitted page numbers in elided page
+#. range generated by paginators, e.g. [1, 2, '…', 5, 6, 7, '…', 9, 10].
+#: venv/lib/python3.14/site-packages/django/core/paginator.py:33
+msgid "…"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/paginator.py:35
+msgid "That page number is not an integer"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/paginator.py:36
+msgid "That page number is less than 1"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/paginator.py:37
+msgid "That page contains no results"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:22
+msgid "Enter a valid value."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:70
+msgid "Enter a valid domain name."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:153
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:773
+msgid "Enter a valid URL."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:200
+msgid "Enter a valid integer."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:211
+msgid "Enter a valid email address."
+msgstr ""
+
+#. Translators: "letters" means latin letters: a-z and A-Z.
+#: venv/lib/python3.14/site-packages/django/core/validators.py:289
+msgid ""
+"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:297
+msgid ""
+"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:309
+#: venv/lib/python3.14/site-packages/django/core/validators.py:318
+#: venv/lib/python3.14/site-packages/django/core/validators.py:332
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2220
+#, python-format
+msgid "Enter a valid %(protocol)s address."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:311
+msgid "IPv4"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:320
+#: venv/lib/python3.14/site-packages/django/utils/ipv6.py:43
+msgid "IPv6"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:334
+msgid "IPv4 or IPv6"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:375
+msgid "Enter only digits separated by commas."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:381
+#, python-format
+msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:416
+#, python-format
+msgid "Ensure this value is less than or equal to %(limit_value)s."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:425
+#, python-format
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:434
+#, python-format
+msgid "Ensure this value is a multiple of step size %(limit_value)s."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:441
+#, python-format
+msgid ""
+"Ensure this value is a multiple of step size %(limit_value)s, starting from "
+"%(offset)s, e.g. %(offset)s, %(valid_value1)s, %(valid_value2)s, and so on."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:473
+#, python-format
+msgid ""
+"Ensure this value has at least %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at least %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:491
+#, python-format
+msgid ""
+"Ensure this value has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:514
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:364
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:403
+#, fuzzy
+#| msgid "Enter tracking number"
+msgid "Enter a number."
+msgstr "Введите трек-номер"
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:516
+#, python-format
+msgid "Ensure that there are no more than %(max)s digit in total."
+msgid_plural "Ensure that there are no more than %(max)s digits in total."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:521
+#, python-format
+msgid "Ensure that there are no more than %(max)s decimal place."
+msgid_plural "Ensure that there are no more than %(max)s decimal places."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:526
+#, python-format
+msgid ""
+"Ensure that there are no more than %(max)s digit before the decimal point."
+msgid_plural ""
+"Ensure that there are no more than %(max)s digits before the decimal point."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:597
+#, python-format
+msgid ""
+"File extension “%(extension)s” is not allowed. Allowed extensions are: "
+"%(allowed_extensions)s."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:659
+msgid "Null characters are not allowed."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/base.py:1635
+#, python-format
+msgid "%(model_name)s with this %(field_labels)s already exists."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/constraints.py:20
+#, python-format
+msgid "Constraint “%(name)s” is violated."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:134
+#, python-format
+msgid "Value %(value)r is not a valid choice."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:135
+#, fuzzy
+#| msgid "This action cannot be undone."
+msgid "This field cannot be null."
+msgstr "Это действие нельзя отменить."
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:136
+#, fuzzy
+#| msgid "This action cannot be undone."
+msgid "This field cannot be blank."
+msgstr "Это действие нельзя отменить."
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:137
+#, python-format
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr ""
+
+#. Translators: The 'lookup_type' is one of 'date', 'year' or
+#. 'month'. Eg: "Title must be unique for pub_date year"
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:141
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:180
+#, python-format
+msgid "Field of type: %(field_type)s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1161
+#, python-format
+msgid "“%(value)s” value must be either True or False."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1162
+#, python-format
+msgid "“%(value)s” value must be either True, False, or None."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1164
+msgid "Boolean (Either True or False)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1214
+#, python-format
+msgid "String (up to %(max_length)s)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1216
+msgid "String (unlimited)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1325
+msgid "Comma-separated integers"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1426
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
+"format."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1430
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1565
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
+"date."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1434
+msgid "Date (without time)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1561
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD "
+"HH:MM[:ss[.uuuuuu]][TZ] format."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1569
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1574
+msgid "Date (with time)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1701
+#, python-format
+msgid "“%(value)s” value must be a decimal number."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1703
+#, fuzzy
+#| msgid "Tracking number"
+msgid "Decimal number"
+msgstr "Трек-номер"
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1864
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in [DD] "
+"[[HH:]MM:]ss[.uuuuuu] format."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1868
+#, fuzzy
+#| msgid "Direction"
+msgid "Duration"
+msgstr "Направление"
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1920
+#, fuzzy
+#| msgid "Address"
+msgid "Email address"
+msgstr "Адрес"
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1945
+#, fuzzy
+#| msgid "File"
+msgid "File path"
+msgstr "Файл"
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2023
+#, python-format
+msgid "“%(value)s” value must be a float."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2025
+#, fuzzy
+#| msgid "Tracking number"
+msgid "Floating point number"
+msgstr "Трек-номер"
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2065
+#, python-format
+msgid "“%(value)s” value must be an integer."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2067
+#, fuzzy
+#| msgid "Integrator"
+msgid "Integer"
+msgstr "Интегратор"
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2163
+msgid "Big (8 byte) integer"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2180
+msgid "Small integer"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2188
+#, fuzzy
+#| msgid "Address"
+msgid "IPv4 address"
+msgstr "Адрес"
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2219
+#, fuzzy
+#| msgid "Address"
+msgid "IP address"
+msgstr "Адрес"
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2310
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2311
+#, python-format
+msgid "“%(value)s” value must be either None, True or False."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2313
+msgid "Boolean (Either True, False or None)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2364
+msgid "Positive big integer"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2379
+msgid "Positive integer"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2394
+msgid "Positive small integer"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2410
+#, python-format
+msgid "Slug (up to %(max_length)s)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2526
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"format."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2530
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"invalid time."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2534
+#, fuzzy
+#| msgid "Timezone"
+msgid "Time"
+msgstr "Часовой пояс"
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2642
+msgid "URL"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2666
+msgid "Raw binary data"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2731
+#, python-format
+msgid "“%(value)s” is not a valid UUID."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2733
+msgid "Universally unique identifier"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/json.py:24
+#, fuzzy
+#| msgid "Subject"
+msgid "A JSON object"
+msgstr "Тема"
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/json.py:26
+msgid "Value must be valid JSON."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/related.py:974
+#, python-format
+msgid "%(model)s instance with %(field)s %(value)r is not a valid choice."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/related.py:977
+msgid "Foreign Key (type determined by related field)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/related.py:1271
+msgid "One-to-one relationship"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/related.py:1328
+#, python-format
+msgid "%(from)s-%(to)s relationship"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/related.py:1330
+#, python-format
+msgid "%(from)s-%(to)s relationships"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/related.py:1378
+msgid "Many-to-many relationship"
+msgstr ""
+
+#. Translators: If found as last label character, these punctuation
+#. characters will prevent the default label_suffix to be appended to
+#. the label
+#: venv/lib/python3.14/site-packages/django/forms/boundfield.py:188
+msgid ":?.!"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:91
+#, fuzzy
+#| msgid "Template name is required"
+msgid "This field is required."
+msgstr "Название шаблона обязательно"
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:313
+#, fuzzy
+#| msgid "Enter tracking number"
+msgid "Enter a whole number."
+msgstr "Введите трек-номер"
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:484
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:1241
+msgid "Enter a valid date."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:507
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:1242
+#, fuzzy
+#| msgid "Offer valid until"
+msgid "Enter a valid time."
+msgstr "Предложение действительно до"
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:534
+msgid "Enter a valid date/time."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:568
+#, fuzzy
+#| msgid "Offer valid until"
+msgid "Enter a valid duration."
+msgstr "Предложение действительно до"
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:569
+#, python-brace-format
+msgid "The number of days must be between {min_days} and {max_days}."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:638
+msgid "No file was submitted. Check the encoding type on the form."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:639
+msgid "No file was submitted."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:640
+msgid "The submitted file is empty."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:642
+#, python-format
+msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid_plural ""
+"Ensure this filename has at most %(max)d characters (it has %(length)d)."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:647
+msgid "Please either submit a file or check the clear checkbox, not both."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:715
+msgid ""
+"Upload a valid image. The file you uploaded was either not an image or a "
+"corrupted image."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:862
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:949
+#: venv/lib/python3.14/site-packages/django/forms/models.py:1621
+#, python-format
+msgid "Select a valid choice. %(value)s is not one of the available choices."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:951
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:1070
+#: venv/lib/python3.14/site-packages/django/forms/models.py:1619
+msgid "Enter a list of values."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:1071
+#, fuzzy
+#| msgid "Enter cargo template name:"
+msgid "Enter a complete value."
+msgstr "Введите название шаблона груза:"
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:1313
+msgid "Enter a valid UUID."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:1343
+#, fuzzy
+#| msgid "Invalid JSON"
+msgid "Enter a valid JSON."
+msgstr "Неверный JSON"
+
+#. Translators: This is the default suffix added to form field labels
+#: venv/lib/python3.14/site-packages/django/forms/forms.py:97
+msgid ":"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/forms.py:239
+#, python-format
+msgid "(Hidden field %(name)s) %(error)s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/formsets.py:61
+#, python-format
+msgid ""
+"ManagementForm data is missing or has been tampered with. Missing fields: "
+"%(field_names)s. You may need to file a bug report if the issue persists."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/formsets.py:65
+#, python-format
+msgid "Please submit at most %(num)d form."
+msgid_plural "Please submit at most %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: venv/lib/python3.14/site-packages/django/forms/formsets.py:70
+#, python-format
+msgid "Please submit at least %(num)d form."
+msgid_plural "Please submit at least %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: venv/lib/python3.14/site-packages/django/forms/models.py:925
+#, fuzzy, python-format
+#| msgid "Please correct the errors below."
+msgid "Please correct the duplicate data for %(field)s."
+msgstr "Пожалуйста, исправьте ошибки ниже."
+
+#: venv/lib/python3.14/site-packages/django/forms/models.py:930
+#, python-format
+msgid "Please correct the duplicate data for %(field)s, which must be unique."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/models.py:937
+#, python-format
+msgid ""
+"Please correct the duplicate data for %(field_name)s which must be unique "
+"for the %(lookup)s in %(date_field)s."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/models.py:946
+#, fuzzy
+#| msgid "Please correct the errors below."
+msgid "Please correct the duplicate values below."
+msgstr "Пожалуйста, исправьте ошибки ниже."
+
+#: venv/lib/python3.14/site-packages/django/forms/models.py:1383
+msgid "The inline value did not match the parent instance."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/models.py:1474
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/models.py:1623
+#, python-format
+msgid "“%(pk)s” is not a valid value."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/utils.py:229
+#, python-format
+msgid ""
+"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
+"may be ambiguous or it may not exist."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/widgets.py:528
+msgid "Clear"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/widgets.py:529
+#, fuzzy
+#| msgid "Current balance"
+msgid "Currently"
+msgstr "Текущий баланс"
+
+#: venv/lib/python3.14/site-packages/django/forms/widgets.py:530
+#, fuzzy
+#| msgid "Changed by"
+msgid "Change"
+msgstr "Кто изменил"
+
+#: venv/lib/python3.14/site-packages/django/forms/widgets.py:869
+msgid "Unknown"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/tasks/base.py:34
+#, fuzzy
+#| msgid "Read"
+msgctxt "Task"
+msgid "Ready"
+msgstr "Прочитано"
+
+#: venv/lib/python3.14/site-packages/django/tasks/base.py:36
+msgctxt "Task"
+msgid "Running"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/tasks/base.py:38
+msgctxt "Task"
+msgid "Failed"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/tasks/base.py:40
+#, fuzzy
+#| msgid "Top-up Successful"
+msgctxt "Task"
+msgid "Successful"
+msgstr "Пополнение выполнено"
+
+#. Translators: Please do not add spaces around commas.
+#: venv/lib/python3.14/site-packages/django/template/defaultfilters.py:878
+msgid "yes,no,maybe"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/template/defaultfilters.py:908
+#: venv/lib/python3.14/site-packages/django/template/defaultfilters.py:925
+#, python-format
+msgid "%(size)d byte"
+msgid_plural "%(size)d bytes"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: venv/lib/python3.14/site-packages/django/template/defaultfilters.py:927
+#, python-format
+msgid "%s KB"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/template/defaultfilters.py:929
+#, python-format
+msgid "%s MB"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/template/defaultfilters.py:931
+#, python-format
+msgid "%s GB"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/template/defaultfilters.py:933
+#, python-format
+msgid "%s TB"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/template/defaultfilters.py:935
+#, python-format
+msgid "%s PB"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dateformat.py:74
+msgid "p.m."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dateformat.py:75
+msgid "a.m."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dateformat.py:80
+msgid "PM"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dateformat.py:81
+msgid "AM"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dateformat.py:153
+#, fuzzy
+#| msgid "Min weight"
+msgid "midnight"
+msgstr "Мин. вес"
+
+#: venv/lib/python3.14/site-packages/django/utils/dateformat.py:155
+msgid "noon"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:7
+msgid "Monday"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:8
+msgid "Tuesday"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:9
+msgid "Wednesday"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:10
+msgid "Thursday"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:11
+msgid "Friday"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:12
+msgid "Saturday"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:13
+msgid "Sunday"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:16
+msgid "Mon"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:17
+msgid "Tue"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:18
+msgid "Wed"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:19
+msgid "Thu"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:20
+msgid "Fri"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:21
+#, fuzzy
+#| msgid "Status"
+msgid "Sat"
+msgstr "Статус"
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:22
+msgid "Sun"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:25
+msgid "January"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:26
+msgid "February"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:27
+msgid "March"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:28
+msgid "April"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:29
+msgid "May"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:30
+msgid "June"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:31
+msgid "July"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:32
+msgid "August"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:33
+#, fuzzy
+#| msgid "Remember me"
+msgid "September"
+msgstr "Запомнить меня"
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:34
+msgid "October"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:35
+msgid "November"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:36
+#, fuzzy
+#| msgid "Remember me"
+msgid "December"
+msgstr "Запомнить меня"
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:39
+#, fuzzy
+#| msgid "and"
+msgid "jan"
+msgstr "и"
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:40
+msgid "feb"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:41
+msgid "mar"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:42
+msgid "apr"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:43
+#, fuzzy
+#| msgid "Company"
+msgid "may"
+msgstr "Компания"
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:44
+msgid "jun"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:45
+msgid "jul"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:46
+msgid "aug"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:47
+msgid "sep"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:48
+#, fuzzy
+#| msgid "To city"
+msgid "oct"
+msgstr "Куда"
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:49
+msgid "nov"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:50
+msgid "dec"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:53
+msgctxt "abbrev. month"
+msgid "Jan."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:54
+msgctxt "abbrev. month"
+msgid "Feb."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:55
+msgctxt "abbrev. month"
+msgid "March"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:56
+msgctxt "abbrev. month"
+msgid "April"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:57
+msgctxt "abbrev. month"
+msgid "May"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:58
+msgctxt "abbrev. month"
+msgid "June"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:59
+msgctxt "abbrev. month"
+msgid "July"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:60
+msgctxt "abbrev. month"
+msgid "Aug."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:61
+msgctxt "abbrev. month"
+msgid "Sept."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:62
+msgctxt "abbrev. month"
+msgid "Oct."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:63
+msgctxt "abbrev. month"
+msgid "Nov."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:64
+msgctxt "abbrev. month"
+msgid "Dec."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:67
+msgctxt "alt. month"
+msgid "January"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:68
+msgctxt "alt. month"
+msgid "February"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:69
+msgctxt "alt. month"
+msgid "March"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:70
+msgctxt "alt. month"
+msgid "April"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:71
+msgctxt "alt. month"
+msgid "May"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:72
+msgctxt "alt. month"
+msgid "June"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:73
+msgctxt "alt. month"
+msgid "July"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:74
+msgctxt "alt. month"
+msgid "August"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:75
+#, fuzzy
+#| msgid "Remember me"
+msgctxt "alt. month"
+msgid "September"
+msgstr "Запомнить меня"
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:76
+msgctxt "alt. month"
+msgid "October"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:77
+msgctxt "alt. month"
+msgid "November"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:78
+#, fuzzy
+#| msgid "Remember me"
+msgctxt "alt. month"
+msgid "December"
+msgstr "Запомнить меня"
+
+#: venv/lib/python3.14/site-packages/django/utils/ipv6.py:20
+msgid "This is not a valid IPv6 address."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/text.py:76
+#, python-format
+msgctxt "String to return when truncating text"
+msgid "%(truncated_text)s…"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/text.py:282
+#, fuzzy
+#| msgid "Core"
+msgid "or"
+msgstr "Основной модуль"
+
+#. Translators: This string is used as a separator between list elements
+#: venv/lib/python3.14/site-packages/django/utils/text.py:301
+#: venv/lib/python3.14/site-packages/django/utils/timesince.py:135
+msgid ", "
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/timesince.py:8
+#, python-format
+msgid "%(num)d year"
+msgid_plural "%(num)d years"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: venv/lib/python3.14/site-packages/django/utils/timesince.py:9
+#, python-format
+msgid "%(num)d month"
+msgid_plural "%(num)d months"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: venv/lib/python3.14/site-packages/django/utils/timesince.py:10
+#, python-format
+msgid "%(num)d week"
+msgid_plural "%(num)d weeks"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: venv/lib/python3.14/site-packages/django/utils/timesince.py:11
+#, python-format
+msgid "%(num)d day"
+msgid_plural "%(num)d days"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: venv/lib/python3.14/site-packages/django/utils/timesince.py:12
+#, python-format
+msgid "%(num)d hour"
+msgid_plural "%(num)d hours"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: venv/lib/python3.14/site-packages/django/utils/timesince.py:13
+#, python-format
+msgid "%(num)d minute"
+msgid_plural "%(num)d minutes"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: venv/lib/python3.14/site-packages/django/views/csrf.py:29
+msgid "Forbidden"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/csrf.py:30
+msgid "CSRF verification failed. Request aborted."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/csrf.py:34
+msgid ""
+"You are seeing this message because this HTTPS site requires a “Referer "
+"header” to be sent by your web browser, but none was sent. This header is "
+"required for security reasons, to ensure that your browser is not being "
+"hijacked by third parties."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/csrf.py:40
+msgid ""
+"If you have configured your browser to disable “Referer” headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for “same-"
+"origin” requests."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/csrf.py:45
+msgid ""
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
+"including the “Referrer-Policy: no-referrer” header, please remove them. The "
+"CSRF protection requires the “Referer” header to do strict referer checking. "
+"If you’re concerned about privacy, use alternatives like <a "
+"rel=\"noreferrer\" …> for links to third-party sites."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/csrf.py:54
+msgid ""
+"You are seeing this message because this site requires a CSRF cookie when "
+"submitting forms. This cookie is required for security reasons, to ensure "
+"that your browser is not being hijacked by third parties."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/csrf.py:60
+msgid ""
+"If you have configured your browser to disable cookies, please re-enable "
+"them, at least for this site, or for “same-origin” requests."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/csrf.py:66
+msgid "More information is available with DEBUG=True."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:44
+msgid "No year specified"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:64
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:115
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:214
+msgid "Date out of range"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:94
+msgid "No month specified"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:147
+msgid "No day specified"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:194
+msgid "No week specified"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:353
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:384
+#, python-format
+msgid "No %(verbose_name_plural)s available"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:680
+#, python-format
+msgid ""
+"Future %(verbose_name_plural)s not available because "
+"%(class_name)s.allow_future is False."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:720
+#, python-format
+msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/detail.py:56
+#, python-format
+msgid "No %(verbose_name)s found matching the query"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/list.py:70
+msgid "Page is not “last”, nor can it be converted to an int."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/list.py:77
+#, python-format
+msgid "Invalid page (%(page_number)s): %(message)s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/list.py:173
+#, python-format
+msgid "Empty list and “%(class_name)s.allow_empty” is False."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/static.py:49
+msgid "Directory indexes are not allowed here."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/static.py:51
+#, python-format
+msgid "“%(path)s” does not exist"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/static.py:68
+#: venv/lib/python3.14/site-packages/django/views/templates/directory_index.html:8
+#: venv/lib/python3.14/site-packages/django/views/templates/directory_index.html:11
+#, python-format
+msgid "Index of %(directory)s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:7
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:204
+msgid "The install worked successfully! Congratulations!"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:206
+#, python-format
+msgid ""
+"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:208
+#, python-format
+msgid ""
+"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" "
+"rel=\"noopener\">DEBUG=True</a> is in your settings file and you have not "
+"configured any URLs."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:217
+#, fuzzy
+#| msgid "Documentation"
+msgid "Django Documentation"
+msgstr "Документация"
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:218
+msgid "Topics, references, &amp; how-to’s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:226
+msgid "Tutorial: A Polling App"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:227
+msgid "Get started with Django"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:235
+msgid "Django Community"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:236
+msgid "Connect, get help, or contribute"
+msgstr ""

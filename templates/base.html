@@ -21,7 +21,7 @@
             content="{% block og_description %}{% translate 'Reliable cargo transportation services' %}{% endblock %}"
         />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="{% static 'img/og-image.png' %}" />
+        <meta property="og:image" content="{% static 'img/og-image.svg' %}" />
         <title>{% block title %}Baikal-Service{% endblock %}</title>
         <link
             rel="icon"
@@ -71,7 +71,7 @@
         {% block extra_head %}{% endblock %}
     </head>
     <body
-        class="font-sans antialiased bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300"
+        class="font-sans antialiased bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 {% block body_class %}{% endblock %}"
     >
         <div x-data="{ mobileOpen: false }">
             <!-- Header -->

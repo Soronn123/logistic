@@ -65,7 +65,7 @@ class RoutingHelperTests(TestCase):
             is_active=True,
         )
         status = get_initial_status(self.city_a)
-        self.assertIn(status, ['awaiting_delivery_to_branch', 'available_in_warehouse', 'awaiting_courier'])
+        self.assertEqual(status, 'awaiting_delivery_to_branch')
 
     def test_calculate_price_with_tariff(self):
         Tariff.objects.create(

@@ -79,7 +79,7 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
       <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
         <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">{% translate 'Route' %}</h3>
         <p class="text-gray-900 dark:text-white font-medium">{{ order.sender_address|default:'—' }} → {{ order.recipient_address|default:'—' }}</p>
@@ -91,6 +91,20 @@
         <p class="text-gray-900 dark:text-white mt-1"><span class="text-gray-500">{% translate 'Weight' %}:</span> {{ order.weight }} kg</p>
         {% if order.total_price %}<p class="text-gray-900 dark:text-white mt-1"><span class="text-gray-500">{% translate 'Price' %}:</span> <span class="font-bold text-baikal-600 dark:text-baikal-400">{{ order.total_price }} ₽</span></p>{% endif %}
       </div>
+      {% if attached_documents %}
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">{% translate 'Documents' %}</h3>
+        <div class="space-y-2">
+          {% for doc in attached_documents %}
+          <a href="{% if doc.file %}{{ doc.file.url }}{% else %}#{% endif %}" target="_blank" class="flex items-center gap-2 text-sm text-baikal-600 dark:text-baikal-400 hover:underline">
+            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            <span>{{ doc.title }}</span>
+            <span class="text-xs text-gray-400">({{ doc.get_category_display }})</span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
     </div>
 
     <div id="track-map" class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden h-[400px]">
@@ -205,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var bounds = new maplibregl.LngLatBounds();
     bounds.extend([senderLng, senderLat]);
     bounds.extend([recipientLng, recipientLat]);
-    map.fitBounds(bounds, { padding: 50 });
+    map.fitBounds(bounds, { padding: 50, maxZoom: 8 });
 
     updateCargo();
     setInterval(updateCargo, 10000);

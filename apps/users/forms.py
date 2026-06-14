@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.utils.translation import gettext_lazy as _
 
-from .models import CargoTemplate, ContactTemplate, CustomUser, DeliveryTemplate, Ticket, TicketMessage, Transaction
+from .models import CargoTemplate, CompanyApplication, ContactTemplate, CustomUser, DeliveryTemplate, Ticket, TicketMessage, Transaction
 
 
 class LoginForm(AuthenticationForm):
@@ -155,7 +155,7 @@ class TicketMessageForm(forms.ModelForm):
 class DeliveryTemplateForm(forms.ModelForm):
     class Meta:
         model = DeliveryTemplate
-        fields = ['name', 'from_city', 'to_city', 'weight', 'length', 'width', 'height', 'cargo_description', 'service', 'declared_value', 'sender_address_detail', 'recipient_address_detail', 'additional_services', 'total_price']
+        fields = ['name', 'from_city', 'to_city', 'weight', 'length', 'width', 'height', 'cargo_description', 'service', 'declared_value', 'sender_address_detail', 'recipient_address_detail', 'additional_services']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Template name')}),
             'from_city': forms.Select(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all'}),
@@ -200,6 +200,16 @@ class ContactTemplateForm(forms.ModelForm):
         self.fields['city'].queryset = City.objects.filter(is_active=True)
         self.fields['city'].empty_label = _('Select city')
         self.fields['city'].required = False
+
+
+class CompanyApplicationForm(forms.ModelForm):
+    class Meta:
+        model = CompanyApplication
+        fields = ['company_name', 'inn']
+        widgets = {
+            'company_name': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Company name')}),
+            'inn': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('INN')}),
+        }
 
 
 class CargoTemplateForm(forms.ModelForm):

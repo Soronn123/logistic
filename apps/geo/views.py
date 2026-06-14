@@ -18,7 +18,6 @@ class CityBranchListView(DetailView):
     model = City
     template_name = 'pages/geo/city_branches.html'
     context_object_name = 'city'
-    slug_field = 'name'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

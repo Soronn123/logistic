@@ -60,6 +60,12 @@ class Order(models.Model):
         verbose_name_plural = _('Orders')
         ordering = ['-created_at']
 
+    def get_attached_documents(self):
+        from apps.documents.models import Document
+        service_docs = Document.objects.filter(services=self.service) if self.service else Document.objects.none()
+        addon_docs = Document.objects.filter(additional_services__in=self.additional_services.all())
+        return (service_docs | addon_docs).distinct()
+
     def __str__(self):
         return self.tracking_number
 

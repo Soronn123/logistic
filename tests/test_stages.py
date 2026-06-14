@@ -25,7 +25,7 @@ class StageSequenceLogicTests(TestCase):
             Order(sender_address=moscow, recipient_address=spb)
         )
         self.assertNotIn('customs_clearance', flow)
-        self.assertEqual(flow, ['draft', 'confirmed', 'picked_up', 'in_transit', 'at_warehouse', 'out_for_delivery', 'delivered'])
+        self.assertEqual(flow, ['draft', 'confirmed', 'awaiting_courier', 'picked_up', 'in_transit', 'at_warehouse', 'out_for_delivery', 'delivered'])
 
     def test_international_flow_includes_customs_clearance(self):
         moscow = City.objects.create(name='Moscow', latitude=55.75, longitude=37.62, country='RU')
@@ -36,7 +36,7 @@ class StageSequenceLogicTests(TestCase):
             Order(sender_address=moscow, recipient_address=berlin)
         )
         self.assertIn('customs_clearance', flow)
-        self.assertEqual(flow, ['draft', 'confirmed', 'picked_up', 'in_transit', 'customs_clearance', 'at_warehouse', 'out_for_delivery', 'delivered'])
+        self.assertEqual(flow, ['draft', 'confirmed', 'awaiting_courier', 'picked_up', 'in_transit', 'customs_clearance', 'at_warehouse', 'out_for_delivery', 'delivered'])
 
     def test_stages_cannot_be_skipped_domestic(self):
         for current, allowed in [
@@ -85,7 +85,7 @@ class StageSequenceLogicTests(TestCase):
             service=svc, status='draft',
         )
 
-        expected = ['confirmed', 'picked_up', 'in_transit', 'at_warehouse', 'out_for_delivery', 'delivered']
+        expected = ['confirmed', 'awaiting_courier', 'picked_up', 'in_transit', 'at_warehouse', 'out_for_delivery', 'delivered']
         for next_status in expected:
             result = simulate_next_status(order)
             self.assertIsNotNone(result)
