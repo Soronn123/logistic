@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#1e40af"/>
+  <rect x="540" y="200" width="120" height="50" rx="8" fill="#60a5fa"/>
+  <rect x="560" y="160" width="20" height="20" rx="4" fill="#60a5fa"/>
+  <rect x="620" y="160" width="20" height="20" rx="4" fill="#60a5fa"/>
+  <circle cx="560" cy="250" r="8" fill="white"/>
+  <circle cx="640" cy="250" r="8" fill="white"/>
+  <text x="600" y="340" font-family="Arial,sans-serif" font-size="48" font-weight="bold" fill="white" text-anchor="middle">Baikal-Service</text>
+  <text x="600" y="400" font-family="Arial,sans-serif" font-size="24" fill="#93c5fd" text-anchor="middle">Cargo Transportation Services</text>
+</svg>
