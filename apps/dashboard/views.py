@@ -251,6 +251,71 @@ class DashboardTicketsView(DirectoryAccessMixin, StaffRequiredMixin, TemplateVie
         return context
 
 
+class DashboardTicketDetailView(DirectoryAccessMixin, StaffRequiredMixin, TemplateView):
+    template_name = 'pages/dashboard/ticket_detail.html'
+    directory_keys = ['tickets']
+
+    def get_ticket(self):
+        from apps.users.models import Ticket
+        return get_object_or_404(Ticket.objects.prefetch_related('messages__sender'), pk=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ticket = self.get_ticket()
+        from apps.users.forms import TicketMessageForm
+        context['ticket'] = ticket
+        context['messages'] = ticket.messages.all()
+        context['form'] = TicketMessageForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        from apps.users.models import TicketMessage, Ticket
+        from apps.users.forms import TicketMessageForm
+
+        ticket = self.get_ticket()
+
+        if '_close_ticket' in request.POST:
+            ticket.status = Ticket.Status.CLOSED
+            ticket.save(update_fields=['status'])
+            messages.success(request, _('Ticket closed.'))
+            return redirect('dashboard:ticket_detail', pk=ticket.pk)
+
+        if '_reopen_ticket' in request.POST:
+            ticket.status = Ticket.Status.OPEN
+            ticket.save(update_fields=['status'])
+            messages.success(request, _('Ticket reopened.'))
+            return redirect('dashboard:ticket_detail', pk=ticket.pk)
+
+        if '_mark_in_progress' in request.POST:
+            ticket.status = Ticket.Status.IN_PROGRESS
+            ticket.save(update_fields=['status'])
+            messages.success(request, _('Ticket marked as in progress.'))
+            return redirect('dashboard:ticket_detail', pk=ticket.pk)
+
+        if '_assign_to_me' in request.POST:
+            ticket.assigned_to = request.user
+            ticket.save(update_fields=['assigned_to'])
+            messages.success(request, _('Ticket assigned to you.'))
+            return redirect('dashboard:ticket_detail', pk=ticket.pk)
+
+        form = TicketMessageForm(request.POST)
+        if form.is_valid():
+            TicketMessage.objects.create(
+                ticket=ticket,
+                sender=request.user,
+                message=form.cleaned_data['message'],
+                is_internal_note=request.POST.get('is_internal_note') == 'on',
+            )
+            if ticket.status == Ticket.Status.CLOSED:
+                ticket.status = Ticket.Status.IN_PROGRESS
+                ticket.save(update_fields=['status'])
+            messages.success(request, _('Reply sent.'))
+        else:
+            messages.error(request, _('Message cannot be empty.'))
+
+        return redirect('dashboard:ticket_detail', pk=ticket.pk)
+
+
 class DashboardServicesView(DirectoryAccessMixin, StaffRequiredMixin, TemplateView):
     template_name = 'pages/dashboard/services.html'
     directory_keys = ['services']

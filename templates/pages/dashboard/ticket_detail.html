@@ -1,0 +1,124 @@
+{% extends 'pages/dashboard/base_dashboard.html' %}{% load i18n %}
+{% block dash_title %}{% translate 'Ticket' %} #{{ ticket.id }} — {{ ticket.subject }}{% endblock %}
+{% block dash_page_title %}{% translate 'Ticket Details' %}{% endblock %}
+{% block dash_content %}
+<div class="max-w-4xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{% translate 'Ticket' %} #{{ ticket.id }}</h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-1">{{ ticket.subject }}</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="{% url 'dashboard:tickets' %}" class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium">
+        {% translate 'Back to List' %}
+      </a>
+    </div>
+  </div>
+
+  {% if messages %}
+  <div class="mb-6">
+    {% for msg in messages %}
+    <div class="{% if msg.tags == 'success' %}bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-green-200 dark:border-green-700{% elif msg.tags == 'error' %}bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200 dark:border-red-700{% else %}bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-700{% endif %} border rounded-xl px-4 py-3 text-sm">
+      {{ msg }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+      <div>
+        <p class="text-gray-500 dark:text-gray-400">{% translate 'Status' %}</p>
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-1
+          {% if ticket.status == 'open' %}bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400
+          {% elif ticket.status == 'in_progress' %}bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400
+          {% else %}bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400{% endif %}">
+          {{ ticket.get_status_display }}
+        </span>
+      </div>
+      <div>
+        <p class="text-gray-500 dark:text-gray-400">{% translate 'Priority' %}</p>
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-1
+          {% if ticket.priority == 'high' %}bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400
+          {% elif ticket.priority == 'medium' %}bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400
+          {% else %}bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300{% endif %}">
+          {{ ticket.get_priority_display }}
+        </span>
+      </div>
+      <div>
+        <p class="text-gray-500 dark:text-gray-400">{% translate 'Created by' %}</p>
+        <p class="font-medium text-gray-900 dark:text-white mt-1">{{ ticket.created_by.get_full_name|default:ticket.created_by.email }}</p>
+      </div>
+      <div>
+        <p class="text-gray-500 dark:text-gray-400">{% translate 'Assigned to' %}</p>
+        <p class="font-medium text-gray-900 dark:text-white mt-1">{% if ticket.assigned_to %}{{ ticket.assigned_to.get_full_name|default:ticket.assigned_to.email }}{% else %}—{% endif %}</p>
+      </div>
+    </div>
+  </div>
+
+  <form method="post" class="mb-6 flex flex-wrap gap-2">
+    {% csrf_token %}
+    {% if ticket.status != 'closed' %}
+      <button type="submit" name="_close_ticket" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl transition-colors text-sm font-medium">
+        {% translate 'Close ticket' %}
+      </button>
+    {% endif %}
+    {% if ticket.status == 'open' or ticket.status == 'closed' %}
+      <button type="submit" name="_mark_in_progress" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-xl transition-colors text-sm font-medium">
+        {% translate 'Mark in progress' %}
+      </button>
+    {% endif %}
+    {% if ticket.status == 'closed' %}
+      <button type="submit" name="_reopen_ticket" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xl transition-colors text-sm font-medium">
+        {% translate 'Reopen ticket' %}
+      </button>
+    {% endif %}
+    {% if ticket.assigned_to and ticket.assigned_to != request.user %}
+      <button type="submit" name="_assign_to_me" class="px-4 py-2 bg-baikal-600 hover:bg-baikal-700 text-white rounded-xl transition-colors text-sm font-medium">
+        {% translate 'Assign to me' %}
+      </button>
+    {% endif %}
+  </form>
+
+  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6">
+    <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4">{% translate 'Messages' %}</h2>
+    <div class="space-y-4 max-h-96 overflow-y-auto mb-6">
+      {% for msg in messages %}
+      <div class="flex {% if msg.sender == request.user %}justify-end{% endif %}">
+        <div class="max-w-[75%] {% if msg.sender == request.user %}bg-baikal-50 dark:bg-baikal-900/30{% else %}bg-gray-50 dark:bg-gray-700{% endif %} rounded-2xl px-4 py-3">
+          <div class="flex items-center justify-between gap-3 mb-1">
+            <span class="text-xs font-medium text-gray-900 dark:text-white">{{ msg.sender.get_full_name|default:msg.sender.email }}</span>
+            <span class="text-xs text-gray-400">{{ msg.created_at|date:'d M Y H:i' }}</span>
+          </div>
+          <p class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{{ msg.message }}</p>
+          {% if msg.is_internal_note %}
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 mt-1">
+            {% translate 'Internal note' %}
+          </span>
+          {% endif %}
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center text-gray-500 dark:text-gray-400 py-8">{% translate 'No messages yet.' %}</p>
+      {% endfor %}
+    </div>
+
+    <form method="post" class="border-t border-gray-100 dark:border-gray-700 pt-4">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="id_message" class="sr-only">{% translate 'Message' %}</label>
+        <textarea name="message" id="id_message" rows="3" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all text-gray-900 dark:text-white" placeholder="{% translate 'Write your message...' %}"></textarea>
+      </div>
+      <div class="flex items-center justify-between">
+        <label class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
+          <input type="checkbox" name="is_internal_note" class="rounded border-gray-300 dark:border-gray-600 text-baikal-600 focus:ring-baikal-500">
+          {% translate 'Internal note (not visible to client)' %}
+        </label>
+        <button type="submit" class="px-6 py-2 bg-baikal-600 hover:bg-baikal-700 text-white rounded-xl transition-colors text-sm font-medium">
+          {% translate 'Send reply' %}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

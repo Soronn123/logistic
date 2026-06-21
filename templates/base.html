@@ -298,36 +298,30 @@
                             </a>
 
                             <!-- Language Switcher -->
-                            <div class="lang-switcher hidden sm:block">
-                                {% get_current_language as LANGUAGE_CODE %}
-                                {% get_available_languages as LANGUAGES %}
-                                {% for lang_code, lang_name in LANGUAGES %}
-                                {% if lang_code != LANGUAGE_CODE %}
-                                <form
-                                    action="{% url 'set_language' %}"
-                                    method="post"
-                                    class="inline"
+                            {% get_current_language as LANGUAGE_CODE %}
+                            <form
+                                action="{% url 'set_language' %}"
+                                method="post"
+                                class="hidden sm:block"
+                            >
+                                {% csrf_token %}
+                                <input
+                                    name="next"
+                                    type="hidden"
+                                    value="{{ request.path }}"
+                                />
+                                <input
+                                    name="language"
+                                    type="hidden"
+                                    value="{% if LANGUAGE_CODE == 'ru' %}en{% else %}ru{% endif %}"
+                                />
+                                <button
+                                    type="submit"
+                                    class="px-3 py-1.5 text-xs font-semibold uppercase rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                                 >
-                                    {% csrf_token %}
-                                    <input
-                                        name="next"
-                                        type="hidden"
-                                        value="{{ request.path }}"
-                                    />
-                                    <input
-                                        name="language"
-                                        type="hidden"
-                                        value="{{ lang_code }}"
-                                    />
-                                    <button
-                                        type="submit"
-                                        class="px-2 py-1 text-xs font-medium rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors uppercase"
-                                    >
-                                        {{ lang_code }}
-                                    </button>
-                                </form>
-                                {% endif %} {% endfor %}
-                            </div>
+                                    {% if LANGUAGE_CODE == 'ru' %}EN{% else %}RU{% endif %}
+                                </button>
+                            </form>
 
                             <!-- Theme Toggle -->
                             <button
@@ -442,27 +436,6 @@
                                             />
                                         </svg>
                                         {% translate 'Admin Panel' %}
-                                    </a>
-                                    {% endif %}
-                                    {% if user.role == 'manager' or user.role == 'admin' or user.is_staff %}
-                                    <a
-                                        href="{% url 'dashboard:home' %}"
-                                        class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-purple-600 dark:text-purple-400 border border-purple-300 dark:border-purple-600 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors ml-1"
-                                    >
-                                        <svg
-                                            class="w-3.5 h-3.5 mr-1"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"
-                                            />
-                                        </svg>
-                                        {% translate 'Manager Panel' %}
                                     </a>
                                     {% endif %}
                                     <hr
@@ -850,27 +823,6 @@
                             {% translate 'Admin Panel' %}
                         </a>
                         {% endif %}
-                        {% if user.role == 'manager' or user.role == 'admin' or user.is_staff %}
-                        <a
-                            href="{% url 'dashboard:home' %}"
-                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-purple-600 dark:text-purple-400 border border-purple-300 dark:border-purple-600 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors ml-1"
-                        >
-                            <svg
-                                class="w-3.5 h-3.5 mr-1"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"
-                                />
-                            </svg>
-                            {% translate 'Manager Panel' %}
-                        </a>
-                        {% endif %}
                         <form method="post" action="{% url 'users:logout' %}">
                             {% csrf_token %}
                             <button
@@ -897,10 +849,10 @@
                         <!-- Lang switch in mobile -->
                         <hr class="my-2 border-gray-200 dark:border-gray-700" />
                         <div class="px-4 py-2">
+                            {% get_current_language as LANGUAGE_CODE %}
                             <form
                                 action="{% url 'set_language' %}"
                                 method="post"
-                                class="flex space-x-2 rtl:space-x-reverse"
                             >
                                 {% csrf_token %}
                                 <input
@@ -908,24 +860,17 @@
                                     type="hidden"
                                     value="{{ request.path }}"
                                 />
-                                {% get_current_language as LANGUAGE_CODE %}
-                                {% if LANGUAGE_CODE != 'ru' %}
-                                <button
+                                <input
                                     name="language"
-                                    value="ru"
-                                    class="px-3 py-1 text-xs font-medium rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 uppercase"
-                                >
-                                    Ru
-                                </button>
-                                {% endif %} {% if LANGUAGE_CODE != 'en' %}
+                                    type="hidden"
+                                    value="{% if LANGUAGE_CODE == 'ru' %}en{% else %}ru{% endif %}"
+                                />
                                 <button
-                                    name="language"
-                                    value="en"
-                                    class="px-3 py-1 text-xs font-medium rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 uppercase"
+                                    type="submit"
+                                    class="px-3 py-1 text-xs font-semibold uppercase rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                                 >
-                                    En
+                                    {% if LANGUAGE_CODE == 'ru' %}EN{% else %}RU{% endif %}
                                 </button>
-                                {% endif %}
                             </form>
                         </div>
                     </div>

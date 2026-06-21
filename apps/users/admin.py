@@ -1,8 +1,48 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 
 from .models import CargoTemplate, CompanyApplication, ContactTemplate, CustomUser, DeliveryTemplate, ManagerDirectoryPermission, Ticket, TicketMessage, Transaction
+
+
+@admin.action(description=_('Close selected tickets'))
+def close_tickets(modeladmin, request, queryset):
+    queryset.update(status=Ticket.Status.CLOSED)
+
+
+@admin.action(description=_('Reopen selected tickets'))
+def reopen_tickets(modeladmin, request, queryset):
+    queryset.update(status=Ticket.Status.OPEN)
+
+
+@admin.action(description=_('Mark selected as in progress'))
+def mark_in_progress(modeladmin, request, queryset):
+    queryset.update(status=Ticket.Status.IN_PROGRESS)
+
+
+class TicketMessageInline(admin.TabularInline):
+    model = TicketMessage
+    extra = 0
+    readonly_fields = ['sender', 'created_at']
+    can_delete = False
+    fields = ['sender', 'message', 'is_internal_note', 'created_at']
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for obj in instances:
+            if not obj.pk:
+                obj.sender = request.user
+                ticket = obj.ticket
+                if ticket.status == Ticket.Status.CLOSED:
+                    ticket.status = Ticket.Status.IN_PROGRESS
+                    ticket.save()
+            obj.save()
+        formset.save_m2m()
 
 
 @admin.register(CustomUser)
@@ -28,16 +68,6 @@ class CustomUserAdmin(BaseUserAdmin):
     )
 
 
-class TicketMessageInline(admin.TabularInline):
-    model = TicketMessage
-    extra = 0
-    readonly_fields = ['sender', 'message', 'created_at', 'is_internal_note']
-    can_delete = False
-
-    def has_add_permission(self, request, obj=None):
-        return False
-
-
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
     list_display = ['id', 'subject', 'status', 'priority', 'created_by', 'assigned_to', 'created_at']
@@ -45,6 +75,43 @@ class TicketAdmin(admin.ModelAdmin):
     search_fields = ['subject', 'created_by__email']
     inlines = [TicketMessageInline]
     raw_id_fields = ['created_by', 'assigned_to']
+    actions = [close_tickets, reopen_tickets, mark_in_progress]
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['show_save_and_continue'] = True
+        extra_context['show_save_and_add_another'] = True
+        return super().change_view(request, object_id, form_url, extra_context=extra_context)
+
+    def response_change(self, request, obj):
+        opts = self.model._meta
+        pk_value = obj.pk
+
+        if '_close_ticket' in request.POST:
+            obj.status = Ticket.Status.CLOSED
+            obj.save(update_fields=['status'])
+            self.message_user(request, _('Ticket closed.'))
+            return HttpResponseRedirect(request.path)
+
+        if '_reopen_ticket' in request.POST:
+            obj.status = Ticket.Status.OPEN
+            obj.save(update_fields=['status'])
+            self.message_user(request, _('Ticket reopened.'))
+            return HttpResponseRedirect(request.path)
+
+        if '_mark_in_progress' in request.POST:
+            obj.status = Ticket.Status.IN_PROGRESS
+            obj.save(update_fields=['status'])
+            self.message_user(request, _('Ticket marked as in progress.'))
+            return HttpResponseRedirect(request.path)
+
+        if '_assign_to_me' in request.POST:
+            obj.assigned_to = request.user
+            obj.save(update_fields=['assigned_to'])
+            self.message_user(request, _('Ticket assigned to you.'))
+            return HttpResponseRedirect(request.path)
+
+        return super().response_change(request, obj)
 
 
 @admin.register(TicketMessage)
