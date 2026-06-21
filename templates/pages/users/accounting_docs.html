@@ -68,6 +68,32 @@
         <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{% translate 'Your document requests will appear here.' %}</p>
       </div>
     </div>
+
+    {% if service_documents %}
+    <div class="mt-8 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+      <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{% translate 'Service Documents' %}</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{% translate 'Documents attached to your orders services' %}</p>
+      </div>
+
+      <div class="p-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {% for doc in service_documents %}
+          <div class="flex items-center gap-3 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <div class="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707L16.586 3.586A1 1 0 0016 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              {% if doc.file %}<a href="{{ doc.file.url }}" target="_blank" class="text-sm font-medium text-gray-900 dark:text-white hover:text-baikal-600 dark:hover:text-baikal-400 truncate">{{ doc.title }}</a>
+              {% else %}<span class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ doc.title }}</span>{% endif %}
+              <p class="text-xs text-gray-500 dark:text-gray-400">{{ doc.get_category_display }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

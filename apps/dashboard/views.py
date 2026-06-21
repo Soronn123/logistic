@@ -12,6 +12,7 @@ from apps.services.models import Service, ServiceCategory, AdditionalService, Ta
 from apps.geo.models import Branch, City
 from apps.partners.models import PartnerApplication, Banner, Partner
 from apps.core.models import ContentPage, NewsItem, Vacancy, FAQ, Review, Tender
+from apps.documents.models import Document
 
 User = get_user_model()
 
@@ -385,6 +386,73 @@ class DashboardDocumentsView(DirectoryAccessMixin, StaffRequiredMixin, TemplateV
             context['documents'] = []
             context['accounting_requests'] = []
         return context
+
+
+class DocumentForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ['title', 'title_en', 'category', 'file', 'description', 'is_active', 'services', 'additional_services']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'title_en': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'category': forms.Select(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'file': forms.FileInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'description': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 3}),
+            'services': forms.SelectMultiple(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'additional_services': forms.SelectMultiple(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['services'].queryset = Service.objects.filter(is_active=True)
+        self.fields['additional_services'].queryset = AdditionalService.objects.filter(is_active=True)
+
+
+class DashboardDocumentCreateView(DirectoryAccessMixin, StaffRequiredMixin, CreateView):
+    model = Document
+    form_class = DocumentForm
+    template_name = 'pages/dashboard/document_form.html'
+    success_url = reverse_lazy('dashboard:documents')
+    directory_keys = ['documents']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = True
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Document created successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardDocumentUpdateView(DirectoryAccessMixin, StaffRequiredMixin, UpdateView):
+    model = Document
+    form_class = DocumentForm
+    template_name = 'pages/dashboard/document_form.html'
+    success_url = reverse_lazy('dashboard:documents')
+    directory_keys = ['documents']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = False
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Document updated successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardDocumentDeleteView(StaffRequiredMixin, DeleteView):
+    model = Document
+    template_name = 'pages/dashboard/document_confirm_delete.html'
+    success_url = reverse_lazy('dashboard:documents')
+
+    def test_func(self):
+        return self.is_admin
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Document deleted successfully.'))
+        return super().form_valid(form)
 
 
 class DashboardPartnersView(DirectoryAccessMixin, StaffRequiredMixin, TemplateView):

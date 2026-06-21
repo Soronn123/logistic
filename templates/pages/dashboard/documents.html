@@ -5,8 +5,14 @@
 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
   <div>
     <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{% translate 'Document Management' %}</h1>
-    <p class="text-gray-500 dark:text-gray-400 mt-1">{% translate 'View uploaded documents and accounting requests' %}</p>
+    <p class="text-gray-500 dark:text-gray-400 mt-1">{% translate 'Manage documents and view accounting requests' %}</p>
   </div>
+  {% if 'documents' not in blocked_directories %}
+  <a href="{% url 'dashboard:document_create' %}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl transition-colors">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+    {% translate 'Add Document' %}
+  </a>
+  {% endif %}
 </div>
 
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
@@ -22,22 +28,42 @@
             <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Title' %}</th>
             <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Category' %}</th>
             <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Uploaded' %}</th>
+            {% if 'documents' not in blocked_directories %}
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Actions' %}</th>
+            {% endif %}
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
           {% for doc in documents %}
           <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-            <td class="px-6 py-3 text-gray-900 dark:text-white">{{ doc.title }}</td>
+             <td class="px-6 py-3 text-gray-900 dark:text-white">
+              {% if doc.file %}<a href="{{ doc.file.url }}" target="_blank" class="hover:text-baikal-600 dark:hover:text-baikal-400">{{ doc.title }}</a>
+              {% else %}{{ doc.title }}{% endif %}
+            </td>
             <td class="px-6 py-3">
               <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400">
                 {{ doc.get_category_display }}
               </span>
             </td>
             <td class="px-6 py-3 text-gray-500 dark:text-gray-400">{{ doc.uploaded_at|date:'d M Y' }}</td>
+            {% if 'documents' not in blocked_directories %}
+            <td class="px-6 py-3">
+              <div class="flex items-center gap-2">
+                <a href="{% url 'dashboard:document_edit' doc.pk %}" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300" title="{% translate 'Edit' %}">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                </a>
+                {% if is_admin %}
+                <a href="{% url 'dashboard:document_delete' doc.pk %}" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300" title="{% translate 'Delete' %}">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </a>
+                {% endif %}
+              </div>
+            </td>
+            {% endif %}
           </tr>
           {% empty %}
           <tr>
-            <td colspan="3" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">{% translate 'No documents uploaded yet.' %}</td>
+            <td colspan="{% if 'documents' not in blocked_directories %}4{% else %}3{% endif %}" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">{% translate 'No documents uploaded yet.' %}</td>
           </tr>
           {% endfor %}
         </tbody>

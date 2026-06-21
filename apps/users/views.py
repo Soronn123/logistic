@@ -250,6 +250,26 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
 class AccountingDocumentsView(LoginRequiredMixin, TemplateView):
     template_name = 'pages/users/accounting_docs.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from apps.documents.models import Document
+        from apps.orders.models import Order
+        from django.db.models import Q
+
+        # Get all services and additional services from user's orders
+        user_orders = Order.objects.filter(user=self.request.user)
+        service_ids = user_orders.values_list('service_id', flat=True).distinct()
+        addon_ids = user_orders.values_list('additional_services', flat=True).distinct()
+
+        # Get documents attached to these services/addons
+        docs = Document.objects.filter(
+            Q(services__id__in=service_ids) | Q(additional_services__id__in=addon_ids),
+            is_active=True
+        ).distinct().prefetch_related('services', 'additional_services')
+
+        context['service_documents'] = docs
+        return context
+
 
 class TemplatesView(LoginRequiredMixin, ListView):
     model = None
