@@ -96,6 +96,16 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
+        # Prevent duplicate submissions
+        session_key = 'order_create_timestamp'
+        current_time = timezone.now().timestamp()
+        last_create_time = self.request.session.get(session_key, 0)
+
+        # If an order was created less than 5 seconds ago, reject this submission
+        if current_time - last_create_time < 5:
+            messages.error(self.request, _('Please wait before creating another order.'))
+            return self.form_invalid(form)
+
         form.instance.user = self.request.user
 
         from_city = form.cleaned_data.get('sender_address')
@@ -153,6 +163,9 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
             return self.form_invalid(form)
 
         response = super().form_valid(form)
+
+        # Update session to prevent duplicate submissions
+        self.request.session['order_create_timestamp'] = timezone.now().timestamp()
 
         # Deduct balance
         user.balance -= total

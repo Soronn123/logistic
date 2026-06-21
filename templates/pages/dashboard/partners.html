@@ -3,12 +3,13 @@
 {% block dash_page_title %}{% translate 'Partner Management' %}{% endblock %}
 {% block dash_content %}
 <div class="mb-6">
-  <p class="text-gray-500 dark:text-gray-400">{% translate 'Manage partner applications and banners' %}</p>
+  <p class="text-gray-500 dark:text-gray-400">{% translate 'Manage partners, partner applications and banners' %}</p>
 </div>
 
 <!-- Tabs -->
 <div class="flex flex-wrap gap-2 mb-6">
   <button class="px-5 py-2.5 text-sm font-medium rounded-xl bg-baikal-600 text-white transition-colors partner-tab active" data-tab="applications">{% translate 'Partner Applications' %}</button>
+  <button class="px-5 py-2.5 text-sm font-medium rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors partner-tab" data-tab="partners">{% translate 'Partners' %}</button>
   <button class="px-5 py-2.5 text-sm font-medium rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors partner-tab" data-tab="banners">{% translate 'Banners' %}</button>
 </div>
 
@@ -64,6 +65,81 @@
           {% empty %}
           <tr>
             <td colspan="6" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">{% translate 'No partner applications yet.' %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Tab: Partners -->
+<div id="ptab-partners" class="partner-tab-content hidden">
+  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{% translate 'Partners' %}</h3>
+      <a href="{% url 'dashboard:partner_create' %}" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-xl transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        {% translate 'Add Partner' %}
+      </a>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 dark:bg-gray-900 text-left">
+          <tr>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Name' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Website' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Active' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Sort Order' %}</th>
+            <th class="px-6 py-3 font-medium text-gray-500 dark:text-gray-400">{% translate 'Actions' %}</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+          {% for partner in partners %}
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <td class="px-6 py-3">
+              <div class="flex items-center gap-3">
+                {% if partner.logo %}
+                <img src="{{ partner.logo.url }}" alt="{{ partner.name }}" class="w-8 h-8 rounded-lg object-cover">
+                {% endif %}
+                <span class="text-gray-900 dark:text-white font-medium">{{ partner.name }}</span>
+              </div>
+            </td>
+            <td class="px-6 py-3">
+              {% if partner.website %}
+              <a href="{{ partner.website }}" target="_blank" class="text-baikal-600 dark:text-baikal-400 hover:underline text-xs">{{ partner.website }}</a>
+              {% else %}
+              <span class="text-gray-400">—</span>
+              {% endif %}
+            </td>
+            <td class="px-6 py-3">
+              {% if partner.is_active %}
+              <span class="inline-flex items-center gap-1.5 text-green-600 dark:text-green-400">
+                <span class="w-2 h-2 rounded-full bg-green-500 shadow-sm shadow-green-500/50"></span>
+                {% translate 'Active' %}
+              </span>
+              {% else %}
+              <span class="inline-flex items-center gap-1.5 text-red-600 dark:text-red-400">
+                <span class="w-2 h-2 rounded-full bg-red-500 shadow-sm shadow-red-500/50"></span>
+                {% translate 'Inactive' %}
+              </span>
+              {% endif %}
+            </td>
+            <td class="px-6 py-3 text-gray-500 dark:text-gray-400">{{ partner.sort_order }}</td>
+            <td class="px-6 py-3">
+              <div class="flex items-center gap-2">
+                <a href="{% url 'dashboard:partner_edit' partner.pk %}" class="p-1.5 rounded-lg text-gray-400 hover:text-baikal-600 dark:hover:text-baikal-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" title="{% translate 'Edit' %}">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                </a>
+                <a href="{% url 'dashboard:partner_delete' partner.pk %}" class="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors" title="{% translate 'Delete' %}">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">{% translate 'No partners yet.' %}</td>
           </tr>
           {% endfor %}
         </tbody>

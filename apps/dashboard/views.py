@@ -10,7 +10,7 @@ from django import forms
 
 from apps.services.models import Service, ServiceCategory, AdditionalService, Tariff
 from apps.geo.models import Branch, City
-from apps.partners.models import PartnerApplication, Banner
+from apps.partners.models import PartnerApplication, Banner, Partner
 from apps.core.models import ContentPage, NewsItem, Vacancy, FAQ, Review, Tender
 
 User = get_user_model()
@@ -389,17 +389,19 @@ class DashboardDocumentsView(DirectoryAccessMixin, StaffRequiredMixin, TemplateV
 
 class DashboardPartnersView(DirectoryAccessMixin, StaffRequiredMixin, TemplateView):
     template_name = 'pages/dashboard/partners.html'
-    directory_keys = ['partner_applications', 'banners']
+    directory_keys = ['partner_applications', 'banners', 'partners']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
-            from apps.partners.models import PartnerApplication, Banner
+            from apps.partners.models import PartnerApplication, Banner, Partner
             context['applications'] = PartnerApplication.objects.all()[:50]
             context['banners'] = Banner.objects.all()[:50]
+            context['partners'] = Partner.objects.all()[:50]
         except ImportError:
             context['applications'] = []
             context['banners'] = []
+            context['partners'] = []
         return context
 
 
@@ -749,6 +751,64 @@ class DashboardBannerDeleteView(StaffRequiredMixin, DeleteView):
 
     def form_valid(self, form):
         messages.success(self.request, _('Banner deleted successfully.'))
+        return super().form_valid(form)
+
+
+class PartnerForm(forms.ModelForm):
+    class Meta:
+        model = Partner
+        fields = ['name', 'logo', 'description', 'website', 'is_active', 'sort_order']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'logo': forms.FileInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'description': forms.Textarea(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm', 'rows': 4}),
+            'website': forms.URLInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'w-5 h-5 rounded border-gray-300 dark:border-gray-600 text-baikal-600 focus:ring-baikal-500 dark:bg-gray-700'}),
+            'sort_order': forms.NumberInput(attrs={'class': 'w-full rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 py-2.5 px-3 text-sm'}),
+        }
+
+
+class DashboardPartnerCreateView(DirectoryAccessMixin, StaffRequiredMixin, CreateView):
+    model = Partner
+    form_class = PartnerForm
+    template_name = 'pages/dashboard/partner_form.html'
+    success_url = reverse_lazy('dashboard:partners')
+    directory_keys = ['partners']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = True
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Partner created successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardPartnerUpdateView(DirectoryAccessMixin, StaffRequiredMixin, UpdateView):
+    model = Partner
+    form_class = PartnerForm
+    template_name = 'pages/dashboard/partner_form.html'
+    success_url = reverse_lazy('dashboard:partners')
+    directory_keys = ['partners']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_create'] = False
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Partner updated successfully.'))
+        return super().form_valid(form)
+
+
+class DashboardPartnerDeleteView(StaffRequiredMixin, DeleteView):
+    model = Partner
+    template_name = 'pages/dashboard/partner_confirm_delete.html'
+    success_url = reverse_lazy('dashboard:partners')
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Partner deleted successfully.'))
         return super().form_valid(form)
 
 

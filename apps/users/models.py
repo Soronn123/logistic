@@ -206,6 +206,7 @@ class ManagerDirectoryPermission(models.Model):
         ORDERS = 'orders', _('Orders')
         TICKETS = 'tickets', _('Tickets')
         PARTNER_APPLICATIONS = 'partner_applications', _('Partner applications')
+        PARTNERS = 'partners', _('Partners')
 
     manager = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE,

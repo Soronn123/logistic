@@ -1,0 +1,73 @@
+{% extends 'pages/dashboard/base_dashboard.html' %}{% load i18n %}
+{% block dash_title %}{% translate 'Directory Permissions' %}{% endblock %}
+{% block dash_page_title %}{% translate 'Directory Permissions' %}{% endblock %}
+{% block dash_content %}
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{% translate 'Directory Permissions' %}</h1>
+    <p class="text-gray-500 dark:text-gray-400 mt-1">{% translate 'Manage manager access to specific directories' %}</p>
+  </div>
+</div>
+
+<!-- Manager Selector -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 mb-6">
+  <form method="get" class="flex items-center gap-4">
+    <label for="manager-select" class="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
+      {% translate 'Select Manager' %}:
+    </label>
+    <select id="manager-select" name="manager" onchange="this.form.submit()"
+      class="flex-1 px-4 py-2 rounded-xl border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm focus:ring-2 focus:ring-baikal-500 focus:border-baikal-500 transition-colors">
+      <option value="">{% translate '— Choose a manager —' %}</option>
+      {% for m in managers %}
+      <option value="{{ m.pk }}" {% if selected_manager and selected_manager.pk == m.pk %}selected{% endif %}>
+        {{ m.get_full_name|default:m.email }} ({{ m.email }})
+      </option>
+      {% endfor %}
+    </select>
+  </form>
+</div>
+
+{% if selected_manager %}
+<!-- Permissions Form -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+  <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+      {% translate 'Permissions for' %} {{ selected_manager.get_full_name|default:selected_manager.email }}
+    </h2>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+      {% translate 'Toggle access to each directory. Unchecked means access is denied.' %}</p>
+  </div>
+  <form method="post" class="p-6">
+    {% csrf_token %}
+    <input type="hidden" name="manager_id" value="{{ selected_manager.pk }}">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {% for d in directories %}
+      <label class="flex items-center gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer">
+        <input type="checkbox" name="perm_{{ d.key }}" {% if d.allowed %}checked{% endif %}
+          class="w-5 h-5 rounded border-gray-300 dark:border-gray-600 text-baikal-600 focus:ring-baikal-500 dark:bg-gray-700 dark:checked:bg-baikal-600 transition-colors">
+        <span class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ d.label }}</span>
+        {% if d.explicit %}
+        <span class="ml-auto text-xs text-gray-400 dark:text-gray-500">{% translate 'explicit' %}</span>
+        {% endif %}
+      </label>
+      {% endfor %}
+    </div>
+    <div class="mt-6 flex justify-end">
+      <button type="submit"
+        class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-xl transition-colors">
+        {% translate 'Save Permissions' %}
+      </button>
+    </div>
+  </form>
+</div>
+{% else %}
+<!-- Empty State -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-12 text-center">
+  <svg class="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+  </svg>
+  <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">{% translate 'No Manager Selected' %}</h3>
+  <p class="text-gray-500 dark:text-gray-400">{% translate 'Please select a manager from the dropdown above to manage their directory permissions.' %}</p>
+</div>
+{% endif %}
+{% endblock %}

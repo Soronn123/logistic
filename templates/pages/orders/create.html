@@ -603,7 +603,7 @@ input[type="number"] { -moz-appearance: textfield; }
           <button type="button" x-show="step < 5" @click="nextStep()" class="px-6 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl transition-colors">
             {% translate 'Next' %} &rarr;
           </button>
-          <button type="button" x-show="step === 5" @click="handleSubmit" :disabled="submitting" class="px-8 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-baikal-600/25 disabled:opacity-50 disabled:cursor-not-allowed">
+          <button type="button" x-show="step === 5" @click="handleSubmit()" :disabled="submitting" class="px-8 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-baikal-600/25 disabled:opacity-50 disabled:cursor-not-allowed">
             <svg x-show="!submitting" class="w-5 h-5 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
             <svg x-show="submitting" class="w-5 h-5 inline-block mr-1 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
             <span x-text="submitting ? '{% translate "Submitting..." %}' : '{% translate "Submit Order" %}'"></span>
@@ -758,78 +758,156 @@ function orderForm() {
         .catch(() => {});
     },
 
-    updateMapMarker(type, cityId) {
-      try {
-        const city = this.getCityById(cityId);
-        if (!city || !this.map) return;
-        const lat = parseFloat(city.latitude);
-        const lng = parseFloat(city.longitude);
-        if (isNaN(lat) || isNaN(lng)) return;
-        const el = document.createElement('div');
-        el.style.width = '20px';
-        el.style.height = '20px';
-        el.style.borderRadius = '50%';
-        el.style.backgroundColor = type === 'sender' ? '#3b82f6' : '#10b981';
-        el.style.border = '2px solid #fff';
-        el.style.cursor = 'pointer';
-        const marker = new maplibregl.Marker({ element: el })
-          .setLngLat([lng, lat])
-          .setPopup(new maplibregl.Popup({ offset: 25 }).setHTML('<b>' + city.name + '</b><br>' + (type === 'sender' ? '{% translate "From" %}' : '{% translate "To" %}')))
-          .addTo(this.map);
-        if (type === 'sender') {
-          if (this.senderMarker) this.senderMarker.remove();
-          this.senderMarker = marker;
-        } else {
-          if (this.recipientMarker) this.recipientMarker.remove();
-          this.recipientMarker = marker;
-        }
-        this.fitMapBounds();
-      } catch (e) {
-        console.warn('Map marker error:', e);
-      }
-    },
+     updateMapMarker(type, cityId) {
+       try {
+         const city = this.getCityById(cityId);
+         if (!city || !this.map) return;
+         const lat = parseFloat(city.latitude);
+         const lng = parseFloat(city.longitude);
+         if (isNaN(lat) || isNaN(lng)) return;
+         const el = document.createElement('div');
+         el.style.width = '20px';
+         el.style.height = '20px';
+         el.style.borderRadius = '50%';
+         el.style.backgroundColor = type === 'sender' ? '#3b82f6' : '#10b981';
+         el.style.border = '2px solid #fff';
+         el.style.cursor = 'pointer';
+         const marker = new maplibregl.Marker({ element: el })
+           .setLngLat([lng, lat])
+           .setPopup(new maplibregl.Popup({ offset: 25 }).setHTML('<b>' + city.name + '</b><br>' + (type === 'sender' ? '{% translate "From" %}' : '{% translate "To" %}')))
+           .addTo(this.map);
+         if (type === 'sender') {
+           if (this.senderMarker) this.senderMarker.remove();
+           this.senderMarker = marker;
+         } else {
+           if (this.recipientMarker) this.recipientMarker.remove();
+           this.recipientMarker = marker;
+         }
+         this.fitMapBounds();
+       } catch (e) {
+         console.warn('Map marker error:', e);
+       }
+     },
 
-    fitMapBounds() {
-      try {
-        if (!this.map) return;
-        const pts = [];
-        if (this.senderMarker) {
-          const ll = this.senderMarker.getLngLat();
-          if (ll && typeof ll.lat === 'number' && isFinite(ll.lat)) pts.push([ll.lng, ll.lat]);
-        }
-        if (this.recipientMarker) {
-          const ll = this.recipientMarker.getLngLat();
-          if (ll && typeof ll.lat === 'number' && isFinite(ll.lat)) pts.push([ll.lng, ll.lat]);
-        }
-        if (pts.length === 0) {
-          const lat = parseFloat('{{ default_lat }}') || 55.7558;
-          const lng = parseFloat('{{ default_lng }}') || 37.6173;
-          this.map.jumpTo({ center: [lng, lat], zoom: 4 });
-          return;
-        }
-        if (pts.length === 1) {
-          this.map.jumpTo({ center: pts[0], zoom: 10 });
-          return;
-        }
-        const bounds = new maplibregl.LngLatBounds(pts[0], pts[1]);
-        this.map.fitBounds(bounds, { padding: 50, maxZoom: 8 });
+      fitMapBounds() {
+        try {
+          if (!this.map) return;
+          const pts = [];
+          if (this.senderMarker) {
+            const ll = this.senderMarker.getLngLat();
+            if (ll && typeof ll.lat === 'number' && isFinite(ll.lat)) pts.push([ll.lng, ll.lat]);
+          }
+          if (this.recipientMarker) {
+            const ll = this.recipientMarker.getLngLat();
+            if (ll && typeof ll.lat === 'number' && isFinite(ll.lat)) pts.push([ll.lng, ll.lat]);
+          }
+          if (pts.length === 0) {
+            const lat = parseFloat('{{ default_lat }}') || 55.7558;
+            const lng = parseFloat('{{ default_lng }}') || 37.6173;
+            this.map.jumpTo({ center: [lng, lat], zoom: 4 });
+            return;
+          }
+          if (pts.length === 1) {
+            this.map.jumpTo({ center: pts[0], zoom: 10 });
+            return;
+          }
+          if (pts.length === 2) {
+            const bounds = new maplibregl.LngLatBounds();
+            bounds.extend(pts[0]);
+            bounds.extend(pts[1]);
+            this.map.fitBounds(bounds, { padding: 50, maxZoom: 8 });
+          }
 
-        try { this.map.removeLayer('route-line'); this.map.removeSource('route-line'); } catch (e) {}
-        this.map.addSource('route-line', {
-          type: 'geojson',
-          data: { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: pts } }
-        });
-        this.map.addLayer({
-          id: 'route-line',
-          type: 'line',
-          source: 'route-line',
-          layout: { 'line-join': 'round', 'line-cap': 'round' },
-          paint: { 'line-color': '#3b82f6', 'line-width': 3, 'line-opacity': 0.6, 'line-dasharray': [2, 2] }
-        });
-      } catch (e) {
-        console.warn('Map fitBounds error:', e);
-      }
-    },
+          if (this.step >= 3) {
+            try { this.map.removeLayer('route-line'); this.map.removeSource('route-line'); } catch (e) {}
+            
+            const senderCity = this.getCityById(this.fields.sender_address);
+            const recipientCity = this.getCityById(this.fields.recipient_address);
+            
+            if (senderCity && recipientCity) {
+              const senderLng = parseFloat(senderCity.longitude);
+              const recipientLng = parseFloat(recipientCity.longitude);
+              
+              const leftCity = senderLng <= recipientLng ? senderCity : recipientCity;
+              const rightCity = senderLng <= recipientLng ? recipientCity : senderCity;
+              
+              const leftCoords = [parseFloat(leftCity.longitude), parseFloat(leftCity.latitude)];
+              const rightCoords = [parseFloat(rightCity.longitude), parseFloat(rightCity.latitude)];
+              
+              const routeCoords = this.generateRoutePoints(leftCoords, rightCoords, 50);
+              this._routeCoords = routeCoords;
+              
+              this.map.addSource('route-line', {
+                type: 'geojson',
+                data: { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: routeCoords } }
+              });
+              this.map.addLayer({
+                id: 'route-line',
+                type: 'line',
+                source: 'route-line',
+                layout: { 'line-join': 'round', 'line-cap': 'round' },
+                paint: { 'line-color': '#3b82f6', 'line-width': 3, 'line-opacity': 0.8 }
+              });
+              this.animateRouteLine();
+            }
+          }
+        } catch (e) {
+          console.warn('Map fitBounds error:', e);
+        }
+      },
+
+      generateRoutePoints(start, end, numPoints) {
+        const coords = [];
+        for (let i = 0; i <= numPoints; i++) {
+          const t = i / numPoints;
+          const lng = start[0] + (end[0] - start[0]) * t;
+          const lat = start[1] + (end[1] - start[1]) * t;
+          coords.push([lng, lat]);
+        }
+        return coords;
+      },
+
+      animateRouteLine() {
+        if (!this.map || !this._routeCoords || this._routeCoords.length < 2) return;
+        if (this._routeAnimFrame) cancelAnimationFrame(this._routeAnimFrame);
+        
+        let progress = 0;
+        const speed = 0.003;
+        
+        const animate = () => {
+          if (!this.map || !this._routeCoords) return;
+          
+          progress += speed;
+          if (progress >= 1) progress = 0;
+          
+          const idx = Math.floor(progress * (this._routeCoords.length - 1));
+          const nextIdx = Math.min(idx + 1, this._routeCoords.length - 1);
+          const localProgress = (progress * (this._routeCoords.length - 1)) - idx;
+          
+          const lng = this._routeCoords[idx][0] + (this._routeCoords[nextIdx][0] - this._routeCoords[idx][0]) * localProgress;
+          const lat = this._routeCoords[idx][1] + (this._routeCoords[nextIdx][1] - this._routeCoords[idx][1]) * localProgress;
+          
+          if (!this._routeAnimMarker) {
+            const el = document.createElement('div');
+            el.style.width = '16px';
+            el.style.height = '16px';
+            el.style.borderRadius = '50%';
+            el.style.backgroundColor = '#3b82f6';
+            el.style.border = '3px solid #fff';
+            el.style.boxShadow = '0 0 15px rgba(59, 130, 246, 0.9)';
+            el.style.zIndex = '1000';
+            this._routeAnimMarker = new maplibregl.Marker({ element: el })
+              .setLngLat([lng, lat])
+              .addTo(this.map);
+          } else {
+            this._routeAnimMarker.setLngLat([lng, lat]);
+          }
+          
+          this._routeAnimFrame = requestAnimationFrame(animate);
+        };
+        
+        this._routeAnimFrame = requestAnimationFrame(animate);
+      },
 
     loadTemplates(type) {
       fetch('{% url "orders:api_templates" %}')
@@ -1094,17 +1172,33 @@ function orderForm() {
       return true;
     },
 
-    nextStep() {
-      if (this.validateStep(this.step)) {
-        this.step++;
-        this.validationError = '';
-      }
-    },
+     nextStep() {
+       if (this.validateStep(this.step)) {
+         this.step++;
+         this.validationError = '';
+         if (this.step === 3) {
+           this.$nextTick(() => this.fitMapBounds());
+         }
+       }
+     },
 
-    prevStep() {
-      this.validationError = '';
-      this.step--;
-    },
+      prevStep() {
+        this.validationError = '';
+        this.step--;
+        if (this.step < 3) {
+          this.$nextTick(() => {
+            try { this.map.removeLayer('route-line'); this.map.removeSource('route-line'); } catch (e) {}
+            if (this._routeAnimFrame) {
+              cancelAnimationFrame(this._routeAnimFrame);
+              this._routeAnimFrame = null;
+            }
+            if (this._routeAnimMarker) {
+              this._routeAnimMarker.remove();
+              this._routeAnimMarker = null;
+            }
+          });
+        }
+      },
 
     handleSubmit() {
       if (this.submitting) return;
@@ -1266,14 +1360,8 @@ function orderForm() {
       return total;
     },
 
-    calculateInsurance() {
-      if (!this.fields.declared_value) return 0;
-      const declared = parseFloat(this.fields.declared_value) || 0;
-      return declared * 0.01;
-    },
-
     calculateTotal() {
-      return this.calculateBasePrice() + this.calculateAddonsPrice() + this.calculateInsurance();
+      return this.calculateBasePrice() + this.calculateAddonsPrice();
     },
 
     formatPrice(value) {
