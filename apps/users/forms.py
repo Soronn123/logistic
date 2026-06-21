@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.utils.translation import gettext_lazy as _
 
-from .models import CargoTemplate, CompanyApplication, ContactTemplate, CustomUser, DeliveryTemplate, Ticket, TicketMessage, Transaction
+from .models import CargoTemplate, CompanyApplication, ContactTemplate, CustomUser, DeliveryTemplate, MasterTemplate, Ticket, TicketMessage, Transaction
 
 
 class LoginForm(AuthenticationForm):
@@ -155,43 +155,31 @@ class TicketMessageForm(forms.ModelForm):
 class DeliveryTemplateForm(forms.ModelForm):
     class Meta:
         model = DeliveryTemplate
-        fields = ['name', 'from_city', 'to_city', 'weight', 'length', 'width', 'height', 'cargo_description', 'service', 'declared_value', 'sender_address_detail', 'recipient_address_detail', 'additional_services']
+        fields = ['name', 'service', 'additional_services']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Template name')}),
-            'from_city': forms.Select(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all'}),
-            'to_city': forms.Select(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all'}),
-            'weight': forms.NumberInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'step': '0.1', 'min': '0.1', 'placeholder': _('Weight (kg)')}),
-            'length': forms.NumberInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'step': '1', 'min': '0', 'placeholder': _('Length (cm)')}),
-            'width': forms.NumberInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'step': '1', 'min': '0', 'placeholder': _('Width (cm)')}),
-            'height': forms.NumberInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'step': '1', 'min': '0', 'placeholder': _('Height (cm)')}),
-            'cargo_description': forms.Textarea(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'rows': 3, 'placeholder': _('Cargo description')}),
             'service': forms.Select(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all'}),
-            'declared_value': forms.NumberInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'step': '100', 'min': '0', 'placeholder': _('Declared value')}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        from apps.geo.models import City
-        from apps.services.models import Service
-        self.fields['from_city'].queryset = City.objects.filter(is_active=True)
-        self.fields['to_city'].queryset = City.objects.filter(is_active=True)
+        from apps.services.models import Service, AdditionalService
         self.fields['service'].queryset = Service.objects.filter(is_active=True)
-        self.fields['from_city'].empty_label = _('Select city')
-        self.fields['to_city'].empty_label = _('Select city')
-        self.fields['declared_value'].required = False
+        self.fields['service'].empty_label = _('Select service')
+        self.fields['service'].required = True
+        self.fields['additional_services'].queryset = AdditionalService.objects.filter(is_active=True)
 
 
 class ContactTemplateForm(forms.ModelForm):
     class Meta:
         model = ContactTemplate
-        fields = ['name', 'recipient_name', 'recipient_phone', 'recipient_email', 'city', 'address_detail', 'template_type']
+        fields = ['name', 'contact_name', 'contact_phone', 'contact_email', 'city', 'address_detail']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Template name')}),
-            'recipient_name': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Contact name')}),
-            'recipient_phone': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Contact phone')}),
-            'recipient_email': forms.EmailInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Contact email')}),
-            'address_detail': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Address detail')}),
-            'template_type': forms.Select(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all'}),
+            'contact_name': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Full name or company name')}),
+            'contact_phone': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': '+7 (999) 123-45-67'}),
+            'contact_email': forms.EmailInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': 'email@example.com'}),
+            'address_detail': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Street, building, apartment')}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -200,6 +188,26 @@ class ContactTemplateForm(forms.ModelForm):
         self.fields['city'].queryset = City.objects.filter(is_active=True)
         self.fields['city'].empty_label = _('Select city')
         self.fields['city'].required = False
+        self.fields['contact_email'].required = False
+        self.fields['address_detail'].required = False
+
+
+class MasterTemplateForm(forms.ModelForm):
+    class Meta:
+        model = MasterTemplate
+        fields = ['name', 'service', 'additional_services']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Template name')}),
+            'service': forms.Select(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from apps.services.models import Service, AdditionalService
+        self.fields['service'].queryset = Service.objects.filter(is_active=True)
+        self.fields['service'].empty_label = _('Select service')
+        self.fields['service'].required = True
+        self.fields['additional_services'].queryset = AdditionalService.objects.filter(is_active=True)
 
 
 class CompanyApplicationForm(forms.ModelForm):
@@ -215,7 +223,8 @@ class CompanyApplicationForm(forms.ModelForm):
 class CargoTemplateForm(forms.ModelForm):
     class Meta:
         model = CargoTemplate
-        fields = ['name', 'cargo_description', 'weight', 'length', 'width', 'height', 'declared_value']
+        fields = ['name', 'cargo_description', 'weight', 'length', 'width', 'height', 'declared_value',
+                   'is_fragile', 'is_dangerous', 'is_temperature_sensitive']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'placeholder': _('Template name')}),
             'cargo_description': forms.Textarea(attrs={'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-baikal-500 focus:border-transparent outline-none transition-all', 'rows': 3, 'placeholder': _('Cargo description')}),

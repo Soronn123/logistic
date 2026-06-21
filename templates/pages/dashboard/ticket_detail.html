@@ -47,7 +47,7 @@
       </div>
       <div>
         <p class="text-gray-500 dark:text-gray-400">{% translate 'Created by' %}</p>
-        <p class="font-medium text-gray-900 dark:text-white mt-1">{{ ticket.created_by.get_full_name|default:ticket.created_by.email }}</p>
+        <p class="font-medium text-gray-900 dark:text-white mt-1">{{ ticket.created_by.get_full_name|default:ticket.created_by.email }} <span class="text-xs text-gray-400">({{ ticket.created_by.get_role_display }})</span></p>
       </div>
       <div>
         <p class="text-gray-500 dark:text-gray-400">{% translate 'Assigned to' %}</p>

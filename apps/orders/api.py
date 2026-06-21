@@ -157,10 +157,10 @@ class OrderTrackingAPIView(View):
 
 class ContactTemplateListView(LoginRequiredMixin, View):
     def get(self, request):
-        template_type = request.GET.get('type', 'recipient')
         templates = ContactTemplate.objects.filter(
-            user=request.user, template_type=template_type
-        ).values('id', 'name', 'recipient_name', 'recipient_phone', 'recipient_email', 'city', 'address_detail')
+            user=request.user
+        ).values('id', 'name', 'contact_name', 'contact_phone', 'contact_email',
+                 'city', 'address_detail')
         return JsonResponse(list(templates), safe=False)
 
     def post(self, request):
@@ -170,27 +170,24 @@ class ContactTemplateListView(LoginRequiredMixin, View):
             return JsonResponse({'error': _('Invalid JSON')}, status=400)
 
         name = data.get('name', '').strip()
-        template_type = data.get('template_type', 'recipient')
         if not name:
             return JsonResponse({'error': _('Template name is required')}, status=400)
 
         template = ContactTemplate.objects.create(
             user=request.user,
             name=name,
-            template_type=template_type,
-            recipient_name=data.get('contact_name', ''),
-            recipient_phone=data.get('contact_phone', ''),
-            recipient_email=data.get('contact_email', ''),
+            contact_name=data.get('contact_name', ''),
+            contact_phone=data.get('contact_phone', ''),
+            contact_email=data.get('contact_email', ''),
             city_id=data.get('city'),
             address_detail=data.get('address_detail', ''),
         )
         return JsonResponse({
             'id': template.id,
             'name': template.name,
-            'template_type': template.template_type,
-            'recipient_name': template.recipient_name,
-            'recipient_phone': template.recipient_phone,
-            'recipient_email': template.recipient_email,
+            'contact_name': template.contact_name,
+            'contact_phone': template.contact_phone,
+            'contact_email': template.contact_email,
             'city': template.city_id,
             'address_detail': template.address_detail,
         })
@@ -216,19 +213,8 @@ class DeliveryTemplateListView(LoginRequiredMixin, View):
             templates_list.append({
                 'id': dt.id,
                 'name': dt.name,
-                'from_city': dt.from_city_id,
-                'to_city': dt.to_city_id,
-                'weight': str(dt.weight),
-                'length': str(dt.length or ''),
-                'width': str(dt.width or ''),
-                'height': str(dt.height or ''),
-                'cargo_description': dt.cargo_description,
                 'service': dt.service_id,
-                'declared_value': str(dt.declared_value or ''),
-                'sender_address_detail': dt.sender_address_detail,
-                'recipient_address_detail': dt.recipient_address_detail,
                 'additional_services': list(dt.additional_services.values_list('id', flat=True)),
-                'total_price': str(dt.total_price or ''),
             })
         return JsonResponse(templates_list, safe=False)
 
@@ -245,17 +231,7 @@ class DeliveryTemplateListView(LoginRequiredMixin, View):
         template = DeliveryTemplate.objects.create(
             user=request.user,
             name=name,
-            from_city_id=data.get('from_city'),
-            to_city_id=data.get('to_city'),
-            weight=data.get('weight', 0),
-            length=data.get('length'),
-            width=data.get('width'),
-            height=data.get('height'),
-            cargo_description=data.get('cargo_description', ''),
             service_id=data.get('service'),
-            declared_value=data.get('declared_value'),
-            sender_address_detail=data.get('sender_address_detail', ''),
-            recipient_address_detail=data.get('recipient_address_detail', ''),
         )
         addon_ids = data.get('additional_services', [])
         if addon_ids:
@@ -264,19 +240,8 @@ class DeliveryTemplateListView(LoginRequiredMixin, View):
         return JsonResponse({
             'id': template.id,
             'name': template.name,
-            'from_city': template.from_city_id,
-            'to_city': template.to_city_id,
-            'weight': str(template.weight),
-            'length': str(template.length or ''),
-            'width': str(template.width or ''),
-            'height': str(template.height or ''),
-            'cargo_description': template.cargo_description,
             'service': template.service_id,
-            'declared_value': str(template.declared_value or ''),
-            'sender_address_detail': template.sender_address_detail,
-            'recipient_address_detail': template.recipient_address_detail,
             'additional_services': list(template.additional_services.values_list('id', flat=True)),
-            'total_price': str(template.total_price or ''),
         })
 
 
@@ -289,20 +254,8 @@ class DeliveryTemplateDetailView(LoginRequiredMixin, View):
             return JsonResponse({'error': _('Invalid JSON')}, status=400)
 
         template.name = data.get('name', template.name)
-        if data.get('from_city'):
-            template.from_city_id = data.get('from_city')
-        if data.get('to_city'):
-            template.to_city_id = data.get('to_city')
-        template.weight = data.get('weight', template.weight)
-        template.length = data.get('length', template.length)
-        template.width = data.get('width', template.width)
-        template.height = data.get('height', template.height)
-        template.cargo_description = data.get('cargo_description', template.cargo_description)
         if data.get('service'):
             template.service_id = data.get('service')
-        template.declared_value = data.get('declared_value', template.declared_value)
-        template.sender_address_detail = data.get('sender_address_detail', template.sender_address_detail)
-        template.recipient_address_detail = data.get('recipient_address_detail', template.recipient_address_detail)
         template.save()
         addon_ids = data.get('additional_services')
         if addon_ids is not None:
@@ -311,19 +264,8 @@ class DeliveryTemplateDetailView(LoginRequiredMixin, View):
         return JsonResponse({
             'id': template.id,
             'name': template.name,
-            'from_city': template.from_city_id,
-            'to_city': template.to_city_id,
-            'weight': str(template.weight),
-            'length': str(template.length or ''),
-            'width': str(template.width or ''),
-            'height': str(template.height or ''),
-            'cargo_description': template.cargo_description,
             'service': template.service_id,
-            'declared_value': str(template.declared_value or ''),
-            'sender_address_detail': template.sender_address_detail,
-            'recipient_address_detail': template.recipient_address_detail,
             'additional_services': list(template.additional_services.values_list('id', flat=True)),
-            'total_price': str(template.total_price or ''),
         })
 
     def delete(self, request, pk):
@@ -335,7 +277,8 @@ class DeliveryTemplateDetailView(LoginRequiredMixin, View):
 class CargoTemplateListView(LoginRequiredMixin, View):
     def get(self, request):
         templates = CargoTemplate.objects.filter(user=request.user).values(
-            'id', 'name', 'cargo_description', 'weight', 'length', 'width', 'height', 'declared_value'
+            'id', 'name', 'cargo_description', 'weight', 'length', 'width', 'height', 'declared_value',
+            'is_fragile', 'is_dangerous', 'is_temperature_sensitive'
         )
         return JsonResponse(list(templates), safe=False)
 
@@ -358,6 +301,9 @@ class CargoTemplateListView(LoginRequiredMixin, View):
             width=data.get('width'),
             height=data.get('height'),
             declared_value=data.get('declared_value'),
+            is_fragile=data.get('is_fragile', False),
+            is_dangerous=data.get('is_dangerous', False),
+            is_temperature_sensitive=data.get('is_temperature_sensitive', False),
         )
         return JsonResponse({
             'id': template.id,
@@ -368,6 +314,9 @@ class CargoTemplateListView(LoginRequiredMixin, View):
             'width': str(template.width or ''),
             'height': str(template.height or ''),
             'declared_value': str(template.declared_value or ''),
+            'is_fragile': template.is_fragile,
+            'is_dangerous': template.is_dangerous,
+            'is_temperature_sensitive': template.is_temperature_sensitive,
         })
 
 

@@ -98,7 +98,7 @@
           <p class="text-xs text-gray-500 dark:text-gray-400">{% translate 'Our support team will respond within 24 hours' %}</p>
           <div class="flex items-center space-x-3 rtl:space-x-reverse">
             {% if ticket.status != 'closed' %}
-            <a href="#" class="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors">{% translate 'Close ticket' %}</a>
+            <button type="submit" name="_close_ticket" formnovalidate class="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors">{% translate 'Close ticket' %}</button>
             {% endif %}
             <button type="submit" class="px-6 py-2.5 bg-baikal-600 hover:bg-baikal-700 text-white font-medium rounded-xl shadow-lg shadow-baikal-600/25 hover:shadow-baikal-600/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-baikal-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
               <span class="flex items-center">

@@ -53,7 +53,7 @@ input[type="number"] { -moz-appearance: textfield; }
         </div>
       </div>
 
-      <!-- Delivery Templates Quick Access (collapsible card) -->
+      <!-- Service Templates Quick Access (collapsible card) -->
       <div x-show="deliveryTemplates.length > 0" class="mx-6 sm:mx-8 mt-4 rounded-xl bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/15 dark:to-indigo-900/15 border border-purple-200 dark:border-purple-800 shadow-sm tpl-card">
         <button type="button" @click="showQuickAccess = !showQuickAccess" class="w-full flex items-center justify-between px-4 py-3 text-left">
           <div class="flex items-center gap-2.5">
@@ -61,7 +61,7 @@ input[type="number"] { -moz-appearance: textfield; }
               <svg class="w-4 h-4 text-purple-600 dark:text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
             <div>
-              <p class="text-sm font-semibold text-purple-700 dark:text-purple-200">{% translate 'Quick fill from delivery template' %}</p>
+              <p class="text-sm font-semibold text-purple-700 dark:text-purple-200">{% translate 'Quick fill from service template' %}</p>
               <p class="text-xs text-purple-500/70 dark:text-purple-400/70" x-text="deliveryTemplates.length + ' template' + (deliveryTemplates.length !== 1 ? 's' : '') + ' available'"></p>
             </div>
           </div>
@@ -492,12 +492,6 @@ input[type="number"] { -moz-appearance: textfield; }
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5" x-text="fields.recipient_address_detail || '—'"></p>
               </div>
             </div>
-            <div class="mt-3 flex justify-end">
-              <button type="button" @click="saveDeliveryTemplate()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2h2m3-4h4a2 2 0 012 2v2m-4 0h-2a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2z"/></svg>
-                {% translate 'Save as route template' %}
-              </button>
-            </div>
           </div>
 
           <!-- Service and additional services -->
@@ -838,14 +832,14 @@ function orderForm() {
     },
 
     loadTemplates(type) {
-      fetch('{% url "orders:api_templates" %}?type=' + type)
+      fetch('{% url "orders:api_templates" %}')
         .then(r => {
           if (!r.ok) throw new Error('HTTP ' + r.status);
           return r.json();
         })
         .then(data => {
-          if (type === 'sender') this.senderTemplates = data;
-          else this.recipientTemplates = data;
+          this.senderTemplates = data;
+          this.recipientTemplates = data;
         })
         .catch(() => {});
     },
@@ -856,7 +850,6 @@ function orderForm() {
       const isSender = type === 'sender';
       const data = {
         name: name,
-        template_type: type,
         contact_name: isSender ? this.fields.sender_name : this.fields.recipient_name,
         contact_phone: isSender ? this.fields.sender_phone : this.fields.recipient_phone,
         contact_email: isSender ? this.fields.sender_email : this.fields.recipient_email,
@@ -881,18 +874,18 @@ function orderForm() {
     },
 
     loadSenderTemplate(tpl) {
-      this.fields.sender_name = tpl.recipient_name || '';
-      this.fields.sender_phone = tpl.recipient_phone || '';
-      this.fields.sender_email = tpl.recipient_email || '';
+      this.fields.sender_name = tpl.contact_name || '';
+      this.fields.sender_phone = tpl.contact_phone || '';
+      this.fields.sender_email = tpl.contact_email || '';
       this.fields.sender_address = tpl.city || '';
       this.fields.sender_address_detail = tpl.address_detail || '';
       this.$nextTick(() => this.updateMapMarker('sender', tpl.city));
     },
 
     loadRecipientTemplate(tpl) {
-      this.fields.recipient_name = tpl.recipient_name || '';
-      this.fields.recipient_phone = tpl.recipient_phone || '';
-      this.fields.recipient_email = tpl.recipient_email || '';
+      this.fields.recipient_name = tpl.contact_name || '';
+      this.fields.recipient_phone = tpl.contact_phone || '';
+      this.fields.recipient_email = tpl.contact_email || '';
       this.fields.recipient_address = tpl.city || '';
       this.fields.recipient_address_detail = tpl.address_detail || '';
       this.$nextTick(() => this.updateMapMarker('recipient', tpl.city));
@@ -909,19 +902,8 @@ function orderForm() {
     },
 
     loadDeliveryTemplate(tpl) {
-      this.fields.sender_address = tpl.from_city || '';
-      this.fields.recipient_address = tpl.to_city || '';
-      this.fields.sender_address_detail = tpl.sender_address_detail || '';
-      this.fields.recipient_address_detail = tpl.recipient_address_detail || '';
-      this.fields.weight = tpl.weight || '';
-      this.fields.cargo_description = tpl.cargo_description || '';
       this.fields.service = tpl.service || '';
-      this.fields.declared_value = tpl.declared_value || '';
       this.fields.additional_services = tpl.additional_services || [];
-      this.$nextTick(() => {
-        this.updateMapMarker('sender', tpl.from_city);
-        this.updateMapMarker('recipient', tpl.to_city);
-      });
     },
 
     saveDeliveryTemplate() {
@@ -929,16 +911,8 @@ function orderForm() {
       if (!name) return;
       const data = {
         name: name,
-        from_city: this.fields.sender_address,
-        to_city: this.fields.recipient_address,
-        weight: this.fields.weight,
-        cargo_description: this.fields.cargo_description,
         service: this.fields.service,
-        declared_value: this.fields.declared_value,
-        sender_address_detail: this.fields.sender_address_detail,
-        recipient_address_detail: this.fields.recipient_address_detail,
         additional_services: this.fields.additional_services,
-        total_price: this.calculateTotal(),
       };
       fetch('{% url "orders:api_delivery_templates" %}', {
         method: 'POST',
@@ -976,6 +950,9 @@ function orderForm() {
         width: this.fields.width,
         height: this.fields.height,
         declared_value: this.fields.declared_value,
+        is_fragile: this.fields.is_fragile,
+        is_dangerous: this.fields.is_dangerous,
+        is_temperature_sensitive: this.fields.is_temperature_sensitive,
       };
       fetch('{% url "orders:api_cargo_templates" %}', {
         method: 'POST',
@@ -999,6 +976,9 @@ function orderForm() {
       this.fields.width = tpl.width || '';
       this.fields.height = tpl.height || '';
       this.fields.declared_value = tpl.declared_value || '';
+      this.fields.is_fragile = tpl.is_fragile || false;
+      this.fields.is_dangerous = tpl.is_dangerous || false;
+      this.fields.is_temperature_sensitive = tpl.is_temperature_sensitive || false;
     },
 
     formatPhone(field) {

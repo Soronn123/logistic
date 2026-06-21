@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, FormView, ListView, TemplateView, UpdateView, View
 
-from .forms import CargoTemplateForm, CompanyApplicationForm, ContactTemplateForm, DeliveryTemplateForm, LoginForm, PasswordChangeForm, ProfileForm, RegisterForm, TicketForm, TicketMessageForm
+from .forms import CargoTemplateForm, CompanyApplicationForm, ContactTemplateForm, DeliveryTemplateForm, MasterTemplateForm, LoginForm, PasswordChangeForm, ProfileForm, RegisterForm, TicketForm, TicketMessageForm
 from .models import CargoTemplate, CompanyApplication, ContactTemplate, CustomUser, DeliveryTemplate, Ticket, TicketMessage, Transaction
 
 
@@ -196,6 +196,12 @@ class TicketDetailView(LoginRequiredMixin, DetailView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
+
+        if '_close_ticket' in request.POST:
+            self.object.status = Ticket.Status.CLOSED
+            self.object.save(update_fields=['status'])
+            return redirect('users:ticket_detail', pk=self.object.pk)
+
         form = TicketMessageForm(request.POST)
         if form.is_valid():
             TicketMessage.objects.create(
@@ -258,24 +264,31 @@ class TemplatesView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         from apps.geo.models import City
         from apps.services.models import Service, AdditionalService
-        context['delivery_templates'] = DeliveryTemplate.objects.filter(user=self.request.user)
-        context['cargo_templates'] = CargoTemplate.objects.filter(user=self.request.user)
-        context['delivery_form'] = DeliveryTemplateForm()
+        from .models import MasterTemplate
+        context['master_templates'] = MasterTemplate.objects.filter(user=self.request.user)
         context['contact_form'] = ContactTemplateForm()
-        context['cargo_form'] = CargoTemplateForm()
+        context['master_form'] = MasterTemplateForm()
         context['cities'] = City.objects.filter(is_active=True)
         context['services'] = Service.objects.filter(is_active=True)
-        context['additional_services'] = AdditionalService.objects.all()
+        context['additional_services'] = AdditionalService.objects.filter(is_active=True)
         return context
 
     def post(self, request, *args, **kwargs):
-        from .models import ContactTemplate
+        from .models import ContactTemplate, MasterTemplate
         action = request.POST.get('action')
-        if action == 'delete':
+        if action == 'delete_contact':
             pk = request.POST.get('pk')
             if pk:
                 ContactTemplate.objects.filter(pk=pk, user=request.user).delete()
             return self.get(request, *args, **kwargs)
+        elif action == 'create_contact':
+            form = ContactTemplateForm(request.POST)
+            if form.is_valid():
+                template = form.save(commit=False)
+                template.user = request.user
+                template.save()
+                messages.success(request, _('Contact template created successfully.'))
+            return redirect('users:templates')
         elif action == 'edit_contact':
             pk = request.POST.get('pk')
             template = get_object_or_404(ContactTemplate, pk=pk, user=request.user)
@@ -284,48 +297,27 @@ class TemplatesView(LoginRequiredMixin, ListView):
                 form.save()
                 messages.success(request, _('Contact template updated successfully.'))
             return redirect('users:templates')
-        elif action == 'delete_delivery':
+        elif action == 'delete_master':
             pk = request.POST.get('pk')
             if pk:
-                DeliveryTemplate.objects.filter(pk=pk, user=request.user).delete()
+                MasterTemplate.objects.filter(pk=pk, user=request.user).delete()
             return self.get(request, *args, **kwargs)
-        elif action == 'create_delivery':
-            form = DeliveryTemplateForm(request.POST)
+        elif action == 'create_master':
+            form = MasterTemplateForm(request.POST)
             if form.is_valid():
                 template = form.save(commit=False)
                 template.user = request.user
                 template.save()
                 form.save_m2m()
-                messages.success(request, _('Delivery template created successfully.'))
+                messages.success(request, _('Master template created successfully.'))
             return redirect('users:templates')
-        elif action == 'edit_delivery':
+        elif action == 'edit_master':
             pk = request.POST.get('pk')
-            template = get_object_or_404(DeliveryTemplate, pk=pk, user=request.user)
-            form = DeliveryTemplateForm(request.POST, instance=template)
+            template = get_object_or_404(MasterTemplate, pk=pk, user=request.user)
+            form = MasterTemplateForm(request.POST, instance=template)
             if form.is_valid():
                 form.save()
-                messages.success(request, _('Delivery template updated successfully.'))
-            return redirect('users:templates')
-        elif action == 'delete_cargo':
-            pk = request.POST.get('pk')
-            if pk:
-                CargoTemplate.objects.filter(pk=pk, user=request.user).delete()
-            return self.get(request, *args, **kwargs)
-        elif action == 'create_cargo':
-            form = CargoTemplateForm(request.POST)
-            if form.is_valid():
-                template = form.save(commit=False)
-                template.user = request.user
-                template.save()
-                messages.success(request, _('Cargo template created successfully.'))
-            return redirect('users:templates')
-        elif action == 'edit_cargo':
-            pk = request.POST.get('pk')
-            template = get_object_or_404(CargoTemplate, pk=pk, user=request.user)
-            form = CargoTemplateForm(request.POST, instance=template)
-            if form.is_valid():
-                form.save()
-                messages.success(request, _('Cargo template updated successfully.'))
+                messages.success(request, _('Master template updated successfully.'))
             return redirect('users:templates')
         return self.get(request, *args, **kwargs)
 
@@ -341,10 +333,8 @@ class DeliveryTemplateEditView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        from apps.geo.models import City
         from apps.services.models import Service, AdditionalService
-        context['cities'] = City.objects.filter(is_active=True)
         context['services'] = Service.objects.filter(is_active=True)
-        context['additional_services'] = AdditionalService.objects.all()
+        context['additional_services'] = AdditionalService.objects.filter(is_active=True)
         context['template_addon_ids'] = list(self.object.additional_services.values_list('id', flat=True)) if self.object.pk else []
         return context
