@@ -291,17 +291,6 @@ front5/
 - All tests in `tests/` directory (7 files)
 - Tests create their own fixtures
 
-### Known Issues
-See `fix.md` for documented bugs and issues to be addressed.
-
----
-
-## Contact
-
-For questions or support, please contact:
-- Email: [Add contact email]
-- Website: [Add website URL]
-
 ---
 
 **Built with Django and ❤️ for Baikal-Service**
