@@ -17,6 +17,16 @@ AGENTS2.md
 # Database
 db.sqlite3
 
+# SSL Certificates
+certbot_certs/
+certbot_data/
+*.pem
+*.key
+
+# Logs
+logs/
+*.log
+
 # Static & media
 staticfiles/
 
