@@ -296,12 +296,6 @@ See `fix.md` for documented bugs and issues to be addressed.
 
 ---
 
-## License
-
-[Add your license information here]
-
----
-
 ## Contact
 
 For questions or support, please contact:
