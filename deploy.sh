@@ -41,6 +41,14 @@ info "  Domain : $DOMAIN"
 info "  E-mail : $EMAIL"
 info "  Dir    : $PROJECT_DIR"
 
+# ─── Stop running containers ─────────────────────────────────
+cd "$PROJECT_DIR"
+if $COMPOSE ps -q 2>/dev/null | grep -q .; then
+  info "Stopping running containers..."
+  $COMPOSE down || die "Failed to stop running containers."
+  info "Containers stopped successfully."
+fi
+
 # ─── Prepare .env ────────────────────────────────────────────
 info "Updating .env with production values..."
 
@@ -59,10 +67,18 @@ info ".env prepared."
 # ─── Build & start containers ────────────────────────────────
 cd "$PROJECT_DIR"
 info "Building images..."
-$COMPOSE build --no-cache
+$COMPOSE build --no-cache || die "Failed to build Docker images."
 
 info "Starting services in the background..."
-$COMPOSE up -d
+$COMPOSE up -d || die "Failed to start containers."
+
+# Verify all containers are running
+info "Verifying containers are running..."
+sleep 5
+if ! $COMPOSE ps | grep -q "Up"; then
+  die "One or more containers failed to start. Check logs with: docker compose logs"
+fi
+info "All containers are running."
 
 # ─── Wait for DB ─────────────────────────────────────────────
 info "Waiting for PostgreSQL to accept connections..."
@@ -94,10 +110,7 @@ $COMPOSE exec -T web python manage.py collectstatic --noinput
 # ─── SSL / Let's Encrypt ───────────────────────────────────
 info "Requesting SSL certificate from Let's Encrypt..."
 
-# Make sure the webroot volume exists and nginx is serving ACME challenges
-$COMPOSE exec -T nginx mkdir -p /var/www/certbot
-
-# Obtain certificate using webroot ($COMPOSE with exec to use existing nginx)
+# Obtain certificate using webroot
 $COMPOSE exec -T nginx certbot certonly \
   --webroot \
   -w /var/www/certbot \
@@ -172,10 +185,9 @@ NGINX
 # Inject the real domain into the SSL paths
 sed -i "s|<DOMAIN>|${DOMAIN}|g" "$PROJECT_DIR/deploy/nginx/default.conf"
 
-$COMPOSE exec -T nginx cp /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.bak 2>/dev/null || true
-$COMPOSE cp "$PROJECT_DIR/deploy/nginx/default.conf" nginx:/etc/nginx/conf.d/default.conf
+# Reload nginx configuration (config is mounted as volume)
 $COMPOSE exec -T nginx nginx -t || die "Nginx configuration test failed."
-$COMPOSE exec -T nginx nginx -s reload
+$COMPOSE exec -T nginx nginx -s reload || die "Failed to reload nginx."
 
 # ─── Auto-renewal cron job ───────────────────────────────────
 CRON_CMD="0 3 * * * cd ${PROJECT_DIR} && ${COMPOSE} exec -T nginx certbot renew --quiet && ${COMPOSE} exec -T nginx nginx -s reload >> /var/log/baikal-certbot-renew.log 2>&1"
